@@ -1,0 +1,7 @@
+26_03_2024:
+-Items: Additional import, Excel export for field Tax2
+-Items: Fix bugs Import item color, Inventory min
+01_04_2024:
+-Permission: Add Own view permission for features:Inventory receiving voucher, Inventory delivery voucher, Packing Lists, Internal delivery note, Loss & adjustment, Receiving-Exporting return order.
+08_04_2024:
+-Inventory History: Update inventory balance at the beginning of the period when Inventory delivery voucher is created from Invoice

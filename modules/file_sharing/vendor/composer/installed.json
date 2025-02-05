@@ -1,0 +1,161 @@
+[
+    {
+        "name": "kunalvarma05/dropbox-php-sdk",
+        "description": "Dropbox PHP API V2 SDK (Unofficial)",
+        "keywords" : ["dropbox", "sdk", "api", "client", "php", "unofficial"],
+        "license": "MIT",
+        "authors": [
+            {
+                "name": "Kunal Varma",
+                "email": "kunalvarma05@gmail.com"
+            }
+        ],
+        "require": {
+            "guzzlehttp/guzzle": "~6.0",
+            "tightenco/collect": "^5.2"
+        },
+        "autoload": {
+            "psr-4": {
+                "Kunnu\\Dropbox\\": "src/Dropbox",
+            }
+        },
+        "require-dev": {
+            "phpunit/phpunit": "^6.0"
+        }
+    },
+    {
+        "name": "google/apiclient",
+        "type": "library",
+        "description": "Client library for Google APIs",
+        "keywords": ["google"],
+        "homepage": "http://developers.google.com/api-client-library/php",
+        "license": "Apache-2.0",
+        "require": {
+            "php": "^5.6|^7.0|^8.0",
+            "google/auth": "^1.10",
+            "google/apiclient-services": "~0.13",
+            "firebase/php-jwt": "~2.0||~3.0||~4.0||~5.0",
+            "monolog/monolog": "^1.17|^2.0",
+            "phpseclib/phpseclib": "~2.0||^3.0.2",
+            "guzzlehttp/guzzle": "~5.3.3||~6.0||~7.0",
+            "guzzlehttp/psr7": "^1.2"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "^5.7||^8.5.13",
+            "squizlabs/php_codesniffer": "~2.3",
+            "symfony/dom-crawler": "~2.1",
+            "symfony/css-selector": "~2.1",
+            "cache/filesystem-adapter": "^0.3.2|^1.1",
+            "phpcompatibility/php-compatibility": "^9.2",
+            "dealerdirect/phpcodesniffer-composer-installer": "^0.7",
+            "composer/composer": "^1.10"
+        },
+        "suggest": {
+            "cache/filesystem-adapter": "For caching certs and tokens (using Google\\Client::setCache)"
+        },
+        "autoload": {
+            "psr-4": {
+                "Google\\": "src/"
+            },
+            "files": [
+                "src/aliases.php"
+            ],
+            "classmap": [
+                "src/aliases.php"
+            ]
+        },
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.x-dev"
+            }
+        }
+    },
+    {
+        "name": "league/flysystem-cached-adapter",
+        "description": "An adapter decorator to enable meta-data caching.",
+        "autoload": {
+            "psr-4": {
+                "League\\Flysystem\\Cached\\": "src/"
+            }
+        },
+        "require": {
+            "league/flysystem": "~1.0",
+            "psr/cache": "^1.0.0"
+        },
+        "require-dev": {
+            "phpspec/phpspec": "^3.4",
+            "phpunit/phpunit": "^5.7",
+            "mockery/mockery": "~0.9",
+            "predis/predis": "~1.0",
+            "tedivm/stash": "~0.12"
+        },
+        "suggest": {
+          "ext-phpredis": "Pure C implemented extension for PHP"
+        },
+        "license": "MIT",
+        "authors": [
+            {
+                "name": "frankdejonge",
+                "email": "info@frenky.net"
+            }
+        ]
+    },
+    {
+        "name": "nao-pon/flysystem-google-drive",
+        "description": "Flysystem adapter for Google Drive",
+        "license": "MIT",
+        "authors": [
+            {
+                "name": "Naoki Sawada",
+                "email": "hypweb@gmail.com"
+            }
+        ],
+        "require": {
+            "php": ">=5.4.0",
+            "league/flysystem": "~1.0",
+            "google/apiclient": "^2.0",
+            "nao-pon/flysystem-cached-extra": "~1.0"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "~4.0",
+            "mockery/mockery": "0.9.*"
+        },
+        "autoload": {
+            "psr-4": {
+                "Hypweb\\Flysystem\\GoogleDrive\\": "src/"
+            }
+        },
+        "config": {
+            "bin-dir": "bin"
+        },
+        "extra": {
+            "branch-alias": {
+                "dev-api_v2": "1.0.x-dev",
+                "dev-master": "1.1.x-dev"
+            }
+        }
+    },
+    {
+        "name": "nao-pon/elfinder-flysystem-driver-ext",
+        "description": "A Flysystem Driver for elFinder extended version",
+        "license": "MIT",
+        "keywords": ["elfinder", "flysystem", "filesystem"],
+        "authors": [
+            {
+                "name": "Naoki Sawada",
+                "email": "hypweb@gmail.com"
+            }
+        ],
+        "require": {
+            "php": ">=5.4",
+            "barryvdh/elfinder-flysystem-driver": "^0.1.5|^0.2"
+        },
+        "autoload": {
+             "classmap": ["elFinderVolumeFlysystemExt.php"],
+             "psr-4": {
+                "Hypweb\\elFinderFlysystemDriverExt\\": "src/"
+            }
+        }
+    }
+
+]

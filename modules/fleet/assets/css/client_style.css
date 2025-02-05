@@ -1,0 +1,17 @@
+.star-rating {
+  line-height:32px;
+  cursor: pointer;
+  font-size: 32px;
+}
+.star-rating .fa-star.fa{color: orange;}
+.star-rating-view {
+  line-height:32px;
+  
+  
+}
+.star-rating-view .fa-star.fa{color: orange;}
+.checked {
+  color: orange;
+}
+
+._star-rating .fa-star.fa{color: orange;}

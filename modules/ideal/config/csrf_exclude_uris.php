@@ -1,0 +1,5 @@
+<?php
+
+return [
+    'ideal/webhook',
+];

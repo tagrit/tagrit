@@ -1,0 +1,66 @@
+ .panel-primary {
+      border-color: #b75a33;
+  }
+  .panel-primary>.panel-heading {
+    color: #fff;
+    background-color: #b75a33;
+    border-color: #b75a33;
+  }
+.signature-pad--body{
+    border-radius: 4px;
+    position: relative;
+    -webkit-box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    border: 1px solid #c0cbda;
+  }
+
+  .row-margin{
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+  }
+  .panel-padding{
+    padding-right: 0px;
+    padding-left: 0px;
+  }
+  .span-font-style{
+  font-style: italic;
+  } 
+
+  .td-width{
+    width: 21%;
+  }
+  .img-width-height{
+    width: 150px; height: 80px
+  }
+  .menu-width-height{
+    min-width: 309px;min-height: 190px;
+  }
+  ul.dropdown-menu.dropdown-menu-right.menu-with-heght{
+    min-width: 500px;min-height: 190px;
+  }
+  
+  .button-margin{
+    margin-right: 15px;
+  }
+  .status-border-color{
+    color:#ff6f00;
+    border:1px solid #ff6f00;
+  }
+  .status-border-color1{
+      color:#84c529;
+      border:1px solid #84c529;
+    }
+  .status-border-color2{
+    color:#fc2d42;
+    border:1px solid #fc2d42;
+  }
+
+  .sig-input-style{
+    width: 1px;
+    height: 1px !important;
+    border: 0px !important;
+  }
+  .table-margintop{
+    margin-top: 0px;
+  }

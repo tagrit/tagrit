@@ -1,0 +1,96 @@
+/**** Single mode specific theme start **/
+.section-clientm-dashboard > *:not(.single-theme, #greeting) {
+	display: none !important;
+}
+
+.single-theme {
+	min-height: 80vh;
+}
+
+.single-theme .iframe-wrapper {
+	position: fixed;
+	width: 100vw;
+	height: 100vh;
+	z-index: 9999999;
+	left: 0;
+	top: 0px;
+	padding: 0;
+}
+
+.single-theme #company-switch .select-placeholder:after {
+	display: none !important;
+}
+
+.single-theme .iframe-toolbar {
+	display: flex;
+	align-items: center;
+	position: fixed;
+	justify-content: center;
+	top: 0;
+	left: 55%;
+}
+
+.single-theme .iframe-toolbar .close-btn {
+	border-radius: 0;
+	font-size: x-large;
+	z-index: 99999999999999999;
+}
+
+.single-theme .top_stats_wrapper {
+	padding: 12px 22px 20px 22px;
+	background: #fff;
+	border-radius: 7px;
+	box-shadow: 0 1px 7px 1px rgb(90 90 90 / 5%);
+	border: 1px solid #dce1ef;
+}
+
+.single-theme .company-info .form-control-static {
+	padding-top: 0px;
+}
+
+.single-theme .company-info .form-group {
+	display: flex;
+	gap: 10px;
+	flex-wrap: wrap;
+}
+
+.single-theme .company-info .form-group label {
+	flex: 1;
+}
+
+.single-theme .company-info .form-group p {
+	flex: 2;
+}
+
+.single-theme .company-info .form-group label::after {
+	content: ":";
+}
+
+.single-theme .company-info h4.company-view-heading {
+	display: none;
+}
+
+.single-theme .menu {
+	position: absolute;
+	display: flex;
+	gap: 20px;
+	z-index: 9;
+	top: 20px;
+	right: 5px;
+	align-items: center;
+}
+
+@media (max-width: 767px) {
+	.single-theme .menu {
+		bottom: 35px;
+		top: auto;
+		left: 40%;
+	}
+
+	.single-theme .iframe-toolbar {
+		width: auto;
+		margin-left: 15%;
+	}
+}
+
+/**** Single mode specific theme ends **/

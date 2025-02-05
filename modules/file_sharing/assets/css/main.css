@@ -1,0 +1,16 @@
+.fs_permisstion .inline-mbot, 
+.fs-gr-radio .inline-mbot {
+    line-height: 23px;
+}
+
+.elfinder-button-icon-share{
+	background-position:0 -880px !important;
+}
+
+#elfinder-elfinder-preference-language{
+	display: none!important;
+}
+
+.elfinder-preference-tab-language{
+	display: none!important;
+}

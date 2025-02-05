@@ -1,0 +1,58 @@
+.avatar-list {
+    margin: 0 0 -.5rem;
+    padding: 0;
+    font-size: 0;
+    display: inline-flex;
+}
+
+.avatar-list-stacked .avatar {
+    margin-right: -.8em !important;
+}
+.avatar-list .avatar {
+    margin-bottom: .5rem;
+}
+.avatar-list-stacked .avatar-none {
+    box-shadow: 0 0 0 2px #fff;
+}
+.brround {
+    border-radius: 50%;
+}
+.avatar {
+    width: 3rem;
+    height: 3rem;
+    line-height: 2rem;
+    display: inline-block;
+    position: relative;
+    text-align: center;
+    color: #fff;
+    font-weight: 600;
+    vertical-align: bottom;
+    font-size: 12px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.bg-secondary {
+    background-color: #ef6430!important;
+    color: #fff;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 9999;
+    display: none;
+    float: left;
+    min-width: 289px;
+    max-width: 289px;
+    padding: 0 0;
+    margin: 2px 0 0;
+    list-style: none;
+    font-size: 14px;
+    background-color: #fff;
+    -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+    background-clip: padding-box;
+}

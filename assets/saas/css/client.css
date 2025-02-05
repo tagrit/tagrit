@@ -1,0 +1,181 @@
+.ps-view {
+	margin-bottom: 50px;
+}
+
+.tw-h-screen {
+	height: 100vh;
+}
+
+.view-company-modal {
+	overflow: hidden !important;
+}
+
+.view-company-modal .modal-header {
+	padding: 0.5rem 0.75rem;
+	border-color: red;
+}
+
+.view-company-modal .modal-header .close {
+	margin-top: 0;
+}
+
+.view-company-modal .modal-header button.btn.dropdown-toggle.btn-default {
+	border-color: red;
+}
+
+.view-company-modal .modal-content {
+	height: inherit;
+	border-radius: 0;
+	display: flex;
+	flex-direction: column;
+}
+
+.view-company-modal .modal-body {
+	margin: 0;
+	padding: 0;
+	flex: 1;
+}
+
+.view-company-modal .modal-header .select-placeholder:after,
+.view-company-modal .modal-header .form-group.label {
+	display: none !important;
+}
+
+.view-company-modal .modal-header .form-group {
+	margin-bottom: 0;
+}
+
+.tw-pl-0 {
+	padding-left: 0px;
+}
+
+.tw-pr-0 {
+	padding-right: 0;
+}
+
+.ps .alert {
+	z-index: 1 !important;
+}
+
+/** my account and module market awokumadivad **/
+.saas-market-items {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: start;
+	align-items: stretch;
+	max-height: 70vh;
+	overflow: auto;
+}
+.saas-market-item-card {
+	height: inherit;
+}
+@media (max-width: 992px) {
+	.saas-market-item-card {
+		width: 100%;
+	}
+}
+.saas-market-item-card .card {
+	padding: 10px;
+	border: 1px solid #eee;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.04) !important;
+	-webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.04) !important;
+	border-radius: 15px;
+	height: 100%;
+	width: 100%;
+}
+
+.saas-market-item-card .card-body {
+	height: 100%;
+	display: flex;
+	justify-content: space-between;
+	flex-direction: column;
+}
+
+.saas-market-item-card .card-body .truncate-text {
+	display: -webkit-box;
+	-webkit-line-clamp: 3; /* Limit to 3 lines */
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}
+.saas-market-item-card .card-body .truncate-text:hover {
+	display: inline-block;
+	overflow: unset;
+}
+
+.strike {
+	text-decoration: line-through;
+}
+
+.ps input.feature-limit {
+	min-width: 50px;
+}
+
+.ps input.feature-limit,
+.ps .input-group {
+	min-width: 50px;
+	max-width: 100px !important;
+	max-height: 28px;
+}
+.ps .\!tw-max-w-xs {
+	white-space: normal !important;
+	max-width: 16rem !important;
+}
+
+.ps .summary-card {
+	width: 100%;
+}
+
+.ps .summary-card .btn {
+	text-overflow: ellipsis;
+	width: 100%;
+	overflow: hidden;
+}
+
+@media (min-width: 992px) {
+	.ps .summary-card {
+		position: fixed;
+		max-width: 285px;
+		overflow: hidden;
+	}
+}
+
+@media (min-width: 1200px) {
+	.ps .summary-card {
+		margin-left: -15px;
+	}
+}
+
+.ps .tw-text-xs {
+	font-size: 10px;
+	line-height: normal;
+}
+
+.custom-domain-form .tc-content ul {
+	list-style: inside;
+}
+
+.custom-domain-form .tc-content ul li ul {
+	list-style: circle;
+	margin-left: 30px;
+	margin-top: 5px;
+}
+
+.custom-domain-form .panel-heading .accordion-toggle:after {
+	font-family: "Glyphicons Halflings";
+	content: "\e114";
+	float: right;
+	color: grey;
+}
+.custom-domain-form .panel-heading .accordion-toggle.collapsed:after {
+	content: "\e080";
+}
+
+.hover\:tw-bg-transparent:hover,
+.hover\:tw-bg-transparent:focus,
+.hover\:tw-bg-transparent:active {
+	background-color: transparent !important;
+}
+
+.min-h-50-vh {
+	min-height: 50vh;
+}

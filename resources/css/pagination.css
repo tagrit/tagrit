@@ -1,0 +1,31 @@
+@layer components {
+  .pagination > li > a,
+  .pagination > li > span {
+    @apply tw-bg-white tw-text-neutral-700 tw-border-0 tw-font-semibold tw-mr-1.5;
+  }
+
+  .pagination > li > a:hover,
+  .pagination > li > span:hover,
+  .pagination > li > a:focus,
+  .pagination > li > span:focus {
+    @apply tw-bg-neutral-200 tw-text-neutral-900 tw-rounded-lg;
+  }
+
+  .pagination > .active > a,
+  .pagination > .active > span,
+  .pagination > .active > a:hover,
+  .pagination > .active > span:hover,
+  .pagination > .active > a:focus,
+  .pagination > .active > span:focus {
+    @apply tw-bg-neutral-200 tw-text-neutral-900 tw-rounded-lg;
+  }
+
+  .pagination > .disabled > span,
+  .pagination > .disabled > span:hover,
+  .pagination > .disabled > span:focus,
+  .pagination > .disabled > a,
+  .pagination > .disabled > a:hover,
+  .pagination > .disabled > a:focus {
+    @apply tw-bg-white tw-border-neutral-200 tw-text-neutral-400;
+  }
+}

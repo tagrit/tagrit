@@ -1,0 +1,3451 @@
+/*!
+ * integrations-banking-reconcile-ui - v4.0.36 - 2021-03-21
+ * Copyright (c) 2021 Intuit Inc. All rights reserved. Unauthorized reproduction is a violation of applicable law. This material contains certain confidential and proprietary information and trade secrets of Intuit Inc.
+ * 
+ */
+.idsStatusBadgeIcon {
+    height: 20px;
+    width: 20px;
+    vertical-align: middle
+}
+
+.idsStatusBadgeIcon--confirm {
+    fill: #2ca01c
+}
+
+.idsStatusBadgeIcon--error {
+    fill: #d52b1e
+}
+
+.idsStatusBadgeIcon--info {
+    fill: #0097e6
+}
+
+.idsStatusBadgeIcon--pending {
+    fill: #d4d7dc
+}
+
+.idsStatusBadgeIcon--round.idsStatusBadgeIcon--warning {
+    fill: #ff6a00
+}
+
+.idsStatusBadgeIcon__text {
+    margin-left: 4px;
+    font-size: 1.2rem;
+    line-height: 1.6rem;
+    font-weight: 500;
+    font-style: normal;
+    font-family: Avenir Next forINTUIT
+}
+
+.idsStatusBadgeIcon__text--confirm {
+    color: #2ca01c
+}
+
+.idsStatusBadgeIcon__text--error {
+    color: #d52b1e
+}
+
+.idsStatusBadgeText {
+    text-align: center;
+    border-radius: 3px;
+    font-size: 1.2rem;
+    color: #fff;
+    font-weight: 600;
+    font-family: Avenir Next forINTUIT;
+    font-style: normal;
+    line-height: 1.6rem;
+    padding-left: 4px;
+    padding-right: 4px;
+    display: inline-block
+}
+
+.idsStatusBadgeText--error {
+    background-color: #d52b1e
+}
+
+.idsStatusBadgeText--warning {
+    background-color: #ff6a00
+}
+
+.idsStatusBadgeText--info {
+    background-color: #0097e6
+}
+
+.idsStatusBadgeText--pending {
+    background-color: #404040
+}
+
+.idsStatusBadgeText--confirm {
+    background-color: #2ca01c
+}
+
+.idsNumericBadge {
+    padding-left: 4px;
+    padding-right: 4px;
+    font-family: Avenir Next forINTUIT;
+    font-weight: 600;
+    font-size: 1.2rem;
+    font-style: normal;
+    border-radius: 3px;
+    color: #fff;
+    background-color: #8d9096;
+    line-height: 1.6rem
+}
+
+.idsNumericBadge--inverse {
+    background-color: #393a3d
+}
+
+.idsStatusBadgeText--new {
+    background-color: #e31c9e
+}
+
+.idsNewFeatureIndicator {
+    width: 8px;
+    height: 8px;
+    color: #e31c9e
+}
+
+.idsTabs__tabPanel {
+    padding: 3px
+}
+
+.idsTabs__tabsList--mobile {
+    overflow-x: scroll;
+    overflow-y: hidden
+}
+
+.idsTab {
+    min-height: 36px;
+    display: inline-block
+}
+
+.idsTab__tabButton--focused:focus {
+    box-shadow: inset 0 0 0 2px rgba(0,119,197,.5);
+    border-radius: 8px;
+    outline: none
+}
+
+.idsTab__tabButton--focused .idsTab__tabButton--highlight {
+    padding: 8px 0;
+    margin: 0 20px;
+    border-bottom: 2px solid rgba(0,119,197,0);
+    min-height: 36px
+}
+
+.idsTab__tabButton {
+    border: none;
+    border-radius: 0;
+    outline: none
+}
+
+.idsTab__tabButton,.idsTab__tabButton--disabled {
+    display: inline-block;
+    min-height: 36px;
+    padding: 0;
+    background: transparent;
+    cursor: pointer
+}
+
+.idsTab__tabButton--disabled {
+    border: none;
+    opacity: .5
+}
+
+.idsTab__tabButton--active {
+    border: none;
+    border-radius: 0;
+    outline: none;
+    display: inline-block;
+    min-height: 36px;
+    padding: 0;
+    background: transparent;
+    cursor: pointer
+}
+
+.idsTab__tabButton--highlight {
+    padding: 8px 0;
+    margin: 0 20px;
+    border-bottom: 2px solid #0077c5;
+    min-height: 36px
+}
+
+.idsTab__tabButton--noHighlight {
+    padding: 8px 0;
+    margin: 0 20px
+}
+
+.idsTab__tabTitle {
+    display: inline-block;
+    text-decoration: none;
+    cursor: default;
+    font-family: Avenir Next forINTUIT;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 1.6rem;
+    line-height: 2rem;
+    color: #6b6c72
+}
+
+.idsTab__tabTitle:hover {
+    color: #393a3d;
+    cursor: pointer
+}
+
+.idsTab__tabTitle--active {
+    color: #393a3d
+}
+
+.idsTab__tabTitle--disabled {
+    display: inline-block;
+    text-decoration: none;
+    cursor: default;
+    font-family: Avenir Next forINTUIT;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 1.6rem;
+    line-height: 2rem;
+    color: #6b6c72
+}
+
+.idsTab__tabTitle--disabled:hover {
+    cursor: pointer
+}
+
+.idsTab__tabIcon,.idsTab__tabIcon--disabled {
+    display: inline-block;
+    vertical-align: middle;
+    height: 20px;
+    width: 20px;
+    margin: 0 8px 0 0
+}
+
+.idsTab__tabBadge,.idsTab__tabBadge--disabled {
+    display: inline-block;
+    margin: 0 0 0 8px
+}
+
+.idsTab__tabButton--highlight--intuitTheme {
+    border-bottom-color: #0077c5
+}
+
+.idsTab__tabButton--focused--intuitTheme:focus {
+    box-shadow: inset 0 0 0 2px rgba(0,119,197,.5)
+}
+
+.idsTab__tabButton--highlight--proconnectTheme {
+    border-bottom-color: #0077c5
+}
+
+.idsTab__tabButton--focused--proconnectTheme:focus {
+    box-shadow: inset 0 0 0 2px rgba(0,119,197,.5)
+}
+
+.idsTab__tabButton--highlight--quickbooksTheme {
+    border-bottom-color: #2ca01c
+}
+
+.idsTab__tabButton--focused--quickbooksTheme:focus {
+    box-shadow: inset 0 0 0 2px rgba(44,160,28,.5)
+}
+
+.idsTab__tabButton--highlight--turbotaxTheme {
+    border-bottom-color: #06b6c9
+}
+
+.idsTab__tabButton--focused--turbotaxTheme:focus {
+    box-shadow: inset 0 0 0 2px rgba(6,182,201,.5)
+}
+
+.idsTabPanel {
+    padding: 20px
+}
+
+.idsTabPanel--disabled {
+    opacity: .5;
+    pointer-events: none
+}
+
+.filterFormOnTablet .Select,.integrations-banking-reconcile-ui-transactionFilter .Select,.integrations-banking-reconcile-ui .Select,.integrations-banking-reconciliation-drawer-container .Select,.integrations-reconcile-discrepancy-report-trowser .Select {
+    position: relative;
+    margin-top: 5px
+}
+
+.filterFormOnTablet .Select,.filterFormOnTablet .Select div,.filterFormOnTablet .Select input,.filterFormOnTablet .Select span,.integrations-banking-reconcile-ui-transactionFilter .Select,.integrations-banking-reconcile-ui-transactionFilter .Select div,.integrations-banking-reconcile-ui-transactionFilter .Select input,.integrations-banking-reconcile-ui-transactionFilter .Select span,.integrations-banking-reconcile-ui .Select,.integrations-banking-reconcile-ui .Select div,.integrations-banking-reconcile-ui .Select input,.integrations-banking-reconcile-ui .Select span,.integrations-banking-reconciliation-drawer-container .Select,.integrations-banking-reconciliation-drawer-container .Select div,.integrations-banking-reconciliation-drawer-container .Select input,.integrations-banking-reconciliation-drawer-container .Select span,.integrations-reconcile-discrepancy-report-trowser .Select,.integrations-reconcile-discrepancy-report-trowser .Select div,.integrations-reconcile-discrepancy-report-trowser .Select input,.integrations-reconcile-discrepancy-report-trowser .Select span {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box
+}
+
+.filterFormOnTablet .Select.is-disabled>.Select-control,.integrations-banking-reconcile-ui-transactionFilter .Select.is-disabled>.Select-control,.integrations-banking-reconcile-ui .Select.is-disabled>.Select-control,.integrations-banking-reconciliation-drawer-container .Select.is-disabled>.Select-control,.integrations-reconcile-discrepancy-report-trowser .Select.is-disabled>.Select-control {
+    background-color: #f6f6f6
+}
+
+.filterFormOnTablet .Select.is-disabled .Select-arrow-zone,.integrations-banking-reconcile-ui-transactionFilter .Select.is-disabled .Select-arrow-zone,.integrations-banking-reconcile-ui .Select.is-disabled .Select-arrow-zone,.integrations-banking-reconciliation-drawer-container .Select.is-disabled .Select-arrow-zone,.integrations-reconcile-discrepancy-report-trowser .Select.is-disabled .Select-arrow-zone {
+    cursor: default;
+    pointer-events: none
+}
+
+.filterFormOnTablet .Select-control,.integrations-banking-reconcile-ui-transactionFilter .Select-control,.integrations-banking-reconcile-ui .Select-control,.integrations-banking-reconciliation-drawer-container .Select-control,.integrations-reconcile-discrepancy-report-trowser .Select-control {
+    background-color: #fff;
+    border-color: #d9d9d9 #ccc #b3b3b3;
+    border-radius: 2px;
+    border: 1px solid #ccc;
+    color: #333;
+    cursor: default;
+    display: table;
+    height: 34px;
+    outline: none;
+    overflow: hidden;
+    position: relative;
+    width: 211px
+}
+
+.filterFormOnTablet .Select-control:hover,.integrations-banking-reconcile-ui-transactionFilter .Select-control:hover,.integrations-banking-reconcile-ui .Select-control:hover,.integrations-banking-reconciliation-drawer-container .Select-control:hover,.integrations-reconcile-discrepancy-report-trowser .Select-control:hover {
+    box-shadow: 0 1px 0 rgba(0,0,0,.06)
+}
+
+.filterFormOnTablet .is-searchable.is-open>.Select-control,.integrations-banking-reconcile-ui-transactionFilter .is-searchable.is-open>.Select-control,.integrations-banking-reconcile-ui .is-searchable.is-open>.Select-control,.integrations-banking-reconciliation-drawer-container .is-searchable.is-open>.Select-control,.integrations-reconcile-discrepancy-report-trowser .is-searchable.is-open>.Select-control {
+    cursor: text
+}
+
+.filterFormOnTablet .is-open>.Select-control,.integrations-banking-reconcile-ui-transactionFilter .is-open>.Select-control,.integrations-banking-reconcile-ui .is-open>.Select-control,.integrations-banking-reconciliation-drawer-container .is-open>.Select-control,.integrations-reconcile-discrepancy-report-trowser .is-open>.Select-control {
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    background: #fff;
+    border-color: #b3b3b3 #ccc #d9d9d9
+}
+
+.filterFormOnTablet .is-open>.Select-control>.Select-arrow,.integrations-banking-reconcile-ui-transactionFilter .is-open>.Select-control>.Select-arrow,.integrations-banking-reconcile-ui .is-open>.Select-control>.Select-arrow,.integrations-banking-reconciliation-drawer-container .is-open>.Select-control>.Select-arrow,.integrations-reconcile-discrepancy-report-trowser .is-open>.Select-control>.Select-arrow {
+    border-color: transparent transparent #999;
+    border-width: 0 5px 5px
+}
+
+.filterFormOnTablet .is-searchable.is-focused:not(.is-open)>.Select-control,.integrations-banking-reconcile-ui-transactionFilter .is-searchable.is-focused:not(.is-open)>.Select-control,.integrations-banking-reconcile-ui .is-searchable.is-focused:not(.is-open)>.Select-control,.integrations-banking-reconciliation-drawer-container .is-searchable.is-focused:not(.is-open)>.Select-control,.integrations-reconcile-discrepancy-report-trowser .is-searchable.is-focused:not(.is-open)>.Select-control {
+    cursor: text
+}
+
+.filterFormOnTablet .is-focused:not(.is-open)>.Select-control,.integrations-banking-reconcile-ui-transactionFilter .is-focused:not(.is-open)>.Select-control,.integrations-banking-reconcile-ui .is-focused:not(.is-open)>.Select-control,.integrations-banking-reconciliation-drawer-container .is-focused:not(.is-open)>.Select-control,.integrations-reconcile-discrepancy-report-trowser .is-focused:not(.is-open)>.Select-control {
+    border-color: #08c #0099e6 #0099e6;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,.1),0 0 5px -1px rgba(0,136,204,.5)
+}
+
+.filterFormOnTablet .Select-placeholder,.integrations-banking-reconcile-ui-transactionFilter .Select-placeholder,.integrations-banking-reconcile-ui .Select-placeholder,.integrations-banking-reconciliation-drawer-container .Select-placeholder,.integrations-reconcile-discrepancy-report-trowser .Select-placeholder {
+    bottom: 0;
+    color: #aaa;
+    left: 0;
+    line-height: 32px;
+    padding-left: 10px;
+    padding-right: 10px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap
+}
+
+.filterFormOnTablet .has-value>.Select-control>.Select-placeholder,.integrations-banking-reconcile-ui-transactionFilter .has-value>.Select-control>.Select-placeholder,.integrations-banking-reconcile-ui .has-value>.Select-control>.Select-placeholder,.integrations-banking-reconciliation-drawer-container .has-value>.Select-control>.Select-placeholder,.integrations-reconcile-discrepancy-report-trowser .has-value>.Select-control>.Select-placeholder {
+    color: #333
+}
+
+.filterFormOnTablet .Select-value,.integrations-banking-reconcile-ui-transactionFilter .Select-value,.integrations-banking-reconcile-ui .Select-value,.integrations-banking-reconciliation-drawer-container .Select-value,.integrations-reconcile-discrepancy-report-trowser .Select-value {
+    color: #aaa;
+    left: 0;
+    padding: 8px 52px 8px 10px;
+    position: absolute;
+    right: -15px;
+    top: 0;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap
+}
+
+.filterFormOnTablet .has-value>.Select-control>.Select-value,.integrations-banking-reconcile-ui-transactionFilter .has-value>.Select-control>.Select-value,.integrations-banking-reconcile-ui .has-value>.Select-control>.Select-value,.integrations-banking-reconciliation-drawer-container .has-value>.Select-control>.Select-value,.integrations-reconcile-discrepancy-report-trowser .has-value>.Select-control>.Select-value {
+    color: #333
+}
+
+.filterFormOnTablet .Select-input,.integrations-banking-reconcile-ui-transactionFilter .Select-input,.integrations-banking-reconcile-ui .Select-input,.integrations-banking-reconciliation-drawer-container .Select-input,.integrations-reconcile-discrepancy-report-trowser .Select-input {
+    height: 32px;
+    padding-left: 10px;
+    padding-right: 10px;
+    vertical-align: middle
+}
+
+.filterFormOnTablet .Select-input>input,.integrations-banking-reconcile-ui-transactionFilter .Select-input>input,.integrations-banking-reconcile-ui .Select-input>input,.integrations-banking-reconciliation-drawer-container .Select-input>input,.integrations-reconcile-discrepancy-report-trowser .Select-input>input {
+    background: none transparent;
+    border: 0 none;
+    box-shadow: none;
+    cursor: default;
+    display: inline-block;
+    font-size: inherit;
+    height: 34px;
+    margin: 0;
+    outline: none;
+    padding: 0;
+    -webkit-appearance: none
+}
+
+.filterFormOnTablet .is-focused .Select-input>input,.integrations-banking-reconcile-ui-transactionFilter .is-focused .Select-input>input,.integrations-banking-reconcile-ui .is-focused .Select-input>input,.integrations-banking-reconciliation-drawer-container .is-focused .Select-input>input,.integrations-reconcile-discrepancy-report-trowser .is-focused .Select-input>input {
+    cursor: text
+}
+
+.filterFormOnTablet .Select-control:not(.is-searchable)>.Select-input,.integrations-banking-reconcile-ui-transactionFilter .Select-control:not(.is-searchable)>.Select-input,.integrations-banking-reconcile-ui .Select-control:not(.is-searchable)>.Select-input,.integrations-banking-reconciliation-drawer-container .Select-control:not(.is-searchable)>.Select-input,.integrations-reconcile-discrepancy-report-trowser .Select-control:not(.is-searchable)>.Select-input {
+    outline: none
+}
+
+.filterFormOnTablet .Select-loading-zone,.integrations-banking-reconcile-ui-transactionFilter .Select-loading-zone,.integrations-banking-reconcile-ui .Select-loading-zone,.integrations-banking-reconciliation-drawer-container .Select-loading-zone,.integrations-reconcile-discrepancy-report-trowser .Select-loading-zone {
+    cursor: pointer;
+    display: table-cell;
+    position: relative;
+    text-align: center;
+    vertical-align: middle;
+    width: 16px
+}
+
+.filterFormOnTablet .Select-loading,.integrations-banking-reconcile-ui-transactionFilter .Select-loading,.integrations-banking-reconcile-ui .Select-loading,.integrations-banking-reconciliation-drawer-container .Select-loading,.integrations-reconcile-discrepancy-report-trowser .Select-loading {
+    -webkit-animation: Select-animation-spin .4s infinite linear;
+    -o-animation: Select-animation-spin .4s infinite linear;
+    animation: Select-animation-spin .4s infinite linear;
+    width: 16px;
+    height: 16px;
+    box-sizing: border-box;
+    border-radius: 50%;
+    border: 2px solid #ccc;
+    border-right-color: #333;
+    display: inline-block;
+    position: relative;
+    vertical-align: middle
+}
+
+.filterFormOnTablet .Select-clear-zone,.integrations-banking-reconcile-ui-transactionFilter .Select-clear-zone,.integrations-banking-reconcile-ui .Select-clear-zone,.integrations-banking-reconciliation-drawer-container .Select-clear-zone,.integrations-reconcile-discrepancy-report-trowser .Select-clear-zone {
+    -webkit-animation: Select-animation-fadeIn .2s;
+    -o-animation: Select-animation-fadeIn .2s;
+    animation: Select-animation-fadeIn .2s;
+    color: #999;
+    cursor: pointer;
+    display: table-cell;
+    position: relative;
+    text-align: center;
+    vertical-align: middle;
+    width: 17px
+}
+
+.filterFormOnTablet .Select-clear-zone:hover,.integrations-banking-reconcile-ui-transactionFilter .Select-clear-zone:hover,.integrations-banking-reconcile-ui .Select-clear-zone:hover,.integrations-banking-reconciliation-drawer-container .Select-clear-zone:hover,.integrations-reconcile-discrepancy-report-trowser .Select-clear-zone:hover {
+    color: #d0021b
+}
+
+.filterFormOnTablet .Select-clear,.integrations-banking-reconcile-ui-transactionFilter .Select-clear,.integrations-banking-reconcile-ui .Select-clear,.integrations-banking-reconciliation-drawer-container .Select-clear,.integrations-reconcile-discrepancy-report-trowser .Select-clear {
+    display: inline-block;
+    font-size: 18px;
+    line-height: 1
+}
+
+.filterFormOnTablet .Select--multi .Select-clear-zone,.integrations-banking-reconcile-ui-transactionFilter .Select--multi .Select-clear-zone,.integrations-banking-reconcile-ui .Select--multi .Select-clear-zone,.integrations-banking-reconciliation-drawer-container .Select--multi .Select-clear-zone,.integrations-reconcile-discrepancy-report-trowser .Select--multi .Select-clear-zone {
+    width: 17px
+}
+
+.filterFormOnTablet .Select-arrow-zone,.integrations-banking-reconcile-ui-transactionFilter .Select-arrow-zone,.integrations-banking-reconcile-ui .Select-arrow-zone,.integrations-banking-reconciliation-drawer-container .Select-arrow-zone,.integrations-reconcile-discrepancy-report-trowser .Select-arrow-zone {
+    cursor: pointer;
+    display: table-cell;
+    position: relative;
+    text-align: center;
+    vertical-align: middle;
+    width: 25px;
+    padding-right: 5px
+}
+
+.filterFormOnTablet .Select-arrow,.integrations-banking-reconcile-ui-transactionFilter .Select-arrow,.integrations-banking-reconcile-ui .Select-arrow,.integrations-banking-reconciliation-drawer-container .Select-arrow,.integrations-reconcile-discrepancy-report-trowser .Select-arrow {
+    border-color: #999 transparent transparent;
+    border-style: solid;
+    border-width: 5px 5px 2.5px;
+    display: inline-block;
+    height: 0;
+    width: 0
+}
+
+.filterFormOnTablet .is-open .Select-arrow,.filterFormOnTablet .Select-arrow-zone:hover>.Select-arrow,.integrations-banking-reconcile-ui-transactionFilter .is-open .Select-arrow,.integrations-banking-reconcile-ui-transactionFilter .Select-arrow-zone:hover>.Select-arrow,.integrations-banking-reconcile-ui .is-open .Select-arrow,.integrations-banking-reconcile-ui .Select-arrow-zone:hover>.Select-arrow,.integrations-banking-reconciliation-drawer-container .is-open .Select-arrow,.integrations-banking-reconciliation-drawer-container .Select-arrow-zone:hover>.Select-arrow,.integrations-reconcile-discrepancy-report-trowser .is-open .Select-arrow,.integrations-reconcile-discrepancy-report-trowser .Select-arrow-zone:hover>.Select-arrow {
+    border-top-color: #666
+}
+
+@-webkit-keyframes Select-animation-fadeIn {
+    0% {
+        opacity: 0
+    }
+
+    to {
+        opacity: 1
+    }
+}
+
+@keyframes Select-animation-fadeIn {
+    0% {
+        opacity: 0
+    }
+
+    to {
+        opacity: 1
+    }
+}
+
+.filterFormOnTablet .Select-menu-outer,.integrations-banking-reconcile-ui-transactionFilter .Select-menu-outer,.integrations-banking-reconcile-ui .Select-menu-outer,.integrations-banking-reconciliation-drawer-container .Select-menu-outer,.integrations-reconcile-discrepancy-report-trowser .Select-menu-outer {
+    border-bottom-right-radius: 4px;
+    border-bottom-left-radius: 4px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-top-color: #e6e6e6;
+    box-shadow: 0 1px 0 rgba(0,0,0,.06);
+    box-sizing: border-box;
+    margin-top: -1px;
+    max-height: 200px;
+    position: absolute;
+    float: none;
+    top: 100%;
+    max-width: 400px;
+    z-index: 1000;
+    -webkit-overflow-scrolling: touch
+}
+
+.filterFormOnTablet .Select-menu,.integrations-banking-reconcile-ui-transactionFilter .Select-menu,.integrations-banking-reconcile-ui .Select-menu,.integrations-banking-reconciliation-drawer-container .Select-menu,.integrations-reconcile-discrepancy-report-trowser .Select-menu {
+    max-height: 198px;
+    overflow-y: auto
+}
+
+.filterFormOnTablet .Select-option,.integrations-banking-reconcile-ui-transactionFilter .Select-option,.integrations-banking-reconcile-ui .Select-option,.integrations-banking-reconciliation-drawer-container .Select-option,.integrations-reconcile-discrepancy-report-trowser .Select-option {
+    box-sizing: border-box;
+    color: #666;
+    cursor: pointer;
+    display: block;
+    padding: 8px 10px;
+    white-space: nowrap
+}
+
+.filterFormOnTablet .Select-option:last-child,.integrations-banking-reconcile-ui-transactionFilter .Select-option:last-child,.integrations-banking-reconcile-ui .Select-option:last-child,.integrations-banking-reconciliation-drawer-container .Select-option:last-child,.integrations-reconcile-discrepancy-report-trowser .Select-option:last-child {
+    border-bottom-right-radius: 4px;
+    border-bottom-left-radius: 4px
+}
+
+.filterFormOnTablet .Select-option.is-focused,.integrations-banking-reconcile-ui-transactionFilter .Select-option.is-focused,.integrations-banking-reconcile-ui .Select-option.is-focused,.integrations-banking-reconciliation-drawer-container .Select-option.is-focused,.integrations-reconcile-discrepancy-report-trowser .Select-option.is-focused {
+    background-color: #365ebf;
+    color: #fff
+}
+
+.filterFormOnTablet .Select-option.is-disabled,.integrations-banking-reconcile-ui-transactionFilter .Select-option.is-disabled,.integrations-banking-reconcile-ui .Select-option.is-disabled,.integrations-banking-reconciliation-drawer-container .Select-option.is-disabled,.integrations-reconcile-discrepancy-report-trowser .Select-option.is-disabled {
+    color: #ccc;
+    cursor: not-allowed
+}
+
+.filterFormOnTablet .Select-noresults,.filterFormOnTablet .Select-search-prompt,.filterFormOnTablet .Select-searching,.integrations-banking-reconcile-ui-transactionFilter .Select-noresults,.integrations-banking-reconcile-ui-transactionFilter .Select-search-prompt,.integrations-banking-reconcile-ui-transactionFilter .Select-searching,.integrations-banking-reconcile-ui .Select-noresults,.integrations-banking-reconcile-ui .Select-search-prompt,.integrations-banking-reconcile-ui .Select-searching,.integrations-banking-reconciliation-drawer-container .Select-noresults,.integrations-banking-reconciliation-drawer-container .Select-search-prompt,.integrations-banking-reconciliation-drawer-container .Select-searching,.integrations-reconcile-discrepancy-report-trowser .Select-noresults,.integrations-reconcile-discrepancy-report-trowser .Select-search-prompt,.integrations-reconcile-discrepancy-report-trowser .Select-searching {
+    box-sizing: border-box;
+    color: #999;
+    cursor: default;
+    display: block;
+    padding: 8px 10px
+}
+
+.filterFormOnTablet .Select--multi .Select-input,.integrations-banking-reconcile-ui-transactionFilter .Select--multi .Select-input,.integrations-banking-reconcile-ui .Select--multi .Select-input,.integrations-banking-reconciliation-drawer-container .Select--multi .Select-input,.integrations-reconcile-discrepancy-report-trowser .Select--multi .Select-input {
+    vertical-align: middle;
+    margin-left: 10px;
+    padding: 0
+}
+
+.filterFormOnTablet .Select--multi.has-value .Select-input,.integrations-banking-reconcile-ui-transactionFilter .Select--multi.has-value .Select-input,.integrations-banking-reconcile-ui .Select--multi.has-value .Select-input,.integrations-banking-reconciliation-drawer-container .Select--multi.has-value .Select-input,.integrations-reconcile-discrepancy-report-trowser .Select--multi.has-value .Select-input {
+    margin-left: 5px
+}
+
+.filterFormOnTablet .Select-item,.integrations-banking-reconcile-ui-transactionFilter .Select-item,.integrations-banking-reconcile-ui .Select-item,.integrations-banking-reconciliation-drawer-container .Select-item,.integrations-reconcile-discrepancy-report-trowser .Select-item {
+    background-color: #f2f9fc;
+    border-radius: 2px;
+    border: 1px solid #c9e6f2;
+    color: #08c;
+    display: inline-block;
+    font-size: .9em;
+    margin-left: 5px;
+    margin-top: 5px;
+    vertical-align: top
+}
+
+.filterFormOnTablet .Select-item-icon,.filterFormOnTablet .Select-item-label,.integrations-banking-reconcile-ui-transactionFilter .Select-item-icon,.integrations-banking-reconcile-ui-transactionFilter .Select-item-label,.integrations-banking-reconcile-ui .Select-item-icon,.integrations-banking-reconcile-ui .Select-item-label,.integrations-banking-reconciliation-drawer-container .Select-item-icon,.integrations-banking-reconciliation-drawer-container .Select-item-label,.integrations-reconcile-discrepancy-report-trowser .Select-item-icon,.integrations-reconcile-discrepancy-report-trowser .Select-item-label {
+    display: inline-block;
+    vertical-align: middle
+}
+
+.filterFormOnTablet .Select-item-label,.integrations-banking-reconcile-ui-transactionFilter .Select-item-label,.integrations-banking-reconcile-ui .Select-item-label,.integrations-banking-reconciliation-drawer-container .Select-item-label,.integrations-reconcile-discrepancy-report-trowser .Select-item-label {
+    border-bottom-right-radius: 2px;
+    border-top-right-radius: 2px;
+    cursor: default;
+    padding: 2px 5px
+}
+
+.filterFormOnTablet .Select-item-label .Select-item-label__a,.integrations-banking-reconcile-ui-transactionFilter .Select-item-label .Select-item-label__a,.integrations-banking-reconcile-ui .Select-item-label .Select-item-label__a,.integrations-banking-reconciliation-drawer-container .Select-item-label .Select-item-label__a,.integrations-reconcile-discrepancy-report-trowser .Select-item-label .Select-item-label__a {
+    color: #08c;
+    cursor: pointer
+}
+
+.filterFormOnTablet .Select-item-icon,.integrations-banking-reconcile-ui-transactionFilter .Select-item-icon,.integrations-banking-reconcile-ui .Select-item-icon,.integrations-banking-reconciliation-drawer-container .Select-item-icon,.integrations-reconcile-discrepancy-report-trowser .Select-item-icon {
+    cursor: pointer;
+    border-bottom-left-radius: 2px;
+    border-top-left-radius: 2px;
+    border-right: 1px solid #c9e6f2;
+    padding: 1px 5px 3px
+}
+
+.filterFormOnTablet .Select-item-icon:focus,.filterFormOnTablet .Select-item-icon:hover,.integrations-banking-reconcile-ui-transactionFilter .Select-item-icon:focus,.integrations-banking-reconcile-ui-transactionFilter .Select-item-icon:hover,.integrations-banking-reconcile-ui .Select-item-icon:focus,.integrations-banking-reconcile-ui .Select-item-icon:hover,.integrations-banking-reconciliation-drawer-container .Select-item-icon:focus,.integrations-banking-reconciliation-drawer-container .Select-item-icon:hover,.integrations-reconcile-discrepancy-report-trowser .Select-item-icon:focus,.integrations-reconcile-discrepancy-report-trowser .Select-item-icon:hover {
+    background-color: #ddeff7;
+    color: #0077b3
+}
+
+.filterFormOnTablet .Select-item-icon:active,.integrations-banking-reconcile-ui-transactionFilter .Select-item-icon:active,.integrations-banking-reconcile-ui .Select-item-icon:active,.integrations-banking-reconciliation-drawer-container .Select-item-icon:active,.integrations-reconcile-discrepancy-report-trowser .Select-item-icon:active {
+    background-color: #c9e6f2
+}
+
+.filterFormOnTablet .Select--multi.is-disabled .Select-item,.integrations-banking-reconcile-ui-transactionFilter .Select--multi.is-disabled .Select-item,.integrations-banking-reconcile-ui .Select--multi.is-disabled .Select-item,.integrations-banking-reconciliation-drawer-container .Select--multi.is-disabled .Select-item,.integrations-reconcile-discrepancy-report-trowser .Select--multi.is-disabled .Select-item {
+    background-color: #f2f2f2;
+    border: 1px solid #d9d9d9;
+    color: #888
+}
+
+.filterFormOnTablet .Select--multi.is-disabled .Select-item-icon,.integrations-banking-reconcile-ui-transactionFilter .Select--multi.is-disabled .Select-item-icon,.integrations-banking-reconcile-ui .Select--multi.is-disabled .Select-item-icon,.integrations-banking-reconciliation-drawer-container .Select--multi.is-disabled .Select-item-icon,.integrations-reconcile-discrepancy-report-trowser .Select--multi.is-disabled .Select-item-icon {
+    cursor: not-allowed;
+    border-right: 1px solid #d9d9d9
+}
+
+.filterFormOnTablet .Select--multi.is-disabled .Select-item-icon:active,.filterFormOnTablet .Select--multi.is-disabled .Select-item-icon:focus,.filterFormOnTablet .Select--multi.is-disabled .Select-item-icon:hover,.integrations-banking-reconcile-ui-transactionFilter .Select--multi.is-disabled .Select-item-icon:active,.integrations-banking-reconcile-ui-transactionFilter .Select--multi.is-disabled .Select-item-icon:focus,.integrations-banking-reconcile-ui-transactionFilter .Select--multi.is-disabled .Select-item-icon:hover,.integrations-banking-reconcile-ui .Select--multi.is-disabled .Select-item-icon:active,.integrations-banking-reconcile-ui .Select--multi.is-disabled .Select-item-icon:focus,.integrations-banking-reconcile-ui .Select--multi.is-disabled .Select-item-icon:hover,.integrations-banking-reconciliation-drawer-container .Select--multi.is-disabled .Select-item-icon:active,.integrations-banking-reconciliation-drawer-container .Select--multi.is-disabled .Select-item-icon:focus,.integrations-banking-reconciliation-drawer-container .Select--multi.is-disabled .Select-item-icon:hover,.integrations-reconcile-discrepancy-report-trowser .Select--multi.is-disabled .Select-item-icon:active,.integrations-reconcile-discrepancy-report-trowser .Select--multi.is-disabled .Select-item-icon:focus,.integrations-reconcile-discrepancy-report-trowser .Select--multi.is-disabled .Select-item-icon:hover {
+    background-color: #f2f2f2
+}
+
+@keyframes Select-animation-spin {
+    to {
+        transform: rotate(1turn)
+    }
+}
+
+@-webkit-keyframes Select-animation-spin {
+    to {
+        -webkit-transform: rotate(1turn)
+    }
+}
+
+.filterFormOnTablet .Select-value,.integrations-banking-reconcile-ui-transactionFilter .Select-value,.integrations-banking-reconcile-ui .Select-value,.integrations-banking-reconciliation-drawer-container .Select-value,.integrations-reconcile-discrepancy-report-trowser .Select-value {
+    color: #404040
+}
+
+.filterFormOnTablet .Select.is-disabled>.Select-control,.integrations-banking-reconcile-ui-transactionFilter .Select.is-disabled>.Select-control,.integrations-banking-reconcile-ui .Select.is-disabled>.Select-control,.integrations-banking-reconciliation-drawer-container .Select.is-disabled>.Select-control,.integrations-reconcile-discrepancy-report-trowser .Select.is-disabled>.Select-control {
+    background-color: #e9e9e9
+}
+
+.filterFormOnTablet .Select.is-disabled>.Select-control .Select-placeholder,.integrations-banking-reconcile-ui-transactionFilter .Select.is-disabled>.Select-control .Select-placeholder,.integrations-banking-reconcile-ui .Select.is-disabled>.Select-control .Select-placeholder,.integrations-banking-reconciliation-drawer-container .Select.is-disabled>.Select-control .Select-placeholder,.integrations-reconcile-discrepancy-report-trowser .Select.is-disabled>.Select-control .Select-placeholder {
+    color: #b8b8b8
+}
+
+.filterFormOnTablet .date-picker,.integrations-banking-reconcile-ui-transactionFilter .date-picker,.integrations-banking-reconcile-ui .date-picker,.integrations-banking-reconciliation-drawer-container .date-picker,.reconcile-modal-content .date-picker {
+    display: inline-block;
+    width: 130px;
+    margin-top: 2px
+}
+
+.filterFormOnTablet .date-picker .date-picker-label,.integrations-banking-reconcile-ui-transactionFilter .date-picker .date-picker-label,.integrations-banking-reconcile-ui .date-picker .date-picker-label,.integrations-banking-reconciliation-drawer-container .date-picker .date-picker-label,.reconcile-modal-content .date-picker .date-picker-label {
+    font-weight: 600;
+    padding-bottom: 4px
+}
+
+.filterFormOnTablet .date-picker .date-picker-end-date-error,.filterFormOnTablet .date-picker .date-picker-label-errored,.integrations-banking-reconcile-ui-transactionFilter .date-picker .date-picker-end-date-error,.integrations-banking-reconcile-ui-transactionFilter .date-picker .date-picker-label-errored,.integrations-banking-reconcile-ui .date-picker .date-picker-end-date-error,.integrations-banking-reconcile-ui .date-picker .date-picker-label-errored,.integrations-banking-reconciliation-drawer-container .date-picker .date-picker-end-date-error,.integrations-banking-reconciliation-drawer-container .date-picker .date-picker-label-errored,.reconcile-modal-content .date-picker .date-picker-end-date-error,.reconcile-modal-content .date-picker .date-picker-label-errored {
+    color: #d93b42
+}
+
+.filterFormOnTablet .date-picker .date-picker-label.date-picker-end-date-error:before,.filterFormOnTablet .date-picker .date-picker-label.date-picker-label-errored:before,.integrations-banking-reconcile-ui-transactionFilter .date-picker .date-picker-label.date-picker-end-date-error:before,.integrations-banking-reconcile-ui-transactionFilter .date-picker .date-picker-label.date-picker-label-errored:before,.integrations-banking-reconcile-ui .date-picker .date-picker-label.date-picker-end-date-error:before,.integrations-banking-reconcile-ui .date-picker .date-picker-label.date-picker-label-errored:before,.integrations-banking-reconciliation-drawer-container .date-picker .date-picker-label.date-picker-end-date-error:before,.integrations-banking-reconciliation-drawer-container .date-picker .date-picker-label.date-picker-label-errored:before,.reconcile-modal-content .date-picker .date-picker-label.date-picker-end-date-error:before,.reconcile-modal-content .date-picker .date-picker-label.date-picker-label-errored:before {
+    font-family: harmonyicons;
+    font-size: 16px;
+    margin-right: 5px;
+    content: "\F070"
+}
+
+.integrations-banking-reconcile-ui-ftu-flow .single-step-title {
+    line-height: 1
+}
+
+.integrations-banking-reconcile-ui-ftu-flow .single-step-inner .text-link {
+    display: inline
+}
+
+.integrations-banking-reconcile-ui-ftu-flow .single-step-inner a {
+    color: #0077c5
+}
+
+.integrations-banking-reconcile-ui-ftu-flow .single-step-inner strong {
+    font-weight: 600
+}
+
+.integrations-banking-reconcile-ui-pon-help-widget .single-step-title {
+    line-height: 1
+}
+
+.integrations-banking-reconcile-ui-pon-help-widget .single-step-inner {
+    padding-bottom: 15px
+}
+
+.integrations-banking-reconcile-ui-pon-help-widget .single-step-inner .text-link {
+    display: inline
+}
+
+.integrations-banking-reconcile-ui-pon-help-widget .single-step-inner a {
+    color: #0077c5
+}
+
+.integrations-banking-reconcile-ui-pon-help-widget .single-step-inner strong {
+    font-weight: 600
+}
+
+.integrations-banking-reconcile-ui-pon-help-widget .integrations-banking-reconcile-ui-pon-checkbox {
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 10px
+}
+
+.integrations-banking-reconcile-ui-close-book-modal .ReactModal__Overlay,.integrations-banking-reconcile-ui-row-editor-modal .ReactModal__Overlay {
+    z-index: 20000
+}
+
+.statement-delete-modal-content .close-button {
+    text-align: right
+}
+
+.statement-delete-modal-content .content {
+    padding: 10px
+}
+
+.statement-delete-modal-content .button-container {
+    text-align: center
+}
+
+.integrations-banking-reconciliation-drawer-container ha-tooltip {
+    width: 150px!important
+}
+
+.integrations-banking-reconciliation-drawer-container h3 {
+    margin: 0 45px 21px 15px!important;
+    font-weight: 700
+}
+
+.integrations-banking-reconciliation-drawer-container ha-select ha-popover.visible {
+    white-space: nowrap
+}
+
+.integrations-banking-reconciliation-drawer-container .row {
+    margin-bottom: 10px;
+    flex-wrap: nowrap
+}
+
+.integrations-banking-reconciliation-drawer-container .money-text-field input {
+    text-align: right
+}
+
+.integrations-banking-reconciliation-drawer-container .input-label-styling {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    font-size: 14px;
+    font-weight: 800;
+    display: block;
+    padding-bottom: 5px;
+    min-width: 130px;
+    font-weight: 700
+}
+
+.integrations-banking-reconciliation-drawer-container .section-spacing {
+    margin-bottom: 40px
+}
+
+.integrations-banking-reconciliation-drawer-container .section-title-styling {
+    font-size: 20px;
+    margin-bottom: 15px
+}
+
+.integrations-banking-reconciliation-drawer-container .classIsOwnRow {
+    margin-top: 20px
+}
+
+.integrations-banking-reconciliation-drawer-container .additional-amount,.integrations-banking-reconciliation-drawer-container .ending-balance {
+    width: 120px
+}
+
+.integrations-banking-reconciliation-drawer-container .additional-amount ha-text-field,.integrations-banking-reconciliation-drawer-container .ending-balance ha-text-field {
+    width: 100%
+}
+
+.integrations-banking-reconciliation-drawer-container .exchange-rate-component {
+    display: block
+}
+
+.integrations-banking-reconciliation-drawer-container .exchange-rate-component ha-text-field {
+    width: 140px
+}
+
+.integrations-banking-reconciliation-drawer-container .date-field {
+    min-width: 145px
+}
+
+.integrations-banking-reconciliation-drawer-container .field-container {
+    margin-left: 15px;
+    margin-bottom: 10px
+}
+
+.integrations-banking-reconciliation-drawer-container .drawer-field-container {
+    margin-bottom: 10px
+}
+
+.integrations-banking-reconciliation-drawer-container .drawer-ending-balance {
+    width: 120px;
+    margin-left: 15px
+}
+
+.integrations-banking-reconciliation-drawer-container .drawer-ending-balance ha-text-field,.integrations-banking-reconciliation-drawer-container .drawer-ending-date-width {
+    width: 165px
+}
+
+.integrations-banking-reconciliation-drawer-container .date-field-drawer-container {
+    margin-left: 60px;
+    margin-bottom: 10px
+}
+
+.integrations-banking-reconciliation-drawer-container .date-field-container {
+    margin-left: 70px;
+    margin-bottom: 10px
+}
+
+.integrations-banking-reconciliation-drawer-container .additional-statement-account-select .error-message-tablet {
+    color: #d52b1e;
+    width: 220px;
+    border-bottom: 1px solid #d52b1e;
+    padding: 8px 0
+}
+
+.integrations-banking-reconciliation-drawer-container .hr-color {
+    margin-top: 35px;
+    border-top-color: #dcdcdc
+}
+
+.integrations-banking-reconciliation-drawer-container .beginning-balance-amount {
+    margin-top: 10px
+}
+
+.integrations-banking-reconciliation-drawer-container .additional-statement-component:last-child .Select-menu-outer,.integrations-banking-reconciliation-drawer-container .additional-statement-component:nth-child(2) .Select-menu-outer {
+    top: auto!important;
+    bottom: 100%
+}
+
+.integrations-banking-reconciliation-drawer-container .Select-menu-outer {
+    max-width: 255px
+}
+
+.integrations-banking-reconciliation-drawer-container .account-select.error label {
+    color: #d93b42
+}
+
+.integrations-banking-reconciliation-drawer-container .account-select.error .Select-control {
+    border-color: #d93b42
+}
+
+.integrations-banking-reconciliation-drawer-container .account-select .account-select-option {
+    white-space: nowrap;
+    font-size: 13px;
+    display: flex;
+    justify-content: space-between
+}
+
+.integrations-banking-reconciliation-drawer-container .account-select .account-select-option .account-type {
+    color: #bdbdbd;
+    font-style: italic;
+    margin-left: 10px
+}
+
+.integrations-reconcile-discrepancy-report-trowser .discrepancy-report {
+    height: 100%
+}
+
+.integrations-reconcile-discrepancy-report-trowser .reconcile-links-container {
+    float: right;
+    padding-right: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px
+}
+
+.integrations-reconcile-discrepancy-report-trowser section {
+    padding: 0!important
+}
+
+.integrations-reconcile-discrepancy-report-trowser section .header-right {
+    text-align: right
+}
+
+.integrations-reconcile-discrepancy-report-trowser section .header-right .description {
+    margin-bottom: 5px;
+    margin-top: -5px
+}
+
+.integrations-reconcile-discrepancy-report-trowser section .header-right i {
+    margin-right: 5px
+}
+
+.integrations-reconcile-discrepancy-report-trowser .discrepancy-report-content {
+    margin: 0 35px 35px;
+    height: 82%
+}
+
+.integrations-reconcile-discrepancy-report-trowser .discrepancy-report-content .ha-table-react-wrapper {
+    height: inherit;
+    background-color: #fff
+}
+
+.integrations-reconcile-discrepancy-report-trowser .discrepancy-report-content .ha-table-react-wrapper ha-table-virtual {
+    height: inherit
+}
+
+.integrations-reconcile-discrepancy-report-trowser .discrepancy-report-content ha-page-message {
+    margin-bottom: 30px
+}
+
+.integrations-reconcile-discrepancy-report-trowser .discrepancy-report-content .dgrid {
+    height: 100%!important;
+    max-height: 100%!important
+}
+
+.integrations-reconcile-discrepancy-report-trowser .discrepancy-report-content .dgrid .dgrid-header.dgrid-header-scroll.dgrid-scrollbar-width.ui-widget-header {
+    display: none
+}
+
+.integrations-reconcile-discrepancy-report-trowser .discrepancy-report-content .dgrid .dgrid-header-row {
+    border-bottom: 2px solid #d4d7dc;
+    margin: 0
+}
+
+.integrations-reconcile-discrepancy-report-trowser .discrepancy-report-content .dgrid .dgrid-content.ui-widget-content {
+    padding: 0;
+    height: 100%
+}
+
+.integrations-reconcile-discrepancy-report-trowser .discrepancy-report-content .dgrid .dgrid-scroller {
+    margin-bottom: 0!important;
+    height: 86%;
+    border-bottom: 2px solid #d4d7dc
+}
+
+.integrations-reconcile-discrepancy-report-trowser .discrepancy-report-content .dgrid .orig-amount-column {
+    width: 139px
+}
+
+.integrations-reconcile-discrepancy-report-trowser .discrepancy-report-content .dgrid .change-type-column {
+    width: 160px
+}
+
+.integrations-reconcile-discrepancy-report-trowser .discrepancy-report-content .dgrid .history-column {
+    width: 105px
+}
+
+.integrations-reconcile-discrepancy-report-trowser .discrepancy-report-content .dgrid .clear-state-column {
+    text-align: center;
+    width: 70px
+}
+
+.integrations-reconcile-discrepancy-report-trowser .discrepancy-report-content .dgrid a {
+    color: #365ebf!important
+}
+
+.integrations-reconcile-discrepancy-report-trowser .discrepancy-report-content .ha-table-row-expansion {
+    cursor: default
+}
+
+.integrations-reconcile-discrepancy-report-trowser .discrepancy-report-content .row-editor-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 1
+}
+
+.integrations-reconcile-discrepancy-report-trowser .discrepancy-report-content .row-editor-container {
+    position: relative;
+    z-index: 2;
+    padding: 0 0 15px 5px
+}
+
+.integrations-reconcile-discrepancy-report-trowser .discrepancy-report-content .row-editor table {
+    width: 100%
+}
+
+.integrations-reconcile-discrepancy-report-trowser .discrepancy-report-content .row-editor table td {
+    padding-right: 10px;
+    max-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap
+}
+
+.integrations-reconcile-discrepancy-report-trowser .discrepancy-report-content .row-editor table td[name=cell_type] {
+    width: 9%
+}
+
+.integrations-reconcile-discrepancy-report-trowser .discrepancy-report-content .row-editor table td[name=cell_date] {
+    width: 10%
+}
+
+.integrations-reconcile-discrepancy-report-trowser .discrepancy-report-content .row-editor table td[name=cell_date] ha-date-picker {
+    width: auto
+}
+
+.integrations-reconcile-discrepancy-report-trowser .discrepancy-report-content .row-editor table td[name=cell_modifiedDate] {
+    width: 10%
+}
+
+.integrations-reconcile-discrepancy-report-trowser .discrepancy-report-content .row-editor table td[name=cell_modifiedDate] ha-date-picker {
+    width: auto
+}
+
+.integrations-reconcile-discrepancy-report-trowser .discrepancy-report-content .row-editor table td[name=cell_refNo] {
+    width: 10%
+}
+
+.integrations-reconcile-discrepancy-report-trowser .discrepancy-report-content .row-editor table td[name=cell_refNo] ha-text-field {
+    width: 100%
+}
+
+.integrations-reconcile-discrepancy-report-trowser .discrepancy-report-content .row-editor table td[name=cell_payee] {
+    width: 9%;
+    padding-left: 5px
+}
+
+.integrations-reconcile-discrepancy-report-trowser .discrepancy-report-content .row-editor table td[name=cell_payee] .Select {
+    margin-top: -18px;
+    margin-left: -6px;
+    width: 8%;
+    border: 1px solid #c7c7c7;
+    border-radius: 2px;
+    position: absolute
+}
+
+.integrations-reconcile-discrepancy-report-trowser .discrepancy-report-content .row-editor table td[name=cell_payee] .Select .Select-control {
+    width: 100%
+}
+
+.integrations-reconcile-discrepancy-report-trowser .discrepancy-report-content .row-editor table td[name=cell_payee] .Select .Select-menu-outer {
+    min-width: 100%
+}
+
+.integrations-reconcile-discrepancy-report-trowser .discrepancy-report-content .row-editor table td[name=cell_payee] .Select .Select-menu-outer .payee-select-option {
+    display: flex;
+    justify-content: space-between
+}
+
+.integrations-reconcile-discrepancy-report-trowser .discrepancy-report-content .row-editor table td[name=cell_payee] .Select .Select-menu-outer .payee-select-option .payee-name {
+    padding-right: 15px
+}
+
+.integrations-reconcile-discrepancy-report-trowser .discrepancy-report-content .row-editor table td[name=cell_origAmount] {
+    width: 10%
+}
+
+.integrations-reconcile-discrepancy-report-trowser .discrepancy-report-content .row-editor table td[name=cell_origAmount] ha-text-field {
+    width: 100%
+}
+
+.integrations-reconcile-discrepancy-report-trowser .discrepancy-report-content .row-editor table td[name=cell_origAmount] ha-text-field input {
+    text-align: right
+}
+
+.integrations-reconcile-discrepancy-report-trowser .discrepancy-report-content .row-editor table td[name=cell_currAmount] {
+    width: 10%
+}
+
+.integrations-reconcile-discrepancy-report-trowser .discrepancy-report-content .row-editor table td[name=cell_currAmount] ha-text-field {
+    width: 100%
+}
+
+.integrations-reconcile-discrepancy-report-trowser .discrepancy-report-content .row-editor table td[name=cell_currAmount] ha-text-field input {
+    text-align: right
+}
+
+.integrations-reconcile-discrepancy-report-trowser .discrepancy-report-content .row-editor table td[name=cell_changeType] {
+    width: 11%;
+    padding-right: 0
+}
+
+.integrations-reconcile-discrepancy-report-trowser .discrepancy-report-content .row-editor table td[name=cell_difference] {
+    width: 8%;
+    text-align: right;
+    padding-left: 10px;
+    padding-right: 10px
+}
+
+.integrations-reconcile-discrepancy-report-trowser .discrepancy-report-content .row-editor table td[name=cell_clearState] {
+    width: 6%;
+    padding-left: 6px
+}
+
+.integrations-reconcile-discrepancy-report-trowser .discrepancy-report-content .row-editor table td[name=cell_clearState] .clearStateButton {
+    background-color: #fff;
+    border: 1px solid #babec5;
+    border-radius: 2px;
+    height: 35px;
+    width: 60px;
+    font-weight: 700
+}
+
+.integrations-reconcile-discrepancy-report-trowser .discrepancy-report-content .row-editor table td[name=cell_buttons] {
+    text-align: right;
+    height: 50px;
+    vertical-align: bottom
+}
+
+.integrations-reconcile-discrepancy-report-trowser .discrepancy-report-content .row-editor table td[name=cell_buttons] button {
+    width: 110px;
+    margin-left: 15px
+}
+
+.integrations-reconcile-discrepancy-report-trowser .discrepancy-report-content .row-editor button.close-expansion-button {
+    right: -50px
+}
+
+.integrations-reconcile-discrepancy-report-trowser .discrepancy-report-content .row-editor .xClose {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    cursor: pointer
+}
+
+.integrations-reconcile-discrepancy-report-trowser .discrepancy-report-content .row-editor ha-text-field.disabled input {
+    background-color: #e9e9e9
+}
+
+.reconcile-stage-tooltip-link {
+    text-decoration: dotted underline;
+    cursor: pointer
+}
+
+.integrations-banking-reconcile-ui .ha-numeral.description {
+    color: #393a3d
+}
+
+.integrations-banking-reconcile-ui .Select-control .Select-menu-outer {
+    overflow-x: hidden
+}
+
+.integrations-banking-reconcile-ui .main-account-select .account-select {
+    display: inline-block;
+    width: 435px
+}
+
+.integrations-banking-reconcile-ui .main-account-select .account-select .Select-control {
+    width: 100%
+}
+
+.integrations-banking-reconcile-ui.main-root-container {
+    height: 100%;
+    position: absolute;
+    width: 100%
+}
+
+.integrations-banking-reconcile-ui .main-reconcile-table-view {
+    display: flex;
+    flex-direction: column;
+    height: 100%
+}
+
+.integrations-banking-reconcile-ui .main-reconcile-table-view .feedback-link-container {
+    display: flex;
+    flex: 0 auto;
+    flex-direction: row;
+    justify-content: flex-end;
+    color: #6b6c72;
+    float: right;
+    min-height: 14px
+}
+
+.integrations-banking-reconcile-ui .main-reconcile-table-view .feedback-link-container span:not(:last-of-type):after {
+    content: "|";
+    margin: 10px
+}
+
+.integrations-banking-reconcile-ui .main-reconcile-table-view .page-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 200px;
+    margin: 0;
+    padding-top: 0
+}
+
+.integrations-banking-reconcile-ui .main-reconcile-table-view .table-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 200px;
+    margin: 0;
+    padding-top: 0;
+    padding: 0
+}
+
+.integrations-banking-reconcile-ui .input-label-styling {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    font-size: 14px;
+    font-weight: 800;
+    display: block;
+    padding-bottom: 5px
+}
+
+.integrations-banking-reconcile-ui .left-grey-border {
+    border-left: 1px solid #bdbfc3
+}
+
+.integrations-banking-reconcile-ui .right-grey-border {
+    border-right: 1px solid #bdbfc3
+}
+
+.integrations-banking-reconcile-ui .top-grey-border {
+    border-top: 1px solid #bdbfc3
+}
+
+.integrations-banking-reconcile-ui .money-text-field input {
+    text-align: right
+}
+
+.integrations-banking-reconcile-ui .btn.hi-icon-button.btn-link.no-connector {
+    background-color: transparent!important
+}
+
+.integrations-banking-reconcile-ui .btn.hi-icon-button.btn-link.no-connector:active,.integrations-banking-reconcile-ui .btn.hi-icon-button.btn-link.no-connector:focus,.integrations-banking-reconcile-ui .btn.hi-icon-button.btn-link.no-connector:hover {
+    background-color: #365ebf!important
+}
+
+.integrations-banking-reconcile-ui .account-select.error label {
+    color: #d93b42
+}
+
+.integrations-banking-reconcile-ui .account-select.error .Select-control {
+    border-color: #d93b42
+}
+
+.integrations-banking-reconcile-ui .account-select .account-select-option {
+    white-space: nowrap;
+    font-size: 13px;
+    display: flex;
+    justify-content: space-between
+}
+
+.integrations-banking-reconcile-ui .account-select .account-select-option .account-type {
+    color: #bdbdbd;
+    font-style: italic;
+    margin-left: 10px
+}
+
+.integrations-banking-reconcile-ui .account-select .Select-menu-outer .Select-option.is-focused,.integrations-banking-reconcile-ui .account-select .Select-menu-outer .Select-option:hover {
+    background-color: #eceef1;
+    color: #108000;
+    font-weight: 600
+}
+
+.integrations-banking-reconcile-ui ha-select {
+    width: 211px
+}
+
+.integrations-banking-reconcile-ui .reconcile-zero-state-container {
+    display: flex;
+    width: 80%;
+    min-width: 786px;
+    max-width: 1280px;
+    padding: 40px;
+    background: #fff;
+    border-radius: 8px;
+    margin: 20px 0
+}
+
+.integrations-banking-reconcile-ui .reconcile-zero-state-container .heading {
+    font-size: 52px;
+    font-weight: 700
+}
+
+.integrations-banking-reconcile-ui .reconcile-zero-state-container .zero-state-video-preview {
+    font-size: 16px;
+    color: #0077c5;
+    padding: 20px 0;
+    font-weight: 500;
+    max-width: 230px;
+    cursor: pointer
+}
+
+.integrations-banking-reconcile-ui .reconcile-zero-state-container .zero-state-video-preview .hi-play {
+    color: #0077c5;
+    font-size: 24px;
+    padding-right: 6px
+}
+
+.integrations-banking-reconcile-ui .reconcile-zero-state-container .zero-state-video-preview .zero-state-video-time {
+    color: #6b6c72;
+    padding-left: 10px
+}
+
+.integrations-banking-reconcile-ui .reconcile-zero-state-container .zero-state-tip {
+    font-size: 16px;
+    padding-top: 10px
+}
+
+.integrations-banking-reconcile-ui .reconcile-zero-state-container .zero-state-tip a {
+    font-weight: 500
+}
+
+.integrations-banking-reconcile-ui .reconcile-zero-state-container .start-reconcile-content-list {
+    list-style: none;
+    padding: 0 0 24px;
+    font-size: 16px
+}
+
+.integrations-banking-reconcile-ui .reconcile-zero-state-container .start-reconcile-content-list li:before {
+    content: "\2022";
+    color: #2ca01c;
+    font-weight: 700;
+    display: inline-block;
+    width: 24px;
+    font-size: 20px
+}
+
+.integrations-banking-reconcile-ui .reconcile-zero-state-container .bolt-button {
+    font-size: 16px;
+    border-radius: 18px;
+    padding: 0 32px
+}
+
+.integrations-banking-reconcile-ui .reconcile-zero-state-image {
+    border-radius: 15px;
+    background-image: url(../images/186567f02cd2a6bf804754c3f19bbec2.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    height: 500px;
+    width: 500px
+}
+
+.integrations-banking-reconcile-ui .start-reconcile-header {
+    padding: 20px 30px
+}
+
+.integrations-banking-reconcile-ui .start-reconcile-header h2 {
+    font-weight: 600;
+    margin-left: 0!important
+}
+
+.integrations-banking-reconcile-ui .reconcile-breadcrumb-container {
+    color: #6b6c72;
+    margin-bottom: 5px
+}
+
+.integrations-banking-reconcile-ui .reconcile-breadcrumb-container .reconcile-breadcrumb:not(:last-of-type):after {
+    content: ">";
+    margin: 10px
+}
+
+.integrations-banking-reconcile-ui .reconcile-breadcrumb-container .reconcile-breadcrumb p {
+    display: inline;
+    margin: 0
+}
+
+.integrations-banking-reconcile-ui .reconcile-links-container {
+    float: right;
+    color: #6b6c72
+}
+
+.integrations-banking-reconcile-ui .reconcile-links-container span:not(:last-of-type):after {
+    content: "|";
+    margin: 10px
+}
+
+.integrations-banking-reconcile-ui .reconcile-stage {
+    background-color: #fff
+}
+
+.integrations-banking-reconcile-ui .reconcile-stage header {
+    height: 8%;
+    overflow-y: hidden;
+    padding-bottom: 10px
+}
+
+.integrations-banking-reconcile-ui .reconcile-stage section {
+    border-bottom: 1px solid #bdbfc3
+}
+
+.integrations-banking-reconcile-ui .reconcile-stage ha-stage .btn-toggle {
+    width: 28px;
+    border-left: 2px solid #ddd;
+    border-bottom: 2px solid #ddd;
+    border-right: 2px solid #ddd
+}
+
+.integrations-banking-reconcile-ui .reconcile-stage .stage-header {
+    width: 100%
+}
+
+.integrations-banking-reconcile-ui .reconcile-stage .stage-header td {
+    font-size: 14px;
+    padding-left: 3px;
+    padding-right: 3px
+}
+
+.integrations-banking-reconcile-ui .reconcile-stage .stage-header .account-name,.integrations-banking-reconcile-ui .reconcile-stage .stage-header .reconcile-main-title {
+    margin-left: 0
+}
+
+.integrations-banking-reconcile-ui .reconcile-stage .stage-header .vertical-divider {
+    height: 28px;
+    margin: 0 10px
+}
+
+.integrations-banking-reconcile-ui .reconcile-stage .stage-header .difference-icon {
+    display: inline-block;
+    position: relative;
+    right: 4px;
+    bottom: 18px
+}
+
+.integrations-banking-reconcile-ui .reconcile-stage .stage-header .difference-icon i {
+    font-size: 24px
+}
+
+.integrations-banking-reconcile-ui .reconcile-stage .stage-header .button-container {
+    float: right
+}
+
+.integrations-banking-reconcile-ui .reconcile-stage .stage-header button.editStatement,.integrations-banking-reconcile-ui .reconcile-stage .stage-header ha-combo-button {
+    margin: 2px
+}
+
+.integrations-banking-reconcile-ui .reconcile-stage ha-stage[open=open] .header-deposits,.integrations-banking-reconcile-ui .reconcile-stage ha-stage[open=open] .header-difference,.integrations-banking-reconcile-ui .reconcile-stage ha-stage[open=open] .header-payments,.integrations-banking-reconcile-ui .reconcile-stage ha-stage[open=true] .header-deposits,.integrations-banking-reconcile-ui .reconcile-stage ha-stage[open=true] .header-difference,.integrations-banking-reconcile-ui .reconcile-stage ha-stage[open=true] .header-payments {
+    display: none
+}
+
+.integrations-banking-reconcile-ui .reconcile-stage ha-stage[open=false] header {
+    border-bottom: 1px solid #bdbfc3
+}
+
+.integrations-banking-reconcile-ui .reconcile-stage ha-stage[open=false] .header-difference {
+    white-space: nowrap
+}
+
+@media (max-width: 1200px) {
+    .integrations-banking-reconcile-ui .reconcile-stage ha-stage[open=false] .header-deposits,.integrations-banking-reconcile-ui .reconcile-stage ha-stage[open=false] .header-payments {
+        display:none
+    }
+}
+
+@media (max-width: 900px) {
+    .integrations-banking-reconcile-ui .reconcile-stage ha-stage[open=false] .header-deposits,.integrations-banking-reconcile-ui .reconcile-stage ha-stage[open=false] .header-difference,.integrations-banking-reconcile-ui .reconcile-stage ha-stage[open=false] .header-payments {
+        display:none
+    }
+}
+
+.integrations-banking-reconcile-ui .reconcile-stage .stage-expanded-section {
+    width: 100%;
+    margin-bottom: 6px
+}
+
+.integrations-banking-reconcile-ui .reconcile-stage .stage-expanded-section td {
+    text-align: center;
+    font-size: 24px
+}
+
+.integrations-banking-reconcile-ui .reconcile-stage .stage-expanded-section .equation-bottom,.integrations-banking-reconcile-ui .reconcile-stage .stage-expanded-section .equation-top {
+    width: 100%
+}
+
+.integrations-banking-reconcile-ui .reconcile-stage .stage-expanded-section .brace-head {
+    border-right: 2px solid #bdbfc3;
+    height: 10px
+}
+
+.integrations-banking-reconcile-ui .reconcile-stage .stage-expanded-section .brace-arms {
+    border: 2px solid #bdbfc3;
+    border-bottom: 0;
+    height: 10px
+}
+
+.integrations-banking-reconcile-ui .reconcile-stage .stage-expanded-section .operator {
+    font-size: 150%
+}
+
+.integrations-banking-reconcile-ui .reconcile-stage .stage-expanded-section .spacer {
+    width: 5%
+}
+
+.integrations-banking-reconcile-ui .reconcile-stage .stage-expanded-section .spacer-large {
+    width: 10%
+}
+
+.integrations-banking-reconcile-ui .reconcile-stage .stage-expanded-section .difference {
+    border-left: 1px solid #bdbfc3;
+    white-space: nowrap
+}
+
+.integrations-banking-reconcile-ui .reconcile-stage .stage-expanded-section .difference .difference-icon {
+    display: inline-block;
+    position: relative;
+    right: 12px;
+    bottom: 12px
+}
+
+.integrations-banking-reconcile-ui .reconcile-stage .stage-expanded-section .difference .difference-icon i {
+    font-size: 42px
+}
+
+@media (max-width: 1000px) {
+    .integrations-banking-reconcile-ui .reconcile-stage .stage-expanded-section .difference {
+        border-left:0
+    }
+}
+
+.integrations-banking-reconcile-ui .reconcile-stage .money-field {
+    display: inline-block;
+    padding: 0 10px
+}
+
+.integrations-banking-reconcile-ui .reconcile-stage .money-field .description {
+    text-align: center;
+    white-space: nowrap
+}
+
+.integrations-banking-reconcile-ui .reconcile-stage .tool-tipped {
+    border-bottom: 1px dotted #516d88
+}
+
+.integrations-banking-reconcile-ui ha-table .dgrid-content .dgrid-row:last-child .dgrid-cell {
+    border-bottom: 2px solid #dcdcdc!important
+}
+
+.integrations-banking-reconcile-ui .grid .gridFilterButtonsContainer {
+    position: absolute;
+    top: 6px;
+    text-align: center;
+    margin: auto;
+    width: 340px;
+    z-index: 1;
+    left: 0;
+    right: 0
+}
+
+.integrations-banking-reconcile-ui .grid .gridFilterButtonsContainer button {
+    width: 112px;
+    color: #404040;
+    background: #fff
+}
+
+.integrations-banking-reconcile-ui .grid .gridFilterButtonsContainer button[aria-pressed=true] {
+    background: #f6f7f9
+}
+
+.integrations-banking-reconcile-ui .grid .ha-expando-button .pull-left {
+    line-height: 1em
+}
+
+.integrations-banking-reconcile-ui .grid .ha-table-row-expansion {
+    z-index: 3;
+    cursor: default;
+    padding: 0
+}
+
+.integrations-banking-reconcile-ui .grid .shiftedRight {
+    left: 250px
+}
+
+.integrations-banking-reconcile-ui .grid.transactionGrid {
+    height: 100%;
+    position: relative;
+    flex: 1;
+    min-height: 50vh
+}
+
+.integrations-banking-reconcile-ui .grid.transactionGrid .ha-table-react-wrapper {
+    height: 100%;
+    position: absolute;
+    width: 100%
+}
+
+.integrations-banking-reconcile-ui .grid.transactionGrid .ha-table-react-wrapper ha-table-virtual {
+    height: 100%;
+    display: flex;
+    flex-direction: column
+}
+
+.integrations-banking-reconcile-ui .grid.transactionGrid .ha-table-react-wrapper ha-table-virtual .tablebar {
+    padding-bottom: 5px!important
+}
+
+.integrations-banking-reconcile-ui .grid.transactionGrid .ha-table-react-wrapper ha-table-virtual .dgrid {
+    height: 100%!important;
+    max-height: 100%!important;
+    flex: 1
+}
+
+.integrations-banking-reconcile-ui .grid.transactionGrid .ha-table-react-wrapper ha-table-virtual .dgrid .dgrid-header.dgrid-header-scroll.dgrid-scrollbar-width.ui-widget-header {
+    display: none
+}
+
+.integrations-banking-reconcile-ui .grid.transactionGrid .ha-table-react-wrapper ha-table-virtual .dgrid .dgrid-scroller .dgrid-cell {
+    border-right: none
+}
+
+.integrations-banking-reconcile-ui .grid.transactionGrid .ha-table-react-wrapper ha-table-virtual .dgrid .dgrid-scroller {
+    border-bottom: 2px solid #d4d7dc;
+    background-color: #fff
+}
+
+.integrations-banking-reconcile-ui .grid.transactionGrid .ha-table-react-wrapper ha-table-virtual .dgrid .dgrid-header {
+    margin-left: 0;
+    margin-right: 0
+}
+
+.integrations-banking-reconcile-ui .grid.transactionGrid .ha-table-react-wrapper ha-table-virtual .dgrid .dgrid-header .dgrid-cell {
+    border-color: #d4d7dc
+}
+
+.integrations-banking-reconcile-ui .grid.transactionGrid .ha-table-react-wrapper ha-table-virtual .dgrid .dgrid-content {
+    padding: 0
+}
+
+.integrations-banking-reconcile-ui .grid.transactionGrid .ha-table-react-wrapper ha-table-virtual .dgrid .dgrid-cell.sorted {
+    background-color: #fff
+}
+
+.integrations-banking-reconcile-ui .grid.transactionGrid .ha-table-react-wrapper ha-table-virtual .edit-columns ha-checkbox:first-of-type {
+    margin-top: 0
+}
+
+.integrations-banking-reconcile-ui .grid.transactionGrid .ha-table-react-wrapper ha-table-virtual .dgrid-content {
+    width: 100%!important
+}
+
+.integrations-banking-reconcile-ui .grid.transactionGrid .ha-table-react-wrapper ha-table-virtual.compact .dgrid-row {
+    height: auto
+}
+
+.integrations-banking-reconcile-ui .grid.transactionGrid .ha-table-react-wrapper ha-table-virtual.compact .dgrid-row-table {
+    height: 30px
+}
+
+.integrations-banking-reconcile-ui .grid.transactionGrid .ha-table-react-wrapper ha-table-virtual.super-compact .source-icon {
+    width: 18px!important;
+    height: 18px!important
+}
+
+.integrations-banking-reconcile-ui .grid.transactionGrid .ha-table-react-wrapper ha-table-virtual.super-compact .subline {
+    display: none
+}
+
+.integrations-banking-reconcile-ui .grid.transactionGrid .ha-table-react-wrapper ha-table-virtual.super-compact .dgrid-row {
+    height: auto
+}
+
+.integrations-banking-reconcile-ui .grid.transactionGrid .ha-table-react-wrapper ha-table-virtual.super-compact .dgrid-cell {
+    height: 24px
+}
+
+.integrations-banking-reconcile-ui .grid.transactionGrid .ha-table-react-wrapper ha-table-virtual.super-compact .dgrid-content .dgrid-row {
+    height: auto
+}
+
+.integrations-banking-reconcile-ui .grid.transactionGrid .ha-table-react-wrapper ha-table-virtual.super-compact .dgrid-content .dgrid-cell {
+    height: 24px
+}
+
+.integrations-banking-reconcile-ui .grid.transactionGrid .ha-table-react-wrapper ha-table-virtual.super-compact .ha-text-field input {
+    max-height: 21px
+}
+
+.integrations-banking-reconcile-ui .grid.transactionGrid .ha-table-react-wrapper ha-table-virtual .dgrid-row.success {
+    background-color: #eceef1
+}
+
+.integrations-banking-reconcile-ui .grid.transactionGrid .ha-table-react-wrapper ha-table-virtual .dgrid-row.success:before {
+    background-color: transparent
+}
+
+.integrations-banking-reconcile-ui .grid.transactionGrid .ha-table-react-wrapper ha-table-virtual .dgrid-no-data {
+    margin-top: 25px
+}
+
+.integrations-banking-reconcile-ui .grid.transactionGrid .ha-table-react-wrapper ha-table-virtual .date {
+    width: 120px
+}
+
+@media only screen and (max-device-width: 1024px) {
+    .integrations-banking-reconcile-ui .grid.transactionGrid .ha-table-react-wrapper ha-table-virtual .date {
+        width:90px
+    }
+}
+
+.integrations-banking-reconcile-ui .grid.transactionGrid .ha-table-react-wrapper ha-table-virtual .clearDate {
+    width: 120px
+}
+
+@media only screen and (max-device-width: 1024px) {
+    .integrations-banking-reconcile-ui .grid.transactionGrid .ha-table-react-wrapper ha-table-virtual .clearDate {
+        width:90px
+    }
+}
+
+.integrations-banking-reconcile-ui .grid.transactionGrid .ha-table-react-wrapper ha-table-virtual .account {
+    width: 130px
+}
+
+@media only screen and (max-device-width: 1024px) {
+    .integrations-banking-reconcile-ui .grid.transactionGrid .ha-table-react-wrapper ha-table-virtual .account {
+        width:80px
+    }
+}
+
+.integrations-banking-reconcile-ui .grid.transactionGrid .ha-table-react-wrapper ha-table-virtual .account div {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis
+}
+
+.integrations-banking-reconcile-ui .grid.transactionGrid .ha-table-react-wrapper ha-table-virtual .amount,.integrations-banking-reconcile-ui .grid.transactionGrid .ha-table-react-wrapper ha-table-virtual .refNo,.integrations-banking-reconcile-ui .grid.transactionGrid .ha-table-react-wrapper ha-table-virtual .txnType {
+    width: 11%
+}
+
+.integrations-banking-reconcile-ui .grid.transactionGrid .ha-table-react-wrapper ha-table-virtual .payee {
+    width: 14%
+}
+
+.integrations-banking-reconcile-ui .grid.transactionGrid .ha-table-react-wrapper ha-table-virtual .memo {
+    width: 24%
+}
+
+@media only screen and (max-device-width: 1024px) {
+    .integrations-banking-reconcile-ui .grid.transactionGrid .ha-table-react-wrapper ha-table-virtual .memo {
+        width:16%
+    }
+}
+
+.integrations-banking-reconcile-ui .grid.transactionGrid .ha-table-react-wrapper ha-table-virtual .clearState,.integrations-banking-reconcile-ui .grid.transactionGrid .ha-table-react-wrapper ha-table-virtual .olb-source {
+    width: 80px
+}
+
+.integrations-banking-reconcile-ui .grid.transactionGrid .ha-table-react-wrapper ha-table-virtual .clearState .dgrid-sort-arrow,.integrations-banking-reconcile-ui .grid.transactionGrid .ha-table-react-wrapper ha-table-virtual .olb-source .dgrid-sort-arrow {
+    right: 6px
+}
+
+.integrations-banking-reconcile-ui .grid.transactionGrid .ha-table-react-wrapper ha-table-virtual .clearState {
+    padding: 0
+}
+
+.integrations-banking-reconcile-ui .grid.transactionGrid .ha-table-react-wrapper ha-table-virtual .clearState>div {
+    height: 100%;
+    width: 100%
+}
+
+.integrations-banking-reconcile-ui .grid.transactionGrid .ha-table-react-wrapper ha-table-virtual .clearState>div button {
+    border: none;
+    background: none;
+    width: 100%;
+    height: 100%
+}
+
+.integrations-banking-reconcile-ui .grid.transactionGrid .ha-table-react-wrapper ha-table-virtual td.clearState:hover .circle-unticked .tickmark,.integrations-banking-reconcile-ui .grid.transactionGrid .ha-table-react-wrapper ha-table-virtual th.clearState .circle-unticked .tickmark:hover {
+    color: #bec0c1
+}
+
+.integrations-banking-reconcile-ui .grid.transactionGrid .ha-table-react-wrapper ha-table-virtual .row-tickbox {
+    pointer-events: none
+}
+
+.integrations-banking-reconcile-ui .grid.transactionGrid .ha-table-react-wrapper ha-table-virtual .circle-ticked,.integrations-banking-reconcile-ui .grid.transactionGrid .ha-table-react-wrapper ha-table-virtual .circle-unticked {
+    margin: auto;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    text-align: center
+}
+
+.integrations-banking-reconcile-ui .grid.transactionGrid .ha-table-react-wrapper ha-table-virtual .circle-unticked {
+    border: thin solid silver
+}
+
+.integrations-banking-reconcile-ui .grid.transactionGrid .ha-table-react-wrapper ha-table-virtual .circle-unticked .tickmark {
+    color: transparent
+}
+
+.integrations-banking-reconcile-ui .grid.transactionGrid .ha-table-react-wrapper ha-table-virtual .circle-ticked {
+    background: #486c8f
+}
+
+.integrations-banking-reconcile-ui .grid.transactionGrid .ha-table-react-wrapper ha-table-virtual .tickmark {
+    pointer-events: none;
+    color: #fff;
+    position: relative;
+    bottom: 1px;
+    font-size: 75%
+}
+
+.integrations-banking-reconcile-ui .grid.transactionGrid .ha-table-react-wrapper ha-table-virtual .busy-ticking-all,.integrations-banking-reconcile-ui .grid.transactionGrid .ha-table-react-wrapper ha-table-virtual .busy-ticking-one {
+    opacity: 0;
+    cursor: wait
+}
+
+.integrations-banking-reconcile-ui .grid.transactionGrid .ha-table-react-wrapper ha-table-virtual .clearState-header {
+    margin-left: auto;
+    position: relative;
+    top: 2px
+}
+
+.integrations-banking-reconcile-ui .grid.transactionGrid .ha-table-react-wrapper ha-table-virtual .hi-filter {
+    margin-top: 5px
+}
+
+.integrations-banking-reconcile-ui .grid.transactionGrid .ha-table-react-wrapper ha-table-virtual ha-tag {
+    font-size: 14px
+}
+
+.integrations-banking-reconcile-ui .grid.transactionGrid .ha-table-react-wrapper ha-table-virtual ha-tag button {
+    position: relative;
+    bottom: 4px
+}
+
+.integrations-banking-reconcile-ui .grid.transactionGrid .ha-table-react-wrapper ha-table-virtual ha-tag:hover {
+    cursor: pointer
+}
+
+.integrations-banking-reconcile-ui .grid.transactionGrid .ha-table-react-wrapper ha-table-virtual button.more:hover {
+    cursor: default;
+    color: inherit
+}
+
+.integrations-banking-reconcile-ui .grid .source-icon {
+    width: 25px;
+    height: 25px;
+    background-size: 95px;
+    margin: auto
+}
+
+.integrations-banking-reconcile-ui .grid .source-icon.manual-match {
+    background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+Cjxzdmcgd2lkdGg9IjIyMHB4IiBoZWlnaHQ9IjE4NXB4IiB2aWV3Qm94PSIwIDAgMjIwIDE4NSIgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIj4KICAgIDwhLS0gR2VuZXJhdG9yOiBTa2V0Y2ggMy44LjMgKDI5ODAyKSAtIGh0dHA6Ly93d3cuYm9oZW1pYW5jb2RpbmcuY29tL3NrZXRjaCAtLT4KICAgIDx0aXRsZT5BcnRib2FyZCAxIENvcHk8L3RpdGxlPgogICAgPGRlc2M+Q3JlYXRlZCB3aXRoIFNrZXRjaC48L2Rlc2M+CiAgICA8ZGVmcz48L2RlZnM+CiAgICA8ZyBpZD0iUGFnZS0xIiBzdHJva2U9Im5vbmUiIHN0cm9rZS13aWR0aD0iMSIgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj4KICAgICAgICA8ZyBpZD0iYWRkLW1hdGNoLW1hbnVhbCIgZmlsbD0iIzRGQjI0OCI+CiAgICAgICAgICAgIDxnIGlkPSJhZGQtbWF0Y2giIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAuMDAwMDAwLCAtNDQ5LjAwMDAwMCkiPgogICAgICAgICAgICAgICAgPHBhdGggZD0iTTE5NS41OTU0MTQsNDg0LjczNjM3NSBMNjMuMzIzNjgxNyw0ODQuNzM2Mzc1IEM0OS45NDcxMDQ5LDQ4NC43MzYzNzUgMzkuMDYzMjgzOSw0OTUuNjI2MTQ1IDM5LjA2MzI4MzksNTA5LjAwNzc4IEwzOS4wNjMyODM5LDYwMC44ODgxOTcgQzM5LjA2MzI4MzksNjE0LjI2OTgzMiA0OS45NDcxMDQ5LDYyNS4xNTk2MDMgNjMuMzIzNjgxNyw2MjUuMTU5NjAzIEwxOTUuNTk2NDI1LDYyNS4xNTk2MDMgQzIwOC45NzE5OTEsNjI1LjE1OTYwMyAyMTkuODU2ODIzLDYxNC4yNjk4MzIgMjE5Ljg1NjgyMyw2MDAuODg4MTk3IEwyMTkuODU2ODIzLDUwOS4wMDc3OCBDMjE5Ljg1NTgxMiw0OTUuNjI1MTM0IDIwOC45NzE5OTEsNDg0LjczNjM3NSAxOTUuNTk1NDE0LDQ4NC43MzYzNzUgTDE5NS41OTU0MTQsNDg0LjczNjM3NSBaIE0xOTkuNjM4ODE0LDYwMC44ODcxODYgQzE5OS42Mzg4MTQsNjAzLjExODEzMiAxOTcuODI0MzM4LDYwNC45MzI0MiAxOTUuNTk1NDE0LDYwNC45MzI0MiBMNjMuMzIzNjgxNyw2MDQuOTMyNDIgQzYxLjA5Mzc0NjgsNjA0LjkzMjQyIDU5LjI4MDI4MjEsNjAzLjExODEzMiA1OS4yODAyODIxLDYwMC44ODcxODYgTDU5LjI4MDI4MjEsNTA5LjAwNjc2OSBDNTkuMjgwMjgyMSw1MDYuNzc2ODM0IDYxLjA5Mzc0NjgsNTA0Ljk2MTUzNSA2My4zMjM2ODE3LDUwNC45NjE1MzUgTDE5NS41OTY0MjUsNTA0Ljk2MTUzNSBDMTk3LjgyNTM0OSw1MDQuOTYxNTM1IDE5OS42Mzk4MjUsNTA2Ljc3NjgzNCAxOTkuNjM5ODI1LDUwOS4wMDY3NjkgTDE5OS42Mzk4MjUsNjAwLjg4NzE4NiBMMTk5LjYzODgxNCw2MDAuODg3MTg2IFoiIGlkPSJTaGFwZSI+PC9wYXRoPgogICAgICAgICAgICAgICAgPHBhdGggZD0iTTE2Ny4yOTA2MDYsNDU5LjE3MjUxNyBDMTY3LjI5MDYwNiw0NTMuNTg3MDYgMTYyLjc2NDAyLDQ0OS4wNTk0MzEgMTU3LjE4MjEwNyw0NDkuMDU5NDMxIEwzMi4zNDcxOTcxLDQ0OS4wNTk0MzEgQzE0LjUxMDc1MDUsNDQ5LjA1OTQzMSAwLDQ2My41NzU3NTQgMCw0ODEuNDIxMzA1IEwwLDU3Ny42MjgxIEMwLDU4My4yMTM1NTcgNC41MjY1ODU5LDU4Ny43NDExODYgMTAuMTA4NDk5MSw1ODcuNzQxMTg2IEMxNS42OTA0MTIzLDU4Ny43NDExODYgMjAuMjE2OTk4Miw1ODMuMjEzNTU3IDIwLjIxNjk5ODIsNTc3LjYyODEgTDIwLjIxNjk5ODIsNDgxLjQyMTMwNSBDMjAuMjE2OTk4Miw0NzQuNzI5NDc3IDI1LjY1ODQwMzMsNDY5LjI4NTYwMyAzMi4zNDcxOTcxLDQ2OS4yODU2MDMgTDE1Ny4xODIxMDcsNDY5LjI4NTYwMyBDMTYyLjc2NTAzMSw0NjkuMjg1NjAzIDE2Ny4yOTA2MDYsNDY0Ljc1Njk2MyAxNjcuMjkwNjA2LDQ1OS4xNzI1MTcgTDE2Ny4yOTA2MDYsNDU5LjE3MjUxNyBaIiBpZD0iU2hhcGUiPjwvcGF0aD4KICAgICAgICAgICAgPC9nPgogICAgICAgIDwvZz4KICAgIDwvZz4KPC9zdmc+);
+    left: 2px;
+    top: 3px
+}
+
+.integrations-banking-reconcile-ui .grid .source-icon.auto-match {
+    background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+Cjxzdmcgd2lkdGg9IjIyMHB4IiBoZWlnaHQ9IjE4NXB4IiB2aWV3Qm94PSIwIDAgMjIwIDE4NSIgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIj4KICAgIDwhLS0gR2VuZXJhdG9yOiBTa2V0Y2ggMy44LjMgKDI5ODAyKSAtIGh0dHA6Ly93d3cuYm9oZW1pYW5jb2RpbmcuY29tL3NrZXRjaCAtLT4KICAgIDx0aXRsZT5BcnRib2FyZCAxPC90aXRsZT4KICAgIDxkZXNjPkNyZWF0ZWQgd2l0aCBTa2V0Y2guPC9kZXNjPgogICAgPGRlZnM+PC9kZWZzPgogICAgPGcgaWQ9IlBhZ2UtMSIgc3Ryb2tlPSJub25lIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiIGZpbGwtcnVsZT0iZXZlbm9kZCI+CiAgICAgICAgPGcgaWQ9ImFkZC1tYXRjaC1hdXRvIiBmaWxsPSIjNEZCMjQ4Ij4KICAgICAgICAgICAgPGcgaWQ9ImFkZC1tYXRjaCI+CiAgICAgICAgICAgICAgICA8cGF0aCBkPSJNMTg4LjQ5OCwxMTguNjM0IEwxNjEuMTMxLDExOC42MzQgTDE2MS4xMzEsOTIgQzE2MS4xMzEsODUuMDk3IDE1NS41MzMsNzkuNSAxNDguNjMxLDc5LjUgQzE0MS43MjksNzkuNSAxMzYuMTMxLDg1LjA5NyAxMzYuMTMxLDkyIEwxMzYuMTMxLDExOC42MzQgTDEwOS40OTcsMTE4LjYzNCBDMTAyLjU5NCwxMTguNjM0IDk2Ljk5NywxMjQuMjMxIDk2Ljk5NywxMzEuMTM0IEM5Ni45OTcsMTM4LjAzNyAxMDIuNTk0LDE0My42MzQgMTA5LjQ5NywxNDMuNjM0IEwxMzYuMTMxLDE0My42MzQgTDEzNi4xMzEsMTcxIEMxMzYuMTMxLDE3Ny45MDMgMTQxLjcyOSwxODMuNSAxNDguNjMxLDE4My41IEMxNTUuNTMzLDE4My41IDE2MS4xMzEsMTc3LjkwMyAxNjEuMTMxLDE3MSBMMTYxLjEzMSwxNDMuNjM0IEwxODguNDk4LDE0My42MzQgQzE5NS40LDE0My42MzQgMjAwLjk5OCwxMzguMDM3IDIwMC45OTgsMTMxLjEzNCBDMjAwLjk5OCwxMjQuMjMxIDE5NS40LDExOC42MzQgMTg4LjQ5OCwxMTguNjM0IEwxODguNDk4LDExOC42MzQgWiIgaWQ9IlNoYXBlIj48L3BhdGg+CiAgICAgICAgICAgICAgICA8cGF0aCBkPSJNMTY1LjQ5OCwxMCBDMTY1LjQ5OCw0LjQ3NyAxNjEuMDE5LDAgMTU1LjQ5OCwwIEwzMiwwIEMxNC4zNTUsMCAwLDE0LjM1NCAwLDMyIEwwLDEyNy4xMzEgQzAsMTMyLjY1MyA0LjQ3NywxMzcuMTMxIDEwLDEzNy4xMzEgQzE1LjUyMywxMzcuMTMxIDIwLDEzMi42NTMgMjAsMTI3LjEzMSBMMjAsMzIgQzIwLDI1LjM4MyAyNS4zODMsMjAgMzIsMjAgTDE1NS40OTgsMjAgQzE2MS4wMiwyMCAxNjUuNDk4LDE1LjUyMiAxNjUuNDk4LDEwIEwxNjUuNDk4LDEwIFoiIGlkPSJTaGFwZSI+PC9wYXRoPgogICAgICAgICAgICAgICAgPHBhdGggZD0iTTE5My41NTcsMzYgTDYyLjcwNCwzNiBDNDkuNDcxLDM2IDM4LjcwNCw0Ni43NjcgMzguNzA0LDYwIEwzOC43MDQsMTUwLjg1MiBDMzguNzA0LDE2NC4wODUgNDkuNDcxLDE3NC44NTIgNjIuNzA0LDE3NC44NTIgTDg4LjQ5NywxNzQuODUyIEw4OC40OTcsMTU0Ljg1MiBMNjIuNzA0LDE1NC44NTIgQzYwLjQ5OCwxNTQuODUyIDU4LjcwNCwxNTMuMDU4IDU4LjcwNCwxNTAuODUyIEw1OC43MDQsNjAgQzU4LjcwNCw1Ny43OTUgNjAuNDk4LDU2IDYyLjcwNCw1NiBMMTkzLjU1Nyw1NiBDMTk1Ljc2NCw1NiAxOTcuNTU3LDU3Ljc5NSAxOTcuNTU3LDYwIEwxOTcuNTU3LDg4IEwyMTcuNTU3LDg4IEwyMTcuNTU3LDYwIEMyMTcuNTU3LDQ2Ljc2NyAyMDYuNzkxLDM2IDE5My41NTcsMzYgTDE5My41NTcsMzYgWiIgaWQ9IlNoYXBlIj48L3BhdGg+CiAgICAgICAgICAgIDwvZz4KICAgICAgICA8L2c+CiAgICA8L2c+Cjwvc3ZnPg==);
+    left: 2px;
+    top: 3px
+}
+
+.integrations-banking-reconcile-ui .grid .source-icon.column-header {
+    background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+Cjxzdmcgd2lkdGg9IjIyMHB4IiBoZWlnaHQ9IjE4NXB4IiB2aWV3Qm94PSIwIDAgMjIwIDE4NSIgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIj4KICAgIDwhLS0gR2VuZXJhdG9yOiBTa2V0Y2ggMy44LjMgKDI5ODAyKSAtIGh0dHA6Ly93d3cuYm9oZW1pYW5jb2RpbmcuY29tL3NrZXRjaCAtLT4KICAgIDx0aXRsZT5BcnRib2FyZCAxIENvcHk8L3RpdGxlPgogICAgPGRlc2M+Q3JlYXRlZCB3aXRoIFNrZXRjaC48L2Rlc2M+CiAgICA8ZGVmcz48L2RlZnM+CiAgICA8ZyBpZD0iUGFnZS0xIiBzdHJva2U9Im5vbmUiIHN0cm9rZS13aWR0aD0iMSIgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj4KICAgICAgICA8ZyBpZD0iYWRkLW1hdGNoLXRpdGxlIiBmaWxsPSIjNzA4RkFDIj4KICAgICAgICAgICAgPGcgaWQ9ImFkZC1tYXRjaCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMC4wMDAwMDAsIC00NDkuMDAwMDAwKSI+CiAgICAgICAgICAgICAgICA8cGF0aCBkPSJNMTk1LjU5NTQxNCw0ODQuNzM2Mzc1IEw2My4zMjM2ODE3LDQ4NC43MzYzNzUgQzQ5Ljk0NzEwNDksNDg0LjczNjM3NSAzOS4wNjMyODM5LDQ5NS42MjYxNDUgMzkuMDYzMjgzOSw1MDkuMDA3NzggTDM5LjA2MzI4MzksNjAwLjg4ODE5NyBDMzkuMDYzMjgzOSw2MTQuMjY5ODMyIDQ5Ljk0NzEwNDksNjI1LjE1OTYwMyA2My4zMjM2ODE3LDYyNS4xNTk2MDMgTDE5NS41OTY0MjUsNjI1LjE1OTYwMyBDMjA4Ljk3MTk5MSw2MjUuMTU5NjAzIDIxOS44NTY4MjMsNjE0LjI2OTgzMiAyMTkuODU2ODIzLDYwMC44ODgxOTcgTDIxOS44NTY4MjMsNTA5LjAwNzc4IEMyMTkuODU1ODEyLDQ5NS42MjUxMzQgMjA4Ljk3MTk5MSw0ODQuNzM2Mzc1IDE5NS41OTU0MTQsNDg0LjczNjM3NSBMMTk1LjU5NTQxNCw0ODQuNzM2Mzc1IFogTTE5OS42Mzg4MTQsNjAwLjg4NzE4NiBDMTk5LjYzODgxNCw2MDMuMTE4MTMyIDE5Ny44MjQzMzgsNjA0LjkzMjQyIDE5NS41OTU0MTQsNjA0LjkzMjQyIEw2My4zMjM2ODE3LDYwNC45MzI0MiBDNjEuMDkzNzQ2OCw2MDQuOTMyNDIgNTkuMjgwMjgyMSw2MDMuMTE4MTMyIDU5LjI4MDI4MjEsNjAwLjg4NzE4NiBMNTkuMjgwMjgyMSw1MDkuMDA2NzY5IEM1OS4yODAyODIxLDUwNi43NzY4MzQgNjEuMDkzNzQ2OCw1MDQuOTYxNTM1IDYzLjMyMzY4MTcsNTA0Ljk2MTUzNSBMMTk1LjU5NjQyNSw1MDQuOTYxNTM1IEMxOTcuODI1MzQ5LDUwNC45NjE1MzUgMTk5LjYzOTgyNSw1MDYuNzc2ODM0IDE5OS42Mzk4MjUsNTA5LjAwNjc2OSBMMTk5LjYzOTgyNSw2MDAuODg3MTg2IEwxOTkuNjM4ODE0LDYwMC44ODcxODYgWiIgaWQ9IlNoYXBlIj48L3BhdGg+CiAgICAgICAgICAgICAgICA8cGF0aCBkPSJNMTY3LjI5MDYwNiw0NTkuMTcyNTE3IEMxNjcuMjkwNjA2LDQ1My41ODcwNiAxNjIuNzY0MDIsNDQ5LjA1OTQzMSAxNTcuMTgyMTA3LDQ0OS4wNTk0MzEgTDMyLjM0NzE5NzEsNDQ5LjA1OTQzMSBDMTQuNTEwNzUwNSw0NDkuMDU5NDMxIDAsNDYzLjU3NTc1NCAwLDQ4MS40MjEzMDUgTDAsNTc3LjYyODEgQzAsNTgzLjIxMzU1NyA0LjUyNjU4NTksNTg3Ljc0MTE4NiAxMC4xMDg0OTkxLDU4Ny43NDExODYgQzE1LjY5MDQxMjMsNTg3Ljc0MTE4NiAyMC4yMTY5OTgyLDU4My4yMTM1NTcgMjAuMjE2OTk4Miw1NzcuNjI4MSBMMjAuMjE2OTk4Miw0ODEuNDIxMzA1IEMyMC4yMTY5OTgyLDQ3NC43Mjk0NzcgMjUuNjU4NDAzMyw0NjkuMjg1NjAzIDMyLjM0NzE5NzEsNDY5LjI4NTYwMyBMMTU3LjE4MjEwNyw0NjkuMjg1NjAzIEMxNjIuNzY1MDMxLDQ2OS4yODU2MDMgMTY3LjI5MDYwNiw0NjQuNzU2OTYzIDE2Ny4yOTA2MDYsNDU5LjE3MjUxNyBMMTY3LjI5MDYwNiw0NTkuMTcyNTE3IFoiIGlkPSJTaGFwZSI+PC9wYXRoPgogICAgICAgICAgICA8L2c+CiAgICAgICAgPC9nPgogICAgPC9nPgo8L3N2Zz4=);
+    opacity: .8
+}
+
+.integrations-banking-reconcile-ui .grid .source-icon.auto-match,.integrations-banking-reconcile-ui .grid .source-icon.column-header,.integrations-banking-reconcile-ui .grid .source-icon.manual-match {
+    background-size: 80%;
+    background-repeat: no-repeat;
+    margin-left: auto;
+    position: relative
+}
+
+.integrations-banking-reconcile-ui .grid .row-editor-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 1
+}
+
+.integrations-banking-reconcile-ui .grid .row-editor-container {
+    position: relative;
+    z-index: 2;
+    padding: 0 0 15px 5px
+}
+
+.integrations-banking-reconcile-ui .grid .row-editor table {
+    width: 100%
+}
+
+.integrations-banking-reconcile-ui .grid .row-editor table td input {
+    height: 36px
+}
+
+.integrations-banking-reconcile-ui .grid .row-editor table td[name=cell_date] {
+    width: 115px;
+    min-width: 115px;
+    max-width: 115px;
+    padding-bottom: 5px;
+    color: #404040
+}
+
+.integrations-banking-reconcile-ui .grid .row-editor table td[name=cell_date] .date-picker {
+    width: 115px
+}
+
+.integrations-banking-reconcile-ui .grid .row-editor table td[name=cell_clearDate] {
+    width: 100px;
+    min-width: 100px;
+    max-width: 100px;
+    padding-bottom: 5px;
+    padding-left: 5px;
+    color: #404040
+}
+
+.integrations-banking-reconcile-ui .grid .row-editor table td[name=cell_clearDate] .date-picker {
+    width: 100px
+}
+
+.integrations-banking-reconcile-ui .grid .row-editor table td[name=cell_type] {
+    width: 10%;
+    padding-left: 10px;
+    color: #404040
+}
+
+.integrations-banking-reconcile-ui .grid .row-editor table td[name=cell_refNo] {
+    width: 11%;
+    color: #404040
+}
+
+.integrations-banking-reconcile-ui .grid .row-editor table td[name=cell_refNo] ha-text-field {
+    width: 98%
+}
+
+.integrations-banking-reconcile-ui .grid .row-editor table td[name=cell_account],.integrations-banking-reconcile-ui .grid .row-editor table td[name=cell_payee] {
+    width: 13%
+}
+
+.integrations-banking-reconcile-ui .grid .row-editor table td[name=cell_account] .Select,.integrations-banking-reconcile-ui .grid .row-editor table td[name=cell_payee] .Select {
+    margin-top: 0;
+    width: 96%;
+    border: 1px solid #c7c7c7;
+    border-radius: 2px
+}
+
+.integrations-banking-reconcile-ui .grid .row-editor table td[name=cell_account] .Select .Select-control,.integrations-banking-reconcile-ui .grid .row-editor table td[name=cell_account] .Select .Select-control input,.integrations-banking-reconcile-ui .grid .row-editor table td[name=cell_payee] .Select .Select-control,.integrations-banking-reconcile-ui .grid .row-editor table td[name=cell_payee] .Select .Select-control input {
+    width: 100%
+}
+
+.integrations-banking-reconcile-ui .grid .row-editor table td[name=cell_account] .Select .Select-menu-outer,.integrations-banking-reconcile-ui .grid .row-editor table td[name=cell_payee] .Select .Select-menu-outer {
+    min-width: 100%
+}
+
+.integrations-banking-reconcile-ui .grid .row-editor table td[name=cell_account] .Select .Select-menu-outer .account-select-option,.integrations-banking-reconcile-ui .grid .row-editor table td[name=cell_account] .Select .Select-menu-outer .payee-select-option,.integrations-banking-reconcile-ui .grid .row-editor table td[name=cell_payee] .Select .Select-menu-outer .account-select-option,.integrations-banking-reconcile-ui .grid .row-editor table td[name=cell_payee] .Select .Select-menu-outer .payee-select-option {
+    display: flex;
+    justify-content: space-between
+}
+
+.integrations-banking-reconcile-ui .grid .row-editor table td[name=cell_account] .Select .Select-menu-outer .account-select-option .account-name,.integrations-banking-reconcile-ui .grid .row-editor table td[name=cell_account] .Select .Select-menu-outer .account-select-option .payee-name,.integrations-banking-reconcile-ui .grid .row-editor table td[name=cell_account] .Select .Select-menu-outer .payee-select-option .account-name,.integrations-banking-reconcile-ui .grid .row-editor table td[name=cell_account] .Select .Select-menu-outer .payee-select-option .payee-name,.integrations-banking-reconcile-ui .grid .row-editor table td[name=cell_payee] .Select .Select-menu-outer .account-select-option .account-name,.integrations-banking-reconcile-ui .grid .row-editor table td[name=cell_payee] .Select .Select-menu-outer .account-select-option .payee-name,.integrations-banking-reconcile-ui .grid .row-editor table td[name=cell_payee] .Select .Select-menu-outer .payee-select-option .account-name,.integrations-banking-reconcile-ui .grid .row-editor table td[name=cell_payee] .Select .Select-menu-outer .payee-select-option .payee-name {
+    padding-right: 15px
+}
+
+.integrations-banking-reconcile-ui .grid .row-editor table td[name=cell_account] .Select .Select-menu-outer .account-select-option .account-type,.integrations-banking-reconcile-ui .grid .row-editor table td[name=cell_account] .Select .Select-menu-outer .account-select-option .payee-type,.integrations-banking-reconcile-ui .grid .row-editor table td[name=cell_account] .Select .Select-menu-outer .payee-select-option .account-type,.integrations-banking-reconcile-ui .grid .row-editor table td[name=cell_account] .Select .Select-menu-outer .payee-select-option .payee-type,.integrations-banking-reconcile-ui .grid .row-editor table td[name=cell_payee] .Select .Select-menu-outer .account-select-option .account-type,.integrations-banking-reconcile-ui .grid .row-editor table td[name=cell_payee] .Select .Select-menu-outer .account-select-option .payee-type,.integrations-banking-reconcile-ui .grid .row-editor table td[name=cell_payee] .Select .Select-menu-outer .payee-select-option .account-type,.integrations-banking-reconcile-ui .grid .row-editor table td[name=cell_payee] .Select .Select-menu-outer .payee-select-option .payee-type {
+    color: #bdbdbd;
+    font-style: italic
+}
+
+.integrations-banking-reconcile-ui .grid .row-editor table td[name=cell_account] .Select .Select-menu-outer .Select-option.is-focused,.integrations-banking-reconcile-ui .grid .row-editor table td[name=cell_account] .Select .Select-menu-outer .Select-option:hover,.integrations-banking-reconcile-ui .grid .row-editor table td[name=cell_payee] .Select .Select-menu-outer .Select-option.is-focused,.integrations-banking-reconcile-ui .grid .row-editor table td[name=cell_payee] .Select .Select-menu-outer .Select-option:hover {
+    background-color: #eceef1;
+    color: #108000;
+    font-weight: 600
+}
+
+.integrations-banking-reconcile-ui .grid .row-editor table td[name=cell_memo] {
+    width: 24%;
+    color: #404040
+}
+
+.integrations-banking-reconcile-ui .grid .row-editor table td[name=cell_memo] ha-text-field {
+    width: 100%
+}
+
+.integrations-banking-reconcile-ui .grid .row-editor table td[name=cell_olbIcon] {
+    width: 75px;
+    min-width: 75px;
+    max-width: 75px
+}
+
+.integrations-banking-reconcile-ui .grid .row-editor table td[name=cell_amount_label] {
+    width: 11%;
+    padding-left: 1em;
+    color: #8d9096;
+    font-style: italic
+}
+
+.integrations-banking-reconcile-ui .grid .row-editor table td[name=cell_amount] {
+    width: 11%;
+    color: #404040
+}
+
+.integrations-banking-reconcile-ui .grid .row-editor table td[name=cell_amount] ha-text-field {
+    width: 95%
+}
+
+.integrations-banking-reconcile-ui .grid .row-editor table td[name=cell_amount] ha-text-field input {
+    text-align: right
+}
+
+.integrations-banking-reconcile-ui .grid .row-editor table td[name=cell_empty] {
+    width: 75px;
+    min-width: 75px;
+    max-width: 75px
+}
+
+.integrations-banking-reconcile-ui .grid .row-editor table td[name=cell_buttons] {
+    text-align: right;
+    padding-right: 15px;
+    height: 50px;
+    vertical-align: bottom
+}
+
+.integrations-banking-reconcile-ui .grid .row-editor table td[name=cell_buttons] button {
+    width: 110px;
+    margin-left: 15px
+}
+
+.integrations-banking-reconcile-ui .grid .row-editor button.close-expansion-button {
+    right: -50px
+}
+
+.integrations-banking-reconcile-ui .grid .row-editor .xClose {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    cursor: pointer
+}
+
+.integrations-banking-reconcile-ui .grid ha-text-field.disabled input {
+    background-color: #e9e9e9
+}
+
+.integrations-banking-reconcile-ui .hr-padding {
+    padding-left: 0;
+    padding-right: 0
+}
+
+.integrations-banking-reconcile-ui .hr-padding .hr-color {
+    margin-top: 35px;
+    border-top-color: #dcdcdc
+}
+
+.integrations-banking-reconcile-ui .discrepancy-report-warning,.integrations-banking-reconcile-ui .ipd-info {
+    margin-bottom: 20px;
+    width: 100%;
+    max-width: 650px
+}
+
+.integrations-banking-reconcile-ui .zero-state-container {
+    display: flex;
+    flex-flow: column;
+    justify-content: center
+}
+
+.integrations-banking-reconcile-ui .zero-state-container .reconcile-zero-state-img {
+    height: 225px;
+    background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdG9yOiBBZG9iZSBJbGx1c3RyYXRvciAxOS4xLjAsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9uOiA2LjAwIEJ1aWxkIDApICAtLT4NCjxzdmcgdmVyc2lvbj0iMS4xIiBpZD0iTGF5ZXJfMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeD0iMHB4IiB5PSIwcHgiDQoJIHZpZXdCb3g9IjAgMCAyMTguNyAxNjYuNyIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgMjE4LjcgMTY2Ljc7IiB4bWw6c3BhY2U9InByZXNlcnZlIj4NCjxzdHlsZSB0eXBlPSJ0ZXh0L2NzcyI+DQoJLnN0MHtmaWxsOiM3OENFMDA7fQ0KCS5zdDF7ZmlsbDpub25lO3N0cm9rZTojQkFCRUM1O3N0cm9rZS13aWR0aDoyO3N0cm9rZS1saW5lY2FwOnJvdW5kO3N0cm9rZS1saW5lam9pbjpyb3VuZDtzdHJva2UtbWl0ZXJsaW1pdDoxMDt9DQoJLnN0MntmaWxsOm5vbmU7c3Ryb2tlOiNCQUJFQzU7c3Ryb2tlLXdpZHRoOjI7c3Ryb2tlLWxpbmVjYXA6cm91bmQ7c3Ryb2tlLW1pdGVybGltaXQ6MTA7fQ0KPC9zdHlsZT4NCjxnPg0KCTxnPg0KCQk8Y2lyY2xlIGNsYXNzPSJzdDAiIGN4PSIxMDAiIGN5PSI3NC42IiByPSI1LjYiLz4NCgkJPHBhdGggY2xhc3M9InN0MSIgZD0iTTExNy40LDEwNC40SDk5LjF2MTkuOWw3LjQtMTMuOHY2LjFoMTUuMWM3LjEsMCwxMC43LTguNiw1LjctMTMuN0wxMDkuMyw4OEg5My40Ii8+DQoJCTxsaW5lIGNsYXNzPSJzdDEiIHgxPSIxMDUuOCIgeTE9Ijk5LjciIHgyPSIxMTEuNSIgeTI9IjEwNC40Ii8+DQoJCTxwYXRoIGNsYXNzPSJzdDEiIGQ9Ik00OC4xLDU3LjlsMzQuMi0yLjVjNS44LTAuNyw4LjcsMCwxMC42LDEuN2MwLjQsMC40LDAuNCwxLjEsMCwxLjVsLTUuNSw0LjVsMS41LDI0LjhsLTIsMzAuNWwyLDI4LjFIOTMNCgkJCWwtMTMuOCw3LjRoMTkuOXYtMjQuNiIvPg0KCQk8cGF0aCBjbGFzcz0ic3QxIiBkPSJNMTUzLjMsNTdjLTI2LjctMS42LTQwLjYtNC4zLTQ2LjYsMC4xYy0wLjUsMC4zLTAuMywxLjEsMC4xLDEuNWw1LjIsNGwtMS41LDIwLjkiLz4NCgkJPHBhdGggY2xhc3M9InN0MSIgZD0iTTEwNi43LDQ1Ljd2Mi43YzAsNS44LTcsNy03LDdoLTAuMWMwLDAtNy0xLTctN3YtNS45YzAtMy4yLDIuNi01LjgsNS44LTUuOGgyLjZjMy4yLDAsNS44LDIuNiw1LjgsNS44DQoJCQljMCwwLTcuOCwwLjMtMTAtMS45Ii8+DQoJCTxwYXRoIGNsYXNzPSJzdDEiIGQ9Ik04OC4xLDQzLjEiLz4NCgkJPHBhdGggY2xhc3M9InN0MSIgZD0iTTEwMi43LDU4LjdjLTEuNywxLjctNC41LDEuNy02LjIsMCIvPg0KCTwvZz4NCgk8Zz4NCgkJPHBhdGggY2xhc3M9InN0MiIgZD0iTTEwMi42LDQ2aC0zLjFjLTEuMSwwLTEuOSwwLjQtMS45LDEuNHMwLDEuNiwwLDEuNiIvPg0KCTwvZz4NCgk8Zz4NCgkJPGc+DQoJCQk8ZyBpZD0iWE1MSURfNl8iPg0KCQkJCTxnPg0KCQkJCQk8cGF0aCBjbGFzcz0ic3QxIiBkPSJNMTk5LjIsMTI5LjgiLz4NCgkJCQkJPHBhdGggY2xhc3M9InN0MSIgZD0iTTEzNC44LDEyOS44Ii8+DQoJCQkJCTxwYXRoIGNsYXNzPSJzdDEiIGQ9Ik0xOTkuNCwxMjkuOCIvPg0KCQkJCQk8Zz4NCgkJCQkJCTxwYXRoIGNsYXNzPSJzdDEiIGQ9Ik0xMzAuNSwxMzEuMWMwLDAsMi45LTQuMyw1LjgtMWw3LjctMTMuNyIvPg0KCQkJCQk8L2c+DQoJCQkJCTxnPg0KCQkJCQkJPHBhdGggY2xhc3M9InN0MSIgZD0iTTIwNS45LDEzMy44aC05LjFjLTEuMSwwLTIuNC0wLjctMy4xLTEuNWwtMTAuMS0xMy42Yy0wLjYtMC44LTAuNS0yLjEsMC40LTIuN2wyLjctMi4xDQoJCQkJCQkJYzAuOC0wLjYsMS0xLjgsMC4zLTIuN2wtNy4yLTguOGMtMC43LTAuOC0yLjEtMS41LTMuMS0xLjVoLTcuOCIvPg0KCQkJCQk8L2c+DQoJCQkJCTxnPg0KCQkJCQkJPHBhdGggY2xhc3M9InN0MSIgZD0iTTIwMy42LDEzMS4xYzAsMC0yLjktNC4zLTUuOC0xbC04LjYtMTQuMSIvPg0KCQkJCQk8L2c+DQoJCQkJCTxnPg0KCQkJCQkJPHBhdGggY2xhc3M9InN0MSIgZD0iTTE1NC45LDEwOS44djIyLjFjMCwxLjEtMC45LDIuMS0xLjksMi4zbC04LjEsMS41Yy0yLjcsMC40LTQuOCwyLjItNC44LDQuOHYzLjVjMCwyLjcsMi4yLDQuOCw0LjgsNC44DQoJCQkJCQkJaDI1LjljMS4xLDAsMi43LDAuMywzLjcsMC43bDcuNSwyLjdjMSwwLjQsMS44LTAuMiwxLjgtMS4zdi01LjJjMC0xLjEtMC45LTEuOS0xLjktMS45aC03LjJjLTEuMSwwLTIuOC0wLjEtMy44LTAuMw0KCQkJCQkJCWwtMTYuMi0yLjRjLTEtMC4yLTIuMSwwLjYtMi4zLDEuNmwtMC42LDMuMSIvPg0KCQkJCQk8L2c+DQoJCQkJCTxnPg0KCQkJCQkJPHBhdGggY2xhc3M9InN0MSIgZD0iTTE3Ny45LDEwOS44djIyLjFjMCwxLjEsMC45LDIuMSwxLjksMi4zbDguNCwxLjVjMi4zLDAuNCwzLjgsMi40LDMuOCw0LjV2My44YzAsMi4xLTEuNywzLjgtMy44LDMuOCIvPg0KCQkJCQk8L2c+DQoJCQkJCTxnPg0KCQkJCQkJPHBhdGggY2xhc3M9InN0MSIgZD0iTTE0NC45LDE1MS44YzAsMCwwLDAuNSwwLDFjMCwwLjYsMC45LDAuOCwxLjksMC42bDcuMS0xLjYiLz4NCgkJCQkJPC9nPg0KCQkJCQk8Zz4NCgkJCQkJCTxwYXRoIGNsYXNzPSJzdDEiIGQ9Ik0xNTkuOSw4My44djljMCwyLjIsMS44LDQsNCw0bDAsMGMwLDAsMCwwLjUsMCwxYzAsMC42LDAsMS41LDAsMmMwLDAuNi0wLjksMS0xLjksMWwtNi41LDANCgkJCQkJCQljLTEuMSwwLTIuNSwwLjctMy4xLDEuNWwtNy4xLDguOGMtMC43LDAuOC0wLjUsMiwwLjQsMi42bDMuNSwyLjRjMC45LDAuNiwxLjEsMS44LDAuNSwyLjZsLTkuNywxMy43Yy0wLjYsMC45LTIsMS42LTMsMS42DQoJCQkJCQkJaC05LjYiLz4NCgkJCQkJPC9nPg0KCQkJCQk8Zz4NCgkJCQkJCTxwYXRoIGNsYXNzPSJzdDEiIGQ9Ik0xNjguOSw5Ni44TDE2OC45LDk2LjhjMi44LDAsNS0yLjIsNS01di04YzAtMi44LTIuMi01LTUtNWMwLDAtMTAuNSwwLjktMTItNGMwLDAtMiw5LDMsOSIvPg0KCQkJCQk8L2c+DQoJCQkJCTxwYXRoIGNsYXNzPSJzdDEiIGQ9Ik0xNTguNCwxMzMuN2MwLDAsOC44LDIuNiwxNS40LDAiLz4NCgkJCQkJPHBhdGggY2xhc3M9InN0MSIgZD0iTTE2OS45LDEwMy44Yy0xLjgsMS44LTUuMiwxLjgtNywwIi8+DQoJCQkJCTxnPg0KCQkJCQkJPGxpbmUgY2xhc3M9InN0MSIgeDE9IjE3Mi45IiB5MT0iMTQwLjgiIHgyPSIxODEuOSIgeTI9IjEzOC44Ii8+DQoJCQkJCTwvZz4NCgkJCQk8L2c+DQoJCQk8L2c+DQoJCQk8cGF0aCBjbGFzcz0ic3QxIiBkPSJNMTY1LjMsODUuOCIvPg0KCQkJPHJlY3QgeD0iMTYwLjkiIHk9IjgyLjgiIGNsYXNzPSJzdDAiIHdpZHRoPSIxMi4xIiBoZWlnaHQ9IjMiLz4NCgkJPC9nPg0KCQk8cGF0aCBjbGFzcz0ic3QyIiBkPSJNMTY0LjMsOTIuN2MwLDAsMC43LDEuMiwyLjIsMS4yczIuMi0xLjIsMi4yLTEuMiIvPg0KCTwvZz4NCgk8Zz4NCgkJPGc+DQoJCQk8cGF0aCBjbGFzcz0ic3QyIiBkPSJNNTAuNiw4OGgtMi42Yy0xLjEsMC0yLjQsMC40LTIuNCwxLjRzMCwxLjYsMCwxLjYiLz4NCgkJPC9nPg0KCQk8cGF0aCBjbGFzcz0ic3QyIiBkPSJNNDIsOTQuM2MwLDAsMC43LDEuMiwyLjIsMS4yYzEuNiwwLDIuMi0xLjIsMi4yLTEuMiIvPg0KCQk8Zz4NCgkJCTxnPg0KCQkJCTxnPg0KCQkJCQk8cGF0aCBjbGFzcz0ic3QxIiBkPSJNNjMsMTUxLjhjMCwwLDAsMC41LDAsMWMwLDAuNi0wLjksMC44LTEuOSwwLjZsLTcuMS0xLjYiLz4NCgkJCQk8L2c+DQoJCQkJPGc+DQoJCQkJCTxsaW5lIGNsYXNzPSJzdDEiIHgxPSIzNSIgeTE9IjE0MC44IiB4Mj0iMjYiIHkyPSIxMzguOCIvPg0KCQkJCTwvZz4NCgkJCTwvZz4NCgkJCTxwYXRoIGNsYXNzPSJzdDEiIGQ9Ik0zMi4yLDExMS43bC0xLDMuNmMtMC4xLDAuOC0wLjEsMS43LDAsMi41bDIuNywxNS45bC0xNC4zLDEuOWMtMi4zLDAuNC0zLjgsMi40LTMuOCw0LjV2My44DQoJCQkJYzAsMi4xLDEuNywzLjgsMy44LDMuOCIvPg0KCQkJPHBhdGggY2xhc3M9InN0MSIgZD0iTTUxLjIsMTExLjdsMS4yLDMuNWMwLjEsMC45LDAuMSwxLjgsMCwyLjdsLTMsMTUuOWwxMy41LDEuOGMyLjcsMC40LDQuOCwyLjIsNC44LDQuOHYzLjUNCgkJCQljMCwyLjctMi4yLDQuOC00LjgsNC44SDM1LjFMMjQsMTUyLjh2LTYuOWwxMS0yLjFsMjAtMyIvPg0KCQk8L2c+DQoJCTxwYXRoIGNsYXNzPSJzdDEiIGQ9Ik00NC40LDEwNi44Yy0xLjgsMS44LTUuMiwxLjgtNywwIi8+DQoJCTxwYXRoIGNsYXNzPSJzdDEiIGQ9Ik0zNi40LDExNy4xYzIuNy0xLjMsNy43LTEuMywxMC40LDAiLz4NCgkJPHBvbHlnb24gY2xhc3M9InN0MCIgcG9pbnRzPSI0Ny41LDEzMy45IDM2LjEsMTMzLjkgMzUuMSwxMjkuNiA0OC41LDEyOS42IAkJIi8+DQoJCTxwYXRoIGNsYXNzPSJzdDIiIGQ9Ik0yOS4zLDEwMS41YzIuMiwwLDQtMS44LDQtNFY4NS44YzAtMy4zLDIuNy02LDYtNkg0NWMzLjMsMCw2LDIuNyw2LDZ2Ny43YzAsMy4zLTIuNyw2LTYsNmgtMS43Ii8+DQoJCTxwYXRoIGNsYXNzPSJzdDIiIGQ9Ik00Ni4xLDgyLjhjMCwyLjQtMi41LDUuMS03LjUsNS4xIi8+DQoJCTxwYXRoIGNsYXNzPSJzdDEiIGQ9Ik0yMS4zLDExMS43aC01LjVjLTIuMiwwLTMuNi0yLjMtMi43LTQuM0wxOSw5Mi43YzAuNS0xLjMsMS43LTIuMiwzLTIuNGgzLjFjMC41LDAsMC44LDAuNCwwLjgsMC44djMuNw0KCQkJYzAsMC41LTAuNCwwLjgtMC44LDAuOCIvPg0KCQk8cGF0aCBjbGFzcz0ic3QxIiBkPSJNNDIuMSw4Mi44YzAsMi4zLTEuNSw0LjItMy42LDQuOWMtMC45LDAuMy0xLjUsMS0xLjUsMS45djEwYzAsMi40LTEuOCw0LjUtNC4yLDQuOWwtNy45LDAuNnY2LjVoMy42Ii8+DQoJCTxwb2x5bGluZSBjbGFzcz0ic3QxIiBwb2ludHM9IjIyLDk2LjMgMjAsMTA1LjYgMjIuNSwxMDUuNiAJCSIvPg0KCQk8cGF0aCBjbGFzcz0ic3QxIiBkPSJNNjEuNiwxMTEuN2g2LjljMi4yLDAsMy42LTIuMywyLjctNC4zbC01LjktMTQuN2MtMC41LTEuMy0xLjctMi4yLTMtMi40aC0zLjFjLTAuNSwwLTAuOCwwLjQtMC44LDAuOHYzLjcNCgkJCWMwLDAuNSwwLjQsMC44LDAuOCwwLjgiLz4NCgkJPHBvbHlsaW5lIGNsYXNzPSJzdDEiIHBvaW50cz0iNDQuNyw5OS41IDQ0LjcsMTAzLjYgNTcuNiwxMDUuMSA1OC41LDExMS43IDU0LjgsMTExLjcgCQkiLz4NCgkJPHBhdGggY2xhc3M9InN0MSIgZD0iTTYwLjYsMTA1LjYiLz4NCgkJPHBvbHlsaW5lIGNsYXNzPSJzdDEiIHBvaW50cz0iNjIuMyw5Ni4zIDY0LjMsMTA1LjYgNjAuNiwxMDUuNiAJCSIvPg0KCTwvZz4NCjwvZz4NCjxwb2x5bGluZSBjbGFzcz0ic3QxIiBwb2ludHM9IjQ5LjEsNTkuOSA1OC4xLDYyLjUgNjEuNCw1OS4zIDg4LjEsNjIuNSAiLz4NCjxwb2x5bGluZSBjbGFzcz0ic3QxIiBwb2ludHM9IjE1Mi42LDU5LjkgMTQ0LjQsNjEuNiAxNDEuNCw1OS4zIDExMS45LDYyLjUgIi8+DQo8L3N2Zz4NCg==);
+    background-repeat: no-repeat;
+    background-position: 50%;
+    background-size: 250px
+}
+
+.integrations-banking-reconcile-ui .zero-state-container .reconcile-zero-state-img-fr {
+    height: 225px;
+    background-image: url(../images/f6b8fd5bf88ffe0055731ccd599eca2c.svg);
+    background-repeat: no-repeat;
+    background-position: 50%;
+    background-size: 220px
+}
+
+.integrations-banking-reconcile-ui .zero-state-container .lightbulb-spacing {
+    padding-right: 5px
+}
+
+.integrations-banking-reconcile-ui .zero-state-container .title-center {
+    font-weight: 700;
+    font-size: 28px;
+    text-align: center;
+    padding-bottom: 25px
+}
+
+.integrations-banking-reconcile-ui .zero-state-container .subtitle-content {
+    text-align: center;
+    font-size: 18px;
+    padding-bottom: 15px
+}
+
+.integrations-banking-reconcile-ui .zero-state-container .tip-content {
+    text-align: center;
+    font-size: 15px;
+    padding-bottom: 35px
+}
+
+.integrations-banking-reconcile-ui .zero-state-container .button-long {
+    font-size: 16px;
+    padding: 10px 40px;
+    width: 300px
+}
+
+.integrations-banking-reconcile-ui .sidebar-section {
+    max-width: 24%;
+    padding-left: 0;
+    padding-right: 0;
+    height: 800px
+}
+
+.integrations-banking-reconcile-ui .sidebar-line-separator {
+    border-left: 2px solid #e3e5e8;
+    width: 1px;
+    padding: 0;
+    margin-top: 20px;
+    min-width: 0;
+    max-width: 0;
+    margin-bottom: 20px
+}
+
+.integrations-banking-reconcile-ui .landing-container .page-content:not(.history-container) {
+    padding-bottom: 30px;
+    min-height: 80vh;
+    text-align: center
+}
+
+.integrations-banking-reconcile-ui .landing-container .reconcile-summary {
+    background-color: #fff
+}
+
+.integrations-banking-reconcile-ui .landing-container .reconcile-summary .default-actions button:focus,.integrations-banking-reconcile-ui .landing-container .reconcile-summary .dgrid-cell:focus {
+    border: 1px solid #0097e6;
+    box-shadow: 0 0 2px #babec5
+}
+
+.integrations-banking-reconcile-ui .landing-container ha-select ha-popover.visible {
+    white-space: nowrap
+}
+
+.integrations-banking-reconcile-ui .landing-container .reconcile-title-container {
+    padding: 24px 30px 0 20px
+}
+
+.integrations-banking-reconcile-ui .landing-container .landing-page {
+    text-align: left;
+    display: inline-block
+}
+
+.integrations-banking-reconcile-ui .landing-container .landing-page ha-tooltip {
+    min-width: 150px!important
+}
+
+.integrations-banking-reconcile-ui .landing-container .landing-page h1 {
+    text-align: center
+}
+
+.integrations-banking-reconcile-ui .landing-container .landing-page ha-date-picker {
+    width: 125px
+}
+
+.integrations-banking-reconcile-ui .landing-container .landing-page ha-date-picker input {
+    width: 110px
+}
+
+.integrations-banking-reconcile-ui .landing-container .landing-page .currencyIsoCode {
+    display: inline-block;
+    color: #999;
+    margin-left: 40px;
+    position: relative;
+    bottom: 15px
+}
+
+.integrations-banking-reconcile-ui .landing-container .landing-page .reconcile-start-img {
+    height: 100px;
+    background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+Cjxzdmcgd2lkdGg9IjEyMnB4IiBoZWlnaHQ9IjEwMXB4IiB2aWV3Qm94PSIwIDAgMTIyIDEwMSIgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIj4KICAgIDwhLS0gR2VuZXJhdG9yOiBza2V0Y2h0b29sIDMuNy4yICgyODI3NikgLSBodHRwOi8vd3d3LmJvaGVtaWFuY29kaW5nLmNvbS9za2V0Y2ggLS0+CiAgICA8dGl0bGU+RkYxMTNGMUQtMjlCMC00NTE0LTk4MkMtQUQ5NUIyRjU1QTkzPC90aXRsZT4KICAgIDxkZXNjPkNyZWF0ZWQgd2l0aCBza2V0Y2h0b29sLjwvZGVzYz4KICAgIDxkZWZzPjwvZGVmcz4KICAgIDxnIGlkPSJWMy0tLURlc2t0b3AiIHN0cm9rZT0ibm9uZSIgc3Ryb2tlLXdpZHRoPSIxIiBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+CiAgICAgICAgPGcgaWQ9IjEuMC1SRUNPTi1TVEFSVCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTU3Mi4wMDAwMDAsIC0xODUuMDAwMDAwKSIgc3Ryb2tlLXdpZHRoPSIyIj4KICAgICAgICAgICAgPGcgaWQ9IlNVQi1IRUFERVIvSUNPTiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNTczLjAwMDAwMCwgMTg2LjAwMDAwMCkiPgogICAgICAgICAgICAgICAgPGcgaWQ9IklDT04iPgogICAgICAgICAgICAgICAgICAgIDxwYXRoIGQ9Ik01MC43NjkyMzA4LDE1LjM4NDYxNTQgTDY5LjIzMDc2OTIsMTUuMzg0NjE1NCIgaWQ9IlN0cm9rZS0xIiBzdHJva2U9IiNCQUJEQzQiPjwvcGF0aD4KICAgICAgICAgICAgICAgICAgICA8ZyBpZD0iR3JvdXAtMTYiPgogICAgICAgICAgICAgICAgICAgICAgICA8cGF0aCBkPSJNODMuMDc2OTIzMSw5OC40NjE1Mzg1IEwxMTcuMzgzMDc3LDk4LjQ2MTUzODUgQzExOS4wNzUzODUsOTguNDYxNTM4NSAxMjAsOTcuMDc2OTIzMSAxMjAsOTUuMzg0NjE1NCBMMTIwLDI3LjY5MjMwNzcgQzEyMCwyNiAxMTkuMjUwNzY5LDIzLjYzNjkyMzEgMTE4LjA1Mzg0NiwyMi40NCBMOTcuNjc1Mzg0NiwyLjE3NTM4NDYyIEM5Ni40Nzg0NjE1LDAuOTc4NDYxNTM4IDk1LjM4NDYxNTQsMS4zODQ2MTUzOCA5NS4zODQ2MTU0LDMuMDc2OTIzMDggTDk1LjM4NDYxNTQsMjEuNTM4NDYxNSBDOTUuMzg0NjE1NCwyMy4yMzA3NjkyIDk3LjIyOTIzMDgsMjQuNjE1Mzg0NiA5OC45MjE1Mzg1LDI0LjYxNTM4NDYgTDExMi4zMDc2OTIsMjQuNjE1Mzg0NiIgaWQ9IlN0cm9rZS0yIiBzdHJva2U9IiNCQUJEQzQiPjwvcGF0aD4KICAgICAgICAgICAgICAgICAgICAgICAgPHBhdGggZD0iTTkwLjc2OTIzMDgsMCBMNDAuNDYsMCBDMzguNzY3NjkyMywwIDM2LjkyMzA3NjksMS4zODQ2MTUzOCAzNi45MjMwNzY5LDMuMDc2OTIzMDggTDM2LjkyMzA3NjksMTYuOTIzMDc2OSIgaWQ9IlN0cm9rZS00IiBzdHJva2U9IiNCQUJEQzQiPjwvcGF0aD4KICAgICAgICAgICAgICAgICAgICAgICAgPHBhdGggZD0iTTU1LjM4NDYxNTQsODMuMDc2OTIzMSBMNTUuMzg0NjE1NCw1NS45ODE1Mzg1IEM1NS4zODQ2MTU0LDU0LjcxODQ2MTUgNTQuMzQsNTMuODQ2MTUzOCA1My4wNzg0NjE1LDUzLjg0NjE1MzggTDQ4LjQ4NDYxNTQsNTMuODQ2MTUzOCBDNDcuMjIzMDc2OSw1My44NDYxNTM4IDQ2LjE1Mzg0NjIsNTQuNzE4NDYxNSA0Ni4xNTM4NDYyLDU1Ljk4MTUzODUgTDQ2LjE1Mzg0NjIsODEuMjQgQzQ2LjE1Mzg0NjIsODIuNTAzMDc2OSA0NS4xNTUzODQ2LDgzLjA3NjkyMzEgNDMuODkyMzA3Nyw4My4wNzY5MjMxIEw0MC40NDkyMzA4LDgzLjA3NjkyMzEgQzM5LjE4NjE1MzgsODMuMDc2OTIzMSAzOC40NjE1Mzg1LDgyLjUwMzA3NjkgMzguNDYxNTM4NSw4MS4yNCBMMzguNDYxNTM4NSw1NS45ODE1Mzg1IEMzOC40NjE1Mzg1LDU0LjcxODQ2MTUgMzcuMTE4NDYxNSw1My44NDYxNTM4IDM1Ljg1NjkyMzEsNTMuODQ2MTUzOCBMMzEuMjYzMDc2OSw1My44NDYxNTM4IEMzMC4wMDE1Mzg1LDUzLjg0NjE1MzggMjkuMjMwNzY5Miw1NC43MTg0NjE1IDI5LjIzMDc2OTIsNTUuOTgxNTM4NSBMMjkuMjMwNzY5Miw4MS4yNCBDMjkuMjMwNzY5Miw4Mi41MDMwNzY5IDI3LjkzMzg0NjIsODMuMDc2OTIzMSAyNi42NzA3NjkyLDgzLjA3NjkyMzEgTDIzLjIyNzY5MjMsODMuMDc2OTIzMSBDMjEuOTY0NjE1NCw4My4wNzY5MjMxIDIxLjUzODQ2MTUsODIuNTAzMDc2OSAyMS41Mzg0NjE1LDgxLjI0IEwyMS41Mzg0NjE1LDU1Ljk4MTUzODUgQzIxLjUzODQ2MTUsNTQuNzE4NDYxNSAxOS44OTY5MjMxLDUzLjg0NjE1MzggMTguNjM1Mzg0Niw1My44NDYxNTM4IEwxNC4wNDE1Mzg1LDUzLjg0NjE1MzggQzEyLjc4LDUzLjg0NjE1MzggMTIuMzA3NjkyMyw1NC43MTg0NjE1IDEyLjMwNzY5MjMsNTUuOTgxNTM4NSBMMTIuMzA3NjkyMyw4Ni45OCBDMTIuMzA3NjkyMyw4OC4yNDMwNzY5IDEwLjcxMjMwNzcsODkuMjMwNzY5MiA5LjQ0OTIzMDc3LDg5LjIzMDc2OTIgTDIuNTYxNTM4NDYsODkuMjMwNzY5MiBDMS4yOTg0NjE1NCw4OS4yMzA3NjkyIDAsOTAuMzA5MjMwOCAwLDkxLjU3MjMwNzcgTDAsOTYuMTY0NjE1NCBDMCw5Ny40Mjc2OTIzIDEuMjk4NDYxNTQsOTguNDYxNTM4NSAyLjU2MTUzODQ2LDk4LjQ2MTUzODUgTDcyLjU5NTM4NDYsOTguNDYxNTM4NSBDNzMuODU4NDYxNSw5OC40NjE1Mzg1IDc1LjM4NDYxNTQsOTcuNDI3NjkyMyA3NS4zODQ2MTU0LDk2LjE2NDYxNTQgTDc1LjM4NDYxNTQsOTEuNTcyMzA3NyBDNzUuMzg0NjE1NCw5MC4zMDkyMzA4IDczLjg1ODQ2MTUsODkuMjMwNzY5MiA3Mi41OTUzODQ2LDg5LjIzMDc2OTIgTDY1LjcwNzY5MjMsODkuMjMwNzY5MiBDNjQuNDQ0NjE1NCw4OS4yMzA3NjkyIDYzLjA3NjkyMzEsODguMjQzMDc2OSA2My4wNzY5MjMxLDg2Ljk4IEw2My4wNzY5MjMxLDUwLjI0MTUzODUgQzYzLjA3NjkyMzEsNDguOTc4NDYxNSA2NC40NDQ2MTU0LDQ3LjY5MjMwNzcgNjUuNzA3NjkyMyw0Ny42OTIzMDc3IEw3NC4zMTg0NjE1LDQ3LjY5MjMwNzcgQzc1LjU4LDQ3LjY5MjMwNzcgNzUuNzQ3NjkyMyw0Ny4yNTUzODQ2IDc0LjY4OTIzMDgsNDYuNTY3NjkyMyBMMzguMzU1Mzg0NiwyMy4wMTM4NDYyIEMzNy4yOTY5MjMxLDIyLjMyNjE1MzggMzUuNTg3NjkyMywyMi4zOTIzMDc3IDM0LjU1ODQ2MTUsMjMuMTI0NjE1NCBMMS41NjMwNzY5Miw0Ni40NzIzMDc3IEMwLjUzMjMwNzY5Miw0Ny4yMDQ2MTU0IDAuNzI0NjE1Mzg1LDQ3LjY5MjMwNzcgMS45ODc2OTIzMSw0Ny42OTIzMDc3IEw1OC4yNDQ2MTU0LDQ3LjY5MjMwNzcgQzU5LjUwNzY5MjMsNDcuNjkyMzA3NyA1OS42NTY5MjMxLDQ3LjI4MzA3NjkgNTguNTc2OTIzMSw0Ni42Mjc2OTIzIEwzOC4zOTM4NDYyLDM0LjQ0NjE1MzggQzM3LjMxMzg0NjIsMzMuNzkwNzY5MiAzNS41NjQ2MTU0LDMzLjg1MjMwNzcgMzQuNTA3NjkyMywzNC41NDMwNzY5IEwyMi4zNzA3NjkyLDQyLjI2NDYxNTQiIGlkPSJTdHJva2UtNiIgc3Ryb2tlPSIjQkFCREM0Ij48L3BhdGg+CiAgICAgICAgICAgICAgICAgICAgICAgIDxwYXRoIGQ9Ik0xNi45MjMwNzY5LDg5LjIzMDc2OTIgTDU2LjkyMzA3NjksODkuMjMwNzY5MiIgaWQ9IlN0cm9rZS04IiBzdHJva2U9IiNCQUJEQzQiPjwvcGF0aD4KICAgICAgICAgICAgICAgICAgICAgICAgPHBvbHlsaW5lIGlkPSJTdHJva2UtMTAiIHN0cm9rZT0iIzUyQjYwMCIgcG9pbnRzPSI4OS42OTA5MjMxIDM3Ljk3MiA5NC41ODYzMDc3IDQzLjg0NTg0NjIgMTA1LjM1NTUzOCAzMi4wOTgxNTM4Ij48L3BvbHlsaW5lPgogICAgICAgICAgICAgICAgICAgICAgICA8cG9seWxpbmUgaWQ9IlN0cm9rZS0xMiIgc3Ryb2tlPSIjNTJCNjAwIiBwb2ludHM9Ijg5LjY5MDkyMzEgNTcuOTcyIDk0LjU4NjMwNzcgNjMuODQ1ODQ2MiAxMDUuMzU1NTM4IDUyLjA5ODE1MzgiPjwvcG9seWxpbmU+CiAgICAgICAgICAgICAgICAgICAgICAgIDxwb2x5bGluZSBpZD0iU3Ryb2tlLTE0IiBzdHJva2U9IiM1MkI2MDAiIHBvaW50cz0iODkuNjkwOTIzMSA3Ny45NzIgOTQuNTg2MzA3NyA4My44NDU4NDYyIDEwNS4zNTU1MzggNzIuMDk4MTUzOCI+PC9wb2x5bGluZT4KICAgICAgICAgICAgICAgICAgICA8L2c+CiAgICAgICAgICAgICAgICA8L2c+CiAgICAgICAgICAgIDwvZz4KICAgICAgICA8L2c+CiAgICA8L2c+Cjwvc3ZnPgo=);
+    background-repeat: no-repeat;
+    background-position: 50%;
+    background-size: 100px
+}
+
+.integrations-banking-reconcile-ui .landing-container .landing-page .subtitle {
+    text-align: center;
+    font-size: 16px;
+    margin-bottom: 35px
+}
+
+.integrations-banking-reconcile-ui .landing-container .landing-page .section-spacing {
+    margin-bottom: 20px
+}
+
+.integrations-banking-reconcile-ui .landing-container .landing-page .field-container {
+    min-width: 145px;
+    margin-bottom: 15px
+}
+
+.integrations-banking-reconcile-ui .landing-container .landing-page .beginning-balance-container {
+    display: inline-block;
+    margin-right: 16px;
+    width: 129px
+}
+
+.integrations-banking-reconcile-ui .landing-container .landing-page .beginning-balance-container .beginning-balance {
+    text-size: 14px;
+    padding-top: 5px;
+    line-height: 35px
+}
+
+.integrations-banking-reconcile-ui .landing-container .landing-page .beginning-balance-container .beginning-balance i {
+    margin-right: 9px
+}
+
+.integrations-banking-reconcile-ui .landing-container .landing-page .beginning-balance-container .beginning-balance .beginning-balance-amount {
+    vertical-align: top
+}
+
+.integrations-banking-reconcile-ui .landing-container .landing-page .additional-amount,.integrations-banking-reconcile-ui .landing-container .landing-page .ending-balance {
+    margin-right: 45px;
+    width: 120px
+}
+
+.integrations-banking-reconcile-ui .landing-container .landing-page .additional-amount ha-text-field,.integrations-banking-reconcile-ui .landing-container .landing-page .ending-balance ha-text-field {
+    width: 110%
+}
+
+.integrations-banking-reconcile-ui .landing-container .landing-page .additional-account {
+    margin-right: 15px
+}
+
+.integrations-banking-reconcile-ui .landing-container .landing-page .additional-account .error-message-tablet {
+    color: #d52b1e;
+    width: 220px;
+    border-bottom: 1px solid #d52b1e;
+    padding: 8px 0
+}
+
+.integrations-banking-reconcile-ui .landing-container .landing-page .exchange-rate-component {
+    width: 211px
+}
+
+.integrations-banking-reconcile-ui .landing-container .landing-page .exchange-rate-component .foreign-currency,.integrations-banking-reconcile-ui .landing-container .landing-page .exchange-rate-component .home-currency {
+    display: inline-block;
+    vertical-align: top;
+    padding-top: 10px
+}
+
+.integrations-banking-reconcile-ui .landing-container .landing-page .exchange-rate-component .label {
+    font-weight: 600
+}
+
+.integrations-banking-reconcile-ui .landing-container .landing-page .exchange-rate-component ha-text-field {
+    width: auto;
+    top: 2px
+}
+
+.integrations-banking-reconcile-ui .landing-container .landing-page .exchange-rate-component ha-text-field input {
+    width: 110px;
+    margin-left: 4px
+}
+
+.integrations-banking-reconcile-ui .landing-container .landing-page .reconcileHeader {
+    margin-bottom: 40px
+}
+
+.integrations-banking-reconcile-ui .landing-container .landing-page .account-section-label {
+    font-size: 20px;
+    margin-bottom: 15px
+}
+
+.integrations-banking-reconcile-ui .landing-container .landing-page .account-statement-info .bank-statement-info {
+    margin-top: 45px
+}
+
+.integrations-banking-reconcile-ui .landing-container .landing-page .lastStatementEndingDate {
+    padding-bottom: 10px
+}
+
+.integrations-banking-reconcile-ui .landing-container .landing-page .lastStatementEndingDate a {
+    font-size: 12px
+}
+
+.integrations-banking-reconcile-ui .landing-container .landing-page .additional-statement-info {
+    margin-top: 20px
+}
+
+.integrations-banking-reconcile-ui .landing-container .landing-page .money-field {
+    display: inline-block;
+    text-align: right;
+    width: 211px
+}
+
+.integrations-banking-reconcile-ui .landing-container .landing-page .money-field .ha-numeral {
+    margin-top: 7px
+}
+
+.integrations-banking-reconcile-ui .landing-container .ha-button-primary {
+    margin-top: 25px
+}
+
+.integrations-banking-reconcile-ui .history-container.display-report {
+    background-color: #f6f7f9;
+    min-height: calc(100vh - 161px);
+    height: 100%
+}
+
+.integrations-banking-reconcile-ui .history-container .filter-container {
+    padding: 10px 25px;
+    position: relative
+}
+
+.integrations-banking-reconcile-ui .history-container .filter-container .field-container {
+    display: inline-block;
+    vertical-align: middle
+}
+
+.integrations-banking-reconcile-ui .history-container .filter-container .report-period-container {
+    width: 300px
+}
+
+.integrations-banking-reconcile-ui .history-container .filter-container .history-account-select-container {
+    white-space: nowrap;
+    padding-right: 25px
+}
+
+.integrations-banking-reconcile-ui .history-container .filter-container .history-account-select-container .history-account-select {
+    float: left;
+    padding-right: 10px
+}
+
+.integrations-banking-reconcile-ui .history-container .filter-container .history-account-select-container .currencyIsoCode {
+    color: #999;
+    padding-top: 30px;
+    float: right
+}
+
+.integrations-banking-reconcile-ui .history-container .filter-container .hi {
+    font-size: 1.8em;
+    position: absolute;
+    cursor: pointer;
+    margin-right: 15px;
+    right: 20px;
+    bottom: 10px
+}
+
+.integrations-banking-reconcile-ui .history-container .filter-container ha-select {
+    margin-right: 25px
+}
+
+.integrations-banking-reconcile-ui .history-container .filter-container .account-selector {
+    width: 250px
+}
+
+.integrations-banking-reconcile-ui .history-container .filter-container .statement-end-date-container {
+    display: inline-block;
+    vertical-align: top
+}
+
+.integrations-banking-reconcile-ui .history-container .filter-container .hide-additional-statement-info {
+    margin-top: 16px
+}
+
+.integrations-banking-reconcile-ui .history-container .no-reports-messaging-container {
+    margin: 25px;
+    padding: 40px;
+    border: 1px solid #e4e6e9
+}
+
+.integrations-banking-reconcile-ui .history-container .table-container {
+    margin: 0 25px
+}
+
+.integrations-banking-reconcile-ui .history-container .table-container .dgrid {
+    overflow: visible
+}
+
+.integrations-banking-reconcile-ui .history-container .table-container .dgrid .dgrid-scroller {
+    overflow: visible;
+    border-bottom: 2px solid #d4d7dc;
+    min-height: 90px
+}
+
+.integrations-banking-reconcile-ui .history-container .table-container .dgrid .dgrid-header {
+    margin-left: 0;
+    margin-right: 0
+}
+
+.integrations-banking-reconcile-ui .history-container .table-container .dgrid .dgrid-content {
+    padding: 0
+}
+
+.integrations-banking-reconcile-ui .history-container .table-container .dgrid-cell {
+    overflow: visible
+}
+
+.integrations-banking-reconcile-ui .history-container .table-container .dgrid-cell:focus,.integrations-banking-reconcile-ui .history-container .table-container .ha-expando-button:focus {
+    border: 1px solid #0097e6;
+    box-shadow: 0 0 2px #babec5
+}
+
+.integrations-banking-reconcile-ui .history-container .table-container .action-column {
+    width: 155px
+}
+
+.integrations-banking-reconcile-ui .history-container .table-container .arrow-padding .dgrid-resize-header-container {
+    padding-right: 20px;
+    margin-right: 0
+}
+
+.integrations-banking-reconcile-ui .history-container .table-container .category-column button {
+    width: 100%;
+    overflow: visible
+}
+
+.integrations-banking-reconcile-ui .history-container .table-container .category-column button div:nth-of-type(2) {
+    border-style: none
+}
+
+.integrations-banking-reconcile-ui .history-container .table-container .statements-cell {
+    color: #0077c5;
+    font-weight: 600
+}
+
+.integrations-banking-reconcile-ui .history-container .table-container .statements-cell .hi-attach {
+    color: #0077c5!important;
+    font-size: 18px
+}
+
+.integrations-banking-reconcile-ui .history-container .report-content {
+    margin: 0 25px 25px;
+    padding: 40px;
+    border: 1px solid #e4e6e9;
+    background: #fff
+}
+
+.integrations-banking-reconcile-ui .history-container .report-content .loading-spinner {
+    width: 20px;
+    height: 20px;
+    display: block;
+    margin: 0 auto;
+    margin-top: 10px;
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 2s linear infinite
+}
+
+.integrations-banking-reconcile-ui .history-container .report-content header {
+    text-align: center
+}
+
+.integrations-banking-reconcile-ui .history-container .report-content header h3 {
+    margin-top: 10px
+}
+
+.integrations-banking-reconcile-ui .history-container .report-content header .section-header {
+    text-transform: uppercase
+}
+
+.integrations-banking-reconcile-ui .history-container .report-content .detail-report th {
+    width: 20%
+}
+
+.integrations-banking-reconcile-ui .history-container .report-content .detail-report .amount-column {
+    width: 150px
+}
+
+.integrations-banking-reconcile-ui .history-container .report-content .change-report .change-column {
+    padding-left: 25px
+}
+
+.integrations-banking-reconcile-ui .history-container .report-content .change-report td {
+    text-align: left;
+    line-height: .9em
+}
+
+.integrations-banking-reconcile-ui .history-container .report-content .change-report,.integrations-banking-reconcile-ui .history-container .report-content .detail-report {
+    margin: 10px 0 30px
+}
+
+.integrations-banking-reconcile-ui .history-container .report-content .change-report .detail-title,.integrations-banking-reconcile-ui .history-container .report-content .detail-report .detail-title {
+    margin: 0;
+    margin-bottom: 4px
+}
+
+.integrations-banking-reconcile-ui .history-container .report-content .change-report .total-row,.integrations-banking-reconcile-ui .history-container .report-content .detail-report .total-row {
+    font-size: 13px;
+    font-weight: 700;
+    text-align: right;
+    margin: 0;
+    padding: 5px 0
+}
+
+.integrations-banking-reconcile-ui .history-container .report-content .change-report .total-row .total-amount,.integrations-banking-reconcile-ui .history-container .report-content .detail-report .total-row .total-amount {
+    display: inline-block;
+    width: 150px
+}
+
+.integrations-banking-reconcile-ui .history-container .report-content .reconciliation-report-description {
+    text-align: left;
+    margin-bottom: 0
+}
+
+.integrations-banking-reconcile-ui .history-container .report-content .vertical-divider {
+    width: 100%;
+    border-bottom: 1px solid #000
+}
+
+.integrations-banking-reconcile-ui .history-container .report-content .double-vertical-divider {
+    border-bottom-style: double;
+    border-bottom-width: 3px
+}
+
+.integrations-banking-reconcile-ui .history-container .report-content .clickable-row:hover {
+    text-decoration: underline;
+    color: #365ebf;
+    cursor: pointer
+}
+
+.integrations-banking-reconcile-ui .history-container .report-content .summary {
+    margin-bottom: 30px
+}
+
+.integrations-banking-reconcile-ui .history-container .report-content .summary .summaryHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center
+}
+
+.integrations-banking-reconcile-ui .history-container .report-content .summary .summary-row {
+    margin: 0;
+    display: flex
+}
+
+.integrations-banking-reconcile-ui .history-container .report-content .summary .summary-row .dots {
+    height: 15px;
+    flex-grow: 1;
+    border-bottom: 1px dotted #000
+}
+
+.integrations-banking-reconcile-ui .history-container .report-content .summary .summary-row .ending-balance-float-right {
+    padding-left: 5px;
+    border-top: 1px solid #000;
+    border-bottom-style: double;
+    border-bottom-width: 3px
+}
+
+.integrations-banking-reconcile-ui .history-container .report-content table {
+    width: 100%;
+    table-layout: fixed;
+    border-bottom: 1px solid #ddd
+}
+
+.integrations-banking-reconcile-ui .history-container .report-content table thead {
+    border-top: 1px solid #000;
+    border-bottom: 1px solid #000
+}
+
+.integrations-banking-reconcile-ui .history-container .report-content table th {
+    color: #000
+}
+
+.integrations-banking-reconcile-ui .history-container .report-content table td,.integrations-banking-reconcile-ui .history-container .report-content table th {
+    padding: 5px 0;
+    overflow: hidden;
+    text-overflow: ellipsis
+}
+
+.integrations-banking-reconcile-ui .history-container .report-content table .amount-column {
+    text-align: right
+}
+
+.integrations-banking-reconcile-ui.ftu-link-container {
+    margin-right: 10px;
+    margin-bottom: 10px;
+    font-size: 14px
+}
+
+.integrations-banking-reconcile-ui.ftu-link-container .leftOption {
+    padding-left: 12px;
+    padding-bottom: 10px;
+    float: left
+}
+
+.integrations-banking-reconcile-ui.ftu-link-container .rightOption {
+    padding-right: 12px;
+    padding-bottom: 10px;
+    float: right
+}
+
+.ha-table-settings-popover .section .edit-columns {
+    column-count: 1!important
+}
+
+.reconciliation-report-container .reconciliation-report-title {
+    padding-top: 15px;
+    font-weight: 150;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 22px
+}
+
+.reconciliation-report-container .reconciliation-report-sub-title {
+    padding-top: 15px;
+    font-weight: 700;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 14px
+}
+
+.reconciliation-report-container .dgrid-row {
+    cursor: default
+}
+
+.reconciliation-report-toggle {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end
+}
+
+.integrations-banking-reconcile-ui-transactionFilter {
+    width: 640px;
+    max-width: 640px;
+    background-color: #fefefe
+}
+
+.integrations-banking-reconcile-ui-transactionFilter section table.filterForm {
+    border-collapse: separate;
+    width: 625px
+}
+
+.integrations-banking-reconcile-ui-transactionFilter section table.filterForm td {
+    vertical-align: bottom
+}
+
+.integrations-banking-reconcile-ui-transactionFilter section table.filterForm ha-text-field[name=freeText] {
+    width: 97%
+}
+
+.integrations-banking-reconcile-ui-transactionFilter section table.filterForm ha-text-field[name=freeText] input[type=text] {
+    width: 100%;
+    max-width: 100%
+}
+
+.integrations-banking-reconcile-ui-transactionFilter section table.filterForm ha-select,.integrations-banking-reconcile-ui-transactionFilter section table.filterForm ha-select ha-menu-item {
+    width: 190px
+}
+
+.integrations-banking-reconcile-ui-transactionFilter section table.filterForm ha-select[name=txnTypeId] ha-popover {
+    width: 230px
+}
+
+.integrations-banking-reconcile-ui-transactionFilter section table.filterForm ha-select[name=txnTypeId] ha-popover ha-menu {
+    overflow-x: hidden
+}
+
+.integrations-banking-reconcile-ui-transactionFilter section table.filterForm ha-select[name=txnTypeId] ha-menu-item {
+    width: 230px
+}
+
+.integrations-banking-reconcile-ui-transactionFilter section table.filterForm .hideMe {
+    opacity: 0
+}
+
+.integrations-banking-reconcile-ui-transactionFilter section table.filterForm .payee-select .Select-control {
+    width: 190px
+}
+
+.integrations-banking-reconcile-ui-transactionFilter section table.filterForm .payee-select .payee-select-option {
+    white-space: nowrap;
+    font-size: 13px;
+    display: flex;
+    justify-content: space-between
+}
+
+.integrations-banking-reconcile-ui-transactionFilter section table.filterForm .payee-select .payee-select-option .payee-type {
+    color: #bdbdbd;
+    font-style: italic;
+    margin-left: 10px
+}
+
+.integrations-banking-reconcile-ui-transactionFilter section table.filterForm .payee-select .Select-option.is-focused,.integrations-banking-reconcile-ui-transactionFilter section table.filterForm .payee-select .Select-option:hover {
+    background-color: #eceef1;
+    color: #108000;
+    font-weight: 600
+}
+
+.integrations-banking-reconcile-ui-transactionFilter section table.filterForm label {
+    display: inline-block;
+    margin-top: 10px
+}
+
+.integrations-banking-reconcile-ui-transactionFilter section table.filterForm .dijitDateTextBox {
+    width: 190px
+}
+
+.integrations-banking-reconcile-ui-transactionFilter section table.filterForm button[name=reset],.integrations-banking-reconcile-ui-transactionFilter section table.filterForm button[name=submit] {
+    width: 130px
+}
+
+.integrations-banking-reconcile-ui-transactionFilter section table.filterForm button[name=submit] {
+    float: right;
+    margin-right: 18px
+}
+
+.integrations-banking-reconcile-ui-transactionFilter .outsideFilter {
+    background-color: transparent;
+    z-index: -1;
+    position: fixed;
+    top: 0;
+    left: -200px;
+    bottom: 0;
+    right: 0
+}
+
+.filterFormOnTablet .breadcrumbs {
+    margin-bottom: 25px
+}
+
+.filterFormOnTablet .breadcrumbs .breadcrumb {
+    display: inline-block;
+    margin-right: 16px;
+    color: #0077c5
+}
+
+.filterFormOnTablet .breadcrumbs .breadcrumb:before {
+    font-family: harmonyicons;
+    font-size: 17px;
+    margin-right: 8px;
+    content: "\F061";
+    position: relative;
+    bottom: -2px
+}
+
+.filterFormOnTablet .date-picker-label,.filterFormOnTablet label {
+    color: #8d9096;
+    font-size: 12px;
+    font-weight: 600
+}
+
+.filterFormOnTablet .payee-select,.filterFormOnTablet ha-select,.filterFormOnTablet ha-text-field {
+    margin-bottom: 10px
+}
+
+.filterFormOnTablet .date-picker {
+    margin-right: 15px
+}
+
+.filterFormOnTablet .payee-select .Select-control {
+    width: 276px
+}
+
+.filterFormOnTablet .payee-select .Select-menu-outer {
+    min-width: 276px
+}
+
+.filterFormOnTablet .payee-select .Select-menu-outer .payee-select-option {
+    display: flex;
+    justify-content: space-between
+}
+
+.filterFormOnTablet .payee-select .Select-menu-outer .payee-select-option .payee-name {
+    padding-right: 15px
+}
+
+.filterFormOnTablet .payee-select .Select-menu-outer .payee-select-option .payee-type {
+    color: #bdbdbd;
+    font-style: italic
+}
+
+.filterFormOnTablet .payee-select .Select-menu-outer .Select-option.is-focused,.filterFormOnTablet .payee-select .Select-menu-outer .Select-option:hover {
+    background-color: #eceef1;
+    color: #108000;
+    font-weight: 600
+}
+
+.filterFormOnTablet button {
+    margin-top: 35px;
+    width: 130px
+}
+
+.filterFormOnTablet button:last-of-type {
+    float: right
+}
+
+ha-drawer-large[titletext=Filters] footer,ha-drawer-large[titletext=Filters] section h3 {
+    display: none
+}
+
+.reconcile-modal-content.reconcile-close-book-modal .incorrect-password {
+    color: red
+}
+
+.reconcile-modal-content.reconcile-close-book-modal .passwordField {
+    margin-top: 10px
+}
+
+.reconcile-modal-content.reconcile-undo-modal-content ul li {
+    color: #969696
+}
+
+.reconcile-modal-content.reconcile-undo-modal-content .undo-session-table-container {
+    width: 100%;
+    padding-right: 50px;
+    max-height: 200px;
+    overflow-y: auto
+}
+
+.reconcile-modal-content.reconcile-undo-modal-content .undo-session-table-container table {
+    width: 100%
+}
+
+.reconcile-modal-content.reconcile-undo-modal-content .undo-session-table-container td {
+    color: #969696
+}
+
+.reconcile-modal-content.reconcile-undo-modal-content .undo-session-table-container .amount-column {
+    text-align: right
+}
+
+.reconcile-modal-content.row-editor-modal-content .error-title {
+    width: calc(100% - 100px);
+    margin-left: 20px;
+    display: inline-block
+}
+
+.reconcile-modal-content.row-editor-modal-content .alert-icon-warning {
+    font-size: 64px;
+    color: #ffca00;
+    display: inline-block;
+    vertical-align: top;
+    margin-top: 24px
+}
+
+.reconcile-modal-content.row-editor-modal-content .alert-icon-error {
+    font-size: 64px;
+    color: #e33d43;
+    display: inline-block
+}
+
+.reconcile-modal-content.row-editor-modal-content .warning-message-container {
+    width: 348px;
+    display: block
+}
+
+.reconcile-modal-content.row-editor-modal-content .warning-message-container .alert-icon {
+    font-size: 64px;
+    color: #e33d43;
+    display: inline-block;
+    margin-top: -25px
+}
+
+.reconcile-modal-content.row-editor-modal-content .warning-message-container .warning-message p {
+    color: inherit
+}
+
+.reconcile-modal-content.row-editor-modal-content .error-message-container {
+    margin-left: 55px;
+    display: inline-block
+}
+
+.reconcile-modal-content.row-editor-modal-content .error-message-container .warning-message p {
+    margin-top: 0;
+    margin-bottom: 0;
+    color: #8d9096
+}
+
+.reconcile-modal-content.row-editor-modal-content .button-container .ha-button {
+    min-width: 80px
+}
+
+.reconcile-modal-content.row-editor-modal-content .button-container .ha-button-primary {
+    font-weight: 600
+}
+
+.reconcile-modal-content .money-text-field input {
+    text-align: right
+}
+
+.reconcile-modal-content h2 {
+    text-align: left
+}
+
+.reconcile-modal-content p {
+    color: #969696;
+    text-align: left
+}
+
+.reconcile-modal-content .info-icon {
+    background: url(../images/1f4fc5a5becd9a1a6f6a623d68a36d38.svg) no-repeat;
+    background-size: 100px;
+    background-position-y: -1200px
+}
+
+.reconcile-modal-content .info-icon,.reconcile-modal-content .warning-icon {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    vertical-align: top;
+    margin-top: 24px
+}
+
+.reconcile-modal-content .warning-icon {
+    background: url(../images/1f4fc5a5becd9a1a6f6a623d68a36d38.svg) no-repeat;
+    background-size: 100px;
+    background-position-y: -1100px
+}
+
+.reconcile-modal-content .warning-message {
+    margin-left: 20px;
+    display: inline-block;
+    width: calc(100% - 100px)
+}
+
+.reconcile-modal-content .warning-message h2 {
+    padding-top: 16px
+}
+
+.reconcile-modal-content .warning-message p {
+    padding: 0
+}
+
+.reconcile-modal-content .vertical-divider {
+    width: 100%;
+    margin: 20px 0;
+    border-bottom: 1px solid #c7c7c7
+}
+
+.reconcile-modal-content .button-container {
+    margin: 20px 0
+}
+
+.reconcile-modal-content .button-container button:first-of-type {
+    float: left
+}
+
+.reconcile-modal-content .button-container button:last-of-type {
+    float: right
+}
+
+.reconcile-modal-content span.warning-icon {
+    vertical-align: top;
+    margin-top: 18px
+}
+
+.reconcile-modal-content span.warning-content {
+    display: inline-block;
+    width: 85%;
+    padding-left: 30px
+}
+
+.reconcile-modal-content input.left-long-button {
+    width: 160px
+}
+
+.reconcile-modal-content input.right-long-button {
+    width: 160px;
+    float: right
+}
+
+.reconcile-modal-content .warning-checkbox-label {
+    font-weight: 400
+}
+
+.reconcile-modal-content .warning-checkbox-label-span {
+    padding-left: 10px
+}
+
+.reconcile-discrepancy-modal-content ha-select {
+    margin: 0 20px
+}
+
+.reconcile-discrepancy-modal-content ha-select button {
+    width: 250px
+}
+
+.reconcile-discrepancy-modal-content .adjustment-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center
+}
+
+.reconcile-discrepancy-modal-content .adjustment-details .adjustment-date-field {
+    white-space: nowrap
+}
+
+.reconcile-discrepancy-modal-content .input-label-styling {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    font-size: 14px;
+    font-weight: 800;
+    display: block;
+    padding-bottom: 5px
+}
+
+.reconcile-discrepancy-modal-content .exchange-rate-component ha-text-field {
+    width: auto;
+    vertical-align: initial
+}
+
+.reconcile-discrepancy-modal-content .exchange-rate-component ha-text-field input {
+    width: 75px
+}
+
+.reconcile-discrepancy-modal-content .exchange-rate-component ha-tooltip {
+    left: 60px!important
+}
+
+.reconcile-complete-modal-content .action-list,.reconcile-complete-modal-content h2,.reconcile-complete-modal-content p {
+    text-align: center
+}
+
+.reconcile-complete-modal-content .action-list ul {
+    display: inline-block;
+    list-style-type: none;
+    padding: 0;
+    text-align: left;
+    margin: 0
+}
+
+.reconcile-complete-modal-content .action-list ul li {
+    margin: 10px 0;
+    color: #969696
+}
+
+.reconcile-complete-modal-content .action-list ul li i {
+    margin-right: 5px;
+    width: 20px;
+    text-align: center
+}
+
+.reconcile-complete-modal-content .button-container .ha-button-primary {
+    float: right!important
+}
+
+.reconcile-complete-modal-content .viewing-report-text {
+    line-height: 1.43;
+    text-align: center;
+    margin-left: 10%;
+    margin-right: 10%
+}
+
+.reconcile-complete-modal-content .paying-option-text {
+    margin-top: 35px;
+    text-align: center
+}
+
+.reconcile-complete-modal-content .balance-due {
+    margin-top: 14px
+}
+
+.reconcile-complete-modal-content .check-mark {
+    font-size: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center
+}
+
+.reconcile-before-task-modal {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    font-size: 14px;
+    font-weight: 800;
+    display: block;
+    padding-bottom: 5px;
+    text-align: center;
+    font-weight: 400
+}
+
+.reconcile-before-task-modal .title {
+    text-align: center
+}
+
+.reconcile-before-task-modal .left-button-container {
+    float: left
+}
+
+.reconcile-before-task-modal .right-button-container {
+    float: right
+}
+
+.reconcile-before-task-modal .right-button-container .ha-button-primary {
+    margin-left: 10px
+}
+
+.reconcile-before-task-modal .before-task-modal-content {
+    margin-top: 35px;
+    margin-bottom: 35px
+}
+
+.reconcile-before-task-modal .description {
+    display: inline-table;
+    width: 32%;
+    font-size: 13px;
+    padding: 0 5px
+}
+
+.reconcile-before-task-modal .description .description-header {
+    font-size: 14px;
+    font-weight: 700
+}
+
+.reconcile-before-task-modal .before-task-steps-image {
+    background: url(../images/1204ac018fbc69b4673431d537842234.svg) no-repeat 0 0;
+    max-width: 545px;
+    width: 100%;
+    height: 95px;
+    display: inline-block
+}
+
+ha-single-step {
+    box-shadow: -1px 5px 5px #babec5
+}
+
+ha-single-step>div:after,ha-single-step>div:before {
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none
+}
+
+ha-single-step>div:after {
+    border-color: transparent;
+    border-width: 11px
+}
+
+ha-single-step>div:before {
+    border-color: transparent;
+    border-width: 13px!important
+}
+
+ha-single-step.position-right.alignment-top {
+    margin-top: -10px
+}
+
+ha-single-step.position-right.alignment-top>div:after,ha-single-step.position-right.alignment-top>div:before {
+    top: 9px!important
+}
+
+ha-single-step.position-right.alignment-top>div:after {
+    border-right-color: #fff;
+    margin-top: 2px;
+    left: auto!important;
+    right: 99%!important
+}
+
+ha-single-step.position-right.alignment-top>div:before {
+    right: 100%!important;
+    border-right-color: #d4d7dc
+}
+
+ha-single-step.position-left.alignment-top {
+    margin-top: -10px
+}
+
+ha-single-step.position-left.alignment-top>div:after,ha-single-step.position-left.alignment-top>div:before {
+    top: 9px!important
+}
+
+ha-single-step.position-left.alignment-top>div:after {
+    border-left-color: #fff;
+    margin-top: 2px;
+    left: 100%!important;
+    right: auto!important
+}
+
+ha-single-step.position-left.alignment-top>div:before {
+    left: 100%!important;
+    border-left-color: #d4d7dc
+}
+
+ha-single-step.position-bottom.alignment-left>div:after,ha-single-step.position-bottom.alignment-left>div:before {
+    left: 1%!important;
+    right: auto!important;
+    top: auto!important
+}
+
+ha-single-step.position-bottom.alignment-left>div:after {
+    border-bottom-color: #0077c5;
+    border-left: 12px solid transparent;
+    bottom: 100%!important;
+    margin-left: 1px
+}
+
+ha-single-step.position-bottom.alignment-left>div:before {
+    bottom: 100%!important;
+    border-bottom-color: #d4d7dc
+}
+
+ha-single-step.position-bottom.alignment-right>div:after,ha-single-step.position-bottom.alignment-right>div:before {
+    left: 88%!important;
+    bottom: 100%!important;
+    right: auto!important;
+    top: auto!important
+}
+
+ha-single-step.position-bottom.alignment-right>div:after {
+    border-bottom-color: #0077c5;
+    border-left: 12px solid transparent;
+    margin-left: 1px
+}
+
+ha-single-step.position-bottom.alignment-right>div:before {
+    border-bottom-color: #d4d7dc
+}
+
+ha-single-step.position-top.alignment-left>div:after,ha-single-step.position-top.alignment-left>div:before {
+    margin-top: 25px;
+    left: 1%!important;
+    right: auto!important;
+    bottom: auto!important
+}
+
+ha-single-step.position-top.alignment-left>div:after {
+    top: 99%!important;
+    border-top-color: #fff;
+    border-left: 12px solid transparent;
+    margin-left: 1px
+}
+
+ha-single-step.position-top.alignment-left>div:before {
+    top: 100%!important;
+    border-top-color: #d4d7dc
+}
+
+ha-single-step.position-top.alignment-right>div:after,ha-single-step.position-top.alignment-right>div:before {
+    margin-top: 25px;
+    left: 88%!important;
+    bottom: auto!important;
+    right: auto!important
+}
+
+ha-single-step.position-top.alignment-right>div:after {
+    top: 99%!important;
+    border-top-color: #fff;
+    border-right: 12px solid transparent;
+    margin-left: 2px
+}
+
+ha-single-step.position-top.alignment-right>div:before {
+    top: 100%!important;
+    border-top-color: #d4d7dc
+}
+
+div.start-reconcile-container.row {
+    display: flex
+}
+
+div.start-reconcile-fluid.container-fluid {
+    padding-left: 0;
+    padding-right: 0
+}
+
+.document-item-container:hover {
+    background-color: #f4f5f8
+}
+
+.document-item {
+    padding: 8px;
+    display: flex;
+    flex-direction: row;
+    line-height: 16px;
+    cursor: pointer
+}
+
+.document-item .document-item-preview {
+    cursor: pointer;
+    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAAXNSR0IArs4c6QAAAThJREFUOBFjZACCnLziNIb/DIVAptr///+ZQGLIgJGRceuUyb0+ILHsnKKtQMoLWZ6BkXEvC8iQ///+z0SRQOMADWdEE0Ll/v/vzJiTW3wdqFCDiZGxRFiYd2JDQ8MfVFWYvNzcStF//3/uB8pow2RB3lADccg05CrcIFiYkOGSq0yM7I5wg2AMQjSad8CGTJ7c/hqobxsIsxAyACb/n+HneiAbFCbIhjBMndLnDVKDEdUgQWzg/3+Gj4yMDEdB3oG6BEUZ0S6C2YyiG8iBpisGog1CNwCJD06cRHsNSSNW5nA2CJiz/4E8DUzZJAc8TA/IDFAY3QIZ9Pbt53yYBIhPCIDUgvRA1d1iJKYYIWQoIxNjOvOpk8fPmltYPWdkYFQFOlEIqAl/2QM1FeQdIL4JNKR6yqTeWQCSbXfQ3/uzaAAAAABJRU5ErkJggg==) no-repeat;
+    padding: 3px;
+    width: 25px;
+    height: 25px;
+    align-self: center
+}
+
+.document-item .document-item-delete {
+    margin-right: 12px;
+    font-size: 24px;
+    width: 25px;
+    height: 25px;
+    align-self: center;
+    cursor: pointer
+}
+
+.document-item .document-item-desc {
+    flex-grow: 3;
+    padding: 3px 0
+}
+
+.document-item .document-name {
+    font-size: 16px;
+    color: #0077c5;
+    font-weight: 400
+}
+
+.document-item .document-details {
+    font-weight: 600
+}
+
+.statementsButton {
+    position: absolute;
+    min-width: 180px;
+    margin-left: 24px
+}
+
+.ha-button.bolt-button-secondary {
+    border-radius: 18px;
+    font-size: 16px;
+    border: 2px solid;
+    height: 36px
+}
+
+.ha-button.bolt-button-primary {
+    border-radius: 18px;
+    font-size: 16px
+}
+
+.documents-drawer-container .title-container {
+    margin-bottom: 40px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 16px
+}
+
+.documents-drawer-container .title {
+    font-size: 20px;
+    margin-bottom: 5px;
+    font-weight: 500
+}
+
+.documents-drawer-container .subtitle {
+    font-size: 16px;
+    font-weight: 500;
+    padding-bottom: 20px
+}
+
+.documents-drawer-container .heading {
+    font-weight: 500
+}
+
+.documents-drawer-container hr {
+    margin: 0
+}
+
+.documents-drawer-container .reconcile-feedback-link-sai {
+    text-decoration: none
+}
+
+.documents-drawer-container .documents-drawer-message-container {
+    line-height: 24px;
+    display: flex
+}
+
+.documents-drawer-container .documents-drawer-message-container .hi {
+    width: 32px;
+    padding: 5px;
+    font-size: 20px;
+    color: #8d9096
+}
+
+.documents-drawer-container .attachment-dropper-widget {
+    margin-bottom: 16px;
+    height: 150px;
+    overflow-y: auto
+}
+
+.documents-drawer-container .attachment-dropper-widget .header {
+    position: relative;
+    font-weight: 400
+}
+
+.documents-drawer-container .loading {
+    display: flex;
+    justify-content: center
+}
+
+.spinner {
+    border: 6px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 6px solid #2ca01c;
+    width: 32px;
+    height: 32px;
+    -webkit-animation: spin .75s linear infinite;
+    animation: spin .5s linear infinite;
+    margin: 12px 25px 0
+}
+
+@-webkit-keyframes spin {
+    0% {
+        -webkit-transform: rotate(0deg)
+    }
+
+    to {
+        -webkit-transform: rotate(1turn)
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg)
+    }
+
+    to {
+        transform: rotate(1turn)
+    }
+}
+
+.manual-refresh-section {
+    height: 60px
+}
+
+.manual-refresh-section .manual-refresh-icon {
+    display: inline-block;
+    background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB3aWR0aD0iMjRweCIgaGVpZ2h0PSIyNHB4IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+CiAgICA8IS0tIEdlbmVyYXRvcjogU2tldGNoIDUxLjMgKDU3NTQ0KSAtIGh0dHA6Ly93d3cuYm9oZW1pYW5jb2RpbmcuY29tL3NrZXRjaCAtLT4KICAgIDx0aXRsZT5pY29ucy9uYXYvaWNfcmVmcmVzaDwvdGl0bGU+CiAgICA8ZGVzYz5DcmVhdGVkIHdpdGggU2tldGNoLjwvZGVzYz4KICAgIDxkZWZzPgogICAgICAgIDxwYXRoIGQ9Ik0yMCw0IEMyMC41NTIsNCAyMSw0LjQ0NyAyMSw1IEwyMSw5IEMyMSw5LjU1MyAyMC41NTIsMTAgMjAsMTAgTDE2LDEwIEMxNS40NDgsMTAgMTUsOS41NTMgMTUsOSBDMTUsOC40NDcgMTUuNDQ4LDggMTYsOCBMMTcuNzQxLDggQzE2LjQ0NCw2LjEyOSAxNC4zMjcsNSAxMiw1IEM4LjE0LDUgNSw4LjE0MSA1LDEyIEM1LDEyLjU1MyA0LjU1MiwxMyA0LDEzIEMzLjQ0OCwxMyAzLDEyLjU1MyAzLDEyIEMzLDcuMDM3IDcuMDM4LDMgMTIsMyBDMTQuNzgsMyAxNy4zMTUsNC4yNjcgMTksNi4zNzUgTDE5LDUgQzE5LDQuNDQ3IDE5LjQ0OCw0IDIwLDQgWiBNMjAsMTEgQzIwLjU1MiwxMSAyMSwxMS40NDcgMjEsMTIgQzIxLDE2Ljk2MyAxNi45NjIsMjEgMTIsMjEgQzkuMjM0LDIxIDYuNjkxLDE5LjczMiA1LDE3LjYyOCBMNSwxOSBDNSwxOS41NTMgNC41NTIsMjAgNCwyMCBDMy40NDgsMjAgMywxOS41NTMgMywxOSBMMywxNSBDMywxNC40NDcgMy40NDgsMTQgNCwxNCBMOCwxNCBDOC41NTIsMTQgOSwxNC40NDcgOSwxNSBDOSwxNS41NTMgOC41NTIsMTYgOCwxNiBMNi4yNTgsMTYgQzcuNTU5LDE3Ljg2OCA5LjY4NSwxOSAxMiwxOSBDMTUuODYsMTkgMTksMTUuODU5IDE5LDEyIEMxOSwxMS40NDcgMTkuNDQ4LDExIDIwLDExIFoiIGlkPSJwYXRoLTEiPjwvcGF0aD4KICAgIDwvZGVmcz4KICAgIDxnIGlkPSJpY29ucy9uYXYvaWNfcmVmcmVzaCIgc3Ryb2tlPSJub25lIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiIGZpbGwtcnVsZT0iZXZlbm9kZCI+CiAgICAgICAgPG1hc2sgaWQ9Im1hc2stMiIgZmlsbD0id2hpdGUiPgogICAgICAgICAgICA8dXNlIHhsaW5rOmhyZWY9IiNwYXRoLTEiPjwvdXNlPgogICAgICAgIDwvbWFzaz4KICAgICAgICA8ZyBpZD0iTWFzayI+PC9nPgogICAgICAgIDxnIGlkPSLOqS9NaXhpbnMvSWNvbi0vRGVmYXVsdCIgbWFzaz0idXJsKCNtYXNrLTIpIiBmaWxsPSIjNkI2QzcyIj4KICAgICAgICAgICAgPGcgaWQ9Is6pL01peGlucy9Db2xvci0vR3JheS0wMiI+CiAgICAgICAgICAgICAgICA8cmVjdCBpZD0izqkvTWl4aW5zL0NvbG9yL0dyYXktMDIiIHg9IjAiIHk9IjAiIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCI+PC9yZWN0PgogICAgICAgICAgICA8L2c+CiAgICAgICAgPC9nPgogICAgPC9nPgo8L3N2Zz4=) 50% no-repeat;
+    height: 24px;
+    width: 24px;
+    margin-right: 8px
+}
+
+.manual-refresh-section .manual-refresh-icon.rotate {
+    -webkit-animation: myRotate 1s linear infinite;
+    animation: myRotate 1s linear infinite
+}
+
+@-webkit-keyframes myRotate {
+    0% {
+        -webkit-transform: rotate(0deg)
+    }
+
+    50% {
+        -webkit-transform: rotate(180deg)
+    }
+
+    to {
+        -webkit-transform: rotate(1turn)
+    }
+}
+
+@keyframes myRotate {
+    0% {
+        -webkit-transform: rotate(0deg)
+    }
+
+    50% {
+        -webkit-transform: rotate(180deg)
+    }
+
+    to {
+        -webkit-transform: rotate(1turn)
+    }
+}
+
+.manual-refresh-section .refresh-section {
+    float: right;
+    clear: right;
+    display: flex;
+    align-items: center;
+    cursor: pointer
+}
+
+/*# sourceMappingURL=integrations-banking-reconcile-ui.css.map*/

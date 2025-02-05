@@ -1,0 +1,770 @@
+<template>
+  <div>
+    <h2 class="intro-y text-lg font-medium mt-10">Invoice List</h2>
+    <div class="grid grid-cols-12 gap-6 mt-5">
+      <div
+          class="intro-y col-span-12 flex flex-wrap sm:flex-nowrap items-center mt-2"
+      >
+        <router-link to="/invoices/add-invoice" v-if="!financeView">
+          <button class="btn btn-primary shadow-md mr-2">
+            Add New Invoice
+          </button>
+        </router-link>
+        <Dropdown v-if="!financeView">
+          <DropdownToggle class="btn px-2 box">
+            <span class="w-5 h-5 flex items-center justify-center">
+              <PlusIcon class="w-4 h-4"/>
+            </span>
+          </DropdownToggle>
+          <DropdownMenu class="w-40">
+            <DropdownContent>
+              <DropdownItem>
+                <PrinterIcon class="w-4 h-4 mr-2"/>
+                Print
+              </DropdownItem>
+              <DropdownItem>
+                <FileTextIcon class="w-4 h-4 mr-2"/>
+                Export to Excel
+              </DropdownItem>
+              <DropdownItem>
+                <FileTextIcon class="w-4 h-4 mr-2"/>
+                Export to PDF
+              </DropdownItem>
+            </DropdownContent>
+          </DropdownMenu>
+        </Dropdown>
+        <div class="hidden md:block mx-auto text-slate-500">
+          Showing {{ invoiceResult?.invoices.paginatorInfo.firstItem }} to
+          {{ invoiceResult?.invoices.paginatorInfo.lastItem }} of
+          {{ invoiceResult?.invoices.paginatorInfo.total }} entries
+        </div>
+        <button class="max-[640px]:ml-auto sm:ml-auto btn btn-outline-danger" @click.prevent="clearFilters()">
+          <TrashIcon class="w-4 h-4"/>
+          Clear Filters
+        </button>
+      </div>
+      <div
+          class="intro-y col-span-12 flex flex-wrap items-center mt-2"
+      >
+        <div class="max-[640px]:w-3/6 sm:w-3/6 md:w-1/6 my-3 pr-2 md:block w-1/6 flex flex-col text-slate-500">
+          <small class="pr-1">Status </small>
+          <CustomSelect
+              label="name"
+              placeholder="Search for status"
+              :options="invoiceStatusResult?.invoice_statuses.data"
+              class="form-control box pr-2 bg-white"
+              v-model.number="searchData.invoice_status_id"
+          />
+        </div>
+        <div class="max-[640px]:w-3/6 sm:w-3/6 md:w-1/6  my-3 pr-2 md:block w-1/6 flex flex-col text-slate-500">
+          <small class="pr-1">Filter by Client</small>
+          <CustomSelect
+              label="name"
+              placeholder="Search for client"
+              :options="clientOptions"
+              class="form-control box pr-2 bg-white"
+              v-model.number="searchData.client_id"
+              @keyup="clientSearchInput($event)"
+          />
+        </div>
+        <div class="my-3 pr-2 hidden md:block w-1/6  flex flex-col text-slate-500">
+          <small class="pr-1">Filter by Order</small>
+          <CustomSelect
+              label="order_number"
+              placeholder="Search for order"
+              :options="orderOptions"
+              class="form-control box pr-2 bg-white"
+              v-model.number="searchData.order_id"
+              @keyup="orderSearchInput($event)"
+          />
+        </div>
+
+        <div class="my-3 pr-2 hidden md:block w-1/6  flex flex-col text-slate-500">
+          <small class="pr-1">Filter by Added By</small>
+          <CustomSelect
+              label="first_name"
+              placeholder="Search for staff"
+              :options="staffOptions"
+              class="form-control box pr-2 bg-white"
+              v-model.number="searchData.added_by"
+              @keyup="staffSearchInput($event)"
+          />
+        </div>
+        <div class="max-[640px]:w-3/6 sm:w-3/6 md:w-1/6  my-3 pr-2 md:block w-1/6 flex flex-col text-slate-500">
+          <small class="pr-1">Filter by Order Type</small>
+          <CustomSelect
+              label="label"
+              :value="'value'"
+              placeholder="Search order type"
+              :options="orderTypes"
+              class="form-control box pr-2 bg-white"
+              v-model.trim="searchData.order_type"
+          />
+        </div>
+
+        <div class="max-[640px]:w-3/6 sm:w-3/6 md:w-1/6 my-3 pr-2 md:block w-1/6 flex flex-col text-slate-500">
+          <small class="pr-1">Search </small>
+          <input
+              v-model.trim="searchData.search"
+              type="text"
+              class="form-control box pr-2"
+              placeholder="search"
+          />
+        </div>
+
+        <div class="my-3 pr-2 hidden md:block w-1/6 flex flex-col text-slate-500">
+          <small class="pr-1">Min amount </small>
+          <input
+              v-model.trim="searchData.min_amount"
+              type="number"
+              class="form-control box pr-2"
+              placeholder="Min amount"
+          />
+        </div>
+        <div class="my-3 pr-2 hidden md:block w-1/6 flex flex-col text-slate-500">
+          <small class="pr-1">Max amount </small>
+          <input
+              v-model.trim="searchData.max_amount"
+              type="number"
+              class="form-control box pr-2"
+              placeholder="Max amount"
+          />
+        </div>
+        <div class="my-3 pr-2 hidden md:block w-1/6 flex flex-col text-slate-500">
+          <small class="pr-1">Min Creation Date </small>
+          <flat-pickr
+              v-model="searchData.min_creation_date"
+              :config="timeConfig"
+              class="form-control box pr-2"
+              placeholder="Select end creation date"
+              name="date"
+          />
+        </div>
+        <div class="my-3 pr-2 hidden md:block w-1/6 flex flex-col text-slate-500">
+          <small class="pr-1">Max Creation Date </small>
+          <flat-pickr
+              v-model="searchData.max_creation_date"
+              :config="timeConfig"
+              class="form-control box pr-2"
+              placeholder="Select end creation date"
+              name="date"
+          />
+        </div>
+        <div class="my-3 pr-2 hidden md:block w-1/6 flex flex-col text-slate-500">
+          <small class="pr-1">Min Invoice Date </small>
+          <flat-pickr
+              v-model="searchData.min_invoicing_date"
+              :config="timeConfig"
+              class="form-control box pr-2"
+              placeholder="Select end invoicing date"
+              name="date"
+          />
+        </div>
+        <div class="my-3 pr-2 hidden md:block w-1/6 flex flex-col text-slate-500">
+          <small class="pr-1">Max Invoice Date </small>
+          <flat-pickr
+              v-model="searchData.max_invoicing_date"
+              :config="timeConfig"
+              class="form-control box pr-2"
+              placeholder="Select end invoicing date"
+              name="date"
+          />
+        </div>
+        <div class="my-3 pr-2 hidden md:block w-1/6 flex flex-col text-slate-500">
+          <small class="pr-1">Sort By </small>
+          <CustomSelect
+              label="name"
+              placeholder="Filter  column"
+              :options="sortByCols"
+              class="form-control w-4/5 box pr-2 bg-white"
+              v-model="searchData.sort_column"
+          />
+        </div>
+        <div class="my-3 pr-2 hidden md:block w-1/6 flex flex-col text-slate-500">
+          <small class="pr-1">Sort Direction</small>
+          <CustomSelect
+              label="name"
+              placeholder="Sort direction"
+              :options="sortDirection"
+              class="form-control w-4/5 box pr-2 bg-white"
+              v-model="searchData.sort_direction"
+          />
+        </div>
+      </div>
+      <!-- BEGIN: Data List -->
+      <div class="intro-y col-span-12 overflow-auto">
+        <div
+            v-if="invoiceLoading"
+            class="col-span-6 sm:col-span-3 xl:col-span-2 flex flex-col justify-end items-center"
+        >
+          <LoadingIcon icon="bars" class="w-8 h-8"/>
+        </div>
+        <table class="table table-report table-auto -mt-2" v-else>
+          <thead>
+          <tr>
+            <th class="whitespace-nowrap">INVOICE #</th>
+            <th class="whitespace-nowrap">CLIENT</th>
+            <th class="whitespace-nowrap">ADDED BY</th>
+            <th class="whitespace-nowrap">AMOUNT</th>
+            <th class="whitespace-nowrap">TOTAL AMOUNT</th>
+            <th class="whitespace-nowrap">PAYMENT AMOUNTS</th>
+            <th class="whitespace-nowrap">ORDERS TYPE</th>
+            <th class="text-center whitespace-nowrap">STATUS</th>
+            <th class="text-center whitespace-nowrap">ACTIONS</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr v-if="!(invoiceResult?.invoices.data.length > 0)">
+            <td colspan="9" class="text-center">No invoices found</td>
+          </tr>
+          <tr
+              v-for="(invoice, invoiceKey) in invoiceResult?.invoices.data"
+              :key="invoiceKey"
+              class="intro-x"
+          >
+            <td class="text-sm w-40">
+              {{ invoice.invoice_number }}
+            </td>
+            <td class="text-left">
+              <a href="" class="font-medium">{{ invoice.client.name }}</a>
+              <div class="text-slate-500 text-xs whitespace-nowrap mt-0.5">
+                {{ invoice.client.user.email }}
+              </div>
+            </td>
+            <td class="text-left">
+              <a href="" class="font-medium">{{ invoice.added_by.email }}</a>
+              <div class="text-slate-500 text-xs whitespace-nowrap mt-0.5">
+                {{ invoice.added_by.phone_number }}
+              </div>
+            </td>
+            <td class="text-left">
+              <small class="text-xs italic">AMOUNT:</small>
+              <a href="" class="font-medium text-md">{{
+                  invoice.amount.toLocaleString()
+                }}</a>
+              <div class="text-slate-500 text-xs whitespace-nowrap mt-0.5">
+                <small class="text-xs italic">VAT:</small>
+                {{ invoice.vat_amount.toLocaleString() }}
+                {{
+                  invoice.amount > 0
+                      ? "(" +
+                      ((invoice.vat_amount / invoice.amount) * 100).toFixed(
+                          2
+                      ) +
+                      "%)"
+                      : ""
+                }}
+              </div>
+            </td>
+            <td class="text-center">
+              {{ (invoice.amount + invoice.vat_amount).toLocaleString() }}
+            </td>
+            <td class="text-left">
+              <small class="text-xs italic">VERIFIED:</small>
+              <a href="" class="font-medium">{{
+                  invoice.verified_payments
+                }}</a>
+              <div class="text-slate-500 text-xs whitespace-nowrap mt-0.5">
+                <small class="text-xs italic">UNVERIFIED:</small>
+                <a href="" class="font-medium">{{
+                    invoice.unverified_payments
+                  }}</a>
+              </div>
+            </td>
+            <td class="capitalize">
+              <div
+                  class="flex items-center justify-center text-center rounded-lg border py-0.5 px-2.5"
+                  :class="{
+                    'text-success border-success':
+                      invoice.order_type == 'ordinary',
+                    'text-orange-600 border-orange-600':
+                      invoice.order_type == 'dedicated',
+                  }"
+              >
+                {{ invoice.order_type }}
+              </div>
+            </td>
+            <td class="w-40">
+              <div
+                  class="flex items-center justify-center"
+                  :class="{
+                    'text-success': invoice.invoice_status?.name == 'Paid',
+                    'text-danger': invoice.invoice_status?.name == 'Cancelled',
+                    'text-warning': invoice.invoice_status?.name == 'Draft',
+                    'text-blue-600':
+                      invoice.invoice_status?.name == 'Processing',
+                    'text-pink-700': invoice.invoice_status?.name == 'Active',
+                    'text-orange-600':
+                      invoice.invoice_status?.name == 'Invoiced',
+                  }"
+              >
+                <CheckSquareIcon class="w-4 h-4 mr-2"/>
+                {{ invoice.invoice_status?.name }}
+              </div>
+            </td>
+
+            <td class="table-report__action w-56">
+              <div class="flex justify-end items-center">
+                <router-link
+                    :to="{
+                    name: 'add-credit-note',
+                    params: { invoiceId: invoice.id },
+                  }"
+                    class="group relative flex flex-row items-center w-auto text-warning hover:bg-warning hover:py-0.5 hover:px-1 hover:text-white hover:rounded-lg transition-all duration-300"
+                >
+                  <CreditCardIcon class="w-4 h-4 m-3"/>
+                  <span class="hidden group-hover:inline-flex">Add Credit Note</span>
+                </router-link>
+
+                <a
+                    class="flex items-center text-green-500 mr-1"
+                    href="javascript:;"
+                    v-if="invoice.invoice_status?.id == 4"
+                    @click="resendInvoiceOperation(invoice?.id)"
+                >
+                  <SendIcon class="w-4 h-4 mr-1"/>
+                  <span
+                      class="text-green-500 text-xs whitespace-nowrap mt-0.5"
+                  >{{ resendInvoiceText }}</span
+                  >
+                </a>
+                <router-link
+                    :to="{
+                      name: 'edit-invoice',
+                      params: { invoiceId: invoice.id },
+                    }"
+                    v-if="
+                      invoice.invoice_status.id < 3 &&
+                      !financeView &&
+                      $h.hasPermission('invoice.update') &&
+                      invoice.order_type == 'ordinary'
+                    "
+                >
+                  <a class="flex items-center mr-3">
+                    <CheckSquareIcon class="w-4 h-4 mr-1"/>
+                  </a>
+                </router-link>
+                <router-link
+                    :to="{
+                      name: 'view-invoice',
+                      params: { invoiceId: invoice.id },
+                    }"
+                >
+                  <a class="flex items-center mr-3 text-warning">
+                    <EyeIcon class="w-4 h-4 mr-1"/>
+                  </a>
+                </router-link>
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- END: Data List -->
+      <!-- BEGIN: Pagination -->
+      <div
+          class="intro-y col-span-12 flex flex-wrap sm:flex-row sm:flex-nowrap items-center"
+      >
+        <nav class="w-full sm:w-auto sm:mr-auto">
+          <ul class="pagination">
+            <li class="page-item">
+              <span
+                  class="page-link"
+                  v-if="paginationData?.currentPage > 1"
+                  @click="previousPage(1, pagination)"
+              >
+                <ChevronsLeftIcon class="w-4 h-4"/>
+              </span>
+            </li>
+            <li class="page-item">
+              <a
+                  class="page-link"
+                  v-if="paginationData?.currentPage > 1"
+                  @click="
+                  previousPage(paginationData?.currentPage - 1, pagination)
+                "
+              >
+                <ChevronLeftIcon class="w-4 h-4"/>
+              </a>
+            </li>
+            <li class="page-item">
+              <a class="page-link" v-if="paginationData?.currentPage - 2 > 1"
+              >...</a
+              >
+            </li>
+            <li class="page-item">
+              <a
+                  class="page-link"
+                  v-if="paginationData?.currentPage > 2"
+                  @click="
+                  previousPage(paginationData?.currentPage - 2, pagination)
+                "
+              >{{ paginationData?.currentPage - 2 }}</a
+              >
+            </li>
+            <li
+                class="page-item"
+                v-if="paginationData?.currentPage > 1"
+                @click="previousPage(paginationData?.currentPage - 1, pagination)"
+            >
+              <a class="page-link">{{ paginationData?.currentPage - 1 }}</a>
+            </li>
+            <li class="page-item active">
+              <a class="page-link">{{ paginationData?.currentPage }}</a>
+            </li>
+            <li
+                class="page-item"
+                v-if="paginationData?.currentPage < paginationData?.lastPage"
+                @click="nextPage(pagination, paginationData, 1)"
+            >
+              <a class="page-link">{{ paginationData?.currentPage + 1 }}</a>
+            </li>
+            <li class="page-item">
+              <a
+                  v-if="
+                  paginationData?.currentPage + 1 < paginationData?.lastPage
+                "
+                  @click="nextPage(pagination, paginationData, 2)"
+                  class="page-link"
+              >{{ paginationData?.currentPage + 2 }}</a
+              >
+            </li>
+            <li class="page-item">
+              <a
+                  v-if="
+                  paginationData?.currentPage + 2 < paginationData?.lastPage
+                "
+                  class="page-link"
+                  href=""
+              >...</a
+              >
+            </li>
+            <li class="page-item">
+              <a
+                  class="page-link"
+                  v-if="paginationData?.currentPage < paginationData?.lastPage"
+                  @click="nextPage(pagination, paginationData, 1)"
+              >
+                <ChevronRightIcon class="w-4 h-4"/>
+              </a>
+            </li>
+            <li class="page-item">
+              <a
+                  class="page-link"
+                  v-if="paginationData?.currentPage < paginationData?.lastPage"
+                  @click="
+                  nextPage(
+                    pagination,
+                    paginationData,
+                    paginationData?.lastPage - paginationData?.currentPage
+                  )
+                "
+              >
+                <ChevronsRightIcon class="w-4 h-4"/>
+              </a>
+            </li>
+          </ul>
+        </nav>
+        <select
+            class="w-20 form-select box mt-3 sm:mt-0"
+            v-model.number="searchData.pageSize"
+        >
+          <option v-for="pageSize in pageSizes" :key="pageSize">
+            {{ pageSize }}
+          </option>
+        </select>
+      </div>
+      <!-- END: Pagination -->
+    </div>
+  </div>
+</template>
+
+<script setup>
+import flatPickr from "vue-flatpickr-component";
+import "flatpickr/dist/flatpickr.css";
+import {ref, reactive, watch} from "vue";
+import {INVOICES_QUERY} from "@/graphql/queries/invoice.graphql";
+import {SEND_INVOICE_MUTATION} from "@/graphql/mutations/invoice.graphql";
+import {INVOICE_STATUSES_QUERY} from "@/graphql/queries/invoice-status.graphql";
+import {CLIENTS_QUERY} from "@/graphql/queries/client.graphql";
+import {SEARCH_ORDERS_QUERY} from "@/graphql/queries/order.graphql";
+import {STAFF_QUERY} from "@/graphql/queries/staff.graphql";
+import {useQuery, useMutation} from "@vue/apollo-composable";
+import {previousPage, nextPage, itemCounter} from "@/utils/paginator";
+import {toaster} from "@/utils/toaster";
+import {gqlErrorHandler} from "@/graphql/utils/gql-error-handler";
+
+const timeConfig = {
+  wrap: false, // set wrap to true only when using 'input-group'
+  altFormat: "M j, Y H:i:ss",
+  altInput: true,
+  dateFormat: "Y-m-d H:i:ss",
+  defaultHour: 24,
+  defaultMinute: 0,
+  enableTime: false,
+};
+
+var financeView = false;
+
+const currURL = window.location.href;
+
+if (currURL.includes("finance")) {
+  financeView = true;
+}
+
+const pageSizes = JSON.parse(import.meta.env.VITE_VUE_APP_PAGE_SIZE);
+const changedInvoice = reactive({
+  name: "",
+  id: "",
+});
+
+const searchData = reactive({
+  search: "",
+  invoice_status_id: 2,
+  client_id: "",
+  min_amount: "",
+  max_amount: "",
+  min_creation_date: "",
+  max_creation_date: "",
+  min_invoicing_date: "",
+  max_invoicing_date: "",
+  order_id: "",
+  added_by: "",
+  pageSize: 10,
+  order_type: "",
+  sort_column: "created_at",
+  sort_direction: "DESC",
+});
+const variableData = reactive({
+  search: "",
+  invoice_status_id: 2,
+});
+const pagination = reactive({
+  currentPage: 1,
+  pageSize: 10,
+});
+const paginationData = ref(null);
+
+const {
+  loading: invoiceStatusLoading,
+  result: invoiceStatusResult,
+  onError: invoiceOnError,
+} = useQuery(
+    INVOICE_STATUSES_QUERY,
+    () => ({
+      first: pagination.pageSize,
+      page: pagination.currentPage,
+      invoice_status_id: 1,
+      search: "",
+    }),
+    {
+      fetchPolicy: "network-only",
+    }
+);
+const sortByCols = ref([]);
+const sortDirection = ref([]);
+
+const {
+  loading: invoiceLoading,
+  result: invoiceResult,
+  onError: invoiceError,
+  fetchMore: invoiceFetchMore,
+  onResult: invoiceOnResult,
+  refetch: invoiceRefetch,
+} = useQuery(
+    INVOICES_QUERY,
+    () => ({
+      first: pagination.pageSize,
+      page: pagination.currentPage,
+      search: variableData.search,
+      order_type: variableData.order_type,
+      invoice_status_id: variableData.invoice_status_id,
+      client_id: parseInt(variableData.client_id),
+      added_by: parseInt(variableData.added_by),
+      order_id: parseInt(variableData.order_id),
+      min_amount: parseFloat(variableData.min_amount),
+      max_amount: parseFloat(variableData.max_amount),
+      min_creation_date: variableData.min_creation_date,
+      max_creation_date: variableData.max_creation_date,
+      min_invoicing_date: variableData.min_invoicing_date,
+      max_invoicing_date: variableData.max_invoicing_date,
+      sort_column: searchData.sort_column,
+      sort_direction: searchData.sort_direction,
+    }),
+    {
+      fetchPolicy: "network-only",
+    }
+);
+invoiceOnResult((queryResult) => {
+  paginationData.value = queryResult.data.invoices.paginatorInfo;
+  sortByCols.value = [
+    {name: "Last Update Date", id: "updated_at"},
+    {name: "Date Created", id: "created_at"},
+  ];
+  sortDirection.value = [
+    {name: "Ascending", id: "ASC"},
+    {name: "Descending", id: "DESC"},
+  ];
+});
+
+invoiceError((error) => {
+  if (error.message === 'Permission Denied') {
+    toaster("You do not have permission to view invoices from the selected country.", "danger");
+  } else {
+    toaster(error.message || "An unexpected error occurred. Please try again later.", "danger");
+  }
+})
+
+watch(searchData, (newSearchData) => {
+  setTimeout(function () {
+    if (this.timer) {
+      clearTimeout(this.timer);
+      this.timer = null;
+    }
+    this.timer = setTimeout(() => {
+      variableData.search = newSearchData.search;
+      pagination.pageSize = newSearchData.pageSize;
+      variableData.invoice_status_id = newSearchData.invoice_status_id;
+      variableData.client_id = newSearchData.client_id;
+      variableData.order_id = newSearchData.order_id;
+      variableData.added_by = newSearchData.added_by;
+      variableData.min_amount = newSearchData.min_amount;
+      variableData.max_amount = newSearchData.max_amount;
+      variableData.min_creation_date = newSearchData.min_creation_date;
+      variableData.max_creation_date = newSearchData.max_creation_date;
+      variableData.min_invoicing_date = newSearchData.min_invoicing_date;
+      variableData.max_invoicing_date = newSearchData.max_invoicing_date;
+      variableData.order_type = newSearchData.order_type;
+    }, 300);
+  }, 500);
+});
+
+// client
+const clientOptions = ref([]);
+const searchClients = (search) => {
+  const {onResult} = useQuery(
+      CLIENTS_QUERY,
+      () => ({
+        search,
+        status_id: 1,
+      }),
+      {
+        fetchPolicy: "network-only",
+      }
+  );
+
+  onResult((queryResult) => {
+    clientOptions.value = queryResult.data.clients.data;
+  });
+};
+const clientSearchInput = (e) => {
+  setTimeout(() => {
+    searchClients(e.target.value);
+  }, 500);
+};
+searchClients("");
+
+// order
+const orderOptions = ref([]);
+const searchOrders = (search) => {
+  const {onResult} = useQuery(
+      SEARCH_ORDERS_QUERY,
+      () => ({
+        search,
+        status_id: 1,
+        sort_column: "created_at",
+        sort_direction: "DESC",
+      }),
+      {
+        fetchPolicy: "network-only",
+      }
+  );
+
+  onResult((queryResult) => {
+    orderOptions.value = queryResult.data.orders.data;
+  });
+};
+const orderSearchInput = (e) => {
+  setTimeout(() => {
+    searchOrders(e.target.value);
+  }, 500);
+};
+searchOrders("");
+// staff
+const staffOptions = ref([]);
+const searchStaff = (search) => {
+  const {onResult} = useQuery(
+      STAFF_QUERY,
+      () => ({
+        search,
+        status_id: 1,
+      }),
+      {
+        fetchPolicy: "network-only",
+      }
+  );
+
+  onResult((queryResult) => {
+    staffOptions.value = queryResult.data.staff_members.data;
+  });
+};
+const staffSearchInput = (e) => {
+  setTimeout(() => {
+    searchStaff(e.target.value);
+  }, 500);
+};
+searchStaff("");
+
+const resendInvoiceText = ref("Resend Invoice");
+
+const resendInvoiceOperation = (invoice_id) => {
+  const resendInvoiceInput = reactive({
+    invoice_id: parseInt(invoice_id),
+  });
+  const {
+    mutate: resendInvoiceMutation,
+    onDone: resendInvoiceOnDone,
+    loading: resendInvoiceLoading,
+    onError: resendInvoiceError,
+  } = useMutation(SEND_INVOICE_MUTATION, () => ({
+    variables: resendInvoiceInput,
+  }));
+  resendInvoiceText.value = "Resending ...";
+  resendInvoiceMutation();
+
+  resendInvoiceOnDone((result) => {
+    const resendInvoiceData = result.data.sendInvoice;
+    toaster(resendInvoiceData.message, "success");
+    resendInvoiceText.value = "Resend Invoice";
+  });
+
+  resendInvoiceError((error) => {
+    toaster(gqlErrorHandler(error.graphQLErrors), "danger");
+    resendInvoiceText.value = "Resend Invoice";
+  });
+};
+
+function clearFilters() {
+  searchData.search = "";
+  (searchData.invoice_status_id = 2), (searchData.client_id = "");
+  searchData.min_amount = "";
+  searchData.max_amount = "";
+  searchData.min_creation_date = "";
+  searchData.max_creation_date = "";
+  searchData.min_invoicing_date = "";
+  searchData.max_invoicing_date = "";
+  searchData.order_id = "";
+  searchData.added_by = "";
+  searchData.order_type = "";
+
+  orderOptions.value = [];
+  clientOptions.value = [];
+  staffOptions.value = [];
+}
+
+// order types
+const orderTypes = ref([
+  {value: "ordinary", label: "On Demand Orders"},
+  {value: "dedicated", label: "Dedicated Orders"},
+]);
+</script>

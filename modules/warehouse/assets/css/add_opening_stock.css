@@ -1,0 +1,14 @@
+
+div#item_add_opening_stock_hs {
+	overflow: unset !important;
+}
+div#appointmentModal{
+    z-index: none !important;
+}
+.modal{
+    z-index: 1050 !important;
+}
+h5.add_opening_stock{
+	font-style: italic;
+	color: red;
+}
