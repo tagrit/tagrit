@@ -2,18 +2,6 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
-
-// Load the .env file
-if (file_exists(__DIR__ . '/.env')) {
-    $lines = file(__DIR__ . '/.env', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-    foreach ($lines as $line) {
-        if (strpos($line, '=') !== false) {
-            list($key, $value) = explode('=', $line, 2);
-            putenv(trim($key) . '=' . trim($value));
-        }
-    }
-}
-
 // Get the current hostname
 $host = $_SERVER['HTTP_HOST'] ?? '';
 
