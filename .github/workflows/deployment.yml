@@ -1,0 +1,47 @@
+name: 🚀 Deploy to cPanel via SSH
+
+on:
+  push:
+    branches:
+      - staging
+      - development
+      - auto-update
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up SSH Key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.CPANEL_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.CPANEL_SSH_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy via SSH
+        run: |
+          ssh ${{ secrets.CPANEL_SSH_USER }}@${{ secrets.CPANEL_SSH_HOST }} << 'EOF'
+            # Determine target folder based on branch
+            if [ "${{ github.ref }}" == "refs/heads/staging" ]; then
+              DEPLOY_DIR="staging.tagrit.com"
+            elif [ "${{ github.ref }}" == "refs/heads/development" ]; then
+              DEPLOY_DIR="dev.tagrit.com"
+            elif [ "${{ github.ref }}" == "refs/heads/auto-update" ]; then
+              DEPLOY_DIR="autoupdate.tagrit.com"
+            else
+              echo "Branch not recognized. Exiting..."
+              exit 1
+            fi
+
+            # Navigate to the correct directory
+            cd ~/$DEPLOY_DIR
+
+            # Pull the latest changes
+            git pull origin $(echo ${{ github.ref }} | sed 's/refs\/heads\///')
+
+            echo "🚀 Deployment to $DEPLOY_DIR completed successfully!"
+          EOF
