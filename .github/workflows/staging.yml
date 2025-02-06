@@ -22,3 +22,4 @@ jobs:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_STAGING_USER }}
           password: ${{ secrets.FTP_STAGING_PASSWORD }}
+          timeout: 10800000 # 3 hours
