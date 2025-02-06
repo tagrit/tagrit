@@ -15,6 +15,9 @@ jobs:
       - name: 🚚 Get latest code
         uses: actions/checkout@v4
 
+      - name: Rename .htaccess (Before Upload)
+        run: mv .htaccess htaccess.txt
+
       # Sync files via FTP
       - name: 📂 Sync files via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
@@ -24,3 +27,8 @@ jobs:
           password: ${{ secrets.FTP_AUTO_UPDATE_PASSWORD }}
           dangerous-clean-slate: false
           timeout: 10800000 # 3 hours
+          exclude: |
+              **/.git*
+              **/.github*
+              **/node_modules*
+              htaccess.txt
