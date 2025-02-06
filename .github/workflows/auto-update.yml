@@ -22,4 +22,5 @@ jobs:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_AUTO_UPDATE_USER }}
           password: ${{ secrets.FTP_AUTO_UPDATE_PASSWORD }}
+          dangerous-clean-slate: false
           timeout: 10800000 # 3 hours
