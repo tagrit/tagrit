@@ -1,59 +1,86 @@
 <?php
 
 defined('BASEPATH') or exit('No direct script access allowed');
-/*
-* --------------------------------------------------------------------------
-* Base Site URL
-* --------------------------------------------------------------------------
-*
-* URL to your CodeIgniter root. Typically this will be your base URL,
-* WITH a trailing slash:
-*
-*   http://example.com/
-*
-* If this is not set then CodeIgniter will try guess the protocol, domain
-* and path to your installation. However, you should always configure this
-* explicitly and never rely on auto-guessing, especially in production
-* environments.
-*
-*/
-define('APP_BASE_URL_DEFAULT', 'https://app.tagrit.com/');
 
-/*
-* --------------------------------------------------------------------------
-* Encryption Key
-* IMPORTANT: Do not change this ever!
-* --------------------------------------------------------------------------
-*
-* If you use the Encryption class, you must set an encryption key.
-* See the user guide for more info.
-*
-* http://codeigniter.com/user_guide/libraries/encryption.html
-*
-* Auto added on install
-*/
-define('APP_ENC_KEY', '85bec75a1a6136881a01c08b1fdc31d8');
 
-/**
- * Database Credentials
- * The hostname of your database server
- */
+// Load the .env file
+if (file_exists(__DIR__ . '/.env')) {
+    $lines = file(__DIR__ . '/.env', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    foreach ($lines as $line) {
+        if (strpos($line, '=') !== false) {
+            list($key, $value) = explode('=', $line, 2);
+            putenv(trim($key) . '=' . trim($value));
+        }
+    }
+}
+
+// Get the current hostname
+$host = $_SERVER['HTTP_HOST'] ?? '';
+
+// Define environment mappings
+// Get the current hostname
+$host = $_SERVER['HTTP_HOST'] ?? '';
+
+// Define environment mappings
+$environments = [
+    'localhost' => 'local',
+    '127.0.0.1' => 'local',
+    'dev' => 'dev',
+    'autoupdate' => 'autoupdate',
+    'staging' => 'staging',
+    'app' => 'production'
+];
+
+// Determine environment
+$environment = 'production'; // Default
+foreach ($environments as $key => $env) {
+    if (str_contains($host, $key)) {
+        $environment = $env;
+        break;
+    }
+}
+
+// Define database credentials directly
+$db_config = [
+    'local' => [
+        'BASE_URL'  => 'http://localhost/tagrit',
+        'USERNAME'  => 'root',
+        'PASSWORD'  => '',
+        'DB_NAME'   => 'tagrit_main'
+    ],
+    'dev' => [
+        'BASE_URL'  => 'https://dev.tagrit.com',
+        'USERNAME'  => 'tagrit_dev',
+        'PASSWORD'  => '?=HeYVENjdEi',
+        'DB_NAME'   => 'tagrit_dev'
+    ],
+    'autoupdate' => [
+        'BASE_URL'  => 'https://autoupdate.tagrit.com',
+        'USERNAME'  => 'tagrit_tagrit',
+        'PASSWORD'  => 'Y)GxB~MGB8-T',
+        'DB_NAME'   => 'tagrit_auto_update'
+    ],
+    'staging' => [
+        'BASE_URL'  => 'https://staging.tagrit.com',
+        'USERNAME'  => 'tagrit_staging',
+        'PASSWORD'  => 'CnlKs6btjof&',
+        'DB_NAME'   => 'tagrit_staging'
+    ],
+    'production' => [
+        'BASE_URL'  => 'https://app.tagrit.com',
+        'USERNAME'  => 'tagrit_auth',
+        'PASSWORD'  => 'Mynewpass123#%',
+        'DB_NAME'   => 'tagrit_live'
+    ]
+];
+
+// Define constants
+define('APP_BASE_URL_DEFAULT', $db_config[$environment]['BASE_URL']);
+define('APP_DB_USERNAME_DEFAULT', $db_config[$environment]['USERNAME']);
+define('APP_DB_PASSWORD_DEFAULT', $db_config[$environment]['PASSWORD']);
+define('APP_DB_NAME_DEFAULT', $db_config[$environment]['DB_NAME']);
 define('APP_DB_HOSTNAME_DEFAULT', 'localhost');
-
-/**
- * The username used to connect to the database
- */
-define('APP_DB_USERNAME_DEFAULT', 'tagrit_auth');
-
-/**
- * The password used to connect to the database
- */
-define('APP_DB_PASSWORD_DEFAULT', 'Mynewpass123#%');
-
-/**
- * The name of the database you want to connect to
- */
-define('APP_DB_NAME_DEFAULT', 'tagrit_live');
+define('APP_ENC_KEY', '85bec75a1a6136881a01c08b1fdc31d8');
 
 /**
  * @since  2.3.0
@@ -87,6 +114,6 @@ define('APP_SESSION_COOKIE_SAME_SITE_DEFAULT', 'Lax');
  */
 define('APP_CSRF_PROTECTION', true);//perfex-saas:start:app-config.php
 //dont remove/change above line
-require_once(FCPATH.'modules/perfex_saas/config/app-config.php');
+require_once(FCPATH . 'modules/perfex_saas/config/app-config.php');
 //dont remove/change below line
 //perfex-saas:end:app-config.php
