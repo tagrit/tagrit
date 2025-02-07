@@ -24,7 +24,7 @@ jobs:
 
       - name: Deploy via SSH
         run: |
-          ssh ${{ secrets.CPANEL_SSH_USER }}@${{ secrets.CPANEL_SSH_HOST }} << 'EOF'
+          ssh -o StrictHostKeyChecking=no ${{ secrets.CPANEL_SSH_USER }}@${{ secrets.CPANEL_SSH_HOST }} << 'EOF'
             # Determine target folder based on branch
             if [ "${{ github.ref }}" == "refs/heads/staging" ]; then
               DEPLOY_DIR="staging.tagrit.com"
@@ -40,8 +40,10 @@ jobs:
             # Navigate to the correct directory
             cd ~/$DEPLOY_DIR
 
-            # Pull the latest changes
-            git pull origin $(echo ${{ github.ref }} | sed 's/refs\/heads\///')
+            # Force overwrite local changes with latest from remote
+            git fetch --all
+            git reset --hard origin/$(echo ${{ github.ref }} | sed 's/refs\/heads\///')
+            git pull origin $(echo ${{ github.ref }} | sed 's/refs\/heads\///') --force
 
             echo "🚀 Deployment to $DEPLOY_DIR completed successfully!"
           EOF
