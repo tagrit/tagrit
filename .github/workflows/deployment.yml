@@ -25,9 +25,7 @@ jobs:
 
       - name: Deploy via SSH
         run: |
-          ssh -i ~/.ssh/github_deployment -o StrictHostKeyChecking=no \
-            ${{ secrets.CPANEL_SSH_USER }}@${{ secrets.CPANEL_SSH_HOST }} << 'EOF'
-
+          ssh -i ~/.ssh/github_deployment -o StrictHostKeyChecking=no ${{ secrets.CPANEL_SSH_USER }}@${{ secrets.CPANEL_SSH_HOST }} << 'EOF'
             # Extract branch name from GitHub reference
             BRANCH_NAME=$(basename ${{ github.ref }})
 
@@ -36,7 +34,7 @@ jobs:
               "staging") DEPLOY_DIR="staging.tagrit.com" ;;
               "development") DEPLOY_DIR="dev.tagrit.com" ;;
               "auto-update") DEPLOY_DIR="autoupdate.tagrit.com" ;;
-              *) echo "❌ Branch not recognized. Exiting..."; exit 1 ;;
+              *) echo "Branch not recognized. Exiting..."; exit 1 ;;
             esac
 
             echo "🚀 Deploying branch '$BRANCH_NAME' to $DEPLOY_DIR"
@@ -50,7 +48,7 @@ jobs:
             # Fetch latest changes and reset local state
             git fetch --all
             git reset --hard origin/$BRANCH_NAME
-            git pull origin $BRANCH_NAME --force
+            git pull origin $BRANCH_NAME --rebase --force
 
             echo "✅ Deployment to $DEPLOY_DIR completed successfully!"
           EOF
