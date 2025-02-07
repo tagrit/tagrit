@@ -20,7 +20,7 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.CPANEL_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H ${{ secrets.CPANEL_SSH_HOST }} >> ~/.ssh/known_hosts
+          ssh-keyscan -H github.com >> ~/.ssh/known_hosts
 
       - name: Deploy via SSH
         run: |
@@ -39,6 +39,9 @@ jobs:
 
             # Navigate to the correct directory
             cd ~/$DEPLOY_DIR
+
+            # Ensure Git uses SSH instead of HTTPS
+            git remote set-url origin git@github.com:tagrit/tagrit.git
 
             # Force overwrite local changes with latest from remote
             git fetch --all
