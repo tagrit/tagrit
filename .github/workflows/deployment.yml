@@ -1,4 +1,4 @@
-name: 🚀 Deploy TO CPANEL VIA GitHub ACTION SSH
+name: 🚀 Deploy TO CPANEL VIA GitHub ACTION HTTPS
 
 on:
   push:
@@ -14,30 +14,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Set up SSH Key
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.CPANEL_SSH_PRIVATE_KEY }}" > ~/.ssh/github_deploy
-          chmod 600 ~/.ssh/github_deploy
-          ssh-keyscan -H ${{ secrets.CPANEL_SSH_HOST }} >> ~/.ssh/known_hosts
-          ssh-keyscan -H github.com >> ~/.ssh/known_hosts
-
-      - name: Verify SSH Key Permissions
-        run: |
-          echo "🔍 Checking SSH Key Permissions..."
-          ls -l ~/.ssh/github_deploy
-          cat ~/.ssh/github_deploy | wc -l  # Should be > 0
-
-      - name: Test SSH Connection
-        run: |
-          echo "🔍 Testing SSH Connection..."
-          ssh -i ~/.ssh/github_deploy -o StrictHostKeyChecking=no ${{ secrets.CPANEL_SSH_USER }}@${{ secrets.CPANEL_SSH_HOST }} "echo '✅ SSH connection successful'"
-
-      - name: Debug SSH Connection (Verbose)
-        run: |
-          echo "🔍 Running SSH with Debug Logs..."
-          ssh -vvv -i ~/.ssh/github_deploy -o StrictHostKeyChecking=no ${{ secrets.CPANEL_SSH_USER }}@${{ secrets.CPANEL_SSH_HOST }}
 
       - name: Deploy via SSH
         run: |
@@ -58,8 +34,8 @@ jobs:
             # Navigate to the correct directory
             cd ~/$DEPLOY_DIR || { echo "❌ Deployment directory not found!"; exit 1; }
 
-            # Ensure Git uses SSH instead of HTTPS
-            git remote set-url origin git@github.com:tagrit/tagrit.git
+            # Switch to HTTPS for Git operations
+            git remote set-url origin https://github.com/tagrit/tagrit.git
 
             # Fetch latest changes and reset local state
             git fetch --all
