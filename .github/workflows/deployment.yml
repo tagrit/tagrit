@@ -1,4 +1,4 @@
-name: 🚀 Deploy TO CPANEL VIA GitHub ACTION HTTPS
+name: 🚀 Deploy TO CPANEL VIA GitHub HTTPS
 
 on:
   push:
@@ -14,6 +14,18 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Set up SSH Key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.CPANEL_SSH_PRIVATE_KEY }}" > ~/.ssh/github_deploy
+          chmod 600 ~/.ssh/github_deploy
+          ssh-keyscan -H ${{ secrets.CPANEL_SSH_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Test SSH Connection
+        run: |
+          echo "🔍 Testing SSH Connection..."
+          ssh -i ~/.ssh/github_deploy -o StrictHostKeyChecking=no ${{ secrets.CPANEL_SSH_USER }}@${{ secrets.CPANEL_SSH_HOST }} "echo '✅ SSH connection successful'"
 
       - name: Deploy via SSH
         run: |
@@ -34,8 +46,8 @@ jobs:
             # Navigate to the correct directory
             cd ~/$DEPLOY_DIR || { echo "❌ Deployment directory not found!"; exit 1; }
 
-            # Switch to HTTPS for Git operations
-            git remote set-url origin https://github.com/tagrit/tagrit.git
+            # Use HTTPS with GitHub Token for private repositories
+            git remote set-url origin https://${{ secrets.USER_TOKEN }}@github.com/tagrit/tagrit.git
 
             # Fetch latest changes and reset local state
             git fetch --all
