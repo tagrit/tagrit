@@ -1,4 +1,4 @@
-name: 🚀 Deploy TO CPANEL VIA GitHub HTTPS
+name: 🚀 Deploy TO CPANEL VIA GitHub Action HTTPS
 
 on:
   push:
