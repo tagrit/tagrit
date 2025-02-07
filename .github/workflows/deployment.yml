@@ -1,4 +1,4 @@
-name: 🚀 Deploy TO CPANEL VIA GitHub Action SSH
+name: 🚀 Deploy TO CPANEL VIA GitHub SSH
 
 on:
   push:
