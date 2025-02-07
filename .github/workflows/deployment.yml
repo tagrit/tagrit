@@ -1,4 +1,4 @@
-name: 🚀 Deploy to CPANEL via GitHub SSH
+name: 🚀 Deploy to CPANEL via GitHub Action SSH
 
 on:
   push:
@@ -18,14 +18,14 @@ jobs:
       - name: Set up SSH Key
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.CPANEL_SSH_PRIVATE_KEY }}" > ~/.ssh/github_deployment
-          chmod 600 ~/.ssh/github_deployment
+          echo "${{ secrets.CPANEL_SSH_PRIVATE_KEY }}" > ~/.ssh/github_deploy
+          chmod 600 ~/.ssh/github_deploy
           ssh-keyscan -H ${{ secrets.CPANEL_SSH_HOST }} >> ~/.ssh/known_hosts
           ssh-keyscan -H github.com >> ~/.ssh/known_hosts
 
       - name: Deploy via SSH
         run: |
-          ssh -i ~/.ssh/github_deployment -o StrictHostKeyChecking=no ${{ secrets.CPANEL_SSH_USER }}@${{ secrets.CPANEL_SSH_HOST }} << 'EOF'
+          ssh -i ~/.ssh/github_deploy -o StrictHostKeyChecking=no ${{ secrets.CPANEL_SSH_USER }}@${{ secrets.CPANEL_SSH_HOST }} << 'EOF'
             # Extract branch name from GitHub reference
             BRANCH_NAME=$(basename ${{ github.ref }})
 
