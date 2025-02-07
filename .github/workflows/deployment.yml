@@ -18,14 +18,16 @@ jobs:
       - name: Set up SSH Key
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.CPANEL_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
+          echo "${{ secrets.CPANEL_SSH_PRIVATE_KEY }}" > ~/.ssh/github_deployment
+          chmod 600 ~/.ssh/github_deployment
           ssh-keyscan -H ${{ secrets.CPANEL_SSH_HOST }} >> ~/.ssh/known_hosts
           ssh-keyscan -H github.com >> ~/.ssh/known_hosts
 
       - name: Deploy via SSH
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.CPANEL_SSH_USER }}@${{ secrets.CPANEL_SSH_HOST }} << 'EOF'
+          ssh -i ~/.ssh/github_deployment -o StrictHostKeyChecking=no \
+            ${{ secrets.CPANEL_SSH_USER }}@${{ secrets.CPANEL_SSH_HOST }} << 'EOF'
+
             # Extract branch name from GitHub reference
             BRANCH_NAME=$(basename ${{ github.ref }})
 
@@ -34,7 +36,7 @@ jobs:
               "staging") DEPLOY_DIR="staging.tagrit.com" ;;
               "development") DEPLOY_DIR="dev.tagrit.com" ;;
               "auto-update") DEPLOY_DIR="autoupdate.tagrit.com" ;;
-              *) echo "Branch not recognized. Exiting..."; exit 1 ;;
+              *) echo "❌ Branch not recognized. Exiting..."; exit 1 ;;
             esac
 
             echo "🚀 Deploying branch '$BRANCH_NAME' to $DEPLOY_DIR"
@@ -48,7 +50,7 @@ jobs:
             # Fetch latest changes and reset local state
             git fetch --all
             git reset --hard origin/$BRANCH_NAME
-            git pull origin $BRANCH_NAME --rebase --force
+            git pull origin $BRANCH_NAME --force
 
             echo "✅ Deployment to $DEPLOY_DIR completed successfully!"
           EOF
