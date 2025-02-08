@@ -78,10 +78,5 @@ jobs:
             git reset --hard origin/master
             git pull origin master --rebase --force
 
-            # Restart services (if necessary)
-            echo "🔄 Restarting application..."
-            pm2 restart myapp || echo "❌ PM2 restart failed!"
-            systemctl restart nginx || echo "❌ Nginx restart failed!"
-
             echo "✅ Deployment to DigitalOcean completed successfully!"
           EOF
