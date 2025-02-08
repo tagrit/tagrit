@@ -6,29 +6,26 @@ defined('BASEPATH') or exit('No direct script access allowed');
 $host = $_SERVER['HTTP_HOST'] ?? '';
 
 // Define environment mappings
-// Get the current hostname
-$host = $_SERVER['HTTP_HOST'] ?? '';
-
-// Define environment mappings
 $environments = [
-    'localhost' => 'local',
-    '127.0.0.1' => 'local',
-    'dev' => 'dev',
-    'autoupdate' => 'autoupdate',
-    'staging' => 'staging',
-    'app' => 'production'
+    'localhost'   => 'local',
+    '127.0.0.1'   => 'local',
+    'dev'         => 'dev',
+    'autoupdate'  => 'autoupdate',
+    'staging'     => 'staging',
+    'app'         => 'production'
 ];
 
-// Determine environment
-$environment = 'production'; // Default
+// Default to production
+$environment = 'production';
+
 foreach ($environments as $key => $env) {
-    if (str_contains($host, $key)) {
+    if (stripos($host, $key) !== false) {
         $environment = $env;
         break;
     }
 }
 
-// Define database credentials directly
+// Define database credentials
 $db_config = [
     'local' => [
         'BASE_URL'  => 'http://localhost/tagrit',
@@ -61,6 +58,11 @@ $db_config = [
         'DB_NAME'   => 'tagrit_live'
     ]
 ];
+
+// Ensure a valid environment is selected; if not, default to production
+if (!isset($db_config[$environment])) {
+    $environment = 'production';
+}
 
 // Define constants
 define('APP_BASE_URL_DEFAULT', $db_config[$environment]['BASE_URL']);
