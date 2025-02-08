@@ -1,0 +1,87 @@
+name: 🚀 Deploy to CPANEL & DigitalOcean
+
+on:
+  push:
+    branches:
+      - master
+      - staging
+      - development
+      - auto-update
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up SSH Keys
+        run: |
+          mkdir -p ~/.ssh
+
+          # 🔑 Add CPANEL Private Key
+          echo "${{ secrets.CPANEL_SSH_PRIVATE_KEY }}" > ~/.ssh/cpanel_key
+          chmod 600 ~/.ssh/cpanel_key
+
+          # 🔑 Add DigitalOcean Private Key
+          echo "${{ secrets.DIGITALOCEAN_SSH_PRIVATE_KEY }}" > ~/.ssh/digitalocean_key
+          chmod 600 ~/.ssh/digitalocean_key
+
+          # 🖥️ Add known hosts
+          ssh-keyscan -H ${{ secrets.CPANEL_SSH_HOST }} >> ~/.ssh/known_hosts
+          ssh-keyscan -H ${{ secrets.DIGITALOCEAN_SSH_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Test SSH Connection
+        run: |
+          echo "🔍 Testing SSH Connection..."
+          ssh -i ~/.ssh/cpanel_key -o StrictHostKeyChecking=no ${{ secrets.CPANEL_SSH_USER }}@${{ secrets.CPANEL_SSH_HOST }} "echo '✅ CPANEL SSH connection successful'"
+          ssh -i ~/.ssh/digitalocean_key -o StrictHostKeyChecking=no ${{ secrets.DIGITALOCEAN_SSH_USER }}@${{ secrets.DIGITALOCEAN_SSH_HOST }} "echo '✅ DigitalOcean SSH connection successful'"
+
+      - name: Deploy to CPANEL (Staging/Development/Auto-Update)
+        if: github.ref != 'refs/heads/master'
+        run: |
+          ssh -i ~/.ssh/cpanel_key -o StrictHostKeyChecking=no ${{ secrets.CPANEL_SSH_USER }}@${{ secrets.CPANEL_SSH_HOST }} << 'EOF'
+            BRANCH_NAME="${{ github.ref_name }}"
+
+            case "$BRANCH_NAME" in
+              "staging") DEPLOY_DIR="staging.tagrit.com" ;;
+              "development") DEPLOY_DIR="dev.tagrit.com" ;;
+              "auto-update") DEPLOY_DIR="autoupdate.tagrit.com" ;;
+              *) echo "❌ Branch not recognized. Exiting..."; exit 1 ;;
+            esac
+
+            echo "🚀 Deploying branch '$BRANCH_NAME' to $DEPLOY_DIR"
+
+            cd ~/$DEPLOY_DIR || { echo "❌ Deployment directory not found!"; exit 1; }
+
+            git remote set-url origin https://${{ secrets.GITHUB_TOKEN }}@github.com/tagrit/tagrit.git
+            git fetch --all
+            git reset --hard origin/$BRANCH_NAME
+            git pull origin $BRANCH_NAME --rebase --force
+
+            echo "✅ Deployment to $DEPLOY_DIR completed successfully!"
+          EOF
+
+      - name: Deploy to DigitalOcean (Master Branch)
+        if: github.ref == 'refs/heads/master'
+        run: |
+          ssh -i ~/.ssh/digitalocean_key -o StrictHostKeyChecking=no ${{ secrets.DIGITALOCEAN_SSH_USER }}@${{ secrets.DIGITALOCEAN_SSH_HOST }} << 'EOF'
+            echo "🚀 Deploying master branch to DigitalOcean"
+
+            # Navigate to the correct directory
+            cd /var/www/html/tagrit || { echo "❌ Deployment directory not found!"; exit 1; }
+
+            # Pull the latest changes from GitHub
+            git remote set-url origin https://${{ secrets.GITHUB_TOKEN }}@github.com/tagrit/tagrit.git
+            git fetch --all
+            git reset --hard origin/master
+            git pull origin master --rebase --force
+
+            # Restart services (if necessary)
+            echo "🔄 Restarting application..."
+            pm2 restart myapp || echo "❌ PM2 restart failed!"
+            systemctl restart nginx || echo "❌ Nginx restart failed!"
+
+            echo "✅ Deployment to DigitalOcean completed successfully!"
+          EOF
