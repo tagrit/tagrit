@@ -58,8 +58,6 @@ Use the following credentials to log in as an administrator:
 
 ## 📜 Conventions
 
-Use the following credentials to log in as an administrator:
-
 | **Prefix**   | **Description**              | **Example** |
 |------------|----------------------|----------------|
 | `ft-` | New Feature | `ft-create-event` |
