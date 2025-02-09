@@ -22,7 +22,7 @@ CREATE DATABASE tagrit;
 ```
 2. Import the provided SQL file:
 ```bash
-mysql -u your_username -p tagrit < database.sql
+mysql -u your_username -p tagrit < install.sql
 ```
 ### 3️⃣ Configure your database credentials inside the app-config.php File inside application/config folder
 
