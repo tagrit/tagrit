@@ -55,6 +55,22 @@ Use the following credentials to log in as an administrator:
 | **Email**  | `admin@admin.com`  |
 | **Password** | `Crazy534`         |
 
+
+## 📜 Conventions
+
+Use the following credentials to log in as an administrator:
+
+| **Prefix**   | **Description**              | **Example** |
+|------------|----------------------|----------------|
+| `ft-` | New Feature | `ft-create-event` |
+| `bf-` | Bug Fixes      | `bf-event-listing` |
+| `hf-` | Hot Fixes      | `hf-currency-dropdown` |
+| `ch-` | Chores      | `ch-order-cleanup` |
+
+
+
+
+
 ## 🙌 Contribution
 Feel free to fork the repository and submit pull requests!
 
