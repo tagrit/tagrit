@@ -38,7 +38,7 @@ $db_config = [
 ];
 ```
 
-### 4️⃣ Access Tagrit
+### 4️⃣ Access Tagrit ERP
 
 Open your browser and visit:
 
