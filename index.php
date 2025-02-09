@@ -57,7 +57,17 @@ if( ! ini_get('date.timezone') )
  *
  * NOTE: If you change these, also change the error_reporting() code below
  */
-	define('ENVIRONMENT', 'production');
+// Get the current hostname
+$host = $_SERVER['HTTP_HOST'] ?? '';
+
+// Set environment based on hostname
+if (strpos($host, 'dev') !== false ||
+    strpos($host, 'staging') !== false ||
+    strpos($host, 'autoupdate') !== false) {
+    define('ENVIRONMENT', 'production');
+} else {
+    define('ENVIRONMENT', 'production'); // Change this to your preferred default
+}
 
 /*
  *---------------------------------------------------------------
