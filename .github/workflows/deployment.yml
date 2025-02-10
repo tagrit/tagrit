@@ -55,7 +55,7 @@ jobs:
 
             cd ~/$DEPLOY_DIR || { echo "❌ Deployment directory not found!"; exit 1; }
 
-            git remote set-url origin https://${{ secrets.GITHUB_TOKEN }}@github.com/tagrit/tagrit.git
+            git remote set-url origin https://${{ secrets.USER_TOKEN }}@github.com/tagrit/tagrit.git
             git fetch --all
             git reset --hard origin/$BRANCH_NAME
             git pull origin $BRANCH_NAME --rebase --force
