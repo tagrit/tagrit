@@ -73,7 +73,7 @@ jobs:
             cd /var/www/html/tagrit || { echo "❌ Deployment directory not found!"; exit 1; }
 
             # Pull the latest changes from GitHub
-            git remote set-url origin https://${{ secrets.GITHUB_TOKEN }}@github.com/tagrit/tagrit.git
+            git remote set-url origin https://${{ secrets.USER_TOKEN }}@github.com/tagrit/tagrit.git
             git fetch --all
             git reset --hard origin/master
             git pull origin master --rebase --force
