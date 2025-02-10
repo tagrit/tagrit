@@ -52,7 +52,7 @@ class AccountingLic{
 		$this->api_language = 'english';
 		$this->current_version = 'v1.0.0';
 		$this->verify_type = 'envato';
-		$this->verification_period = 180;
+		$this->verification_period = 90;
 		$this->current_path = realpath(__DIR__);
 		$this->root_path = realpath($this->current_path.'/..');
 		$this->license_file = $this->current_path.'/.lic';
@@ -217,9 +217,31 @@ class AccountingLic{
 	 * @return array
 	 */
 	public function activate_license($license, $client, $create_lic = true){
-        // Bypass activation
-        return array('status' => TRUE, 'message' => LB_TEXT_VERIFIED_RESPONSE);
-    }
+		$data_array =  array(
+			"product_id"  => $this->product_id,
+			"license_code" => $license,
+			"client_name" => $client,
+			"verify_type" => $this->verify_type
+		);
+		$get_data = $this->call_api(
+			'POST',
+			$this->api_url.'api/activate_license', 
+			json_encode($data_array)
+		);
+		$response = json_decode($get_data, true);
+		if(!empty($create_lic)){
+			if($response['status']){
+				$licfile = trim($response['lic_response']);
+				file_put_contents($this->license_file, $licfile, LOCK_EX);
+			}else{
+				@chmod($this->license_file, 0777);
+				if(is_writeable($this->license_file)){
+					unlink($this->license_file);
+				}
+			}
+		}
+		return $response;
+	}
 
 	/**
 	 * verify license
@@ -229,11 +251,76 @@ class AccountingLic{
 	 * @return array
 	 */
 	public function verify_license($time_based_check = false, $license = false, $client = false){
-if(function_exists("perfex_saas_is_tenant") && perfex_saas_is_tenant()){return ["status"=>true];}
-        // Bypass verification
-        return array('status' => TRUE, 'message' => LB_TEXT_VERIFIED_RESPONSE);
-    }
-
+		if(!empty($license)&&!empty($client)){
+			$data_array =  array(
+				"product_id"  => $this->product_id,
+				"license_file" => null,
+				"license_code" => $license,
+				"client_name" => $client
+			);
+		}else{
+			if(is_file($this->license_file)){
+				$data_array =  array(
+					"product_id"  => $this->product_id,
+					"license_file" => file_get_contents($this->license_file),
+					"license_code" => null,
+					"client_name" => null
+				);
+			}else{
+				$data_array =  array();
+				return array('status' => FALSE, 'message' => LB_TEXT_INVALID_RESPONSE);
+			}
+		} 
+		$res = array('status' => TRUE, 'message' => LB_TEXT_VERIFIED_RESPONSE);
+		if($time_based_check && $this->verification_period > 0){
+			ob_start();
+			if(session_status() == PHP_SESSION_NONE){
+				session_start();
+			}
+			$type = (int) $this->verification_period;
+			$today = date('d-m-Y');
+			$last_verification = '00-00-0000';
+			if(is_file($this->license_file)){
+				$last_verification = base64_decode(file_get_contents($this->check_interval_file));
+			} 
+			if($type == 1){
+				$type_text = '1 day';
+			}elseif($type == 3){
+				$type_text = '3 days';
+			}elseif($type == 7){
+				$type_text = '1 week';
+			}elseif($type == 30){
+				$type_text = '1 month';
+			}elseif($type == 90){
+				$type_text = '3 months';
+			}elseif($type == 365) {
+				$type_text = '1 year';
+			}else{
+				$type_text = $type.' days';
+			}
+			if(strtotime($today) >= strtotime($last_verification)){
+				$get_data = $this->call_api(
+					'POST',
+					$this->api_url.'api/verify_license', 
+					json_encode($data_array)
+				);
+				$res = json_decode($get_data, true);
+				if($res['status']==true){
+					$tomo = date('d-m-Y', strtotime($today. ' + '.$type_text));
+					file_put_contents($this->check_interval_file,base64_encode($tomo), LOCK_EX);
+				}
+			}
+			ob_end_clean();
+		}else{		
+			$get_data = $this->call_api(
+				'POST',
+				$this->api_url.'api/verify_license', 
+				json_encode($data_array)
+			);
+			$res = json_decode($get_data, true);
+		}
+		return $res;
+	}
 
 	/**
 	 * deactivate license 

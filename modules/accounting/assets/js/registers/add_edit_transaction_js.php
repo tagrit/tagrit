@@ -115,8 +115,8 @@
 				'<?php echo _l('number'); ?>',
 				'<?php echo _l('payee'); ?>',
 				'<?php echo _l('acc_account'); ?>',
-				'<?php echo _l('debit'); ?>', //debit
-				'<?php echo _l('credit'); ?>', //credit
+				'<?php echo _l('acc_debit'); ?>', 
+				'<?php echo _l('acc_credit'); ?>', 
 				'<?php echo _l('balance'); ?>',
 			],
 			cells: function(row){

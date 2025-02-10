@@ -60,62 +60,17 @@ $list = [
 	<div class="content">
 		<div class="row">
 			<div class="col-md-12">
-				<div class="panel_s mbot10">
-					<div class="panel-body _buttons">
-						
-						<?php echo form_hidden('type',$type); 
-						?>
-		                  <div class="horizontal-scrollable-tabs preview-tabs-top">
-		                   <div class="scroller arrow-left"><i class="fa fa-angle-left"></i></div>
-		                   <div class="scroller arrow-right"><i class="fa fa-angle-right"></i></div>
-		                   <div class="horizontal-tabs">
-
-		                     <ul class="nav nav-tabs nav-tabs-horizontal no-margin" role="tablist">
-		                           <?php if(has_permission('accounting_bills','','create')){ ?>
-		                               <li class="<?php echo ($type == 'new_bill' ? 'active' : '') ?>">
-		                                 <a href="<?php echo admin_url('accounting/bill'); ?>"><?php echo _l('add_new_bill'); ?></a>
-		                               </li>
-		                           <?php } ?>
-		                         <li class="<?php echo ($type == 'unpaid' ? 'active' : '') ?>">
-		                           <a href="<?php echo admin_url('accounting/bills?type=unpaid'); ?>"><?php echo _l('unpaid_bills'); ?></a>
-		                         </li>
-		                         <li class="<?php echo ($type == 'approved' ? 'active' : '') ?>">
-		                              <a href="<?php echo admin_url('accounting/bills?type=approved'); ?>"><?php echo _l('approved_bills'); ?></a>
-		                         </li>
-		                         <li class="<?php echo ($type == 'check' ? 'active' : '') ?>">
-		                           <a href="<?php echo admin_url('accounting/checks'); ?>"><?php echo _l('write_checks'); ?></a>
-		                         </li>
-		                         <li class="<?php echo ($type == 'paid' ? 'active' : '') ?>">
-		                           <a href="<?php echo admin_url('accounting/bills?type=paid'); ?>"><?php echo _l('paid_bills'); ?></a>
-		                         </li>
-		                         <li class="<?php echo ($type == 'check_register' ? 'active' : '') ?>">
-		                              <a href="<?php echo admin_url('accounting/check_register'); ?>"><?php echo _l('check_register'); ?></a>
-		                         </li>
-		                         <li class="<?php echo ($type == 'configure_checks' ? 'active' : '') ?>">
-		                              <a href="<?php echo admin_url('accounting/configure_checks'); ?>"><?php echo _l('configure_checks'); ?></a>
-		                         </li>
-		                     </ul>
-		                   </div>
-		                 </div>
-						</div>
-					</div>
+				
 					<div class="row">
 						<div class="col-md-12 <?php if(isset($check)){ echo 'no-padding';} ?>">
 							<div class="panel_s">
 								<div class="panel-body">
 									<div class="panel-heading dflexy">
-										<span><?php echo _l('configure_checks'); ?></span>
+										<h4><?php echo _l('configure_checks'); ?></h4>
 									</div>
-									<div class="row mtop25">
-										<div class="col-md-6">
-										</div>
-										<div class="col-md-6">
-											<h5><?php echo _l('configure_check_note_1'); ?></h5>
-											<h5><?php echo _l('configure_check_note_2'); ?></h5>
-										</div>
-									</div>
+
 									<?php echo form_open_multipart(admin_url('accounting/update_configure_checks'),array('id'=>'check-form')) ;?>
-									<div class="col-12 bordered">
+									<div class="col-12 bordered hide">
 										<br>
 										<div class="row">
 											<div class="col-lg-6 col-sm-12 template-box text-center mb-3">
@@ -151,68 +106,118 @@ $list = [
 										</div>
 									</div>	
 									<div class="col-12">
-										<div class="check-sample-setting">
-											<div class="row">
-												<div class="col-md-6">
-													<table class="table">
-														<tbody>
-															<tr>
-																<td><?php echo _l('current_check_no') ?></td>
-																<td>
-																	<div class="d-flex">
-																		<?php 																		
-																		echo render_select('acc_current_check_no_icon_a',$list,array('id','name'), '', $current_check_no_icon_a, ['data-live-search' => false], [], '', '', false);
-																		?>
-																		<div class="px-5">
-																			<input type="text" class="text-center" disabled value="1234">																			
-																		</div>
-																		<?php 
-																		echo render_select('acc_current_check_no_icon_b',$list,array('id','name'), '', $current_check_no_icon_b, ['data-live-search' => false], [], '', '', false);
-																		?>
-																	</div>
-																</td>
-															</tr>
-															<tr>
-																<td><?php echo _l('routing_number') ?></td>
-																<td>
-																	<div class="d-flex">
-																		<?php 																	
-																		echo render_select('acc_routing_number_icon_a',$list,array('id','name'), '', $routing_number_icon_a, ['data-live-search' => false], [], '', '', false);
-																		?>
-																		<div class="px-5">
-																			<input type="text" class="text-center" disabled value="123456789">																			
-																		</div>
-																		<?php 
-																		echo render_select('acc_routing_number_icon_b',$list,array('id','name'), '', $routing_number_icon_b, ['data-live-search' => false], [], '', '', false);
-																		?>
-																	</div>
-																</td>
-															</tr>
-															<tr>
-																<td><?php echo _l('bank_account') ?></td>
-																<td>
-																	<div class="d-flex">
-																		<?php 																	
-																		echo render_select('acc_bank_account_icon_a',$list,array('id','name'), '', $bank_account_icon_a, ['data-live-search' => false], [], '', '', false);
-																		?>
-																		<div class="px-5">
-																			<input type="text" class="text-center" disabled value="1234567890">																			
-																		</div>
-																		<?php 
-																		echo render_select('acc_bank_account_icon_b',$list,array('id','name'), '', $bank_account_icon_b, ['data-live-search' => false], [], '', '', false);
-																		?>
-																	</div>
-																</td>
-															</tr>
-															
-														</tbody>
-													</table>
-												</div>
-												<div class="col-md-6">
+										<div class="row">
+											<div class="col-md-3">
+
+												<div class="checkbox checkbox-primary">
+											        <input type="checkbox" id="show_bank_address" name="show_bank_address" value="show_bank_address" <?php if($check_type == 'type_1' || $check_type == 'type_3'){ echo 'checked'; } ?> >
+											        <label for="show_bank_address"><?php echo _l('acc_show_bank_address'); ?>
+
+											        </label>
+											    </div>
+
+											    <div class="checkbox checkbox-primary">
+											        <input type="checkbox" id="show_2_signatures" name="show_2_signatures" value="show_2_signatures" <?php if($check_type == 'type_3' || $check_type == 'type_4'){ echo 'checked'; } ?>>
+											        <label for="show_2_signatures"><?php echo _l('acc_show_2_signatures'); ?>
+
+											        </label>
+											    </div>
+											</div>
+
+											<div class="col-md-8" id="review_check_div">
+												<img id="check_style_1" src="<?php echo site_url('modules/accounting/assets/images/check_style1.png'); ?>" class="<?php if($check_type != 'type_1'){ echo 'hide'; } ?>" alt="img">
+												<img id="check_style_2" src="<?php echo site_url('modules/accounting/assets/images/check_style2.png'); ?>" class="<?php if($check_type != 'type_2'){ echo 'hide'; } ?>" alt="img">
+												<img id="check_style_3" src="<?php echo site_url('modules/accounting/assets/images/check_style3.png'); ?>" class="<?php if($check_type != 'type_3'){ echo 'hide'; } ?>" alt="img">
+												<img id="check_style_4" src="<?php echo site_url('modules/accounting/assets/images/check_style4.png'); ?>" class="<?php if($check_type != 'type_4'){ echo 'hide'; } ?>" alt="img">
+											</div>
+										</div>
+									</div>
+
+									<hr>
+
+									<div class="col-md-12">
+										<div class="row"> 
+
+											<!--check #  -->
+											<div class="col-md-4 ">
+												<div class="col-md-12 text-center"><h4><?php echo _l('current_check_no'); ?></h4><hr class="mtop5 mbot10"></div>
+
+												<div class="col-md-5">
 													<div class="row">
-														<div class="col-md-4">
+														<div class="col-md-6">
+															<strong class="text-uppercase"><?php echo _l('acc_left'); ?></strong>
+														</div>
+
+														<div class="col-md-6 text-right">
+															<strong class="text-uppercase"><?php echo _l('acc_right'); ?></strong>
+														</div>
+
+
+														<div class="col-md-6">
+															<input type="radio" class="ui-radio" id="acc_current_check_no_icon_a_a" name="acc_current_check_no_icon_a" <?php if($current_check_no_icon_a == 'a'){ echo 'checked';} ?>  value="a">
+															<label for="acc_current_check_no_icon_a_a"><img width="18" data-value="a" src="<?php echo site_url('modules/accounting/assets/images/icon_a.svg'); ?>" alt="img"></label>
+														</div>
+
+														<div class="col-md-6 text-right">
+															<input type="radio" class="ui-radio" id="acc_current_check_no_icon_b_a" name="acc_current_check_no_icon_b" <?php if($current_check_no_icon_b == 'a'){ echo 'checked'; } ?> value="a">
+															<label for="acc_current_check_no_icon_b_a"><img width="18" data-value="a" src="<?php echo site_url('modules/accounting/assets/images/icon_a.svg'); ?>" alt="img"></label>
+														</div>
+													</div>
+
+													<div class="row">
+														<div class="col-md-6">
+															<input type="radio" class="ui-radio" id="acc_current_check_no_icon_a_b" name="acc_current_check_no_icon_a" <?php if($current_check_no_icon_a == 'b'){ echo 'checked';} ?> value="b">
+															<label for="acc_current_check_no_icon_a_b"><img width="18" data-value="b" src="<?php echo site_url('modules/accounting/assets/images/icon_b.svg'); ?>" alt="img"></label>
+														</div>
+
+														<div class="col-md-6 text-right">
+															<input type="radio" class="ui-radio" id="acc_current_check_no_icon_b_b" name="acc_current_check_no_icon_b" <?php if($current_check_no_icon_b == 'b'){ echo 'checked'; } ?> value="b">
+															<label for="acc_current_check_no_icon_b_b"><img width="18"  data-value="b" src="<?php echo site_url('modules/accounting/assets/images/icon_b.svg'); ?>" alt="img"></label>
+														</div>
+													</div>
+
+													<div class="row">
+														<div class="col-md-6">
+															<input type="radio" class="ui-radio" id="acc_current_check_no_icon_a_c" name="acc_current_check_no_icon_a" <?php if($current_check_no_icon_a == 'c'){ echo 'checked';} ?> value="c">
+															<label for="acc_current_check_no_icon_a_c"><img width="18"  data-value="c" src="<?php echo site_url('modules/accounting/assets/images/icon_c.svg'); ?>" alt="img"></label>
+														</div>
+
+														<div class="col-md-6 text-right">
+															<input type="radio" class="ui-radio" id="acc_current_check_no_icon_b_c" name="acc_current_check_no_icon_b" <?php if($current_check_no_icon_b == 'c'){ echo 'checked'; } ?> value="c">
+															<label for="acc_current_check_no_icon_b_c"><img width="18"  data-value="c" src="<?php echo site_url('modules/accounting/assets/images/icon_c.svg'); ?>" alt="img"></label>
+														</div>
+													</div>
+
+													<div class="row">
+														<div class="col-md-6">
+															<input type="radio" class="ui-radio" id="acc_current_check_no_icon_a_d" name="acc_current_check_no_icon_a" <?php if($current_check_no_icon_a == 'd'){ echo 'checked';} ?> value="d">
+															<label for="acc_current_check_no_icon_a_d"><img width="18"  data-value="d" src="<?php echo site_url('modules/accounting/assets/images/icon_d.svg'); ?>" alt="img"></label>
+														</div>
+
+														<div class="col-md-6 text-right">
+															<input type="radio" class="ui-radio" id="acc_current_check_no_icon_b_d" name="acc_current_check_no_icon_b" <?php if($current_check_no_icon_b == 'd'){ echo 'checked'; } ?> value="d">
+															<label for="acc_current_check_no_icon_b_d"><img width="18"  data-value="d" src="<?php echo site_url('modules/accounting/assets/images/icon_d.svg'); ?>" alt="img"></label>
+														</div>
+													</div>
+
+													<div class="row">
+														<div class="col-md-6">
+															<input type="radio" class="ui-radio" id="acc_current_check_no_icon_a_e" name="acc_current_check_no_icon_a" <?php if($current_check_no_icon_a == 'e'){ echo 'checked';} ?> value="e">
+															<label for="acc_current_check_no_icon_a_e"><?php echo _l('empty'); ?></label>
+														</div>
+
+														<div class="col-md-6 text-right">
+															<input type="radio" class="ui-radio" id="acc_current_check_no_icon_b_e" name="acc_current_check_no_icon_b" <?php if($current_check_no_icon_b == 'e'){ echo 'checked'; } ?> value="e">
+															<label for="acc_current_check_no_icon_b_e"><?php echo _l('empty'); ?></label>
+														</div>
+													</div>
+												</div>
+
+												<div class="col-md-7">
+													<div class="col-md-12 text-center text-uppercase"><?php echo _l('acc_review').' '._l('check').' #'; ?></div>
+													<div class="col-md-12">
 															<fieldset class="fieldset">
-																<legend><?php echo _l('check').' #'; ?></legend>
+																
 																<div class="row">
 																	<div class="col-12 text-center">
 																		<div class="d-flex justify-content-center current_check_no_icon">
@@ -230,29 +235,195 @@ $list = [
 																</div>
 															</fieldset>
 														</div>
-														<div class="col-md-4">
-															<fieldset class="fieldset">
-																<legend><?php echo _l('routing').' #'; ?></legend>
-																<div class="row">
-																	<div class="col-12 text-center">
-																		<div class="d-flex justify-content-center routing_number_icon">
-																			<img width="18" class="exam-icon exam-icon-a<?php echo ($routing_number_icon_a == 'a' ? '' : ' hide') ?>" data-value="a" src="<?php echo site_url('modules/accounting/assets/images/icon_a.svg'); ?>" alt="img">
-																			<img width="18" class="exam-icon exam-icon-a<?php echo ($routing_number_icon_a == 'b' ? '' : ' hide') ?>" data-value="b" src="<?php echo site_url('modules/accounting/assets/images/icon_b.svg'); ?>" alt="img">
-																			<img width="18" class="exam-icon exam-icon-a<?php echo ($routing_number_icon_a == 'c' ? '' : ' hide') ?>" data-value="c" src="<?php echo site_url('modules/accounting/assets/images/icon_c.svg'); ?>" alt="img">
-																			<img width="18" class="exam-icon exam-icon-a<?php echo ($routing_number_icon_a == 'd' ? '' : ' hide') ?>" data-value="d" src="<?php echo site_url('modules/accounting/assets/images/icon_d.svg'); ?>" alt="img">
-																			<span class="h3 px-5 unset-top check-font-style1">123456789</span>
-																			<img width="18" class="exam-icon exam-icon-b<?php echo ($routing_number_icon_b == 'a' ? '' : ' hide') ?>" data-value="a" src="<?php echo site_url('modules/accounting/assets/images/icon_a.svg'); ?>" alt="img">
-																			<img width="18" class="exam-icon exam-icon-b<?php echo ($routing_number_icon_b == 'b' ? '' : ' hide') ?>" data-value="b" src="<?php echo site_url('modules/accounting/assets/images/icon_b.svg'); ?>" alt="img">
-																			<img width="18" class="exam-icon exam-icon-b<?php echo ($routing_number_icon_b == 'c' ? '' : ' hide') ?>" data-value="c" src="<?php echo site_url('modules/accounting/assets/images/icon_c.svg'); ?>" alt="img">
-																			<img width="18" class="exam-icon exam-icon-b<?php echo ($routing_number_icon_b == 'd' ? '' : ' hide') ?>" data-value="d" src="<?php echo site_url('modules/accounting/assets/images/icon_d.svg'); ?>" alt="img">
-																		</div>
+
+												</div>
+
+												
+											</div>
+
+											<!--routing #  -->
+											<div class="col-md-4 ">
+												<div class="col-md-12 text-center"><h4><?php echo _l('routing_number'); ?></h4><hr class="mtop5 mbot10"></div>
+
+												<div class="col-md-5">
+													<div class="row">
+														<div class="col-md-6">
+															<strong class="text-uppercase"><?php echo _l('acc_left'); ?></strong>
+														</div>
+
+														<div class="col-md-6 text-right">
+															<strong class="text-uppercase"><?php echo _l('acc_right'); ?></strong>
+														</div>
+
+
+														<div class="col-md-6">
+															<input type="radio" class="ui-radio" id="acc_routing_number_icon_a_a" name="acc_routing_number_icon_a" <?php if($routing_number_icon_a == 'a'){ echo 'checked';} ?>  value="a">
+															<label for="acc_routing_number_icon_a_a"><img width="18" data-value="a" src="<?php echo site_url('modules/accounting/assets/images/icon_a.svg'); ?>" alt="img"></label>
+														</div>
+
+														<div class="col-md-6 text-right">
+															<input type="radio" class="ui-radio" id="acc_routing_number_icon_b_a" name="acc_routing_number_icon_b" <?php if($routing_number_icon_b == 'a'){ echo 'checked'; } ?> value="a">
+															<label for="acc_routing_number_icon_b_a"><img width="18" data-value="a" src="<?php echo site_url('modules/accounting/assets/images/icon_a.svg'); ?>" alt="img"></label>
+														</div>
+													</div>
+
+													<div class="row">
+														<div class="col-md-6">
+															<input type="radio" class="ui-radio" id="acc_routing_number_icon_a_b" name="acc_routing_number_icon_a" <?php if($routing_number_icon_a == 'b'){ echo 'checked';} ?> value="b">
+															<label for="acc_routing_number_icon_a_b"><img width="18" data-value="b" src="<?php echo site_url('modules/accounting/assets/images/icon_b.svg'); ?>" alt="img"></label>
+														</div>
+
+														<div class="col-md-6 text-right">
+															<input type="radio" class="ui-radio" id="acc_routing_number_icon_b_b" name="acc_routing_number_icon_b" <?php if($routing_number_icon_b == 'b'){ echo 'checked'; } ?> value="b">
+															<label for="acc_routing_number_icon_b_b"><img width="18"  data-value="b" src="<?php echo site_url('modules/accounting/assets/images/icon_b.svg'); ?>" alt="img"></label>
+														</div>
+													</div>
+
+													<div class="row">
+														<div class="col-md-6">
+															<input type="radio" class="ui-radio" id="acc_routing_number_icon_a_c" name="acc_routing_number_icon_a" <?php if($routing_number_icon_a == 'c'){ echo 'checked';} ?> value="c">
+															<label for="acc_routing_number_icon_a_c"><img width="18"  data-value="c" src="<?php echo site_url('modules/accounting/assets/images/icon_c.svg'); ?>" alt="img"></label>
+														</div>
+
+														<div class="col-md-6 text-right">
+															<input type="radio" class="ui-radio" id="acc_routing_number_icon_b_c" name="acc_routing_number_icon_b" <?php if($routing_number_icon_b == 'c'){ echo 'checked'; } ?> value="c">
+															<label for="acc_routing_number_icon_b_c"><img width="18"  data-value="c" src="<?php echo site_url('modules/accounting/assets/images/icon_c.svg'); ?>" alt="img"></label>
+														</div>
+													</div>
+
+													<div class="row">
+														<div class="col-md-6">
+															<input type="radio" class="ui-radio" id="acc_routing_number_icon_a_d" name="acc_routing_number_icon_a" <?php if($routing_number_icon_a == 'd'){ echo 'checked';} ?> value="d">
+															<label for="acc_routing_number_icon_a_d"><img width="18"  data-value="d" src="<?php echo site_url('modules/accounting/assets/images/icon_d.svg'); ?>" alt="img"></label>
+														</div>
+
+														<div class="col-md-6 text-right">
+															<input type="radio" class="ui-radio" id="acc_routing_number_icon_b_d" name="acc_routing_number_icon_b" <?php if($routing_number_icon_b == 'd'){ echo 'checked'; } ?> value="d">
+															<label for="acc_routing_number_icon_b_d"><img width="18"  data-value="d" src="<?php echo site_url('modules/accounting/assets/images/icon_d.svg'); ?>" alt="img"></label>
+														</div>
+													</div>
+
+													<div class="row">
+														<div class="col-md-6">
+															<input type="radio" class="ui-radio" id="acc_routing_number_icon_a_e" name="acc_routing_number_icon_a" <?php if($routing_number_icon_a == 'e'){ echo 'checked';} ?> value="e">
+															<label for="acc_routing_number_icon_a_e"><?php echo _l('empty'); ?></label>
+														</div>
+
+														<div class="col-md-6 text-right">
+															<input type="radio" class="ui-radio" id="acc_routing_number_icon_b_e" name="acc_routing_number_icon_b" <?php if($routing_number_icon_b == 'e'){ echo 'checked'; } ?> value="e">
+															<label for="acc_routing_number_icon_b_e"><?php echo _l('empty'); ?></label>
+														</div>
+													</div>
+												</div>
+
+												<div class="col-md-7">
+													<div class="col-md-12 text-center text-uppercase"><?php echo _l('acc_review').' '._l('routing').' #'; ?></div>
+													<div class="col-md-12">
+														<fieldset class="fieldset">
+															
+															<div class="row">
+																<div class="col-12 text-center">
+																	<div class="d-flex justify-content-center routing_number_icon">
+																		<img width="18" class="exam-icon exam-icon-a<?php echo ($routing_number_icon_a == 'a' ? '' : ' hide') ?>" data-value="a" src="<?php echo site_url('modules/accounting/assets/images/icon_a.svg'); ?>" alt="img">
+																		<img width="18" class="exam-icon exam-icon-a<?php echo ($routing_number_icon_a == 'b' ? '' : ' hide') ?>" data-value="b" src="<?php echo site_url('modules/accounting/assets/images/icon_b.svg'); ?>" alt="img">
+																		<img width="18" class="exam-icon exam-icon-a<?php echo ($routing_number_icon_a == 'c' ? '' : ' hide') ?>" data-value="c" src="<?php echo site_url('modules/accounting/assets/images/icon_c.svg'); ?>" alt="img">
+																		<img width="18" class="exam-icon exam-icon-a<?php echo ($routing_number_icon_a == 'd' ? '' : ' hide') ?>" data-value="d" src="<?php echo site_url('modules/accounting/assets/images/icon_d.svg'); ?>" alt="img">
+																		<span class="h3 px-5 unset-top check-font-style1">123456789</span>
+																		<img width="18" class="exam-icon exam-icon-b<?php echo ($routing_number_icon_b == 'a' ? '' : ' hide') ?>" data-value="a" src="<?php echo site_url('modules/accounting/assets/images/icon_a.svg'); ?>" alt="img">
+																		<img width="18" class="exam-icon exam-icon-b<?php echo ($routing_number_icon_b == 'b' ? '' : ' hide') ?>" data-value="b" src="<?php echo site_url('modules/accounting/assets/images/icon_b.svg'); ?>" alt="img">
+																		<img width="18" class="exam-icon exam-icon-b<?php echo ($routing_number_icon_b == 'c' ? '' : ' hide') ?>" data-value="c" src="<?php echo site_url('modules/accounting/assets/images/icon_c.svg'); ?>" alt="img">
+																		<img width="18" class="exam-icon exam-icon-b<?php echo ($routing_number_icon_b == 'd' ? '' : ' hide') ?>" data-value="d" src="<?php echo site_url('modules/accounting/assets/images/icon_d.svg'); ?>" alt="img">
 																	</div>
 																</div>
-															</fieldset>
+															</div>
+														</fieldset>
+													</div>
+												</div>
+
+												
+											</div>
+
+
+											<!--account #  -->
+											<div class="col-md-4 ">
+												<div class="col-md-12 text-center"><h4><?php echo _l('bank_account'); ?></h4><hr class="mtop5 mbot10"></div>
+
+												<div class="col-md-5">
+													<div class="row">
+														<div class="col-md-6">
+															<strong class="text-uppercase"><?php echo _l('acc_left'); ?></strong>
 														</div>
-														<div class="col-md-4">
+
+														<div class="col-md-6 text-right">
+															<strong class="text-uppercase"><?php echo _l('acc_right'); ?></strong>
+														</div>
+
+
+														<div class="col-md-6">
+															<input type="radio" class="ui-radio" id="acc_bank_account_icon_a_a" name="acc_bank_account_icon_a" <?php if($bank_account_icon_a == 'a'){ echo 'checked';} ?>  value="a">
+															<label for="acc_bank_account_icon_a_a"><img width="18" data-value="a" src="<?php echo site_url('modules/accounting/assets/images/icon_a.svg'); ?>" alt="img"></label>
+														</div>
+
+														<div class="col-md-6 text-right">
+															<input type="radio" class="ui-radio" id="acc_bank_account_icon_b_a" name="acc_bank_account_icon_b" <?php if($bank_account_icon_b == 'a'){ echo 'checked'; } ?> value="a">
+															<label for="acc_bank_account_icon_b_a"><img width="18" data-value="a" src="<?php echo site_url('modules/accounting/assets/images/icon_a.svg'); ?>" alt="img"></label>
+														</div>
+													</div>
+
+													<div class="row">
+														<div class="col-md-6">
+															<input type="radio" class="ui-radio" id="acc_bank_account_icon_a_b" name="acc_bank_account_icon_a" <?php if($bank_account_icon_a == 'b'){ echo 'checked';} ?> value="b">
+															<label for="acc_bank_account_icon_a_b"><img width="18" data-value="b" src="<?php echo site_url('modules/accounting/assets/images/icon_b.svg'); ?>" alt="img"></label>
+														</div>
+
+														<div class="col-md-6 text-right">
+															<input type="radio" class="ui-radio" id="acc_bank_account_icon_b_b" name="acc_bank_account_icon_b" <?php if($bank_account_icon_b == 'b'){ echo 'checked'; } ?> value="b">
+															<label for="acc_bank_account_icon_b_b"><img width="18"  data-value="b" src="<?php echo site_url('modules/accounting/assets/images/icon_b.svg'); ?>" alt="img"></label>
+														</div>
+													</div>
+
+													<div class="row">
+														<div class="col-md-6">
+															<input type="radio" class="ui-radio" id="acc_bank_account_icon_a_c" name="acc_bank_account_icon_a" <?php if($bank_account_icon_a == 'c'){ echo 'checked';} ?> value="c">
+															<label for="acc_bank_account_icon_a_c"><img width="18"  data-value="c" src="<?php echo site_url('modules/accounting/assets/images/icon_c.svg'); ?>" alt="img"></label>
+														</div>
+
+														<div class="col-md-6 text-right">
+															<input type="radio" class="ui-radio" id="acc_bank_account_icon_b_c" name="acc_bank_account_icon_b" <?php if($bank_account_icon_b == 'c'){ echo 'checked'; } ?> value="c">
+															<label for="acc_bank_account_icon_b_c"><img width="18"  data-value="c" src="<?php echo site_url('modules/accounting/assets/images/icon_c.svg'); ?>" alt="img"></label>
+														</div>
+													</div>
+
+													<div class="row">
+														<div class="col-md-6">
+															<input type="radio" class="ui-radio" id="acc_bank_account_icon_a_d" name="acc_bank_account_icon_a" <?php if($bank_account_icon_a == 'd'){ echo 'checked';} ?> value="d">
+															<label for="acc_bank_account_icon_a_d"><img width="18"  data-value="d" src="<?php echo site_url('modules/accounting/assets/images/icon_d.svg'); ?>" alt="img"></label>
+														</div>
+
+														<div class="col-md-6 text-right">
+															<input type="radio" class="ui-radio" id="acc_bank_account_icon_b_d" name="acc_bank_account_icon_b" <?php if($bank_account_icon_b == 'd'){ echo 'checked'; } ?> value="d">
+															<label for="acc_bank_account_icon_b_d"><img width="18"  data-value="d" src="<?php echo site_url('modules/accounting/assets/images/icon_d.svg'); ?>" alt="img"></label>
+														</div>
+													</div>
+
+													<div class="row">
+														<div class="col-md-6">
+															<input type="radio" class="ui-radio" id="acc_bank_account_icon_a_e" name="acc_bank_account_icon_a" <?php if($bank_account_icon_a == 'e'){ echo 'checked';} ?> value="e">
+															<label for="acc_bank_account_icon_a_e"><?php echo _l('empty'); ?></label>
+														</div>
+
+														<div class="col-md-6 text-right">
+															<input type="radio" class="ui-radio" id="acc_bank_account_icon_b_e" name="acc_bank_account_icon_b" <?php if($bank_account_icon_b == 'e'){ echo 'checked'; } ?> value="e">
+															<label for="acc_bank_account_icon_b_e"><?php echo _l('empty'); ?></label>
+														</div>
+													</div>
+												</div>
+
+												<div class="col-md-7">
+													<div class="col-md-12 text-center text-uppercase"><?php echo _l('acc_review').' '._l('account').' #'; ?></div>
+													<div class="col-md-12">
 															<fieldset class="fieldset">
-																<legend><?php echo _l('account').' #'; ?></legend>
+														
 																<div class="row">
 																	<div class="col-12 text-center">
 																		<div class="d-flex justify-content-center bank_account_icon">
@@ -270,86 +441,62 @@ $list = [
 																</div>
 															</fieldset>
 														</div>
+												</div>
+
+												
+											</div>
+
+										</div>
+									</div>
+
+									<div class="col-md-12">
+										<hr>
+										<fieldset class="fieldset">
+									
+											<div class="row">
+												<div class="col-12 d-flex justify-content-center">
+
+													<div class="d-flex justify-content-center px-5 current_check_no_icon">
+														<img width="18" class="exam-icon exam-icon-a<?php echo ($current_check_no_icon_a == 'a' ? '' : ' hide') ?>" data-value="a" src="<?php echo site_url('modules/accounting/assets/images/icon_a.svg'); ?>" alt="img">
+														<img width="18" class="exam-icon exam-icon-a<?php echo ($current_check_no_icon_a == 'b' ? '' : ' hide') ?>" data-value="b" src="<?php echo site_url('modules/accounting/assets/images/icon_b.svg'); ?>" alt="img">
+														<img width="18" class="exam-icon exam-icon-a<?php echo ($current_check_no_icon_a == 'c' ? '' : ' hide') ?>" data-value="c" src="<?php echo site_url('modules/accounting/assets/images/icon_c.svg'); ?>" alt="img">
+														<img width="18" class="exam-icon exam-icon-a<?php echo ($current_check_no_icon_a == 'd' ? '' : ' hide') ?>" data-value="d" src="<?php echo site_url('modules/accounting/assets/images/icon_d.svg'); ?>" alt="img">
+														<span class="h3 px-5 unset-top check-font-style1">1234</span>
+														<img width="18" class="exam-icon exam-icon-b<?php echo ($current_check_no_icon_b == 'a' ? '' : ' hide') ?>" data-value="a" src="<?php echo site_url('modules/accounting/assets/images/icon_a.svg'); ?>" alt="img">
+														<img width="18" class="exam-icon exam-icon-b<?php echo ($current_check_no_icon_b == 'b' ? '' : ' hide') ?>" data-value="b" src="<?php echo site_url('modules/accounting/assets/images/icon_b.svg'); ?>" alt="img">
+														<img width="18" class="exam-icon exam-icon-b<?php echo ($current_check_no_icon_b == 'c' ? '' : ' hide') ?>" data-value="c" src="<?php echo site_url('modules/accounting/assets/images/icon_c.svg'); ?>" alt="img">
+														<img width="18" class="exam-icon exam-icon-b<?php echo ($current_check_no_icon_b == 'd' ? '' : ' hide') ?>" data-value="d" src="<?php echo site_url('modules/accounting/assets/images/icon_d.svg'); ?>" alt="img">
 													</div>
-													<fieldset class="fieldset">
-														<legend><?php echo _l('micr_font_equivalent') ?></legend>
-														<div class="row">
-															<div class="col-md-2">
-																<span class="micr_font_equivalent">A=</span>
-																<img width="18" src="<?php echo site_url('modules/accounting/assets/images/icon_a.svg'); ?>" alt="img">
-															</div>
-															<div class="col-md-2">
-																<span class="micr_font_equivalent">B=</span>
-																<img width="18" src="<?php echo site_url('modules/accounting/assets/images/icon_b.svg'); ?>" alt="img">
-															</div>
-															<div class="col-md-2">
-																<span class="micr_font_equivalent">C=</span>
-																<img width="18" src="<?php echo site_url('modules/accounting/assets/images/icon_c.svg'); ?>" alt="img">
-															</div>
-															<div class="col-md-2">
-																<span class="micr_font_equivalent">D=</span>
-																<img width="18" src="<?php echo site_url('modules/accounting/assets/images/icon_d.svg'); ?>" alt="img">
-															</div>
-															<div class="col-md-4">
-																<span class="micr_font_equivalent">E=Leave Empty</span>
-															</div>
-														</div>
-													</fieldset>
-													<fieldset class="fieldset">
-														<legend><?php echo _l('preview') ?></legend>
-														<div class="row">
-															<div class="col-12 d-flex justify-content-center">
 
-																<div class="d-flex justify-content-center px-5 current_check_no_icon">
-																	<img width="18" class="exam-icon exam-icon-a<?php echo ($current_check_no_icon_a == 'a' ? '' : ' hide') ?>" data-value="a" src="<?php echo site_url('modules/accounting/assets/images/icon_a.svg'); ?>" alt="img">
-																	<img width="18" class="exam-icon exam-icon-a<?php echo ($current_check_no_icon_a == 'b' ? '' : ' hide') ?>" data-value="b" src="<?php echo site_url('modules/accounting/assets/images/icon_b.svg'); ?>" alt="img">
-																	<img width="18" class="exam-icon exam-icon-a<?php echo ($current_check_no_icon_a == 'c' ? '' : ' hide') ?>" data-value="c" src="<?php echo site_url('modules/accounting/assets/images/icon_c.svg'); ?>" alt="img">
-																	<img width="18" class="exam-icon exam-icon-a<?php echo ($current_check_no_icon_a == 'd' ? '' : ' hide') ?>" data-value="d" src="<?php echo site_url('modules/accounting/assets/images/icon_d.svg'); ?>" alt="img">
-																	<span class="h3 px-5 unset-top check-font-style1">1234</span>
-																	<img width="18" class="exam-icon exam-icon-b<?php echo ($current_check_no_icon_b == 'a' ? '' : ' hide') ?>" data-value="a" src="<?php echo site_url('modules/accounting/assets/images/icon_a.svg'); ?>" alt="img">
-																	<img width="18" class="exam-icon exam-icon-b<?php echo ($current_check_no_icon_b == 'b' ? '' : ' hide') ?>" data-value="b" src="<?php echo site_url('modules/accounting/assets/images/icon_b.svg'); ?>" alt="img">
-																	<img width="18" class="exam-icon exam-icon-b<?php echo ($current_check_no_icon_b == 'c' ? '' : ' hide') ?>" data-value="c" src="<?php echo site_url('modules/accounting/assets/images/icon_c.svg'); ?>" alt="img">
-																	<img width="18" class="exam-icon exam-icon-b<?php echo ($current_check_no_icon_b == 'd' ? '' : ' hide') ?>" data-value="d" src="<?php echo site_url('modules/accounting/assets/images/icon_d.svg'); ?>" alt="img">
-																</div>
-
-																<div class="d-flex justify-content-center px-5 routing_number_icon">
-																	<img width="18" class="exam-icon exam-icon-a<?php echo ($routing_number_icon_a == 'a' ? '' : ' hide') ?>" data-value="a" src="<?php echo site_url('modules/accounting/assets/images/icon_a.svg'); ?>" alt="img">
-																	<img width="18" class="exam-icon exam-icon-a<?php echo ($routing_number_icon_a == 'b' ? '' : ' hide') ?>" data-value="b" src="<?php echo site_url('modules/accounting/assets/images/icon_b.svg'); ?>" alt="img">
-																	<img width="18" class="exam-icon exam-icon-a<?php echo ($routing_number_icon_a == 'c' ? '' : ' hide') ?>" data-value="c" src="<?php echo site_url('modules/accounting/assets/images/icon_c.svg'); ?>" alt="img">
-																	<img width="18" class="exam-icon exam-icon-a<?php echo ($routing_number_icon_a == 'd' ? '' : ' hide') ?>" data-value="d" src="<?php echo site_url('modules/accounting/assets/images/icon_d.svg'); ?>" alt="img">
-																	<span class="h3 px-5 unset-top check-font-style1">123456789</span>
-																	<img width="18" class="exam-icon exam-icon-b<?php echo ($routing_number_icon_b == 'a' ? '' : ' hide') ?>" data-value="a" src="<?php echo site_url('modules/accounting/assets/images/icon_a.svg'); ?>" alt="img">
-																	<img width="18" class="exam-icon exam-icon-b<?php echo ($routing_number_icon_b == 'b' ? '' : ' hide') ?>" data-value="b" src="<?php echo site_url('modules/accounting/assets/images/icon_b.svg'); ?>" alt="img">
-																	<img width="18" class="exam-icon exam-icon-b<?php echo ($routing_number_icon_b == 'c' ? '' : ' hide') ?>" data-value="c" src="<?php echo site_url('modules/accounting/assets/images/icon_c.svg'); ?>" alt="img">
-																	<img width="18" class="exam-icon exam-icon-b<?php echo ($routing_number_icon_b == 'd' ? '' : ' hide') ?>" data-value="d" src="<?php echo site_url('modules/accounting/assets/images/icon_d.svg'); ?>" alt="img">
-																</div>
+													<div class="d-flex justify-content-center px-5 routing_number_icon">
+														<img width="18" class="exam-icon exam-icon-a<?php echo ($routing_number_icon_a == 'a' ? '' : ' hide') ?>" data-value="a" src="<?php echo site_url('modules/accounting/assets/images/icon_a.svg'); ?>" alt="img">
+														<img width="18" class="exam-icon exam-icon-a<?php echo ($routing_number_icon_a == 'b' ? '' : ' hide') ?>" data-value="b" src="<?php echo site_url('modules/accounting/assets/images/icon_b.svg'); ?>" alt="img">
+														<img width="18" class="exam-icon exam-icon-a<?php echo ($routing_number_icon_a == 'c' ? '' : ' hide') ?>" data-value="c" src="<?php echo site_url('modules/accounting/assets/images/icon_c.svg'); ?>" alt="img">
+														<img width="18" class="exam-icon exam-icon-a<?php echo ($routing_number_icon_a == 'd' ? '' : ' hide') ?>" data-value="d" src="<?php echo site_url('modules/accounting/assets/images/icon_d.svg'); ?>" alt="img">
+														<span class="h3 px-5 unset-top check-font-style1">123456789</span>
+														<img width="18" class="exam-icon exam-icon-b<?php echo ($routing_number_icon_b == 'a' ? '' : ' hide') ?>" data-value="a" src="<?php echo site_url('modules/accounting/assets/images/icon_a.svg'); ?>" alt="img">
+														<img width="18" class="exam-icon exam-icon-b<?php echo ($routing_number_icon_b == 'b' ? '' : ' hide') ?>" data-value="b" src="<?php echo site_url('modules/accounting/assets/images/icon_b.svg'); ?>" alt="img">
+														<img width="18" class="exam-icon exam-icon-b<?php echo ($routing_number_icon_b == 'c' ? '' : ' hide') ?>" data-value="c" src="<?php echo site_url('modules/accounting/assets/images/icon_c.svg'); ?>" alt="img">
+														<img width="18" class="exam-icon exam-icon-b<?php echo ($routing_number_icon_b == 'd' ? '' : ' hide') ?>" data-value="d" src="<?php echo site_url('modules/accounting/assets/images/icon_d.svg'); ?>" alt="img">
+													</div>
 
 
-																<div class="d-flex justify-content-center px-5 bank_account_icon">
-																	<img width="18" class="exam-icon exam-icon-a<?php echo ($bank_account_icon_a == 'a' ? '' : ' hide') ?>" data-value="a" src="<?php echo site_url('modules/accounting/assets/images/icon_a.svg'); ?>" alt="img">
-																	<img width="18" class="exam-icon exam-icon-a<?php echo ($bank_account_icon_a == 'b' ? '' : ' hide') ?>" data-value="b" src="<?php echo site_url('modules/accounting/assets/images/icon_b.svg'); ?>" alt="img">
-																	<img width="18" class="exam-icon exam-icon-a<?php echo ($bank_account_icon_a == 'c' ? '' : ' hide') ?>" data-value="c" src="<?php echo site_url('modules/accounting/assets/images/icon_c.svg'); ?>" alt="img">
-																	<img width="18" class="exam-icon exam-icon-a<?php echo ($bank_account_icon_a == 'd' ? '' : ' hide') ?>" data-value="d" src="<?php echo site_url('modules/accounting/assets/images/icon_d.svg'); ?>" alt="img">
-																	<span class="h3 px-5 unset-top check-font-style1">1234567890</span>
-																	<img width="18" class="exam-icon exam-icon-b<?php echo ($bank_account_icon_b == 'a' ? '' : ' hide') ?>" data-value="a" src="<?php echo site_url('modules/accounting/assets/images/icon_a.svg'); ?>" alt="img">
-																	<img width="18" class="exam-icon exam-icon-b<?php echo ($bank_account_icon_b == 'b' ? '' : ' hide') ?>" data-value="b" src="<?php echo site_url('modules/accounting/assets/images/icon_b.svg'); ?>" alt="img">
-																	<img width="18" class="exam-icon exam-icon-b<?php echo ($bank_account_icon_b == 'c' ? '' : ' hide') ?>" data-value="c" src="<?php echo site_url('modules/accounting/assets/images/icon_c.svg'); ?>" alt="img">
-																	<img width="18" class="exam-icon exam-icon-b<?php echo ($bank_account_icon_b == 'd' ? '' : ' hide') ?>" data-value="d" src="<?php echo site_url('modules/accounting/assets/images/icon_d.svg'); ?>" alt="img">
-																</div>
+													<div class="d-flex justify-content-center px-5 bank_account_icon">
+														<img width="18" class="exam-icon exam-icon-a<?php echo ($bank_account_icon_a == 'a' ? '' : ' hide') ?>" data-value="a" src="<?php echo site_url('modules/accounting/assets/images/icon_a.svg'); ?>" alt="img">
+														<img width="18" class="exam-icon exam-icon-a<?php echo ($bank_account_icon_a == 'b' ? '' : ' hide') ?>" data-value="b" src="<?php echo site_url('modules/accounting/assets/images/icon_b.svg'); ?>" alt="img">
+														<img width="18" class="exam-icon exam-icon-a<?php echo ($bank_account_icon_a == 'c' ? '' : ' hide') ?>" data-value="c" src="<?php echo site_url('modules/accounting/assets/images/icon_c.svg'); ?>" alt="img">
+														<img width="18" class="exam-icon exam-icon-a<?php echo ($bank_account_icon_a == 'd' ? '' : ' hide') ?>" data-value="d" src="<?php echo site_url('modules/accounting/assets/images/icon_d.svg'); ?>" alt="img">
+														<span class="h3 px-5 unset-top check-font-style1">1234567890</span>
+														<img width="18" class="exam-icon exam-icon-b<?php echo ($bank_account_icon_b == 'a' ? '' : ' hide') ?>" data-value="a" src="<?php echo site_url('modules/accounting/assets/images/icon_a.svg'); ?>" alt="img">
+														<img width="18" class="exam-icon exam-icon-b<?php echo ($bank_account_icon_b == 'b' ? '' : ' hide') ?>" data-value="b" src="<?php echo site_url('modules/accounting/assets/images/icon_b.svg'); ?>" alt="img">
+														<img width="18" class="exam-icon exam-icon-b<?php echo ($bank_account_icon_b == 'c' ? '' : ' hide') ?>" data-value="c" src="<?php echo site_url('modules/accounting/assets/images/icon_c.svg'); ?>" alt="img">
+														<img width="18" class="exam-icon exam-icon-b<?php echo ($bank_account_icon_b == 'd' ? '' : ' hide') ?>" data-value="d" src="<?php echo site_url('modules/accounting/assets/images/icon_d.svg'); ?>" alt="img">
+													</div>
 
 
-															</div>
-														</div>
-													</fieldset>
-												</div>
-												<div class="col-md-6">
-													
-												</div>
-												<div class="col-md-6">
-													
 												</div>
 											</div>
-										</div>
+										</fieldset>
 									</div>
 									<div class="col-12 text-right">
 										<hr>

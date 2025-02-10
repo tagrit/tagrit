@@ -12,7 +12,7 @@
               <a data-group="<?php echo new_html_entity_decode($gr); ?>" href="<?php echo admin_url('accounting/banking?group='.$gr); ?>">
                 <?php if ($gr == 'bank_accounts') {
                     echo '<i class="fa fa-list-alt" aria-hidden="true"></i>';
-                }elseif ($gr == 'banking_register') {
+                }elseif ($gr == 'banking_feeds') {
                     echo '<i class="fa fa-university" aria-hidden="true"></i>';
                 }elseif ($gr == 'plaid_new_transaction') {
                     echo '<i class="fa fa-cogs" aria-hidden="true"></i>';

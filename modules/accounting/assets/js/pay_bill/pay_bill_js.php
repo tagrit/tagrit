@@ -345,18 +345,30 @@ var selectCurrency = $('select[name="currency"]');
 
    function caculate_amount_check(el){
 	"use strict";
+				var rows = $('input[name^="pay_bill_amount_paid"]');
+	    if(rows.length > 0){
+				var total = 0;
+			    $.each(rows, function() {
+			    	if($(this).val() != ''){
+			        	total += parseFloat(unFormatNumber($(this).val()));
+			    	}
+			    });
 
-	var total_amount = 0;
+		  		$('input[name="amount"]').val(parseFloat(total));
+			    $('#pay-bill-total').html(format_money(total));
+	    }else{
+				var total_amount = 0;
 
-	var rows = $('.list-bills').find('tbody tr');
-	$.each(rows, function() {
-		var checkbox = $($(this).find('td').eq(0)).find('input');
-		if (checkbox.is(":checked") == true) {
-			total_amount = total_amount + parseFloat(checkbox.data('amount'));
-		}
-	});
-   
-	$('input[name="amount"]').val(total_amount);
+				var rows = $('.list-bills').find('tbody tr');
+				$.each(rows, function() {
+					var checkbox = $($(this).find('td').eq(0)).find('input');
+					if (checkbox.is(":checked") == true) {
+						total_amount = total_amount + parseFloat(checkbox.data('amount'));
+					}
+				});
+			   
+				$('input[name="amount"]').val(total_amount);
+	    }
    }
 
    function create_check(){

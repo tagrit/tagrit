@@ -25,7 +25,7 @@
 								<?php echo render_input('number_filter',_l('number'),''); ?>
 							</div>
 							<div class="col-md-3 ">
-								<?php echo render_select('payee_filter[]', $customers,array('id','label'),'payee', '', array('multiple' => true, 'data-actions-box' => true), array(), '', '', false); ?>
+								<?php echo render_select('payee_filter[]', $payee,array('id','label'),'payee', '', array('multiple' => true, 'data-actions-box' => true), array(), '', '', false); ?>
 							</div>
 
 							<div class="col-md-3 hide">

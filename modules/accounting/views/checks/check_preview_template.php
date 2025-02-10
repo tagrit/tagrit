@@ -59,45 +59,50 @@
          <h4><?php echo _l('check_ensure_configured_note_1'); ?></h4>
       </div>
       <div class="col-md-6">
-        <a href="#" class="btn btn-default pull-right mtop5" onclick="save_and_print_multiple_check(); return false;" data-toggle="tooltip" data-title="<?php echo _l('print_multiple_saved_checks_note'); ?>"><?php echo _l('print_multiple_saved_checks'); ?></a>
-        <a href="#" class="btn btn-default mright5 pull-right mtop5" onclick="save_and_print_later(); return false;" data-toggle="tooltip" data-title="<?php echo _l('save_print_later_note'); ?>"><?php echo _l('save_print_later'); ?></a>
-        <a href="#" class="btn btn-default mright5 pull-right mtop5" onclick="save_and_print_a_check(); return false;" data-toggle="tooltip" data-title="<?php echo _l('save_print_now_note'); ?>"><?php echo _l('save_print_now'); ?></a>
-        <a href="#" class="btn btn-default pull-right mright5 mtop5" onclick="save_a_check(); return false;"><?php echo _l('save'); ?></a>
+        
       </div>
     </div>
     <hr class="hr-panel-heading" />
     <div class="row">
-      <div class="col-md-2">
-        <label class="custom-checkbox">
-          <?php echo _l('include_company_name_address'); ?>
-          <?php $value = (isset($check) ? $check->include_company_name_address : 1); ?>
-          <input type="checkbox" name="include_company_name_address" value="1" <?php if($value == 1){ echo 'checked="checked"'; } ?> >
-          <span class="checkmark"></span>
-        </label>
-        <br>
-        <label class="custom-checkbox">
-         <?php echo _l('include_routing_account_numbers') ?>
-         <?php $value = (isset($check) ? $check->include_routing_account_numbers : 1); ?>
-         <input type="checkbox" name="include_routing_account_numbers" value="1" <?php if($value == 1){ echo 'checked="checked"'; } ?>>
-         <span class="checkmark"></span>
-       </label>
-       <br>
-       <label class="custom-checkbox">
-         <?php echo _l('include_check_number') ?>
-         <?php $value = (isset($check) ? $check->include_check_number : 1); ?>
-         <input type="checkbox" name="include_check_number" value="1" <?php if($value == 1){ echo 'checked="checked"'; } ?>>
-         <span class="checkmark"></span>
-       </label>
-       <br>
-       <label class="custom-checkbox">
-         <?php echo _l('include_bank_name') ?>
-         <?php $value = (isset($check) ? $check->include_bank_name : 1); ?>
-         <input type="checkbox" name="include_bank_name" value="1" <?php if($value == 1){ echo 'checked="checked"'; } ?>>
-         <span class="checkmark"></span>
-       </label>
+      <div class="col-md-3 mbot15">
+        <div class="row">
+          <div class="col-md-12">
+            <a href="javascript:void(0);" class="text-mute" onclick="open_config(); return false;"><p class="mbot5"><i class="fa fa-gear"></i><?php echo ' '._l('acc_configuration'); ?><i id="i-angel" class="fa fa-angle-left pull-right"></i></p></a>
+            <hr class="mtop5 mbot5">
+          </div>
+          <div id="config_div" class="col-md-12 hide">
+              <label class="custom-checkbox">
+                <?php echo _l('include_company_name_address'); ?>
+                <?php $value = (isset($check) ? $check->include_company_name_address : 1); ?>
+                <input type="checkbox" name="include_company_name_address" value="1" <?php if($value == 1){ echo 'checked="checked"'; } ?> >
+                <span class="checkmark"></span>
+              </label>
+              <br>
+              <label class="custom-checkbox">
+               <?php echo _l('include_routing_account_numbers') ?>
+               <?php $value = (isset($check) ? $check->include_routing_account_numbers : 1); ?>
+               <input type="checkbox" name="include_routing_account_numbers" value="1" <?php if($value == 1){ echo 'checked="checked"'; } ?>>
+               <span class="checkmark"></span>
+             </label>
+             <br>
+             <label class="custom-checkbox">
+               <?php echo _l('include_check_number') ?>
+               <?php $value = (isset($check) ? $check->include_check_number : 1); ?>
+               <input type="checkbox" name="include_check_number" value="1" <?php if($value == 1){ echo 'checked="checked"'; } ?>>
+               <span class="checkmark"></span>
+             </label>
+             <br>
+             <label class="custom-checkbox">
+               <?php echo _l('include_bank_name') ?>
+               <?php $value = (isset($check) ? $check->include_bank_name : 1); ?>
+               <input type="checkbox" name="include_bank_name" value="1" <?php if($value == 1){ echo 'checked="checked"'; } ?>>
+               <span class="checkmark"></span>
+             </label>
+           </div>
+         </div>
      </div>
 
-     <div class="col-md-8">
+     <div class="col-md-12">
       <div class="row">
         <div class="col-md-6">
           <?php $value = (isset($check) ? $check->bank_account : $bank_account_check); ?>
@@ -123,13 +128,22 @@
           }
 
           if(is_numeric($bill_ids)){
-            $bill_items = $this->accounting_model->get_bill_mapping_details($bill_ids, 'debit');
+            $bill_debit = $this->accounting_model->get_bill_mapping_details($bill_ids, 'debit');
+            $bill_item = $this->accounting_model->get_bill_mapping_details($bill_ids, 'item');
+            $bill_items = array_merge($bill_debit, $bill_item);
+
           }else{
-            $bill_items = $this->accounting_model->get_bill_mapping_details($bill, 'debit');
+            $bill_debit = $this->accounting_model->get_bill_mapping_details($bill, 'debit');
+            $bill_item = $this->accounting_model->get_bill_mapping_details($bill, 'item');
+            $bill_items = array_merge($bill_debit, $bill_item);
           }
 
             foreach($bill_items as $key => $item){
-                $bill_items[$key]['name'] = isset($account_name[$item['account']]) ? $account_name[$item['account']] : '';
+                if($item['type'] == 'item'){
+                    $bill_items[$key]['name'] = acc_get_item_name_by_id($item['item_id']);
+                }else{
+                    $bill_items[$key]['name'] = isset($account_name[$item['account']]) ? $account_name[$item['account']] : '';
+                }
             }
             $value = (isset($check) ? explode(',', $check->bill_items) : '');
         echo render_select('bill_items[]',$bill_items,array('id','name','amount'),'<small class="req text-danger">* </small> Bill Item', $value, array('multiple' => true, 'data-actions-box' => true, 'required' => true), array(), '', '', false);
@@ -167,7 +181,7 @@
 
       <?php } ?>
   </div>
-  <div class="col-md-2"></div>
+ 
 
 </div>
 <?php } ?>
@@ -396,6 +410,14 @@
 <div id="bill_check_data"></div>
 <div class="additional"></div>
 </div>
+
+<div class="btn-bottom-toolbar text-right">
+    <a href="#" class="btn btn-primary pull-right mtop5" onclick="save_and_print_multiple_check(); return false;" data-toggle="tooltip" data-title="<?php echo _l('print_multiple_saved_checks_note'); ?>"><?php echo _l('print_multiple_saved_checks'); ?></a>
+        <a href="#" class="btn btn-primary mright5 pull-right mtop5" onclick="save_and_print_later(); return false;" data-toggle="tooltip" data-title="<?php echo _l('save_print_later_note'); ?>"><?php echo _l('save_print_later'); ?></a>
+        <a href="#" class="btn btn-primary mright5 pull-right mtop5" onclick="save_and_print_a_check(); return false;" data-toggle="tooltip" data-title="<?php echo _l('save_print_now_note'); ?>"><?php echo _l('save_print_now'); ?></a>
+        <a href="#" class="btn btn-primary pull-right mright5 mtop5" onclick="save_a_check(); return false;"><?php echo _l('save'); ?></a>
+</div>
+
 <div class="modal fade" id="add_signature" tabindex="-1" role="dialog">
  <div class="modal-dialog">
   <div class="modal-content">

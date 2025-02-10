@@ -8,56 +8,67 @@
                <div class="panel-body _buttons">
                   
                   <?php echo form_hidden('type',$type); ?>
-
-                  <div class="horizontal-scrollable-tabs preview-tabs-top">
-                   <div class="scroller arrow-left"><i class="fa fa-angle-left"></i></div>
-                   <div class="scroller arrow-right"><i class="fa fa-angle-right"></i></div>
-                   <div class="horizontal-tabs">
-
-                     <ul class="nav nav-tabs nav-tabs-horizontal no-margin" role="tablist">
-                           <?php if(has_permission('accounting_bills','','create')){ ?>
-                               <li class="<?php echo ($type == 'new_bill' ? 'active' : '') ?>">
-                                 <a href="<?php echo admin_url('accounting/bill'); ?>"><?php echo _l('add_new_bill'); ?></a>
-                               </li>
-                           <?php } ?>
-                         <li class="<?php echo ($type == 'unpaid' ? 'active' : '') ?>">
-                           <a href="<?php echo admin_url('accounting/bills?type=unpaid'); ?>"><?php echo _l('unpaid_bills'); ?></a>
-                         </li>
-                         <li class="<?php echo ($type == 'approved' ? 'active' : '') ?>">
-                              <a href="<?php echo admin_url('accounting/bills?type=approved'); ?>"><?php echo _l('approved_bills'); ?></a>
-                         </li>
-                         <li class="">
-                           <a href="<?php echo admin_url('accounting/checks'); ?>"><?php echo _l('write_checks'); ?></a>
-                         </li>
-                         <li class="<?php echo ($type == 'paid' ? 'active' : '') ?>">
-                           <a href="<?php echo admin_url('accounting/bills?type=paid'); ?>"><?php echo _l('paid_bills'); ?></a>
-                         </li>
-                         <li class="<?php echo ($type == 'check_register' ? 'active' : '') ?>">
-                              <a href="<?php echo admin_url('accounting/check_register'); ?>"><?php echo _l('check_register'); ?></a>
-                         </li>
-                        
-                         <li class="<?php echo ($type == 'configure_checks' ? 'active' : '') ?>">
-                              <a href="<?php echo admin_url('accounting/configure_checks'); ?>"><?php echo _l('configure_checks'); ?></a>
-                         </li>
-                     </ul>
-                   </div>
-                 </div>
+                  <div class="row">
+                     <div class="col-md-12">
+                        <h4 class="no-margin font-bold"><i class="fa fa-inbox" aria-hidden="true"></i> <?php echo _l('acc_bill_management'); ?></h4>
+                     </div>
+                  </div>
                </div>
             </div>
             <div class="row">
                <div class="col-md-12" id="small-table">
                   <div class="panel_s">
                      <div class="panel-body">
+                        <div class="row">    
+                           <div class="col-md-6">
+                              <?php if(has_permission('accounting_bills','','create')){ ?>
+                                 <a href="<?php echo admin_url('accounting/bill'); ?>"class="btn btn-info pull-left mright10 ">
+                                    <?php echo _l('add_new_bill'); ?>
+                                 </a>
+                              <?php } ?>
+                              <?php if(has_permission('accounting_bills','','view')){ ?>
+                                 <a href="<?php echo admin_url('accounting/pay_bills'); ?>"class="btn btn-info pull-left mright10 ">
+                                    <?php echo _l('acc_paybill_management'); ?>
+                                 </a>
+                              <?php } ?>
+                              
+                           </div>
+                        </div>
+                     </br>
+
                         <div class="row">
-                          <div class="col-md-4">
+                          <div class="col-md-3">
+                           <?php echo render_select('vendor_id[]', $list_vendor, array('userid', array('company')), 'acc_vendor', '', ['multiple' => true, 'data-width' => '100%', 'class' => 'selectpicker'], array(), '', '', false); ?>
+
+                          </div>
+                          <div class="col-md-3">
                             <?php echo render_date_input('from_date','from_date'); ?>
                           </div>
-                          <div class="col-md-4">
+                          <div class="col-md-3">
                             <?php echo render_date_input('to_date','to_date'); ?>
-                          </div>
-                          <div class="col-md-4">
-                             <a href="#" class="btn btn-default btn-with-tooltip toggle-small-view hidden-xs pull-right" onclick="toggle_small_view('.table-bills','#bill_div'); return false;" data-toggle="tooltip" title="<?php echo _l('invoices_toggle_table_tooltip'); ?>"><i class="fa fa-angle-double-left"></i> <?php echo _l('expand_table'); ?></a>
-                          </div>
+                       </div>
+                          <?php 
+                          $types = [];
+                        $types[] = [
+                           'id' => 'paid',
+                           'label' => _l('acc_paid'),
+                        ];
+                          $types[] = [
+                           'id' => 'unpaid',
+                           'label' => _l('acc_not_yet_approve'),
+                        ];
+                        $types[] = [
+                           'id' => 'approved',
+                           'label' => _l('acc_approved'),
+                        ];
+
+                        ?>
+                          <div class="col-md-2">
+                           <?php echo render_select('type', $types, array('id', array('label')), 'status', $type_defaults, [ 'data-width' => '100%', 'class' => 'selectpicker'], array(), '', '', false); ?>
+                        </div>
+
+                          <a href="#" class="btn btn-default btn-with-tooltip toggle-small-view hidden-xs mtop25 pull-right" onclick="toggle_small_view('.table-bills','#bill_div'); return false;" data-toggle="tooltip" title="" data-original-title="<?php echo _l('invoices_toggle_table_tooltip'); ?>"><i class="fa fa-angle-double-left"></i></a>
+
                         </div>
                         <div class="clearfix"></div>
                         <!-- if expenseid found in url -->

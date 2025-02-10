@@ -1,6 +1,7 @@
 <script>
 var Input_debit_total = $('#bill-debit-account').children().length;
 var Input_credit_total = $('#bill-credit-account').children().length;
+var Input_item_total = $('#bill-item-list').children().length;
 var customer_currency = '';
 var max_amount = '';
 var limit = '';
@@ -16,7 +17,7 @@ var timer = null;
 
   var input = document.getElementById('debit_amount[0]');
 
-  input.addEventListener('change', debit_account_change);
+  input.addEventListener('change', caculate_total);
 
 
   $("body").on('click', '.new_debit_template', function() {
@@ -48,7 +49,7 @@ var timer = null;
       keyup: function() {
         formatCurrency($(this));
         clearTimeout(timer); 
-        timer = setTimeout(debit_account_change, 1000);
+        timer = setTimeout(caculate_total, 1000);
       },
       blur: function() {
         formatCurrency($(this), "blur");
@@ -56,7 +57,7 @@ var timer = null;
     });
 
     var input = document.getElementById('debit_amount['+Input_debit_total+']');
-    input.addEventListener('change', debit_account_change);
+    input.addEventListener('change', caculate_total);
       
   $('input[id="debit_amount[0]"]')
 
@@ -100,11 +101,12 @@ var timer = null;
   });
   $("body").on('click', '.remove_debit_template', function() {
       $(this).parents('.template_children').remove();
-      debit_account_change();
+      caculate_total();
   });
 
   $("body").on('click', '.remove_template', function() {
       $(this).parents('.template_children').remove();
+      caculate_total();
   });
 
   if($('#dropzoneDragArea').length > 0){
@@ -132,12 +134,64 @@ var timer = null;
       keyup: function() {
         formatCurrency($(this));
         clearTimeout(timer); 
-        timer = setTimeout(debit_account_change, 1000);
+        timer = setTimeout(caculate_total, 1000);
       },
       blur: function() {
         formatCurrency($(this), "blur");
       }
     });
+
+
+  $("body").on('click', '.new_item_template', function() {
+    var new_template = $('#bill-item-list').find('.template_children').eq(0).clone().appendTo('#bill-item-list');
+
+    for(var i = 0; i <= new_template.find('#template-item').length ; i++){
+        if(i > 0){
+          new_template.find('#template-item').eq(i).remove();
+        }
+        new_template.find('#template-item').eq(1).remove();
+    }
+    
+    new_template.attr('data-index', Input_item_total);
+
+    new_template.find('.template').attr('value', Input_item_total);
+    new_template.find('button[role="combobox"]').remove();
+    new_template.find('select').selectpicker('refresh');
+    // start expense
+    
+    new_template.find('label[for="item_id[0]"]').attr('for', 'item_id[' + Input_item_total + ']');
+    new_template.find('select[name="item_id[0]"]').attr('name', 'item_id[' + Input_item_total + ']');
+    new_template.find('select[id="item_id[0]"]').attr('id', 'item_id[' + Input_item_total + ']').selectpicker('refresh');
+
+    new_template.find('input[id="item_description[0]"]').attr('name', 'item_description['+Input_item_total+']').val('');
+    new_template.find('input[id="item_description[0]"]').attr('id', 'item_description['+Input_item_total+']').val('');
+
+    new_template.find('input[id="item_qty[0]"]').attr('name', 'item_qty['+Input_item_total+']').val('');
+    new_template.find('input[id="item_qty[0]"]').attr('id', 'item_qty['+Input_item_total+']').val('');
+    
+    new_template.find('input[id="item_cost[0]"]').attr('name', 'item_cost['+Input_item_total+']').val('');
+    new_template.find('input[id="item_cost[0]"]').attr('id', 'item_cost['+Input_item_total+']').val('');
+
+    new_template.find('input[id="item_amount[0]"]').attr('name', 'item_amount['+Input_item_total+']').val('');
+    new_template.find('input[id="item_amount[0]"]').attr('id', 'item_amount['+Input_item_total+']').val('');
+
+    new_template.find('button[name="add_template"] i').removeClass('fa-plus').addClass('fa-minus');
+    new_template.find('button[name="add_template"]').removeClass('new_item_template').addClass('remove_template').removeClass('btn-success').addClass('btn-danger');
+
+    $("input[data-type='currency']").on({
+      keyup: function() {
+        formatCurrency($(this));
+      },
+      blur: function() {
+        formatCurrency($(this), "blur");
+      }
+    });
+    Input_item_total++;
+  });
+  $("body").on('click', '.remove_item_template', function() {
+      $(this).parents('.template_children').remove();
+      caculate_total();
+  });
 })(jQuery);
 
 function subtract_tax_amount_from_expense_total(){
@@ -168,21 +222,26 @@ function subtract_tax_amount_from_expense_total(){
  function expenseSubmitHandler(form){
   var debit_amount = 0;
   $('input[name^="debit_amount"]').each(function() {
+    if($(this).val() != ''){
       debit_amount += parseFloat(unFormatNumber($(this).val()));
+    }
   });
 
   var credit_amount = 0;
   $('input[name^="credit_amount"]').each(function() {
+    if($(this).val() != ''){
       credit_amount += parseFloat(unFormatNumber($(this).val()));
+    }
   });
-    
+  var bill_amount = $('input[name="amount"]').val();  
   if(debit_amount != credit_amount){
     alert('<?php echo _l('please_balance_debits_and_credits'); ?>');
     return false;
-  }else if(max_amount !== '' && debit_amount > max_amount){
-    alert('<?php echo _l('maximum_amount'); ?>: '+format_money(max_amount));
+  }else if(bill_amount <= 0){
+    alert('<?php echo _l('the_total_bill_must_be_greater_than_0'); ?>');
     return false;
   }
+
 
   $('select[name="tax2"]').prop('disabled',false);
   $('input[name="billable"]').prop('disabled',false);
@@ -235,6 +294,97 @@ function debit_account_change (){
   });
   $('input[name="amount"]').val(debit_amount);  
   $('#bill-total').html(format_money(debit_amount));
+}
+
+
+function bill_item_change(invoker){
+  item_id = $(invoker).val();
+  bill_item_index = $(invoker).parents('tr').data('index');
+  if(item_id != ''){
+    requestGetJSON(admin_url + 'accounting/get_item_data/'+item_id).done(function(response) { 
+      $('input[name="item_description['+bill_item_index+']"]').val('');
+      $('input[name="item_qty['+bill_item_index+']"]').val(1);
+      $('input[name="item_cost['+bill_item_index+']"]').val(response.purchase_price);  
+      $('input[name="item_amount['+bill_item_index+']"]').val(response.purchase_price);  
+      caculate_total();  
+    });
+  }else{
+    $('input[name="item_description['+bill_item_index+']"]').val('');
+    $('input[name="item_qty['+bill_item_index+']"]').val('');
+    $('input[name="item_cost['+bill_item_index+']"]').val('');  
+    $('input[name="item_amount['+bill_item_index+']"]').val('');  
+    caculate_total();  
+  }
+}
+
+function bill_item_qty_change(invoker){
+  item_qty = $(invoker).val();
+
+  bill_item_index = $(invoker).parents('tr').data('index');
+  item_cost = $('input[name="item_cost['+bill_item_index+']"]').val();  
+
+  if(item_cost != '' && item_qty != ''){
+    item_cost = unFormatNumber(item_cost);
+    item_amount = item_cost * item_qty;
+    $('input[name="item_amount['+bill_item_index+']"]').val(formatNumber(item_amount.toString()));  
+  }else{
+    $('input[name="item_amount['+bill_item_index+']"]').val(0);  
+  }
+  caculate_total();
+}
+
+function bill_item_cost_change(invoker){
+  item_cost = $(invoker).val();
+
+  bill_item_index = $(invoker).parents('tr').data('index');
+  item_qty = $('input[name="item_qty['+bill_item_index+']"]').val();  
+
+  if(item_cost != '' && item_qty != ''){
+    item_cost = unFormatNumber(item_cost);
+    item_amount = item_cost * item_qty;
+    $('input[name="item_amount['+bill_item_index+']"]').val(formatNumber(item_amount.toString()));  
+  }else{
+    $('input[name="item_amount['+bill_item_index+']"]').val(0);  
+  }
+
+  caculate_total();
+}
+
+
+function caculate_total(){
+  var debit_amount = 0;
+  $('input[name^="debit_amount"]').each(function() {
+    if($(this).val() != ''){
+      debit_amount += parseFloat(unFormatNumber($(this).val()));
+    }
+  });
+
+  var credit_amount = 0;
+  $('input[name^="credit_amount"]').each(function() {
+    if($(this).val() != ''){
+      credit_amount += parseFloat(unFormatNumber($(this).val()));
+    }
+  });
+
+  var item_amount = 0;
+  $('input[name^="item_amount"]').each(function() {
+    if($(this).val() != ''){
+      item_amount += parseFloat(unFormatNumber($(this).val()));
+    }
+  });
+
+  bill_total = 0;
+
+  if(item_amount > 0 ){
+    bill_total = item_amount;
+  }
+
+  if(debit_amount > 0){
+    bill_total = bill_total + debit_amount;
+  }
+ 
+  $('input[name="amount"]').val(bill_total);  
+  $('#bill-total').html(format_money(bill_total));
 }
 
 function formatNumber(n) {

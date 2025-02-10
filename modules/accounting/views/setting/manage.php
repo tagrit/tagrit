@@ -22,6 +22,8 @@
                     echo '<i class="fa fa-database" aria-hidden="true"></i>';
                 }elseif ($gr == 'income_statement_modification') {
                     echo '<i class="fa fa-th-list" aria-hidden="true"></i>';
+                }elseif ($gr == 'currency_rates') {
+                    echo '<i class="fa fa-usd" aria-hidden="true"></i>';
                 } ?>
                 <?php echo _l($gr); ?>
               </a>

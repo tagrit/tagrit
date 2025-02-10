@@ -69,8 +69,42 @@
 
           <tr class="treegrid-<?php echo new_html_entity_decode($row_index); ?> parent-node expanded">
             <td class="parent text-bold"><?php echo _l('cleared_balance'); ?></td>
-            <td class="total_amount text-bold"><?php echo app_format_money($data_report['cleared_transactions'], $currency->name); ?></td>
+            <td class="total_amount text-bold"><?php echo app_format_money( ($data_report['cleared_transactions'] + ($data_report['beginning_balance']) ), $currency->name); ?></td>
           </tr>
+
+           <?php $row_index += 1; ?>
+          <?php $row_index += 1; ?>
+          <tr class="treegrid-<?php echo new_html_entity_decode($row_index); ?> parent-node expanded">
+            <td class="parent"></td>
+            <td class="total_amount"></td>
+          </tr>
+
+            <?php $row_index += 1; ?>
+          <tr class="treegrid-<?php echo new_html_entity_decode($row_index); ?> parent-node expanded">
+            <td class="parent">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo _l('uncleared_transactions'); ?></td>
+            <td class="total_amount"></td>
+          </tr>
+          <?php $row_index += 1; ?>
+          <tr class="treegrid-<?php echo new_html_entity_decode($row_index); ?> parent-node expanded">
+            <td class="parent">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo _l('checks_and_payments'); ?> - <?php echo $data_report['unclear_checks_and_payments_items']; ?></td>
+            <td class="total_amount"><?php echo app_format_money($data_report['unclear_checks_and_payments'], $currency->name); ?></td>
+          </tr>
+          <?php $row_index += 1; ?>
+          <tr class="treegrid-<?php echo new_html_entity_decode($row_index); ?> parent-node expanded">
+            <td class="parent">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo _l('deposits_and_credits'); ?> - <?php echo $data_report['unclear_deposits_and_credits_items']; ?></td>
+            <td class="total_amount"><?php echo app_format_money($data_report['unclear_deposits_and_credits'], $currency->name); ?></td>
+          </tr>
+          <?php $row_index += 1; ?>
+          <tr class="treegrid-<?php echo new_html_entity_decode($row_index); ?> parent-node expanded">
+            <td class="parent text-bold">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo _l('total_for', _l('uncleared_transactions')); ?></td>
+            <td class="total_amount text-bold"><?php echo app_format_money($data_report['uncleared_transactions'], $currency->name); ?></td>
+          </tr>
+          <?php $row_index += 1; ?>
+          <tr class="treegrid-<?php echo new_html_entity_decode($row_index); ?> parent-node expanded">
+            <td class="parent"></td>
+            <td class="total_amount"></td>
+          </tr>
+         
           <?php $row_index += 1; ?>
           <?php $row_index += 1; ?>
           <tr class="treegrid-<?php echo new_html_entity_decode($row_index); ?> parent-node expanded">
@@ -79,7 +113,7 @@
           </tr>
           <tr class="treegrid-<?php echo new_html_entity_decode($row_index); ?> parent-node expanded">
             <td class="parent text-bold"><?php echo _l('register_balance_as_of', _d($data_report['statement_ending_date'])); ?></td>
-            <td class="total_amount text-bold"><?php echo app_format_money($data_report['ending_balance'], $currency->name); ?></td>
+            <td class="total_amount text-bold"><?php echo app_format_money(($data_report['uncleared_transactions'] + ($data_report['beginning_balance']) + ($data_report['cleared_transactions']) ), $currency->name); ?></td>
           </tr>
           <?php $row_index += 1; ?>
           <?php if($data_report['new_checks_and_payments'] != 0 || $data_report['new_deposits_and_credits'] != 0){ ?>
@@ -115,7 +149,7 @@
           <?php $row_index += 1; ?>
           <tr class="treegrid-<?php echo new_html_entity_decode($row_index); ?> parent-node expanded">
             <td class="parent text-bold"><?php echo _l('ending_balance'); ?></td>
-            <td class="total_amount text-bold"><?php echo app_format_money($data_report['ending_balance'] + $data_report['new_transactions'], $currency->name); ?></td>
+            <td class="total_amount text-bold"><?php echo app_format_money($data_report['ending_balance'], $currency->name); ?></td>
           </tr>
         <?php } ?>
         </tbody>

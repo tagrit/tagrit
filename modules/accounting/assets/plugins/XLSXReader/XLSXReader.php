@@ -22,6 +22,7 @@ Key Changes include:
 	Change of class names and method names
 	Removed rowsEx functionality including extraction of hyperlinks
 */
+#[\AllowDynamicProperties]
 
 class XLSXReader_fin {
 	protected $sheets = array();

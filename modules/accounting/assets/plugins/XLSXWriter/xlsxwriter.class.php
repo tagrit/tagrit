@@ -2,6 +2,7 @@
 /*
  * @license MIT License
  * */
+#[\AllowDynamicProperties]
 
 class XLSXWriter
 {

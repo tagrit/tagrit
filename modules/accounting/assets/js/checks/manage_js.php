@@ -1,6 +1,10 @@
 <script>
 var fnCheckParams = {
         "bank_account_check": '[name="bank_account_check"]',
+        "vendor_ft": '[name="vendor_ft"]',
+        "from_date_ft": '[name="from_date_ft"]',
+        "to_date_ft": '[name="to_date_ft"]',
+        "status" : '[name="status"]'
 };
 var fnChecksToPrintParams = {
         "bank_account_form_check": '[name="bank_account_form_check"]',
@@ -12,8 +16,7 @@ var hidden_columns = [];
 
 (function($) {
   "use strict";
-    $('li.menu-item-accounting_expenses').addClass('active');
-    $('li.sub-menu-item-accounting_bills').addClass('active');
+  $('li.sub-menu-item-accounting_checks').addClass('active');
 
     $('a').click(function() {
         $(window).unbind('beforeunload');
@@ -34,6 +37,22 @@ var hidden_columns = [];
         }
 
         init_bills_table();
+        init_checks_table();
+    });
+
+     $('select[name="vendor_ft"]').on('change', function(){
+        init_checks_table();
+     });
+
+     $('select[name="status"]').on('change', function(){
+        init_checks_table();
+     });
+
+
+     $('input[name="from_date_ft"]').on('change', function() {
+        init_checks_table();
+    });
+    $('input[name="to_date_ft"]').on('change', function() {
         init_checks_table();
     });
 
