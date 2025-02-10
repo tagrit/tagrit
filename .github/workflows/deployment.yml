@@ -1,4 +1,4 @@
-name: 🚀 Deploy to CPANEL & DigitalOcean
+name: 🚀 Deploy to CPANEL  & DigitalOcean
 
 on:
   push:
