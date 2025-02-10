@@ -2,7 +2,6 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
-
 // Get the current hostname
 $host = $_SERVER['HTTP_HOST'] ?? '';
 
