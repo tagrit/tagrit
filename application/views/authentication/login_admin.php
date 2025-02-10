@@ -121,7 +121,7 @@ echo '<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/selec
     $('#country_id').select2({});
 
     document.addEventListener('DOMContentLoaded', function () {
-        const urls = ['goshipping', 'localhost'];
+        const urls = ['goshipping'];
         const currentUrl = window.location.href;
         if (urls.some(url => currentUrl.includes(url))) {
             document.getElementById('country-select').style.display = 'block';
