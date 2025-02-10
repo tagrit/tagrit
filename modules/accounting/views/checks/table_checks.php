@@ -32,16 +32,42 @@ if ($this->ci->input->post('bank_account_check')) {
     array_push($where, 'AND (' . db_prefix() . 'acc_checks.bank_account = "'.$bank_account_check.'" or ' . db_prefix() . 'acc_checks.bank_account is null)');
 }
 
+$vendor_ft = '';
+if ($this->ci->input->post('vendor_ft')) {
+    $vendor_ft = $this->ci->input->post('vendor_ft');
+    array_push($where, 'AND ' . db_prefix() . 'acc_checks.rel_id = '.$vendor_ft.' AND '.db_prefix().'acc_checks.rel_type = "vendor"');
+}
+
+if ($this->ci->input->post('from_date_ft')
+    && $this->ci->input->post('from_date_ft') != '') {
+    array_push($where, 'AND date >= "'.to_sql_date($this->ci->input->post('from_date_ft')).'"');
+}
+
+if ($this->ci->input->post('to_date_ft')
+    && $this->ci->input->post('to_date_ft') != '') {
+    array_push($where, 'AND date <= "'.to_sql_date($this->ci->input->post('to_date_ft')).'"');
+}
+
+if ($this->ci->input->post('status')) {
+    $status_ft = $this->ci->input->post('status');
+    if($status_ft != '' && $status_ft != 4){
+        array_push($where, 'AND ' . db_prefix() . 'acc_checks.issue = '.$status_ft);
+    
+    }else if($status_ft == 4){
+
+        array_push($where, 'AND (' . db_prefix() . 'acc_checks.issue = 0 OR '.db_prefix().'acc_checks.issue IS NULL)');
+    }
+}
+
+
 $type = '';
 
 $sIndexColumn = 'id';
 $sTable       = db_prefix() . 'acc_checks';
 
-array_push($where, 'AND (issue is null or issue = 0)');
 
-// Fix for big queries. Some hosting have max_join_limit
 
-$result = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, ['id'
+$result = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, [db_prefix() . 'acc_checks.id as id'
    
 ]);
 $output  = $result['output'];
@@ -83,6 +109,9 @@ foreach ($rResult as $aRow) {
     }elseif($aRow['issue'] == 2){
         $label_class = 'danger';
         $status_name = _l('printing_error');
+    }elseif($aRow['issue'] == 3){
+        $status_name = _l('void');
+        $label_class = 'danger';
     }else{
         $status_name = _l('not_issued_yet');
         $label_class = 'default';

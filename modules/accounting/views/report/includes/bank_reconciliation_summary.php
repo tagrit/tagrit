@@ -18,7 +18,8 @@
                 echo render_select('reconcile_account',$bank_accounts,array('id','name', 'account_type_name'),'acc_account', $default_account, array(), array(), '', '', false); ?>
               </div>
               <div class="col-md-4">
-                <?php echo render_select('reconcile',$reconcile,array('id','ending_date'),'statement_ending_date', $default_reconcile, array(), array(), '', '', false); ?>
+                
+                <?php echo render_date_input('reconcile_date', 'statement_ending_date', date('Y-m-d'), ['data-date-end-date' => date('Y-m-d')]); ?>
               </div>
               <div class="col-md-3">
                 <?php echo form_hidden('type', 'bank_reconciliation_summary'); ?>

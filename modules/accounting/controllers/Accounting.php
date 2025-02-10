@@ -156,7 +156,7 @@ class Accounting extends AdminController
                 'invoiceid',
                 db_prefix() . 'payment_modes.name as name',
                 db_prefix() .'invoicepaymentrecords.date as date',
-                '(select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'invoicepaymentrecords.id and ' . db_prefix() . 'acc_account_history.rel_type = "payment") as count_account_historys'
+                db_prefix() . 'acc_account_history.rel_type as count_account_historys'
             ];
             $where = [];
             if ($this->input->post('invoice')) {
@@ -175,17 +175,17 @@ class Accounting extends AdminController
                 foreach ($status as $key => $value) {
                     if($value == 'converted'){
                         if($where_status != ''){
-                            $where_status .= ' or ((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'invoicepaymentrecords.id and ' . db_prefix() . 'acc_account_history.rel_type = "payment") > 0)';
+                            $where_status .= ' or ('.db_prefix() . 'acc_account_history.rel_id is not null)';
                         }else{
-                            $where_status .= '((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'invoicepaymentrecords.id and ' . db_prefix() . 'acc_account_history.rel_type = "payment") > 0)';
+                            $where_status .= '('.db_prefix() . 'acc_account_history.rel_id is not null)';
                         }
                     }
 
                     if($value == 'has_not_been_converted'){
                         if($where_status != ''){
-                            $where_status .= ' or ((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'invoicepaymentrecords.id and ' . db_prefix() . 'acc_account_history.rel_type = "payment") = 0)';
+                            $where_status .= ' or ('.db_prefix() . 'acc_account_history.rel_id is null)';
                         }else{
-                            $where_status .= '((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'invoicepaymentrecords.id and ' . db_prefix() . 'acc_account_history.rel_type = "payment") = 0)';
+                            $where_status .= '('.db_prefix() . 'acc_account_history.rel_id is null)';
                         }
                     }
                 }
@@ -222,11 +222,11 @@ class Accounting extends AdminController
             $sIndexColumn = 'id';
             $sTable       = db_prefix() . 'invoicepaymentrecords';
             $join         = ['LEFT JOIN ' . db_prefix() . 'payment_modes ON ' . db_prefix() . 'payment_modes.id = ' . db_prefix() . 'invoicepaymentrecords.paymentmode',
-                            'LEFT JOIN ' . db_prefix() . 'acc_account_history ON ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'invoicepaymentrecords.id and ' . db_prefix() . 'acc_account_history.rel_id = "payment"',
+                            'LEFT JOIN ' . db_prefix() . 'acc_account_history ON ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'invoicepaymentrecords.id and ' . db_prefix() . 'acc_account_history.rel_type = "payment"',
                             'LEFT JOIN ' . db_prefix() . 'invoices ON ' . db_prefix() . 'invoices.id = ' . db_prefix() . 'invoicepaymentrecords.invoiceid',
                             'LEFT JOIN ' . db_prefix() . 'currencies ON ' . db_prefix() . 'currencies.id = ' . db_prefix() . 'invoices.currency'
                         ];
-            $result       = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, ['paymentmode', db_prefix(). 'currencies.name as currency_name']);
+            $result       = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, ['paymentmode', db_prefix(). 'currencies.name as currency_name'], 'GROUP BY '.db_prefix() . 'invoicepaymentrecords.id');
 
             $output  = $result['output'];
             $rResult = $result['rResult'];
@@ -238,7 +238,7 @@ class Accounting extends AdminController
                 $categoryOutput = _d($aRow['date']);
 
                 $categoryOutput .= '<div class="row-options">';
-                if ($aRow['count_account_historys'] == 0) {
+                if ($aRow['count_account_historys'] == '') {
                     if (has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['date'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))) {
                         $categoryOutput .= '<a href="#" onclick="convert(this); return false;" class="text-success" id="payment-id-'.$aRow['id'].'" data-id="'.$aRow['id'].'" data-type="payment" data-amount="'.$aRow['amount'].'">' . _l('acc_convert') . '</a>';
                     }
@@ -264,7 +264,7 @@ class Accounting extends AdminController
                 $status_name = _l('has_not_been_converted');
                 $label_class = 'default';
 
-                if ($aRow['count_account_historys'] > 0) {
+                if ($aRow['count_account_historys'] != '') {
                     $label_class = 'success';
                     $status_name = _l('acc_converted');
                 } 
@@ -272,7 +272,7 @@ class Accounting extends AdminController
                 $row[] = '<span class="label label-' . $label_class . ' s-status payment-status-' . $aRow['id'] . '">' . $status_name . '</span>';
 
                 $options = '';
-                if($aRow['count_account_historys'] == 0 && has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['date'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))){
+                if($aRow['count_account_historys'] == '' && has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['date'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))){
                     $options = icon_btn('#', 'fa fa-share', 'btn-success', [
                         'title' => _l('acc_convert'),
                         'data-id' =>$aRow['id'],
@@ -313,7 +313,7 @@ class Accounting extends AdminController
                 'clientid',
                 db_prefix(). 'currencies.name as currency_name',
                 db_prefix() .'invoices.date as date',
-                '(select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'invoices.id and ' . db_prefix() . 'acc_account_history.rel_type = "invoice") as count_account_historys',
+                db_prefix() . 'acc_account_history.rel_id as count_account_historys',
                 db_prefix() . 'invoices.status'
             ];
             $where = [];
@@ -328,17 +328,17 @@ class Accounting extends AdminController
                 foreach ($status as $key => $value) {
                     if($value == 'converted'){
                         if($where_status != ''){
-                            $where_status .= ' or ((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'invoices.id and ' . db_prefix() . 'acc_account_history.rel_type = "invoice") > 0)';
+                            $where_status .= ' or ('.db_prefix() . 'acc_account_history.rel_id is not null)';
                         }else{
-                            $where_status .= '((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'invoices.id and ' . db_prefix() . 'acc_account_history.rel_type = "invoice") > 0)';
+                            $where_status .= '('.db_prefix() . 'acc_account_history.rel_id is not null)';
                         }
                     }
 
                     if($value == 'has_not_been_converted'){
                         if($where_status != ''){
-                            $where_status .= ' or ((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'invoices.id and ' . db_prefix() . 'acc_account_history.rel_type = "invoice") = 0)';
+                            $where_status .= ' or ('.db_prefix() . 'acc_account_history.rel_id is null)';
                         }else{
-                            $where_status .= '((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'invoices.id and ' . db_prefix() . 'acc_account_history.rel_type = "invoice") = 0)';
+                            $where_status .= '('.db_prefix() . 'acc_account_history.rel_id is null)';
                         }
                     }
                 }
@@ -374,10 +374,12 @@ class Accounting extends AdminController
             $aColumns     = $select;
             $sIndexColumn = 'id';
             $sTable       = db_prefix() . 'invoices';
-            $join         = ['LEFT JOIN ' . db_prefix() . 'acc_account_history ON ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'invoices.id and ' . db_prefix() . 'acc_account_history.rel_id = "invoice"',
+            $join         = [
                 'LEFT JOIN ' . db_prefix() . 'currencies ON ' . db_prefix() . 'currencies.id = ' . db_prefix() . 'invoices.currency',
+                'LEFT JOIN ' . db_prefix() . 'acc_account_history ON ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'invoices.id AND ' . db_prefix() . 'acc_account_history.rel_type = "invoice"',
+
                         ];
-            $result       = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, []);
+            $result       = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, [], 'GROUP BY '.db_prefix() . 'invoices.id');
 
             $output  = $result['output'];
             $rResult = $result['rResult'];
@@ -389,7 +391,7 @@ class Accounting extends AdminController
                 $categoryOutput = '<a href="' . admin_url('invoices/list_invoices/' . $aRow['id']) . '" target="_blank">' . format_invoice_number($aRow['id']) . '</a>';
 
                 $categoryOutput .= '<div class="row-options">';
-                if ($aRow['count_account_historys'] == 0) {
+                if ($aRow['count_account_historys'] == '') {
                     if (has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['date'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))) {
                         $categoryOutput .= '<a href="#" onclick="convert(this); return false;" class="text-success" id="invoice-id-'.$aRow['id'].'" data-id="'.$aRow['id'].'" data-type="invoice" data-amount="'.$aRow['total'].'">' . _l('acc_convert') . '</a>';
                     }
@@ -415,7 +417,7 @@ class Accounting extends AdminController
                 $status_name = _l('has_not_been_converted');
                 $label_class = 'default';
 
-                if ($aRow['count_account_historys'] > 0) {
+                if ($aRow['count_account_historys'] != '') {
                     $label_class = 'success';
                     $status_name = _l('acc_converted');
                 } 
@@ -425,7 +427,7 @@ class Accounting extends AdminController
                 $row[] = format_invoice_status($aRow[db_prefix() . 'invoices.status']);
 
                 $options = '';
-                if($aRow['count_account_historys'] == 0 && has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['date'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))){
+                if($aRow['count_account_historys'] == '' && has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['date'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))){
                     $options = icon_btn('#', 'fa fa-share', 'btn-success', [
                         'title' => _l('acc_convert'),
                         'data-id' =>$aRow['id'],
@@ -459,6 +461,9 @@ class Accounting extends AdminController
             if(get_option('acc_close_the_books') == 1){
                 $acc_closing_date = get_option('acc_closing_date');
             }
+
+            $arr_ids = $this->accounting_model->get_mapping_transaction_ids('expense');
+
             $select = [
                 '1', // bulk actions
                 db_prefix() . 'expenses.id as id',
@@ -468,7 +473,7 @@ class Accounting extends AdminController
                 'expense_name',
                 db_prefix() . 'payment_modes.name as payment_mode_name',
                 db_prefix() . 'expenses.date as date',
-                '(select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'expenses.id and ' . db_prefix() . 'acc_account_history.rel_type = "expense") as count_account_historys'
+                db_prefix() . 'acc_account_history.rel_id as count_account_historys',
             ];
             $where = [];
 
@@ -488,17 +493,17 @@ class Accounting extends AdminController
                 foreach ($status as $key => $value) {
                     if($value == 'converted'){
                         if($where_status != ''){
-                            $where_status .= ' or ((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'expenses.id and ' . db_prefix() . 'acc_account_history.rel_type = "expense") > 0)';
+                            $where_status .= ' or ('.db_prefix() . 'acc_account_history.rel_id is not null)';
                         }else{
-                            $where_status .= '((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'expenses.id and ' . db_prefix() . 'acc_account_history.rel_type = "expense") > 0)';
+                            $where_status .= '('.db_prefix() . 'acc_account_history.rel_id is not null)';
                         }
                     }
 
                     if($value == 'has_not_been_converted'){
                         if($where_status != ''){
-                            $where_status .= ' or ((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'expenses.id and ' . db_prefix() . 'acc_account_history.rel_type = "expense") = 0)';
+                            $where_status .= ' or ('.db_prefix() . 'acc_account_history.rel_id is null)';
                         }else{
-                            $where_status .= '((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'expenses.id and ' . db_prefix() . 'acc_account_history.rel_type = "expense") = 0)';
+                            $where_status .= '('.db_prefix() . 'acc_account_history.rel_id is null)';
                         }
                     }
                 }
@@ -544,9 +549,11 @@ class Accounting extends AdminController
             $join         = [
                 'JOIN ' . db_prefix() . 'expenses_categories ON ' . db_prefix() . 'expenses_categories.id = ' . db_prefix() . 'expenses.category',
                 'LEFT JOIN ' . db_prefix() . 'payment_modes ON ' . db_prefix() . 'payment_modes.id = ' . db_prefix() . 'expenses.paymentmode',
-                'LEFT JOIN ' . db_prefix() . 'currencies ON ' . db_prefix() . 'currencies.id = ' . db_prefix() . 'expenses.currency'
+                'LEFT JOIN ' . db_prefix() . 'currencies ON ' . db_prefix() . 'currencies.id = ' . db_prefix() . 'expenses.currency',
+                'LEFT JOIN ' . db_prefix() . 'acc_account_history ON ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'expenses.id AND ' . db_prefix() . 'acc_account_history.rel_type = "expense"',
             ];
-            $result       = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, [db_prefix(). 'currencies.name as currency_name', $select_purchase]);
+
+            $result       = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, [db_prefix(). 'currencies.name as currency_name', $select_purchase], 'GROUP BY '.db_prefix() . 'expenses.id');
 
             $output  = $result['output'];
             $rResult = $result['rResult'];
@@ -557,7 +564,7 @@ class Accounting extends AdminController
                 $categoryOutput = $aRow['expense_name'];
                 if ($aRow['count_purchases'] == 0) {
                     $categoryOutput .= '<div class="row-options">';
-                    if ($aRow['count_account_historys'] == 0) {
+                    if ($aRow['count_account_historys'] == '') {
                         if (has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['date'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))) {
                             $categoryOutput .= '<a href="#" onclick="convert(this); return false;" class="text-success" id="expense-id-'.$aRow['id'].'" data-id="'.$aRow['id'].'" data-type="expense" data-amount="'.$aRow['amount'].'">' . _l('acc_convert') . '</a>';
                         }
@@ -584,7 +591,7 @@ class Accounting extends AdminController
                 $status_name = _l('has_not_been_converted');
                 $label_class = 'default';
 
-                if ($aRow['count_account_historys'] > 0) {
+                if ($aRow['count_account_historys'] != '') {
                     $label_class = 'success';
                     $status_name = _l('acc_converted');
                 }
@@ -599,7 +606,7 @@ class Accounting extends AdminController
                 }
                 
                 $options = '';
-                if($aRow['count_account_historys'] == 0 && has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['date'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date)) && $aRow['count_purchases'] == 0){
+                if($aRow['count_account_historys'] == '' && has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['date'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date)) && $aRow['count_purchases'] == 0){
                     $options = icon_btn('#', 'fa fa-share', 'btn-success', [
                         'title' => _l('acc_convert'),
                         'data-id' =>$aRow['id'],
@@ -641,7 +648,7 @@ class Accounting extends AdminController
                 'deposits',
                 'payee',
                 'description',
-                '(select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'acc_transaction_bankings.id and ' . db_prefix() . 'acc_account_history.rel_type = "banking") as count_account_historys'
+                db_prefix() . 'acc_account_history.rel_id as count_account_historys',
             
             ];
             $where = [];
@@ -675,17 +682,17 @@ class Accounting extends AdminController
                 foreach ($status as $key => $value) {
                     if($value == 'converted'){
                         if($where_status != ''){
-                            $where_status .= ' or ((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'acc_transaction_bankings.id and ' . db_prefix() . 'acc_account_history.rel_type = "banking") > 0)';
+                            $where_status .= ' or ('.db_prefix() . 'acc_account_history.rel_id is not null)';
                         }else{
-                            $where_status .= '((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'acc_transaction_bankings.id and ' . db_prefix() . 'acc_account_history.rel_type = "banking") > 0)';
+                            $where_status .= '('.db_prefix() . 'acc_account_history.rel_id is not null)';
                         }
                     }
 
                     if($value == 'has_not_been_converted'){
                         if($where_status != ''){
-                            $where_status .= ' or ((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'acc_transaction_bankings.id and ' . db_prefix() . 'acc_account_history.rel_type = "banking") = 0)';
+                            $where_status .= ' or ('.db_prefix() . 'acc_account_history.rel_id is null)';
                         }else{
-                            $where_status .= '((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'acc_transaction_bankings.id and ' . db_prefix() . 'acc_account_history.rel_type = "banking") = 0)';
+                            $where_status .= '('.db_prefix() . 'acc_account_history.rel_id is null)';
                         }
                     }
                 }
@@ -710,7 +717,7 @@ class Accounting extends AdminController
                 $categoryOutput = _d($aRow['date']);
                 $amount = $aRow['withdrawals'] > 0 ? $aRow['withdrawals'] : $aRow['deposits'];
                 $categoryOutput .= '<div class="row-options">';
-                if ($aRow['count_account_historys'] == 0) {
+                if ($aRow['count_account_historys'] == '') {
                     if (has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['date'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))) {
                         $categoryOutput .= '<a href="#" onclick="convert(this); return false;" class="text-success" id="banking-id-'.$aRow['id'].'" data-id="'.$aRow['id'].'" data-type="banking" data-amount="'.$amount.'">' . _l('acc_convert') . '</a>';
                     }
@@ -735,7 +742,7 @@ class Accounting extends AdminController
                 $status_name = _l('has_not_been_converted');
                 $label_class = 'default';
 
-                if ($aRow['count_account_historys'] > 0) {
+                if ($aRow['count_account_historys'] != '') {
                     $label_class = 'success';
                     $status_name = _l('acc_converted');
                 } 
@@ -743,7 +750,7 @@ class Accounting extends AdminController
                 $row[] = '<span class="label label-' . $label_class . ' s-status payment-status-' . $aRow['id'] . '">' . $status_name . '</span>';
 
                 $options = '';
-                if($aRow['count_account_historys'] == 0 && has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['date'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))){
+                if($aRow['count_account_historys'] == '' && has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['date'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))){
                     $options = icon_btn('#', 'fa fa-share', 'btn-success', [
                         'title' => _l('acc_convert'),
                         'data-id' =>$aRow['id'],
@@ -804,6 +811,7 @@ class Accounting extends AdminController
         
         $data          = [];
         $data['group'] = $this->input->get('group');
+        $data['unit_tab'] = $this->input->get('tab');
 
         $data['tab'][] = 'general';
         $data['tab'][] = 'banking_rules';
@@ -811,6 +819,7 @@ class Accounting extends AdminController
         $data['tab'][] = 'account_type_details';
         $data['tab'][] = 'plaid_environment';
         $data['tab'][] = 'income_statement_modification';
+        $data['tab'][] = 'currency_rates';
         
         $data['tab_2'] = $this->input->get('tab');
         if ($data['group'] == '') {
@@ -845,6 +854,14 @@ class Accounting extends AdminController
         }elseif ($data['group'] == 'income_statement_modification') {
             $data['acc_enable_income_statement_modifications'] = get_option('acc_enable_income_statement_modifications');
             
+        }elseif($data['group'] == 'currency_rates'){
+            $this->load->model('currencies_model');
+            $this->accounting_model->check_auto_create_currency_rate();
+
+            $data['currencies'] = $this->currencies_model->get();
+            if($data['unit_tab'] == ''){
+                $data['unit_tab'] = 'general';
+            }
         }
 
         
@@ -1178,7 +1195,7 @@ class Accounting extends AdminController
             
             $_html = '';
             if($invoice->currency_name != $currency->name){
-                $amount = $this->accounting_model->currency_converter($invoice->currency_name, $currency->name, 1);
+                $amount = acc_get_currency_rate($invoice->currency_name, $currency->name);
 
                 $edit_template = "";
                 $edit_template .= render_input('edit_exchange_rate','exchange_rate', $amount, 'number');
@@ -1190,28 +1207,23 @@ class Accounting extends AdminController
                 $_html .= form_hidden('exchange_rate', $amount);
                 $_html .= form_hidden('payment_amount', $payment->amount);
                 $_html .= '<div class="row"><div class="col-md-12"><label class="currency_converter_label th font-medium mbot15 pull-left">1 '.$invoice->currency_name.' = '.$amount.' '.$currency->name.'</label><a href="#" onclick="return false;" data-placement="bottom" data-toggle="popover" data-content="'. htmlspecialchars($edit_template) .'" data-html="true" data-original-title class="pull-left mleft5 font-medium-xs"><i class="fa fa-pencil-square"></i></a><br></div></div>';
-                $html .=   '<tr class="project-overview">
+                $old_currency_rate = $this->accounting_model->get_old_currency_rate($id, $type);
+                if($old_currency_rate != 0){
+                    $html .=   '<tr class="project-overview">
                                 <td class="bold">'. _l('amount_after_convert').'</td>
+                                <td>'.app_format_money(round($old_currency_rate*$payment->amount, 4), $currency->name).'</td>
+                                <td>1 '.$invoice->currency_name.' = '.$old_currency_rate.' '.$currency->name.'</td>
+                             </tr>';
+                }
+                $html .=   '<tr class="project-overview">
+                                <td class="bold">'. _l('amount_after_convert').'('._l('new').')</td>
                                 <td class="amount_after_convert">'.app_format_money(round($amount*$payment->amount, 4), $currency->name).'</td>
                                 <td>'.$_html.'</td>
                              </tr>';
             }
             $html .=   '</tbody>
                   </table>';
-            if($invoice->currency_name != $currency->name){
-                $amount = $this->accounting_model->currency_converter($invoice->currency_name, $currency->name, 1);
-
-                $edit_template = "";
-                $edit_template .= render_input('edit_exchange_rate','exchange_rate', $amount, 'number');
-                $edit_template .= "<div class='text-center mtop10'>";
-                $edit_template .= "<button type='button' class='btn btn-success edit_conversion_rate_action'>"._l('copy_task_confirm')."</button>";
-                $edit_template .= "</div>";
-                $html .= form_hidden('currency_from', $invoice->currency_name);
-                $html .= form_hidden('currency_to', $currency->name);
-                $html .= form_hidden('exchange_rate', $amount);
-                $html .= '<h4>'._l('currency_converter').'</h4><div class="row"><div class="col-md-12"><label class="currency_converter_label th font-medium mbot15 pull-left">1 '.$invoice->currency_name.' = '.$amount.' '.$currency->name.'</label><a href="#" onclick="return false;" data-placement="bottom" data-toggle="popover" data-content="'. htmlspecialchars($edit_template) .'" data-html="true" data-original-title class="pull-left mleft5 font-medium-xs"><i class="fa fa-pencil-square"></i></a><br></div></div>';
-                
-            }
+            
             $debit = get_option('acc_payment_deposit_to');
             $credit = get_option('acc_payment_payment_account');
         }elseif ($type == 'expense') {
@@ -1258,7 +1270,7 @@ class Accounting extends AdminController
             $currency = $this->currencies_model->get_base_currency();
             $amount = 1;
             if($expense->currency_data->name != $currency->name){
-                $amount = $this->accounting_model->currency_converter($expense->currency_data->name, $currency->name, 1);
+                $amount = acc_get_currency_rate($expense->currency_data->name, $currency->name);
                 $_html = '';
                 $edit_template = "";
                 $edit_template .= render_input('edit_exchange_rate','exchange_rate', $amount, 'number');
@@ -1272,8 +1284,17 @@ class Accounting extends AdminController
 
                 $_html .= '<div class="row"><div class="col-md-12"><label class="currency_converter_label th font-medium mbot15 pull-left">1 '.$expense->currency_data->name.' = '.$amount.' '.$currency->name.'</label><a href="#" onclick="return false;" data-placement="bottom" data-toggle="popover" data-content="'. htmlspecialchars($edit_template) .'" data-html="true" data-original-title class="pull-left mleft5 font-medium-xs"><i class="fa fa-pencil-square"></i></a><br></div></div>';
 
-                $html .=   '<tr class="project-overview">
+                $old_currency_rate = $this->accounting_model->get_old_currency_rate($id, $type);
+                if($old_currency_rate != 0){
+                    $html .=   '<tr class="project-overview">
                                 <td class="bold">'. _l('amount_after_convert').'</td>
+                                <td>'.app_format_money(round($old_currency_rate*$expense->amount, 4), $currency->name).'</td>
+                                <td>1 '.$expense->currency_data->name.' = '.$old_currency_rate.' '.$currency->name.'</td>
+                             </tr>';
+                }
+
+                $html .=   '<tr class="project-overview">
+                                <td class="bold">'. _l('amount_after_convert').'('._l('new').')</td>
                                 <td class="amount_after_convert">'.app_format_money(round($amount*$expense->amount, 4), $currency->name).'</td>
                                 <td>'.$_html.'</td>
                              </tr>';
@@ -1351,7 +1372,8 @@ class Accounting extends AdminController
             $currency = $this->currencies_model->get_base_currency();
             $amount = 1;
             if($invoice->currency_name != $currency->name){
-                $amount = $this->accounting_model->currency_converter($invoice->currency_name, $currency->name, 1);
+                $amount = acc_get_currency_rate($invoice->currency_name, $currency->name);
+
                 $_html = '';
                 $edit_template = "";
                 $edit_template .= render_input('edit_exchange_rate','exchange_rate', $amount, 'number');
@@ -1365,8 +1387,17 @@ class Accounting extends AdminController
 
                 $_html .= '<div class="row"><div class="col-md-12"><label class="currency_converter_label th font-medium mbot15 pull-left">1 '.$invoice->currency_name.' = '.$amount.' '.$currency->name.'</label><a href="#" onclick="return false;" data-placement="bottom" data-toggle="popover" data-content="'. htmlspecialchars($edit_template) .'" data-html="true" data-original-title class="pull-left mleft5 font-medium-xs"><i class="fa fa-pencil-square"></i></a><br></div></div>';
 
-                $html .=   '<tr class="project-overview">
+
+                $old_currency_rate = $this->accounting_model->get_old_currency_rate($id, $type);
+                if($old_currency_rate != 0){
+                    $html .=   '<tr class="project-overview">
                                 <td class="bold">'. _l('amount_after_convert').'</td>
+                                <td>'.app_format_money(round($old_currency_rate*$invoice->total, 4), $currency->name).'</td>
+                                <td>1 '.$invoice->currency_name.' = '.$old_currency_rate.' '.$currency->name.'</td>
+                             </tr>';
+                }
+                $html .=   '<tr class="project-overview">
+                                <td class="bold">'. _l('amount_after_convert').'('._l('new').')</td>
                                 <td class="amount_after_convert">'.app_format_money(round($amount*$invoice->total, 4), $currency->name).'</td>
                                 <td>'.$_html.'</td>
                              </tr>';
@@ -1404,6 +1435,7 @@ class Accounting extends AdminController
                         if($val['credit'] > 0){
                             $credit =  $val['account'];
                         }
+
                     }
 
                     if($account_history){
@@ -1652,7 +1684,7 @@ class Accounting extends AdminController
                          </tr>
                          <tr class="project-overview">
                             <td class="bold">'. _l('vendor').'</td>
-                            <td>'. '<a href="' . admin_url('purchase/vendor/' . $purchase_order->vendor) . '" >' .  get_vendor_company_name($purchase_order->vendor) . '</a>' .'</td>
+                            <td>'. '<a href="' . admin_url('purchase/vendor/' . $purchase_order->vendor) . '" >' .  acc_get_vendor_company_name($purchase_order->vendor) . '</a>' .'</td>
                             <td></td>
                          </tr>
                          <tr class="project-overview">
@@ -1677,23 +1709,40 @@ class Accounting extends AdminController
             $amount = 1;
 
             if($base_currency->name != $currency->name){
-                $amount = $this->accounting_model->currency_converter($base_currency->name, $currency->name, 1);
+                $html .= '<tr class="project-overview">
+                            <td class="bold">'. _l('currency_rate').'</td>
+                            <td>'. round(round($purchase_order->total / $purchase_order->currency_rate, 2)/$purchase_order->total, 6) .'</td>
+                         </tr>
+                         <tr class="project-overview">
+                        <td class="bold">'. _l('amount_after_convert').'</td>
+                        <td>'. app_format_money(round($purchase_order->total / $purchase_order->currency_rate, 2), $currency->name) .'</td>
+                     </tr>';
 
-                $edit_template = "";
-                $edit_template .= render_input('edit_exchange_rate','exchange_rate', $amount, 'number');
-                $edit_template .= "<div class='text-center mtop10'>";
-                $edit_template .= "<button type='button' class='btn btn-success edit_conversion_rate_action'>"._l('copy_task_confirm')."</button>";
-                $edit_template .= "</div>";
-                $_html .= form_hidden('currency_from', $base_currency->name);
-                $_html .= form_hidden('currency_to', $currency->name);
-                $_html .= form_hidden('exchange_rate', $amount);
-                $_html .= form_hidden('convert_amount', $purchase_order->total);
-                $_html .= '<div class="row"><div class="col-md-12"><label class="currency_converter_label th font-medium mbot15 pull-left">1 '.$base_currency->name.' = '.$amount.' '.$currency->name.'</label><a href="#" onclick="return false;" data-placement="bottom" data-toggle="popover" data-content="'. htmlspecialchars($edit_template) .'" data-html="true" data-original-title class="pull-left mleft5 font-medium-xs"><i class="fa fa-pencil-square"></i></a><br></div></div>';
-                $html .=   '<tr class="project-overview">
-                                <td class="bold">'. _l('amount_after_convert').'</td>
-                                <td class="amount_after_convert">'.app_format_money(round($amount*$purchase_order->total, 4), $currency->name).'</td>
-                                <td>'.$_html.'</td>
-                             </tr>';
+                // $amount = acc_get_currency_rate($base_currency->name, $currency->name);
+
+                // $edit_template = "";
+                // $edit_template .= render_input('edit_exchange_rate','exchange_rate', $amount, 'number');
+                // $edit_template .= "<div class='text-center mtop10'>";
+                // $edit_template .= "<button type='button' class='btn btn-success edit_conversion_rate_action'>"._l('copy_task_confirm')."</button>";
+                // $edit_template .= "</div>";
+                // $_html .= form_hidden('currency_from', $base_currency->name);
+                // $_html .= form_hidden('currency_to', $currency->name);
+                // $_html .= form_hidden('exchange_rate', $amount);
+                // $_html .= form_hidden('convert_amount', $purchase_order->total);
+                // $_html .= '<div class="row"><div class="col-md-12"><label class="currency_converter_label th font-medium mbot15 pull-left">1 '.$base_currency->name.' = '.$amount.' '.$currency->name.'</label><a href="#" onclick="return false;" data-placement="bottom" data-toggle="popover" data-content="'. htmlspecialchars($edit_template) .'" data-html="true" data-original-title class="pull-left mleft5 font-medium-xs"><i class="fa fa-pencil-square"></i></a><br></div></div>';
+                // $old_currency_rate = $this->accounting_model->get_old_currency_rate($id, $type);
+                // if($old_currency_rate != 0){
+                //     $html .=   '<tr class="project-overview">
+                //                 <td class="bold">'. _l('amount_after_convert').'</td>
+                //                 <td>'.app_format_money(round($old_currency_rate*$purchase_order->total, 4), $currency->name).'</td>
+                //                 <td>1 '.$base_currency->name.' = '.$old_currency_rate.' '.$currency->name.'</td>
+                //              </tr>';
+                // }
+                // $html .=   '<tr class="project-overview">
+                //                 <td class="bold">'. _l('amount_after_convert').'('._l('new').')</td>
+                //                 <td class="amount_after_convert">'.app_format_money(round($amount*$purchase_order->total, 4), $currency->name).'</td>
+                //                 <td>'.$_html.'</td>
+                //              </tr>';
             }
 
             $html .=  '</tbody>
@@ -1722,6 +1771,12 @@ class Accounting extends AdminController
                     if($item_id == 0){
                         continue;
                     }
+
+                    $item_total = $value['into_money'];
+                    if($base_currency->name != $currency->name){
+                        $item_total = round($value['into_money'] / $purchase_order->currency_rate, 2);
+                    }
+
                     $list_item[] = $item_id;
 
                     $this->db->where('rel_id', $id);
@@ -1743,9 +1798,9 @@ class Accounting extends AdminController
                     if($account_history){
                         $html .= '
                         <div class="div_content">
-                        <h5>'.$item_description.'</h5>
+                        <h5>'.$item_description.'('.app_format_money($item_total, $currency->name).')</h5>
                         <div class="row">
-                                '.form_hidden('item_amount['.$item_id.']', $value['into_money']).'
+                                '.form_hidden('item_amount['.$item_id.']', $item_total).'
                               <div class="col-md-6"> '.
                                 render_select('payment_account['.$item_id.']',$accounts,array('id','name', 'account_type_name'),'payment_account',$credit,array(),array(),'','',false) .'
                               </div>
@@ -1760,9 +1815,9 @@ class Accounting extends AdminController
                         if($item_automatic){
                             $html .= '
                         <div class="div_content">
-                            <h5>'.$item_description.'</h5>
+                        <h5>'.$item_description.'('.app_format_money($item_total, $currency->name).')</h5>
                             <div class="row">
-                            '.form_hidden('item_amount['.$item_id.']', $value['into_money']).'
+                            '.form_hidden('item_amount['.$item_id.']', $item_total).'
                               <div class="col-md-6"> '.
                                 render_select('payment_account['.$item_id.']',$accounts,array('id','name', 'account_type_name'),'payment_account',$payment_account,array(),array(),'','',false) .'
                               </div>
@@ -1775,9 +1830,9 @@ class Accounting extends AdminController
 
                             $html .= '
                         <div class="div_content">
-                            <h5>'.$item_description.'</h5>
+                        <h5>'.$item_description.'('.app_format_money($item_total, $currency->name).')</h5>
                             <div class="row">
-                            '.form_hidden('item_amount['.$item_id.']', $value['into_money']).'
+                            '.form_hidden('item_amount['.$item_id.']', $item_total).'
                               <div class="col-md-6"> '.
                                 render_select('payment_account['.$item_id.']',$accounts,array('id','name', 'account_type_name'),'payment_account',$payment_account,array(),array(),'','',false) .'
                               </div>
@@ -2052,6 +2107,11 @@ class Accounting extends AdminController
             $this->load->model('warehouse/warehouse_model');
             $goods_receipt = $this->warehouse_model->get_goods_receipt($id);
             $goods_receipt_detail = $this->warehouse_model->get_goods_receipt_detail($id);
+            $base_currency = $this->currencies_model->get_base_currency();
+            $currency_name = '';
+            if($goods_receipt->pr_order_id != 0 && $goods_receipt->currency != 0 && $goods_receipt->currency != $base_currency->id && (float)($goods_receipt->currency_exchange_rate) != 0){
+                $currency = $this->currencies_model->get($goods_receipt->currency);
+            }
 
             $status = '';
 
@@ -2092,8 +2152,18 @@ class Accounting extends AdminController
                          <tr class="project-overview">
                             <td class="bold">'. _l('total_money').'</td>
                             <td>'. app_format_money($goods_receipt->total_money, $currency->name) .'</td>
-                         </tr>
-                        </tbody>
+                         </tr>';
+                         if($goods_receipt->pr_order_id != 0 && $goods_receipt->currency != 0 && $goods_receipt->currency != $base_currency->id && (float)($goods_receipt->currency_exchange_rate) != 0){
+                            $html .= '<tr class="project-overview">
+                                        <td class="bold">'. _l('currency_rate').'</td>
+                                        <td>'. round(round($goods_receipt->total_money / $goods_receipt->currency_exchange_rate, 2)/$goods_receipt->total_money, 6) .'</td>
+                                     </tr>
+                                     <tr class="project-overview">
+                                    <td class="bold">'. _l('amount_after_convert').'</td>
+                                    <td>'. app_format_money($goods_receipt->total_money / $goods_receipt->currency_exchange_rate, $base_currency->name) .'</td>
+                                 </tr>';
+                        }
+            $html .= '</tbody>
                   </table>';
 
             $check_return_order = false;
@@ -2156,7 +2226,11 @@ class Accounting extends AdminController
                     if($check_return_order && isset($item_price_arr[$item_id])){
                         $item_total = $value['quantities'] * $item_price_arr[$item_id];
                     }else{
-                        $item_total = $value['sub_total'];
+                        if($goods_receipt->pr_order_id != 0 && $goods_receipt->currency != 0 && $goods_receipt->currency != $base_currency->id && (float)($goods_receipt->currency_exchange_rate) != 0){
+                            $item_total = round((float)$value['sub_total'] / $goods_receipt->currency_exchange_rate, 2);
+                        }else{
+                            $item_total = $value['sub_total'];
+                        }
                     }
 
                     $list_item[] = $item_id;
@@ -2166,7 +2240,8 @@ class Accounting extends AdminController
                     $this->db->where('item', $item_id);
                     $this->db->where('(tax = 0 or tax is null)');
                     $account_history = $this->db->get(db_prefix(). 'acc_account_history')->result_array();
-                    
+                    $debit = 0;
+                    $credit = 0;
                     foreach ($account_history as $key => $val) {
                         if($val['debit'] > 0){
                             $debit = $val['account'];
@@ -2180,7 +2255,7 @@ class Accounting extends AdminController
                     if($account_history){
                         $html .= '
                         <div class="div_content">
-                        <h5>'.$item_description.'('.app_format_money($item_total, $currency->name).')</h5>
+                        <h5>'.$item_description.'('.app_format_money($item_total, $base_currency->name).')</h5>
                         <div class="row">
                                 '.form_hidden('item_amount['.$item_id.']', $item_total).'
                               <div class="col-md-6"> '.
@@ -2197,7 +2272,7 @@ class Accounting extends AdminController
                         if($item_automatic){
                             $html .= '
                         <div class="div_content">
-                            <h5>'.$item_description.'('.app_format_money($item_total, $currency->name).')</h5>
+                            <h5>'.$item_description.'('.app_format_money($item_total, $base_currency->name).')</h5>
                             <div class="row">
                             '.form_hidden('item_amount['.$item_id.']', $item_total).'
                               <div class="col-md-6"> '.
@@ -2212,7 +2287,7 @@ class Accounting extends AdminController
 
                             $html .= '
                         <div class="div_content">
-                            <h5>'.$item_description.'('.app_format_money($item_total, $currency->name).')</h5>
+                            <h5>'.$item_description.'('.app_format_money($item_total, $base_currency->name).')</h5>
                             <div class="row">
                             '.form_hidden('item_amount['.$item_id.']', $item_total).'
                               <div class="col-md-6"> '.
@@ -2507,7 +2582,7 @@ class Accounting extends AdminController
             
 
             if($base_currency->name != $currency->name){
-                $amount = $this->accounting_model->currency_converter($base_currency->name, $currency->name, 1);
+                $amount = acc_get_currency_rate($base_currency->name, $currency->name);
 
                 $edit_template = "";
                 $edit_template .= render_input('edit_exchange_rate','exchange_rate', $amount, 'number');
@@ -2519,8 +2594,16 @@ class Accounting extends AdminController
                 $_html .= form_hidden('exchange_rate', $amount);
                 $_html .= form_hidden('convert_amount', $payment->amount);
                 $_html .= '<div class="row"><div class="col-md-12"><label class="currency_converter_label th font-medium mbot15 pull-left">1 '.$base_currency->name.' = '.$amount.' '.$currency->name.'</label><a href="#" onclick="return false;" data-placement="bottom" data-toggle="popover" data-content="'. htmlspecialchars($edit_template) .'" data-html="true" data-original-title class="pull-left mleft5 font-medium-xs"><i class="fa fa-pencil-square"></i></a><br></div></div>';
-                $html .=   '<tr class="project-overview">
+                $old_currency_rate = $this->accounting_model->get_old_currency_rate($id, $type);
+                if($old_currency_rate != 0){
+                    $html .=   '<tr class="project-overview">
                                 <td class="bold">'. _l('amount_after_convert').'</td>
+                                <td>'.app_format_money(round($old_currency_rate*$payment->amount, 4), $currency->name).'</td>
+                                <td>1 '.$base_currency->name.' = '.$old_currency_rate.' '.$currency->name.'</td>
+                             </tr>';
+                }
+                $html .=   '<tr class="project-overview">
+                                <td class="bold">'. _l('amount_after_convert').'('._l('new').')</td>
                                 <td class="amount_after_convert">'.app_format_money(round($amount*$payment->amount, 4), $currency->name).'</td>
                                 <td>'.$_html.'</td>
                              </tr>';
@@ -3032,9 +3115,10 @@ class Accounting extends AdminController
             $currency = $this->currencies_model->get_base_currency();
             $select = [
                 '1', // bulk actions
-                'id',
-                'number',
                 'journal_date',
+                'number',
+                'reference',
+                'id',
             ];
 
             $where = [];
@@ -3065,7 +3149,7 @@ class Accounting extends AdminController
             $sIndexColumn = 'id';
             $sTable       = db_prefix() . 'acc_journal_entries';
             $join         = [];
-            $result       = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, ['amount', 'description']);
+            $result       = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, ['amount', 'description', 'recurring']);
 
             $output  = $result['output'];
             $rResult = $result['rResult'];
@@ -3074,7 +3158,9 @@ class Accounting extends AdminController
                 $row   = [];
                 $row[] = '<div class="checkbox"><input type="checkbox" value="' . $aRow['id'] . '"><label></label></div>';
                 $categoryOutput = _d($aRow['journal_date']);
-
+                if ($aRow['recurring'] > 0) {
+                    $categoryOutput .= '<br /><span class="label label-primary inline-block mtop4"> ' . _l('invoice_recurring_indicator') . '</span>';
+                }
                 $categoryOutput .= '<div class="row-options">';
 
                 if (has_permission('accounting_journal_entry', '', 'edit')) {
@@ -3092,10 +3178,11 @@ class Accounting extends AdminController
                 $categoryOutput .= '</div>';
                 $row[] = $categoryOutput;
                 if(strlen($aRow['number'].' - '.new_html_entity_decode($aRow['description'])) > 150){
-                    $row[] = '<div data-toggle="tooltip" data-title="'. $aRow['number'].' - '.new_html_entity_decode(strip_tags($aRow['description'])).'">'.substr($aRow['number'].' - '.new_html_entity_decode($aRow['description']), 0, 150).'...</div>';
+                    $row[] = '<div data-toggle="tooltip" data-title="'. $aRow['number'].' - '.new_html_entity_decode(strip_tags($aRow['description'])).'">'.$aRow['number'].' - '.substr(new_html_entity_decode($aRow['description']), 0, 150).'...</div>';
                 }else{
                     $row[] = $aRow['number'].' - '.new_html_entity_decode($aRow['description']);
                 }
+                $row[] = $aRow['reference'];
                 $row[] = app_format_money($aRow['amount'], $currency->name);
 
                 $output['aaData'][] = $row;
@@ -3147,7 +3234,7 @@ class Accounting extends AdminController
         $data['currency'] = $this->currencies_model->get_base_currency();
         $data['next_number'] = $this->accounting_model->get_journal_entry_next_number();
         $data['title'] = _l('journal_entry');
-        $data['account_to_select'] = $this->accounting_model->get_data_account_to_select();
+        $data['accounts'] = $this->accounting_model->get_accounts();
 
         $this->load->view('journal_entry/journal_entry', $data);
     }
@@ -3182,7 +3269,7 @@ class Accounting extends AdminController
         if (!has_permission('accounting_report', '', 'view')) {
             access_denied('accounting_report');
         }
-        $data['title'] = _l('accounting_report');
+        $data['title'] = _l('reports');
 
         $this->load->view('report/manage', $data);
     }
@@ -3873,7 +3960,7 @@ class Accounting extends AdminController
         $account->name = $account->name != '' ? $account->name : _l($account->key_name);
 
         if($account->balance == 0){
-            if($account->account_type_id > 10 || $account->account_type_id == 1 || $account->account_type_id == 6){
+            if(($account->account_type_id > 10 && $account->account_type_id != 16) || $account->account_type_id == 1 || $account->account_type_id == 6){
                 $account->balance = 1;
             }else{
                 $this->db->where('account', $id);
@@ -5803,9 +5890,10 @@ class Accounting extends AdminController
 
         $writer = new XLSXWriter();
         $writer->writeSheetRow('Sheet1', []);
-        $writer->writeSheetRow('Sheet1', [1 => _l('journal_date').': '. _d($journal_entry->journal_date), ]);
         $writer->writeSheetRow('Sheet1', [1 => _l('number').': '. $journal_entry->number, ]);
-        $writer->writeSheetRow('Sheet1', [1 => _l('description').': '. $journal_entry->Description, ]);
+        $writer->writeSheetRow('Sheet1', [1 => _l('journal_date').': '. _d($journal_entry->journal_date), ]);
+        $writer->writeSheetRow('Sheet1', [1 => _l('reference').': '. $journal_entry->reference, ]);
+        $writer->writeSheetRow('Sheet1', [1 => _l('description').': '. new_html_entity_decode(strip_tags($journal_entry->description ?? '')), ]);
         $writer->writeSheetRow('Sheet1', []);
 
         
@@ -5933,8 +6021,8 @@ class Accounting extends AdminController
                 'staff_id_created',
                 'date_created',
                 'payslip_status',
-                '(select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'hrp_payslips.id and ' . db_prefix() . 'acc_account_history.rel_type = "payslip") as count_account_historys',
-                'id',
+                db_prefix() . 'acc_account_history.rel_id as count_account_historys',
+                db_prefix() . 'hrp_payslips.id as id',
             ];
 
             $where = [];
@@ -5945,17 +6033,17 @@ class Accounting extends AdminController
                 foreach ($status as $key => $value) {
                     if($value == 'converted'){
                         if($where_status != ''){
-                            $where_status .= ' or ((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'hrp_payslips.id and ' . db_prefix() . 'acc_account_history.rel_type = "payslip") > 0)';
+                            $where_status .= ' or ('.db_prefix() . 'acc_account_history.rel_id is not null)';
                         }else{
-                            $where_status .= '((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'hrp_payslips.id and ' . db_prefix() . 'acc_account_history.rel_type = "payslip") > 0)';
+                            $where_status .= '('.db_prefix() . 'acc_account_history.rel_id is not null)';
                         }
                     }
 
                     if($value == 'has_not_been_converted'){
                         if($where_status != ''){
-                            $where_status .= ' or ((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'hrp_payslips.id and ' . db_prefix() . 'acc_account_history.rel_type = "payslip") = 0)';
+                            $where_status .= ' or ('.db_prefix() . 'acc_account_history.rel_id is null)';
                         }else{
-                            $where_status .= '((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'hrp_payslips.id and ' . db_prefix() . 'acc_account_history.rel_type = "payslip") = 0)';
+                            $where_status .= '('.db_prefix() . 'acc_account_history.rel_id is null)';
                         }
                     }
                 }
@@ -5992,8 +6080,9 @@ class Accounting extends AdminController
             $sIndexColumn = 'id';
             $sTable       = db_prefix() . 'hrp_payslips';
             $join         = [
+                'LEFT JOIN ' . db_prefix() . 'acc_account_history ON ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'hrp_payslips.id AND ' . db_prefix() . 'acc_account_history.rel_type = "payslip"',
             ];
-            $result       = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, []);
+            $result       = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, [], 'GROUP BY '.db_prefix() . 'hrp_payslips.id');
 
             $output  = $result['output'];
             $rResult = $result['rResult'];
@@ -6012,7 +6101,7 @@ class Accounting extends AdminController
                     $code .= '<div class="row-options">';
                 }
 
-                if ($aRow['count_account_historys'] == 0) {
+                if ($aRow['count_account_historys'] == '') {
                     if (has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['payslip_month'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))) {
                         $code .= '<a href="#" onclick="convert(this); return false;" class="text-success" id="payslip-id-'.$aRow['id'].'" data-id="'.$aRow['id'].'" data-type="payslip">' . _l('acc_convert') . '</a>';
                     }
@@ -6050,14 +6139,14 @@ class Accounting extends AdminController
                 $status_name = _l('has_not_been_converted');
                 $label_class = 'default';
 
-                if ($aRow['count_account_historys'] > 0) {
+                if ($aRow['count_account_historys'] != '') {
                     $label_class = 'success';
                     $status_name = _l('acc_converted');
                 } 
                 $row[] = '<span class="label label-' . $label_class . ' s-status payslip-status-' . $aRow['id'] . '">' . $status_name . '</span>';
                 
                 $options = '';
-                if($aRow['count_account_historys'] == 0 && has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['payslip_month'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))){
+                if($aRow['count_account_historys'] == '' && has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['payslip_month'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))){
                     $options = icon_btn('#', 'fa fa-share', 'btn-success', [
                         'title' => _l('acc_convert'),
                         'data-id' =>$aRow['id'],
@@ -6097,9 +6186,9 @@ class Accounting extends AdminController
                 'subtotal',
                 'total_tax',
                 'total',
-                'number',
+                db_prefix().'pur_orders.number as number',
                 'expense_convert',
-                '(select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'pur_orders.id and ' . db_prefix() . 'acc_account_history.rel_type = "purchase_order") as count_account_historys',
+                db_prefix() . 'acc_account_history.rel_id as count_account_historys',
                 db_prefix() .'pur_orders.id as id',
             ];
 
@@ -6112,17 +6201,17 @@ class Accounting extends AdminController
                 foreach ($status as $key => $value) {
                     if($value == 'converted'){
                         if($where_status != ''){
-                            $where_status .= ' or ((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'pur_orders.id and ' . db_prefix() . 'acc_account_history.rel_type = "purchase_order") > 0)';
+                            $where_status .= ' or ('.db_prefix() . 'acc_account_history.rel_id is not null)';
                         }else{
-                            $where_status .= '((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'pur_orders.id and ' . db_prefix() . 'acc_account_history.rel_type = "purchase_order") > 0)';
+                            $where_status .= '('.db_prefix() . 'acc_account_history.rel_id is not null)';
                         }
                     }
 
                     if($value == 'has_not_been_converted'){
                         if($where_status != ''){
-                            $where_status .= ' or ((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'pur_orders.id and ' . db_prefix() . 'acc_account_history.rel_type = "purchase_order") = 0)';
+                            $where_status .= ' or ('.db_prefix() . 'acc_account_history.rel_id is null)';
                         }else{
-                            $where_status .= '((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'pur_orders.id and ' . db_prefix() . 'acc_account_history.rel_type = "purchase_order") = 0)';
+                            $where_status .= '('.db_prefix() . 'acc_account_history.rel_id is null)';
                         }
                     }
                 }
@@ -6163,8 +6252,9 @@ class Accounting extends AdminController
                 'LEFT JOIN '.db_prefix().'departments ON '.db_prefix().'departments.departmentid = '.db_prefix().'pur_orders.department',
                 'LEFT JOIN '.db_prefix().'projects ON '.db_prefix().'projects.id = '.db_prefix().'pur_orders.project',
                 'LEFT JOIN '.db_prefix().'expenses ON '.db_prefix().'expenses.id = '.db_prefix().'pur_orders.expense_convert',
+                'LEFT JOIN ' . db_prefix() . 'acc_account_history ON ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'pur_orders.id AND ' . db_prefix() . 'acc_account_history.rel_type = "purchase_order"',
             ];
-            $result       = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, ['company','pur_order_number','expense_convert',db_prefix().'projects.name as project_name',db_prefix().'departments.name as department_name', db_prefix().'expenses.id as expense_id', db_prefix().'expenses.expense_name as expense_name', db_prefix().'pur_orders.currency as currency']);
+            $result       = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, ['company','pur_order_number','expense_convert',db_prefix().'projects.name as project_name',db_prefix().'departments.name as department_name', db_prefix().'expenses.id as expense_id', db_prefix().'expenses.expense_name as expense_name', db_prefix().'pur_orders.currency as currency'], 'GROUP BY '.db_prefix() . 'pur_orders.id');
 
             $output  = $result['output'];
             $rResult = $result['rResult'];
@@ -6184,7 +6274,7 @@ class Accounting extends AdminController
                 
                 $numberOutput .= '<div class="row-options">';
 
-                if ($aRow['count_account_historys'] == 0) {
+                if ($aRow['count_account_historys'] == '') {
                     if (has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['order_date'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))) {
                         $numberOutput .= '<a href="#" onclick="convert(this); return false;" class="text-success" id="purchase-order-id-'.$aRow['id'].'" data-id="'.$aRow['id'].'" data-type="purchase_order">' . _l('acc_convert') . '</a>';
                     }
@@ -6246,7 +6336,7 @@ class Accounting extends AdminController
                 $status_name = _l('has_not_been_converted');
                 $label_class = 'default';
 
-                if ($aRow['count_account_historys'] > 0) {
+                if ($aRow['count_account_historys'] != '') {
                     $label_class = 'success';
                     $status_name = _l('acc_converted');
                 } 
@@ -6254,7 +6344,7 @@ class Accounting extends AdminController
                 $row[] = '<span class="label label-' . $label_class . ' s-status purchase_order-status-' . $aRow['id'] . '">' . $status_name . '</span>';
                 
                 $options = '';
-                if($aRow['count_account_historys'] == 0 && has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['order_date'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))){
+                if($aRow['count_account_historys'] == '' && has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['order_date'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))){
                     $options = icon_btn('#', 'fa fa-share', 'btn-success', [
                         'title' => _l('acc_convert'),
                         'data-id' =>$aRow['id'],
@@ -6296,8 +6386,8 @@ class Accounting extends AdminController
                 'value_of_inventory',
                 'total_money',
                 'approval',
-                '(select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'goods_receipt.id and ' . db_prefix() . 'acc_account_history.rel_type = "stock_import") as count_account_historys',
-                'id',
+                db_prefix() . 'acc_account_history.rel_id as count_account_historys',
+                db_prefix() . 'goods_receipt.id as id',
             ];
 
             $where = [];
@@ -6309,17 +6399,17 @@ class Accounting extends AdminController
                 foreach ($status as $key => $value) {
                     if($value == 'converted'){
                         if($where_status != ''){
-                            $where_status .= ' or ((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'goods_receipt.id and ' . db_prefix() . 'acc_account_history.rel_type = "stock_import") > 0)';
+                            $where_status .= ' or ('.db_prefix() . 'acc_account_history.rel_id is not null)';
                         }else{
-                            $where_status .= '((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'goods_receipt.id and ' . db_prefix() . 'acc_account_history.rel_type = "stock_import") > 0)';
+                            $where_status .= '('.db_prefix() . 'acc_account_history.rel_id is not null)';
                         }
                     }
 
                     if($value == 'has_not_been_converted'){
                         if($where_status != ''){
-                            $where_status .= ' or ((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'goods_receipt.id and ' . db_prefix() . 'acc_account_history.rel_type = "stock_import") = 0)';
+                            $where_status .= ' or ('.db_prefix() . 'acc_account_history.rel_id is null)';
                         }else{
-                            $where_status .= '((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'goods_receipt.id and ' . db_prefix() . 'acc_account_history.rel_type = "stock_import") = 0)';
+                            $where_status .= '('.db_prefix() . 'acc_account_history.rel_id is null)';
                         }
                     }
                 }
@@ -6356,8 +6446,9 @@ class Accounting extends AdminController
             $sIndexColumn = 'id';
             $sTable       = db_prefix() . 'goods_receipt';
             $join         = [
+                'LEFT JOIN ' . db_prefix() . 'acc_account_history ON ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'goods_receipt.id AND ' . db_prefix() . 'acc_account_history.rel_type = "stock_import"',
             ];
-            $result       = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, ['date_add','goods_receipt_code', 'supplier_code']);
+            $result       = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, ['date_add','goods_receipt_code', 'supplier_code'], 'GROUP BY '.db_prefix() . 'goods_receipt.id');
 
             $output  = $result['output'];
             $rResult = $result['rResult'];
@@ -6370,7 +6461,7 @@ class Accounting extends AdminController
 
                 $name .= '<div class="row-options">';
 
-                if ($aRow['count_account_historys'] == 0) {
+                if ($aRow['count_account_historys'] == '') {
                     if (has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['date_c'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))) {
                         $name .= '<a href="#" onclick="convert(this); return false;" class="text-success" id="stock-import-id-'.$aRow['id'].'" data-id="'.$aRow['id'].'" data-type="stock_import">' . _l('acc_convert') . '</a>';
                     }
@@ -6408,14 +6499,14 @@ class Accounting extends AdminController
                 $status_name = _l('has_not_been_converted');
                 $label_class = 'default';
 
-                if ($aRow['count_account_historys'] > 0) {
+                if ($aRow['count_account_historys'] != '') {
                     $label_class = 'success';
                     $status_name = _l('acc_converted');
                 } 
                 $row[] = '<span class="label label-' . $label_class . ' s-status stock-import-status-' . $aRow['id'] . '">' . $status_name . '</span>';
                 
                 $options = '';
-                if($aRow['count_account_historys'] == 0 && has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['date_c'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))){
+                if($aRow['count_account_historys'] == '' && has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['date_c'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))){
                     $options = icon_btn('#', 'fa fa-share', 'btn-success', [
                         'title' => _l('acc_convert'),
                         'data-id' =>$aRow['id'],
@@ -6455,8 +6546,8 @@ class Accounting extends AdminController
                 'date_add',
                 'invoice_id',
                 'approval',
-                '(select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'goods_delivery.id and ' . db_prefix() . 'acc_account_history.rel_type = "stock_export") as count_account_historys',
-                'id',
+                db_prefix() . 'acc_account_history.rel_id as count_account_historys',
+                db_prefix() . 'goods_delivery.id as id',
             ];
 
             $where = [];
@@ -6468,17 +6559,17 @@ class Accounting extends AdminController
                 foreach ($status as $key => $value) {
                     if($value == 'converted'){
                         if($where_status != ''){
-                            $where_status .= ' or ((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'goods_delivery.id and ' . db_prefix() . 'acc_account_history.rel_type = "stock_export") > 0)';
+                            $where_status .= ' or ('.db_prefix() . 'acc_account_history.rel_id is not null)';
                         }else{
-                            $where_status .= '((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'goods_delivery.id and ' . db_prefix() . 'acc_account_history.rel_type = "stock_export") > 0)';
+                            $where_status .= '('.db_prefix() . 'acc_account_history.rel_id is not null)';
                         }
                     }
 
                     if($value == 'has_not_been_converted'){
                         if($where_status != ''){
-                            $where_status .= ' or ((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'goods_delivery.id and ' . db_prefix() . 'acc_account_history.rel_type = "stock_export") = 0)';
+                            $where_status .= ' or ('.db_prefix() . 'acc_account_history.rel_id is null)';
                         }else{
-                            $where_status .= '((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'goods_delivery.id and ' . db_prefix() . 'acc_account_history.rel_type = "stock_export") = 0)';
+                            $where_status .= '('.db_prefix() . 'acc_account_history.rel_id is null)';
                         }
                     }
                 }
@@ -6515,8 +6606,9 @@ class Accounting extends AdminController
             $sIndexColumn = 'id';
             $sTable       = db_prefix() . 'goods_delivery';
             $join         = [
+                'LEFT JOIN ' . db_prefix() . 'acc_account_history ON ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'goods_delivery.id AND ' . db_prefix() . 'acc_account_history.rel_type = "stock_export"',
             ];
-            $result       = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, ['date_add','date_c','goods_delivery_code','total_money']);
+            $result       = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, ['date_add','date_c','goods_delivery_code','total_money'], 'GROUP BY '.db_prefix() . 'goods_delivery.id');
 
             $output  = $result['output'];
             $rResult = $result['rResult'];
@@ -6529,7 +6621,7 @@ class Accounting extends AdminController
 
                 $name .= '<div class="row-options">';
 
-                if ($aRow['count_account_historys'] == 0) {
+                if ($aRow['count_account_historys'] == '') {
                     if (has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['date_c'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))) {
                         $name .= '<a href="#" onclick="convert(this); return false;" class="text-success" id="stock-export-id-'.$aRow['id'].'" data-id="'.$aRow['id'].'" data-type="stock_export">' . _l('acc_convert') . '</a>';
                     }
@@ -6579,14 +6671,14 @@ class Accounting extends AdminController
                 $status_name = _l('has_not_been_converted');
                 $label_class = 'default';
 
-                if ($aRow['count_account_historys'] > 0) {
+                if ($aRow['count_account_historys'] != '') {
                     $label_class = 'success';
                     $status_name = _l('acc_converted');
                 } 
                 $row[] = '<span class="label label-' . $label_class . ' s-status stock-export-status-' . $aRow['id'] . '">' . $status_name . '</span>';
                 
                 $options = '';
-                if($aRow['count_account_historys'] == 0 && has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['date_c'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))){
+                if($aRow['count_account_historys'] == '' && has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['date_c'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))){
                     $options = icon_btn('#', 'fa fa-share', 'btn-success', [
                         'title' => _l('acc_convert'),
                         'data-id' =>$aRow['id'],
@@ -6630,8 +6722,8 @@ class Accounting extends AdminController
                 'time',
                 'type',
                 'status',
-                '(select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'wh_loss_adjustment.id and ' . db_prefix() . 'acc_account_history.rel_type = "loss_adjustment") as count_account_historys',
-                'id',
+                db_prefix() . 'acc_account_history.rel_id as count_account_historys',
+                db_prefix() . 'wh_loss_adjustment.id as id',
             ];
 
             $where = [];
@@ -6643,17 +6735,17 @@ class Accounting extends AdminController
                 foreach ($status as $key => $value) {
                     if($value == 'converted'){
                         if($where_status != ''){
-                            $where_status .= ' or ((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'wh_loss_adjustment.id and ' . db_prefix() . 'acc_account_history.rel_type = "loss_adjustment") > 0)';
+                            $where_status .= ' or ('.db_prefix() . 'acc_account_history.rel_id is not null)';
                         }else{
-                            $where_status .= '((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'wh_loss_adjustment.id and ' . db_prefix() . 'acc_account_history.rel_type = "loss_adjustment") > 0)';
+                            $where_status .= '('.db_prefix() . 'acc_account_history.rel_id is not null)';
                         }
                     }
 
                     if($value == 'has_not_been_converted'){
                         if($where_status != ''){
-                            $where_status .= ' or ((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'wh_loss_adjustment.id and ' . db_prefix() . 'acc_account_history.rel_type = "loss_adjustment") = 0)';
+                            $where_status .= ' or ('.db_prefix() . 'acc_account_history.rel_id is null)';
                         }else{
-                            $where_status .= '((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'wh_loss_adjustment.id and ' . db_prefix() . 'acc_account_history.rel_type = "loss_adjustment") = 0)';
+                            $where_status .= '('.db_prefix() . 'acc_account_history.rel_id is null)';
                         }
                     }
                 }
@@ -6690,8 +6782,9 @@ class Accounting extends AdminController
             $sIndexColumn = 'id';
             $sTable       = db_prefix() . 'wh_loss_adjustment';
             $join         = [
+                'LEFT JOIN ' . db_prefix() . 'acc_account_history ON ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'wh_loss_adjustment.id AND ' . db_prefix() . 'acc_account_history.rel_type = "loss_adjustment"',
             ];
-            $result       = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, []);
+            $result       = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, [], 'GROUP BY '.db_prefix() . 'wh_loss_adjustment.id');
 
             $output  = $result['output'];
             $rResult = $result['rResult'];
@@ -6703,7 +6796,7 @@ class Accounting extends AdminController
                 $name = _l($aRow['type']);
                 $name .= '<div class="row-options">';
 
-                if ($aRow['count_account_historys'] == 0) {
+                if ($aRow['count_account_historys'] == '') {
                     if (has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['time'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))) {
                         $name .= '<a href="#" onclick="convert(this); return false;" class="text-success" id="loss-adjustment-id-'.$aRow['id'].'" data-id="'.$aRow['id'].'" data-type="loss_adjustment">' . _l('acc_convert') . '</a>';
                     }
@@ -6735,14 +6828,14 @@ class Accounting extends AdminController
                 $status_name = _l('has_not_been_converted');
                 $label_class = 'default';
 
-                if ($aRow['count_account_historys'] > 0) {
+                if ($aRow['count_account_historys'] != '') {
                     $label_class = 'success';
                     $status_name = _l('acc_converted');
                 } 
                 $row[] = '<span class="label label-' . $label_class . ' s-status stock-export-status-' . $aRow['id'] . '">' . $status_name . '</span>';
                 
                 $options = '';
-                if($aRow['count_account_historys'] == 0 && has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['time'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))){
+                if($aRow['count_account_historys'] == '' && has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['time'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))){
                     $options = icon_btn('#', 'fa fa-share', 'btn-success', [
                         'title' => _l('acc_convert'),
                         'data-id' =>$aRow['id'],
@@ -6801,7 +6894,7 @@ class Accounting extends AdminController
                 'commodity_code',
                 'description',
                 'sku_code',
-                '(select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'items.id and ' . db_prefix() . 'acc_account_history.rel_type = "opening_stock" and ' . db_prefix() . 'acc_account_history.date >= "'.$date_financial_year.'") as count_account_historys',
+                db_prefix() . 'acc_account_history.rel_id as count_account_historys',
                 'id',
             ];
 
@@ -6813,17 +6906,17 @@ class Accounting extends AdminController
                 foreach ($status as $key => $value) {
                     if($value == 'converted'){
                         if($where_status != ''){
-                            $where_status .= ' or ((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'items.id and ' . db_prefix() . 'acc_account_history.rel_type = "opening_stock" and ' . db_prefix() . 'acc_account_history.date >= "'.$date_financial_year.'") > 0)';
+                            $where_status .= ' or ('.db_prefix() . 'acc_account_history.rel_id is not null)';
                         }else{
-                            $where_status .= '((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'items.id and ' . db_prefix() . 'acc_account_history.rel_type = "opening_stock" and ' . db_prefix() . 'acc_account_history.date >= "'.$date_financial_year.'") > 0)';
+                            $where_status .= '('.db_prefix() . 'acc_account_history.rel_id is not null)';
                         }
                     }
 
                     if($value == 'has_not_been_converted'){
                         if($where_status != ''){
-                            $where_status .= ' or ((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'items.id and ' . db_prefix() . 'acc_account_history.rel_type = "opening_stock" and ' . db_prefix() . 'acc_account_history.date >= "'.$date_financial_year.'") = 0)';
+                            $where_status .= ' or ('.db_prefix() . 'acc_account_history.rel_id is null)';
                         }else{
-                            $where_status .= '((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'items.id and ' . db_prefix() . 'acc_account_history.rel_type = "opening_stock" and ' . db_prefix() . 'acc_account_history.date >= "'.$date_financial_year.'") = 0)';
+                            $where_status .= '('.db_prefix() . 'acc_account_history.rel_id is null)';
                         }
                     }
                 }
@@ -6837,9 +6930,10 @@ class Accounting extends AdminController
             $sIndexColumn = 'id';
             $sTable       = db_prefix() . 'items';
             $join         = [
+                'LEFT JOIN ' . db_prefix() . 'acc_account_history ON ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'items.id AND ' . db_prefix() . 'acc_account_history.rel_type = "opening_stock" and ' . db_prefix() . 'acc_account_history.date >= "'.$date_financial_year.'"',
             ];
 
-            $result = $this->accounting_model->get_opening_stock_data_tables($aColumns, $sIndexColumn, $sTable, $join, $where, []);
+            $result = $this->accounting_model->get_opening_stock_data_tables($aColumns, $sIndexColumn, $sTable, $join, $where, [], 'GROUP BY '.db_prefix() . 'items.id');
 
             $output  = $result['output'];
             $rResult = $result['rResult'];
@@ -6851,7 +6945,7 @@ class Accounting extends AdminController
                 $code = '<a href="' . admin_url('warehouse/view_commodity_detail/' . $aRow['id']) . '">' . $aRow['commodity_code'] . '</a>';
                 $code .= '<div class="row-options">';
 
-                if ($aRow['count_account_historys'] == 0) {
+                if ($aRow['count_account_historys'] == '') {
                     if (has_permission('accounting_transaction', '', 'create') && ($acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))) {
                         $code .= '<a href="#" onclick="convert(this); return false;" class="text-success" id="opening-stock-id-'.$aRow['id'].'" data-id="'.$aRow['id'].'" data-type="opening_stock" data-amount="'.$aRow['opening_stock'].'">' . _l('acc_convert') . '</a>';
                     }
@@ -6884,14 +6978,14 @@ class Accounting extends AdminController
                 $status_name = _l('has_not_been_converted');
                 $label_class = 'default';
 
-                if ($aRow['count_account_historys'] > 0) {
+                if ($aRow['count_account_historys'] != '') {
                     $label_class = 'success';
                     $status_name = _l('acc_converted');
                 } 
                 $row[] = '<span class="label label-' . $label_class . ' s-status stock-export-status-' . $aRow['id'] . '">' . $status_name . '</span>';
                 
                 $options = '';
-                if($aRow['count_account_historys'] == 0 && has_permission('accounting_transaction', '', 'create') && ($acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))){
+                if($aRow['count_account_historys'] == '' && has_permission('accounting_transaction', '', 'create') && ($acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))){
                     $options = icon_btn('#', 'fa fa-share', 'btn-success', [
                         'title' => _l('acc_convert'),
                         'data-id' =>$aRow['id'],
@@ -6948,10 +7042,10 @@ class Accounting extends AdminController
                 db_prefix() . 'payment_modes.name as name',
                 db_prefix() . 'pur_invoices.pur_order',
                 db_prefix() .'pur_invoice_payment.date as date',
-                '(select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'pur_invoice_payment.id and ' . db_prefix() . 'acc_account_history.rel_type = "purchase_payment") as count_account_historys'
+                db_prefix() . 'acc_account_history.rel_id as count_account_historys',
             ];
             $where = [];
-            array_push($where, 'AND approval_status = 2');
+            array_push($where, 'AND '.db_prefix() .'pur_invoice_payment.approval_status = 2');
             
             if ($this->input->post('status')) {
                 $status = $this->input->post('status');
@@ -6959,17 +7053,17 @@ class Accounting extends AdminController
                 foreach ($status as $key => $value) {
                     if($value == 'converted'){
                         if($where_status != ''){
-                            $where_status .= ' or ((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'pur_invoice_payment.id and ' . db_prefix() . 'acc_account_history.rel_type = "purchase_payment") > 0)';
+                            $where_status .= ' or ('.db_prefix() . 'acc_account_history.rel_id is not null)';
                         }else{
-                            $where_status .= '((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'pur_invoice_payment.id and ' . db_prefix() . 'acc_account_history.rel_type = "purchase_payment") > 0)';
+                            $where_status .= '('.db_prefix() . 'acc_account_history.rel_id is not null)';
                         }
                     }
 
                     if($value == 'has_not_been_converted'){
                         if($where_status != ''){
-                            $where_status .= ' or ((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'pur_invoice_payment.id and ' . db_prefix() . 'acc_account_history.rel_type = "purchase_payment") = 0)';
+                            $where_status .= ' or ('.db_prefix() . 'acc_account_history.rel_id is null)';
                         }else{
-                            $where_status .= '((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'pur_invoice_payment.id and ' . db_prefix() . 'acc_account_history.rel_type = "purchase_payment") = 0)';
+                            $where_status .= '('.db_prefix() . 'acc_account_history.rel_id is null)';
                         }
                     }
                 }
@@ -7006,11 +7100,11 @@ class Accounting extends AdminController
             $sIndexColumn = 'id';
             $sTable       = db_prefix() . 'pur_invoice_payment';
             $join         = ['LEFT JOIN ' . db_prefix() . 'payment_modes ON ' . db_prefix() . 'payment_modes.id = ' . db_prefix() . 'pur_invoice_payment.paymentmode',
-                            'LEFT JOIN ' . db_prefix() . 'acc_account_history ON ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'pur_invoice_payment.id and ' . db_prefix() . 'acc_account_history.rel_id = "purchase_payment"',
                             'LEFT JOIN ' . db_prefix() . 'pur_invoices ON ' . db_prefix() . 'pur_invoices.id = ' . db_prefix() . 'pur_invoice_payment.pur_invoice',
+                            'LEFT JOIN ' . db_prefix() . 'acc_account_history ON ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'pur_invoice_payment.id AND ' . db_prefix() . 'acc_account_history.rel_type = "purchase_payment"',
                         ];
 
-            $result       = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, ['paymentmode', db_prefix() . 'pur_invoices.pur_order', db_prefix() . 'pur_invoices.currency as currency']);
+            $result       = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, ['paymentmode', db_prefix() . 'pur_invoices.pur_order', db_prefix() . 'pur_invoices.currency as currency'], 'GROUP BY '.db_prefix() . 'pur_invoice_payment.id');
 
             $output  = $result['output'];
             $rResult = $result['rResult'];
@@ -7027,7 +7121,7 @@ class Accounting extends AdminController
                 $categoryOutput = _d($aRow['date']);
 
                 $categoryOutput .= '<div class="row-options">';
-                if ($aRow['count_account_historys'] == 0) {
+                if ($aRow['count_account_historys'] == '') {
                     if (has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['date'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))) {
                         $categoryOutput .= '<a href="#" onclick="convert(this); return false;" class="text-success" id="purchase-payment-id-'.$aRow['id'].'" data-id="'.$aRow['id'].'" data-type="purchase_payment" data-amount="'.$aRow['amount'].'">' . _l('acc_convert') . '</a>';
                     }
@@ -7053,7 +7147,7 @@ class Accounting extends AdminController
 
                 $label_class = 'default';
 
-                if ($aRow['count_account_historys'] > 0) {
+                if ($aRow['count_account_historys'] != '') {
                     $label_class = 'success';
                     $status_name = _l('acc_converted');
                 } 
@@ -7061,7 +7155,7 @@ class Accounting extends AdminController
                 $row[] = '<span class="label label-' . $label_class . ' s-status payment-status-' . $aRow['id'] . '">' . $status_name . '</span>';
 
                 $options = '';
-                if($aRow['count_account_historys'] == 0 && has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['date'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))){
+                if($aRow['count_account_historys'] == '' && has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['date'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))){
                     $options = icon_btn('#', 'fa fa-share', 'btn-success', [
                         'title' => _l('acc_convert'),
                         'data-id' =>$aRow['id'],
@@ -7286,7 +7380,7 @@ class Accounting extends AdminController
 
     /**
      * report Accounts payable ageing detail
-     * @return view
+     * @return views
      */
     public function rp_accounts_payable_ageing_detail() {
         $this->load->model('currencies_model');
@@ -8364,10 +8458,10 @@ class Accounting extends AdminController
 
         $data['group'] = $this->input->get('group');
         $data['tab'][] = 'bank_accounts';
-        $data['tab'][] = 'banking_register';
-        $data['tab'][] = 'posted_bank_transactions';
-        $data['tab'][] = 'plaid_new_transaction';
-        $data['tab'][] = 'reconcile_bank_account';
+        $data['tab'][] = 'banking_feeds';
+        // $data['tab'][] = 'posted_bank_transactions';
+        // $data['tab'][] = 'plaid_new_transaction';
+        // $data['tab'][] = 'reconcile_bank_account';
       
         if ($data['group'] == '') {
             $data['group'] = 'banking_register';
@@ -8445,7 +8539,7 @@ class Accounting extends AdminController
         }elseif($data['group'] == 'bank_accounts'){
             $data['account_types'] = $this->accounting_model->get_account_types();
             $data['accounts'] = $this->accounting_model->get_accounts('', 'account_detail_type_id = 14');
-        }elseif($data['group'] == 'plaid_new_transaction'){
+        }elseif($data['group'] == 'banking_feeds'){
             $data['last_updated'] = '';
             if(isset($_GET['id'])){
                 $transactions = $this->accounting_model->get_plaid_transaction($_GET['id']);
@@ -8466,6 +8560,10 @@ class Accounting extends AdminController
             $data['bank_accounts'] = $this->accounting_model->get_accounts('', ['account_detail_type_id' => 14]);
             $data['accounts'] = $this->accounting_model->get_accounts();
             $data['account_to_select'] = $this->accounting_model->get_data_account_to_select();
+            $data['account_expense'] = 80;
+            $data['account_income'] = 81;
+            $data['vendors'] = $this->accounting_model->get_vendor();
+            $data['customers']    = $this->clients_model->get();
         }
 
         $data['_status'] = '';
@@ -8674,7 +8772,6 @@ class Accounting extends AdminController
             
             $select = [
                 'date',
-                //'check_number',
                 'payee',
                 'description',
                 'withdrawals',
@@ -8716,34 +8813,14 @@ class Accounting extends AdminController
                 array_push($where, 'AND (' . db_prefix() . 'acc_transaction_bankings.date <= "' . $to_date . '")');
             }
 
-            $company_id = $this->input->post('company_id');
-            if ($company_id != '') {
-                array_push($where, 'AND id IN (SELECT rel_id FROM '. db_prefix() . 'acc_account_history where company = ' . $company_id.' and rel_type = "banking")');
-            }
-
-            if ($this->input->post('status')) {
-                $status = $this->input->post('status');
-                $where_status = '';
-                foreach ($status as $key => $value) {
-                    if ($value == 'converted') {
-                        if ($where_status != '') {
-                            $where_status .= ' or (matched > 0)';
-                        } else {
-                            $where_status .= '(matched > 0)';
-                        }
-                    }
-
-                    if ($value == 'has_not_been_converted') {
-                        if ($where_status != '') {
-                            $where_status .= ' or (matched = 0)';
-                        } else {
-                            $where_status .= '(matched = 0)';
-                        }
-                    }
-                }
-
-                if ($where_status != '') {
-                    array_push($where, 'AND (' . $where_status . ')');
+            $status = $this->input->post('status');
+            if ($status != '') {
+                if ($status == 'cleared') {
+                    array_push($where, 'AND matched = 1');
+                } elseif ($status == 'ignore') {
+                    array_push($where, 'AND matched = -2');
+                } else {
+                    array_push($where, 'AND matched != 1 AND matched != -2');
                 }
             }
 
@@ -8753,7 +8830,7 @@ class Accounting extends AdminController
             $join = [
                 'LEFT JOIN ' . db_prefix() . 'acc_banking_rules ON ' . db_prefix() . 'acc_banking_rules.id = ' . db_prefix() . 'acc_transaction_bankings.banking_rule',
             ];
-            $result = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, [db_prefix() . 'acc_transaction_bankings.id as id', 'name']);
+            $result = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, [db_prefix() . 'acc_transaction_bankings.id as id', 'name', 'bank_id']);
 
             $output = $result['output'];
             $rResult = $result['rResult'];
@@ -8782,28 +8859,41 @@ class Accounting extends AdminController
 
                 if ($aRow['matched'] == 1) {
                     $row[] = '<i class="fa fa-check-circle text-success fa-lg" aria-hidden="true"></i>';
+                }elseif ($aRow['matched'] == -2) {
+                    $row[] = '<i class="fa fa-times-circle text-warning fa-lg" aria-hidden="true"></i>';
                 }else{
                     $row[] = '';
                 }
 
-                $options = '';
+                $options = '<div class="btn-group btn-with-tooltip-group pull-right">
+
+                    <button type="button" class="btn btn-default dropdown-toggle sm:tw-max-w-xs tw-truncate" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><i class="fa fa-cog" aria-hidden="true"></i> </button>
+                    <ul class="dropdown-menu dropdown-menu-right width-250">';
+
                 if($aRow['is_imported'] == 1){
-                    $options .= icon_btn('#', 'fa fa-pencil-square', 'btn-default', [
-                        'title' => _l('edit'),
-                        'data-id' => $aRow['id'],
-                        'data-date' => _d($aRow['date']),
-                        'data-payee' => $aRow['payee'],
-                        'data-description' => $aRow['description'],
-                        'data-withdrawals' => $aRow['withdrawals'],
-                        'data-deposits' => $aRow['deposits'],
-                        'onclick' => 'edit_transaction(this); return false;'
-                    ]);
+                    $options .= '<li>
+                            <a href="#" 
+                            data-id="'.$aRow['id'].'" 
+                            data-date="'.$aRow['date'].'" 
+                            data-payee="'.$aRow['payee'].'" 
+                            data-description="'.$aRow['description'].'" 
+                            data-withdrawals="'.$aRow['withdrawals'].'"
+                            data-deposits="'.$aRow['deposits'].'"
+                            onclick="edit_transaction(this); return false;">'. _l('edit').'</a>
+                        </li>';
                 }
 
-                $options .= icon_btn('#', 'fa fa-remove', 'btn-danger', [
-                        'title' => _l('delete'),
-                        'onclick' => 'delete_transation('.$aRow['id'].'); return false;'
-                    ]);
+                if($aRow['matched'] != 1 && $aRow['matched'] != -2){
+                    $options .= '<li><a href="#" class="" onclick="add_transaction('.$aRow['id'].')"> '. _l('add_transaction').'</a></li>';
+                    $options .= '<li><a href="#" class="" onclick="match_transaction('.$aRow['id'].')"> '. _l('match_to_existing_transaction').'</a></li>';
+                    $options .= '<li><a href="#" class="" onclick="ignore_transaction('.$aRow['id'].')"> '. _l('ignore').'</a></li>';
+                }else{
+                    $options .= '<li><a href="#" class="" onclick="unmatch_transaction('.$aRow['id'].')"> '. _l('uncleared').'</a></li>';
+                }
+
+                if($aRow['is_imported'] == 1){
+                    $options .= '<li><a href="#" class="text-danger delete-text" onclick="delete_transation('.$aRow['id'].')"> '. _l('delete').'</a></li>';
+                }
 
                 $row[] =  $options;
 
@@ -9173,7 +9263,7 @@ class Accounting extends AdminController
                                     $node['datecreated'] = date('Y-m-d H:i:s');
                                     $node['addedfrom'] = get_staff_user_id();
                                     $node['cleared'] = 1;
-                                    $node['reconcile'] = -1;
+                                    $node['reconcile'] = $insert_id;
                                     $this->db->insert(db_prefix().'acc_account_history', $node);
                                     $account_history_id = $this->db->insert_id();
 
@@ -9183,7 +9273,7 @@ class Accounting extends AdminController
                                         'rel_id' => $insert_id,
                                         'rel_type' => 'banking',
                                         'amount' => 0,
-                                        'reconcile' => -1,
+                                        'reconcile' => $insert_id,
                                     ]);
 
                                     $node = [];
@@ -9198,7 +9288,7 @@ class Accounting extends AdminController
                                     $node['datecreated'] = date('Y-m-d H:i:s');
                                     $node['addedfrom'] = get_staff_user_id();
                                     $node['cleared'] = 1;
-                                    $node['reconcile'] = -1;
+                                    $node['reconcile'] = $insert_id;
                                     $this->db->insert(db_prefix().'acc_account_history', $node);
                                     $account_history_id = $this->db->insert_id();
 
@@ -9208,7 +9298,7 @@ class Accounting extends AdminController
                                         'rel_id' => $insert_id,
                                         'rel_type' => 'banking',
                                         'amount' => 0,
-                                        'reconcile' => -1,
+                                        'reconcile' => $insert_id,
                                     ]);
 
                                 }elseif($val['mapping_type'] == 'split_percentage'){
@@ -9242,7 +9332,7 @@ class Accounting extends AdminController
                                         $node['datecreated'] = date('Y-m-d H:i:s');
                                         $node['addedfrom'] = get_staff_user_id();
                                         $node['cleared'] = 1;
-                                        $node['reconcile'] = -1;
+                                        $node['reconcile'] = $insert_id;
                                         $this->db->insert(db_prefix().'acc_account_history', $node);
                                         $account_history_id = $this->db->insert_id();
 
@@ -9252,7 +9342,7 @@ class Accounting extends AdminController
                                             'rel_id' => $insert_id,
                                             'rel_type' => 'banking',
                                             'amount' => 0,
-                                            'reconcile' => -1,
+                                            'reconcile' => $insert_id,
                                         ]);
 
                                         $node = [];
@@ -9267,7 +9357,7 @@ class Accounting extends AdminController
                                         $node['datecreated'] = date('Y-m-d H:i:s');
                                         $node['addedfrom'] = get_staff_user_id();
                                         $node['cleared'] = 1;
-                                        $node['reconcile'] = -1;
+                                        $node['reconcile'] = $insert_id;
                                         $this->db->insert(db_prefix().'acc_account_history', $node);
                                         $account_history_id = $this->db->insert_id();
 
@@ -9277,7 +9367,7 @@ class Accounting extends AdminController
                                             'rel_id' => $insert_id,
                                             'rel_type' => 'banking',
                                             'amount' => 0,
-                                            'reconcile' => -1,
+                                            'reconcile' => $insert_id,
                                         ]);
                                     }
 
@@ -9309,7 +9399,7 @@ class Accounting extends AdminController
                                         $node['datecreated'] = date('Y-m-d H:i:s');
                                         $node['addedfrom'] = get_staff_user_id();
                                         $node['cleared'] = 1;
-                                        $node['reconcile'] = -1;
+                                        $node['reconcile'] = $insert_id;
                                         $this->db->insert(db_prefix().'acc_account_history', $node);
                                         $account_history_id = $this->db->insert_id();
 
@@ -9319,7 +9409,7 @@ class Accounting extends AdminController
                                             'rel_id' => $insert_id,
                                             'rel_type' => 'banking',
                                             'amount' => 0,
-                                            'reconcile' => -1,
+                                            'reconcile' => $insert_id,
                                         ]);
 
                                         $node = [];
@@ -9334,7 +9424,7 @@ class Accounting extends AdminController
                                         $node['datecreated'] = date('Y-m-d H:i:s');
                                         $node['addedfrom'] = get_staff_user_id();
                                         $node['cleared'] = 1;
-                                        $node['reconcile'] = -1;
+                                        $node['reconcile'] = $insert_id;
                                         $this->db->insert(db_prefix().'acc_account_history', $node);
                                         $account_history_id = $this->db->insert_id();
 
@@ -9344,7 +9434,7 @@ class Accounting extends AdminController
                                             'rel_id' => $insert_id,
                                             'rel_type' => 'banking',
                                             'amount' => 0,
-                                            'reconcile' => -1,
+                                            'reconcile' => $insert_id,
                                         ]);
                                     }
 
@@ -9373,7 +9463,7 @@ class Accounting extends AdminController
                                         $node['datecreated'] = date('Y-m-d H:i:s');
                                         $node['addedfrom'] = get_staff_user_id();
                                         $node['cleared'] = 1;
-                                        $node['reconcile'] = -1;
+                                        $node['reconcile'] = $insert_id;
                                         $this->db->insert(db_prefix().'acc_account_history', $node);
                                         $account_history_id = $this->db->insert_id();
 
@@ -9383,7 +9473,7 @@ class Accounting extends AdminController
                                             'rel_id' => $insert_id,
                                             'rel_type' => 'banking',
                                             'amount' => 0,
-                                            'reconcile' => -1,
+                                            'reconcile' => $insert_id,
                                         ]);
 
                                         $node = [];
@@ -9398,7 +9488,7 @@ class Accounting extends AdminController
                                         $node['datecreated'] = date('Y-m-d H:i:s');
                                         $node['addedfrom'] = get_staff_user_id();
                                         $node['cleared'] = 1;
-                                        $node['reconcile'] = -1;
+                                        $node['reconcile'] = $insert_id;
                                         $this->db->insert(db_prefix().'acc_account_history', $node);
                                         $account_history_id = $this->db->insert_id();
 
@@ -9408,7 +9498,7 @@ class Accounting extends AdminController
                                             'rel_id' => $insert_id,
                                             'rel_type' => 'banking',
                                             'amount' => 0,
-                                            'reconcile' => -1,
+                                            'reconcile' => $insert_id,
                                         ]);
                                     }
                                 }
@@ -9562,7 +9652,7 @@ class Accounting extends AdminController
 
                 if($aRow['vendor'] != 0){
                     if($purchase_module_status){
-                        $row[] = get_vendor_company_name($aRow['vendor']);
+                        $row[] = acc_get_vendor_company_name($aRow['vendor']);
                     }else{
                         $row[] = '';
                     }
@@ -9746,27 +9836,28 @@ class Accounting extends AdminController
 
         $currency = $this->currencies_model->get_base_currency();
         $data = $this->input->post();
+        $bank_id = $this->input->post('bank_id');
 
         $transaction_banking = $this->accounting_model->get_transaction_banking($data['transaction_bank_id']);
 
 
-        $amount = app_format_money($transaction_banking->deposits, $currency->name);
+        $payment = '';
+        $deposit = app_format_money($transaction_banking->deposits, $currency->name);
+        $amount = $transaction_banking->deposits;
 
         if($transaction_banking->withdrawals > 0){
-            $amount = app_format_money(-$transaction_banking->withdrawals, $currency->name);
+            $amount = $transaction_banking->withdrawals;
+            $payment = app_format_money($transaction_banking->withdrawals, $currency->name);
+            $deposit = '';
         }
 
-        $transaction_uncleared = $this->accounting_model->get_bank_transaction_uncleared($data['reconcile_id']);
+        $transaction_uncleared = $this->accounting_model->get_bank_transaction_uncleared($bank_id);
+
         $tran_html = '';
         $tran_withdrawals = 0;
         $tran_deposits = 0;
         foreach($transaction_uncleared as $key => $tran){
-            $payee = '';
-            if($purchase_module_status){
-                $payee = get_vendor_company_name($tran['vendor']);
-            }
             $date = _d($tran['date']);
-            
 
             $selected = '';
 
@@ -9774,16 +9865,24 @@ class Accounting extends AdminController
                 $selected = 'selected';
             }
 
-            $name = 'Date: '.$date.' Payee: '.$payee;
+            $name = 'Date: '.$date;
             if($tran['credit'] > 0){
+                $payee = acc_get_vendor_company_name($tran['vendor']);
+                if($payee != ''){
+                    $name .= ' | Payee: '.$payee;
+                }
                 $withdrawals = number_format($tran['credit'],2);
-                $name .= ' Withdrawals: '.$withdrawals;
+                $name .= ' | Withdrawals: '.$withdrawals;
                 if($key < 1){
                     $tran_withdrawals = $withdrawals;
                 }
             }else{
+                $payee = get_company_name($tran['customer']);
+                if($payee != ''){
+                    $name .= ' | Payee: '.$payee;
+                }
                 $deposits = number_format($tran['debit'],2);
-                $name .= ' Deposits: '.$deposits;
+                $name .= ' | Deposits: '.$deposits;
                 if($key < 1){
                     $tran_deposits = $deposits;
                 }
@@ -9795,6 +9894,8 @@ class Accounting extends AdminController
         echo json_encode([
             'date' => date('m/d/Y', strtotime($transaction_banking->date)),
             'amount' => $amount,
+            'payment' => $payment,
+            'deposit' => $deposit,
             'payee' => $transaction_banking->payee ? $transaction_banking->payee : '',
             'tran_html' => $tran_html,
             'date_value' => _d($transaction_banking->date),
@@ -10139,6 +10240,7 @@ class Accounting extends AdminController
         }
         $data['title'] = _l('import_excel');
         $data['bank_accounts'] = $this->accounting_model->get_accounts('', ['account_detail_type_id' => 14]);
+        $data['bank_id'] = $this->input->get('bank_id');
 
         $this->load->view('banking/import_banking', $data);
     }
@@ -10192,13 +10294,24 @@ class Accounting extends AdminController
 
                         $rowstyle[] =array('widths'=>[10,20,30,40]);
 
-                        $writer = new XLSXWriter();
-                        $writer->writeSheetHeader('Sheet1', $writer_header,  $col_options = ['widths'=>[40,40,40,40,50,50]]);
+                        if($_FILES['file_csv']['type'] == 'text/csv'){
+                            $fd   = fopen($newFilePath, 'r');
+                            $data = [];
+                            while ($row = fgetcsv($fd)) {
+                                $data[] = $row;
+                            }
 
-                        //Reader file
-                        $xlsx = new XLSXReader_fin($newFilePath);
-                        $sheetNames = $xlsx->getSheetNames();
-                        $data = $xlsx->getSheetData($sheetNames[1]);
+                            fclose($fd);
+                        }else{
+                            $writer = new XLSXWriter();
+                            $writer->writeSheetHeader('Sheet1', $writer_header,  $col_options = ['widths'=>[40,40,40,40,50,50]]);
+
+                            //Reader file
+                            $xlsx = new XLSXReader_fin($newFilePath);
+                            $sheetNames = $xlsx->getSheetNames();
+                            $data = $xlsx->getSheetData($sheetNames[1]);
+                        }
+
 
                         $arr_header = [];
 
@@ -10422,8 +10535,8 @@ class Accounting extends AdminController
                 'unit_id',
                 'routing_id',
                 'status',
-                '(select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'mrp_manufacturing_orders.id and ' . db_prefix() . 'acc_account_history.rel_type = "manufacturing_order") as count_account_historys',
-                'id',
+                db_prefix() . 'acc_account_history.rel_id as count_account_historys',
+                db_prefix().'mrp_manufacturing_orders.id as id',
             ];
 
             $where = [];
@@ -10434,17 +10547,17 @@ class Accounting extends AdminController
                 foreach ($status as $key => $value) {
                     if($value == 'converted'){
                         if($where_status != ''){
-                            $where_status .= ' or ((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'mrp_manufacturing_orders.id and ' . db_prefix() . 'acc_account_history.rel_type = "manufacturing_order") > 0)';
+                            $where_status .= ' or ('.db_prefix() . 'acc_account_history.rel_id is not null)';
                         }else{
-                            $where_status .= '((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'mrp_manufacturing_orders.id and ' . db_prefix() . 'acc_account_history.rel_type = "manufacturing_order") > 0)';
+                            $where_status .= '('.db_prefix() . 'acc_account_history.rel_id is not null)';
                         }
                     }
 
                     if($value == 'has_not_been_converted'){
                         if($where_status != ''){
-                            $where_status .= ' or ((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'mrp_manufacturing_orders.id and ' . db_prefix() . 'acc_account_history.rel_type = "manufacturing_order") = 0)';
+                            $where_status .= ' or ('.db_prefix() . 'acc_account_history.rel_id is null)';
                         }else{
-                            $where_status .= '((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'mrp_manufacturing_orders.id and ' . db_prefix() . 'acc_account_history.rel_type = "manufacturing_order") = 0)';
+                            $where_status .= '('.db_prefix() . 'acc_account_history.rel_id is null)';
                         }
                     }
                 }
@@ -10498,8 +10611,9 @@ class Accounting extends AdminController
             $sIndexColumn = 'id';
             $sTable       = db_prefix() . 'mrp_manufacturing_orders';
             $join         = [
+                'LEFT JOIN ' . db_prefix() . 'acc_account_history ON ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'mrp_manufacturing_orders.id AND ' . db_prefix() . 'acc_account_history.rel_type = "manufacturing_order"',
             ];
-            $result       = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, ['date_plan_from']);
+            $result       = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, ['date_plan_from'], 'GROUP BY '.db_prefix() . 'mrp_manufacturing_orders.id');
 
             $output  = $result['output'];
             $rResult = $result['rResult'];
@@ -10511,7 +10625,7 @@ class Accounting extends AdminController
                 $name = $aRow['manufacturing_order_code'];
                 $name .= '<div class="row-options">';
 
-                if ($aRow['count_account_historys'] == 0) {
+                if ($aRow['count_account_historys'] == '') {
                     if (has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['date_plan_from'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))) {
                         $name .= '<a href="#" onclick="convert(this); return false;" class="text-success" id="manufacturing-order-id-'.$aRow['id'].'" data-id="'.$aRow['id'].'" data-type="manufacturing_order">' . _l('acc_convert') . '</a>';
                     }
@@ -10536,14 +10650,14 @@ class Accounting extends AdminController
                 $status_name = _l('has_not_been_converted');
                 $label_class = 'default';
 
-                if ($aRow['count_account_historys'] > 0) {
+                if ($aRow['count_account_historys'] != '') {
                     $label_class = 'success';
                     $status_name = _l('acc_converted');
                 } 
                 $row[] = '<span class="label label-' . $label_class . ' s-status stock-export-status-' . $aRow['id'] . '">' . $status_name . '</span>';
                 
                 $options = '';
-                if($aRow['count_account_historys'] == 0 && has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['date_plan_from'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))){
+                if($aRow['count_account_historys'] == '' && has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['date_plan_from'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))){
                     $options = icon_btn('#', 'fa fa-share', 'btn-success', [
                         'title' => _l('acc_convert'),
                         'data-id' =>$aRow['id'],
@@ -10583,10 +10697,10 @@ class Accounting extends AdminController
                 'total_amount',
                 'discount_total',
                 'total_after_discount',
-                'datecreated',
+                db_prefix() .'wh_order_returns.datecreated as datecreated',
                 'status',
                 'approval',
-                '(select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'wh_order_returns.id and ' . db_prefix() . 'acc_account_history.rel_type = "purchase_order_return") as count_account_historys',
+                db_prefix() . 'acc_account_history.rel_id as count_account_historys',
                 db_prefix() .'wh_order_returns.id as id',
             ];
 
@@ -10598,17 +10712,17 @@ class Accounting extends AdminController
                 foreach ($status as $key => $value) {
                     if($value == 'converted'){
                         if($where_status != ''){
-                            $where_status .= ' or ((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'wh_order_returns.id and ' . db_prefix() . 'acc_account_history.rel_type = "purchase_order_return") > 0)';
+                            $where_status .= ' or ('.db_prefix() . 'acc_account_history.rel_id is not null)';
                         }else{
-                            $where_status .= '((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'wh_order_returns.id and ' . db_prefix() . 'acc_account_history.rel_type = "purchase_order_return") > 0)';
+                            $where_status .= '('.db_prefix() . 'acc_account_history.rel_id is not null)';
                         }
                     }
 
                     if($value == 'has_not_been_converted'){
                         if($where_status != ''){
-                            $where_status .= ' or ((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'wh_order_returns.id and ' . db_prefix() . 'acc_account_history.rel_type = "purchase_order_return") = 0)';
+                            $where_status .= ' or ('.db_prefix() . 'acc_account_history.rel_id is null)';
                         }else{
-                            $where_status .= '((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'wh_order_returns.id and ' . db_prefix() . 'acc_account_history.rel_type = "purchase_order_return") = 0)';
+                            $where_status .= '('.db_prefix() . 'acc_account_history.rel_id is null)';
                         }
                     }
                 }
@@ -10617,8 +10731,6 @@ class Accounting extends AdminController
                     array_push($where, 'AND ('. $where_status . ')');
                 }
             }
-
-
             
             $from_date = '';
             $to_date   = '';
@@ -10650,9 +10762,9 @@ class Accounting extends AdminController
             $sIndexColumn = 'id';
             $sTable       = db_prefix() . 'wh_order_returns';
             $join         = [
-                
+                'LEFT JOIN ' . db_prefix() . 'acc_account_history ON ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'wh_order_returns.id AND ' . db_prefix() . 'acc_account_history.rel_type = "purchase_order_return"',
             ];
-            $result       = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, ['order_return_name', 'additional_discount', 'approval', 'return_type', 'rel_id', 'rel_type', 'order_return_number', 'receipt_delivery_id', 'currency']);
+            $result       = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, ['order_return_name', 'additional_discount', 'approval', 'return_type', db_prefix() .'wh_order_returns.rel_id  as rel_id', db_prefix() .'wh_order_returns.rel_type as rel_type', 'order_return_number', 'receipt_delivery_id', 'currency'], 'GROUP BY '.db_prefix() . 'wh_order_returns.id');
 
             $output  = $result['output'];
             $rResult = $result['rResult'];
@@ -10672,7 +10784,7 @@ class Accounting extends AdminController
                 
                 $numberOutput .= '<div class="row-options">';
 
-                if ($aRow['count_account_historys'] == 0) {
+                if ($aRow['count_account_historys'] == '') {
                     if (has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['datecreated'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))) {
                         $numberOutput .= '<a href="#" onclick="convert(this); return false;" class="text-success" id="purchase-order-id-'.$aRow['id'].'" data-id="'.$aRow['id'].'" data-type="purchase_order_return">' . _l('acc_convert') . '</a>';
                     }
@@ -10688,7 +10800,7 @@ class Accounting extends AdminController
                 $numberOutput .= '</div>';
 
                 $row[] = $numberOutput;
-                $row[] = get_vendor_company_name($aRow['company_id']);
+                $row[] = acc_get_vendor_company_name($aRow['company_id']);
 
                 $row[] = app_format_money($aRow['total_amount'], $base_currency->name);
                 $row[] = app_format_money($aRow['discount_total'], $base_currency->name);
@@ -10702,7 +10814,7 @@ class Accounting extends AdminController
                 $status_name = _l('has_not_been_converted');
                 $label_class = 'default';
 
-                if ($aRow['count_account_historys'] > 0) {
+                if ($aRow['count_account_historys'] != '') {
                     $label_class = 'success';
                     $status_name = _l('acc_converted');
                 } 
@@ -10710,7 +10822,7 @@ class Accounting extends AdminController
                 $row[] = '<span class="label label-' . $label_class . ' s-status purchase-order-return-status-' . $aRow['id'] . '">' . $status_name . '</span>';
                 
                 $options = '';
-                if($aRow['count_account_historys'] == 0 && has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['datecreated'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))){
+                if($aRow['count_account_historys'] == '' && has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['datecreated'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))){
                     $options = icon_btn('#', 'fa fa-share', 'btn-success', [
                         'title' => _l('acc_convert'),
                         'data-id' =>$aRow['id'],
@@ -10750,7 +10862,7 @@ class Accounting extends AdminController
                 'refunded_on',
                 'amount',
                 db_prefix() . 'payment_modes.name as name',
-                '(select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'wh_order_returns_refunds.id and ' . db_prefix() . 'acc_account_history.rel_type = "purchase_refund") as count_account_historys',
+                db_prefix() . 'acc_account_history.rel_id as count_account_historys',
                 db_prefix() .'wh_order_returns_refunds.id as id',
             ];
 
@@ -10762,17 +10874,17 @@ class Accounting extends AdminController
                 foreach ($status as $key => $value) {
                     if($value == 'converted'){
                         if($where_status != ''){
-                            $where_status .= ' or ((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'wh_order_returns_refunds.id and ' . db_prefix() . 'acc_account_history.rel_type = "purchase_refund") > 0)';
+                            $where_status .= ' or ('.db_prefix() . 'acc_account_history.rel_id is not null)';
                         }else{
-                            $where_status .= '((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'wh_order_returns_refunds.id and ' . db_prefix() . 'acc_account_history.rel_type = "purchase_refund") > 0)';
+                            $where_status .= '('.db_prefix() . 'acc_account_history.rel_id is not null)';
                         }
                     }
 
                     if($value == 'has_not_been_converted'){
                         if($where_status != ''){
-                            $where_status .= ' or ((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'wh_order_returns_refunds.id and ' . db_prefix() . 'acc_account_history.rel_type = "purchase_refund") = 0)';
+                            $where_status .= ' or ('.db_prefix() . 'acc_account_history.rel_id is null)';
                         }else{
-                            $where_status .= '((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'wh_order_returns_refunds.id and ' . db_prefix() . 'acc_account_history.rel_type = "purchase_refund") = 0)';
+                            $where_status .= '('.db_prefix() . 'acc_account_history.rel_id is null)';
                         }
                     }
                 }
@@ -10813,8 +10925,9 @@ class Accounting extends AdminController
             $join         = [
                 'LEFT JOIN ' . db_prefix() . 'payment_modes ON ' . db_prefix() . 'payment_modes.id = ' . db_prefix() . 'wh_order_returns_refunds.payment_mode',
                 'LEFT JOIN ' . db_prefix() . 'wh_order_returns ON ' . db_prefix() . 'wh_order_returns.id = ' . db_prefix() . 'wh_order_returns_refunds.order_return_id',
+                'LEFT JOIN ' . db_prefix() . 'acc_account_history ON ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'wh_order_returns_refunds.id AND ' . db_prefix() . 'acc_account_history.rel_type = "purchase_refund"',
             ];
-            $result       = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, ['order_return_number','order_return_name', db_prefix() . 'wh_order_returns.currency as currency']);
+            $result       = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, ['order_return_number','order_return_name', db_prefix() . 'wh_order_returns.currency as currency'], 'GROUP BY '.db_prefix() . 'wh_order_returns_refunds.id');
 
             $output  = $result['output'];
             $rResult = $result['rResult'];
@@ -10835,7 +10948,7 @@ class Accounting extends AdminController
                 
                 $numberOutput .= '<div class="row-options">';
 
-                if ($aRow['count_account_historys'] == 0) {
+                if ($aRow['count_account_historys'] == '') {
                     if (has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['refunded_on'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))) {
                         $numberOutput .= '<a href="#" onclick="convert(this); return false;" class="text-success" id="purchase-order-id-'.$aRow['id'].'" data-id="'.$aRow['id'].'" data-amount="'.$aRow['amount'].'" data-type="purchase_refund">' . _l('acc_convert') . '</a>';
                     }
@@ -10859,7 +10972,7 @@ class Accounting extends AdminController
                 $status_name = _l('has_not_been_converted');
                 $label_class = 'default';
 
-                if ($aRow['count_account_historys'] > 0) {
+                if ($aRow['count_account_historys'] != '') {
                     $label_class = 'success';
                     $status_name = _l('acc_converted');
                 } 
@@ -10867,7 +10980,7 @@ class Accounting extends AdminController
                 $row[] = '<span class="label label-' . $label_class . ' s-status purchase-order-return-status-' . $aRow['id'] . '">' . $status_name . '</span>';
                 
                 $options = '';
-                if($aRow['count_account_historys'] == 0 && has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['refunded_on'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))){
+                if($aRow['count_account_historys'] == '' && has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['refunded_on'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))){
                     $options = icon_btn('#', 'fa fa-share', 'btn-success', [
                         'title' => _l('acc_convert'),
                         'data-id' =>$aRow['id'],
@@ -10926,15 +11039,16 @@ class Accounting extends AdminController
                 'invoice_date',
                 'is_recurring_from',
                 'subtotal',
-                'tax', 
+                db_prefix().'pur_invoices.tax as tax', 
                 'total',
                 'payment_request_status',
                 'payment_status',
-                '(select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'pur_invoices.id and ' . db_prefix() . 'acc_account_history.rel_type = "purchase_invoice") as count_account_historys',
+                db_prefix() . 'acc_account_history.rel_id as count_account_historys',
                 db_prefix() .'pur_invoices.id as id',
             ];
 
             $where = [];
+            array_push($where, 'AND approval_status = 2');
 
             if ($this->input->post('status')) {
                 $status = $this->input->post('status');
@@ -10942,17 +11056,17 @@ class Accounting extends AdminController
                 foreach ($status as $key => $value) {
                     if($value == 'converted'){
                         if($where_status != ''){
-                            $where_status .= ' or ((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'pur_invoices.id and ' . db_prefix() . 'acc_account_history.rel_type = "purchase_invoice") > 0)';
+                            $where_status .= ' or ('.db_prefix() . 'acc_account_history.rel_id is not null)';
                         }else{
-                            $where_status .= '((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'pur_invoices.id and ' . db_prefix() . 'acc_account_history.rel_type = "purchase_invoice") > 0)';
+                            $where_status .= '('.db_prefix() . 'acc_account_history.rel_id is not null)';
                         }
                     }
 
                     if($value == 'has_not_been_converted'){
                         if($where_status != ''){
-                            $where_status .= ' or ((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'pur_invoices.id and ' . db_prefix() . 'acc_account_history.rel_type = "purchase_invoice") = 0)';
+                            $where_status .= ' or ('.db_prefix() . 'acc_account_history.rel_id is null)';
                         }else{
-                            $where_status .= '((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'pur_invoices.id and ' . db_prefix() . 'acc_account_history.rel_type = "purchase_invoice") = 0)';
+                            $where_status .= '('.db_prefix() . 'acc_account_history.rel_id is null)';
                         }
                     }
                 }
@@ -10994,9 +11108,10 @@ class Accounting extends AdminController
             $sIndexColumn = 'id';
             $sTable       = db_prefix() . 'pur_invoices';
             $join         = [
-                'LEFT JOIN '.db_prefix().'pur_contracts ON '.db_prefix().'pur_contracts.id = '.db_prefix().'pur_invoices.contract'
+                'LEFT JOIN '.db_prefix().'pur_contracts ON '.db_prefix().'pur_contracts.id = '.db_prefix().'pur_invoices.contract',
+                'LEFT JOIN ' . db_prefix() . 'acc_account_history ON ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'pur_invoices.id AND ' . db_prefix() . 'acc_account_history.rel_type = "purchase_invoice"',
             ];
-            $result       = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, [db_prefix().'pur_invoices.id as id', 'contract_number', 'invoice_number', 'currency', $select_purchase]);
+            $result       = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, [db_prefix().'pur_invoices.id as id', 'contract_number', 'invoice_number', 'currency', $select_purchase], 'GROUP BY '.db_prefix() . 'pur_invoices.id');
 
             $output  = $result['output'];
             $rResult = $result['rResult'];
@@ -11016,7 +11131,7 @@ class Accounting extends AdminController
                 
                 $numberOutput .= '<div class="row-options">';
 
-                if ($aRow['count_account_historys'] == 0) {
+                if ($aRow['count_account_historys'] == '') {
                     if (has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['invoice_date'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date)) && $aRow['count_purchases'] == 0) {
                         $numberOutput .= '<a href="#" onclick="convert(this); return false;" class="text-success" id="purchase-invoice-id-'.$aRow['id'].'" data-id="'.$aRow['id'].'" data-type="purchase_invoice">' . _l('acc_convert') . '</a>';
                     }
@@ -11032,7 +11147,7 @@ class Accounting extends AdminController
                 $numberOutput .= '</div>';
 
                 $row[] = $numberOutput;
-                $row[] = '<a href="' . admin_url('purchase/vendor/' . $aRow[db_prefix().'pur_invoices.vendor']) . '" >' .  get_vendor_company_name($aRow[db_prefix().'pur_invoices.vendor']) . '</a>'; 
+                $row[] = '<a href="' . admin_url('purchase/vendor/' . $aRow[db_prefix().'pur_invoices.vendor']) . '" >' .  acc_get_vendor_company_name($aRow[db_prefix().'pur_invoices.vendor']) . '</a>'; 
 
                 $row[] = '<a href="'.admin_url('purchase/contract/'.$aRow['contract']).'">'.$aRow['contract_number'].'</a>';
 
@@ -11060,7 +11175,7 @@ class Accounting extends AdminController
                 $status_name = _l('has_not_been_converted');
                 $label_class = 'default';
 
-                if ($aRow['count_account_historys'] > 0) {
+                if ($aRow['count_account_historys'] != '') {
                     $label_class = 'success';
                     $status_name = _l('acc_converted');
                 }
@@ -11072,7 +11187,7 @@ class Accounting extends AdminController
                 }  
                 
                 $options = '';
-                if($aRow['count_account_historys'] == 0 && has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['invoice_date'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date)) && $aRow['count_purchases'] == 0){
+                if($aRow['count_account_historys'] == '' && has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['invoice_date'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date)) && $aRow['count_purchases'] == 0){
                     $options = icon_btn('#', 'fa fa-share', 'btn-success', [
                         'title' => _l('acc_convert'),
                         'data-id' =>$aRow['id'],
@@ -11115,7 +11230,7 @@ class Accounting extends AdminController
                 'company',
                 'channel',
                 'status',
-                '(select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'cart.id and ' . db_prefix() . 'acc_account_history.rel_type = "sales_return_order") as count_account_historys',
+                db_prefix() . 'acc_account_history.rel_id as count_account_historys',
                 db_prefix() .'cart.id as id',
             ];
 
@@ -11127,17 +11242,17 @@ class Accounting extends AdminController
                 foreach ($status as $key => $value) {
                     if($value == 'converted'){
                         if($where_status != ''){
-                            $where_status .= ' or ((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'cart.id and ' . db_prefix() . 'acc_account_history.rel_type = "sales_return_order") > 0)';
+                            $where_status .= ' or ('.db_prefix() . 'acc_account_history.rel_id is not null)';
                         }else{
-                            $where_status .= '((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'cart.id and ' . db_prefix() . 'acc_account_history.rel_type = "sales_return_order") > 0)';
+                            $where_status .= '('.db_prefix() . 'acc_account_history.rel_id is not null)';
                         }
                     }
 
                     if($value == 'has_not_been_converted'){
                         if($where_status != ''){
-                            $where_status .= ' or ((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'cart.id and ' . db_prefix() . 'acc_account_history.rel_type = "sales_return_order") = 0)';
+                            $where_status .= ' or ('.db_prefix() . 'acc_account_history.rel_id is null)';
                         }else{
-                            $where_status .= '((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'cart.id and ' . db_prefix() . 'acc_account_history.rel_type = "sales_return_order") = 0)';
+                            $where_status .= '('.db_prefix() . 'acc_account_history.rel_id is null)';
                         }
                     }
                 }
@@ -11179,9 +11294,10 @@ class Accounting extends AdminController
             $sIndexColumn = 'id';
             $sTable       = db_prefix() . 'cart';
             $join         = [
+                'LEFT JOIN ' . db_prefix() . 'acc_account_history ON ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'cart.id AND ' . db_prefix() . 'acc_account_history.rel_type = "sales_return_order"',
                 
             ];
-            $result       = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, ['channel_id', 'allowed_payment_modes']);
+            $result       = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, ['channel_id', 'allowed_payment_modes'], 'GROUP BY '.db_prefix() . 'cart.id');
 
             $output  = $result['output'];
             $rResult = $result['rResult'];
@@ -11196,7 +11312,7 @@ class Accounting extends AdminController
                 
                 $numberOutput .= '<div class="row-options">';
 
-                if ($aRow['count_account_historys'] == 0) {
+                if ($aRow['count_account_historys'] == '') {
                     if (has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['datecreator'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))) {
                         $numberOutput .= '<a href="#" onclick="convert(this); return false;" class="text-success" id="omni_sales-order-id-'.$aRow['id'].'" data-id="'.$aRow['id'].'" data-type="sales_return_order">' . _l('acc_convert') . '</a>';
                     }
@@ -11259,7 +11375,7 @@ class Accounting extends AdminController
                 $status_name = _l('has_not_been_converted');
                 $label_class = 'default';
 
-                if ($aRow['count_account_historys'] > 0) {
+                if ($aRow['count_account_historys'] != '') {
                     $label_class = 'success';
                     $status_name = _l('acc_converted');
                 } 
@@ -11267,7 +11383,7 @@ class Accounting extends AdminController
                 $row[] = '<span class="label label-' . $label_class . ' s-status omni_sales-order-return-status-' . $aRow['id'] . '">' . $status_name . '</span>';
                 
                 $options = '';
-                if($aRow['count_account_historys'] == 0 && has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['datecreator'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))){
+                if($aRow['count_account_historys'] == '' && has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['datecreator'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))){
                     $options = icon_btn('#', 'fa fa-share', 'btn-success', [
                         'title' => _l('acc_convert'),
                         'data-id' =>$aRow['id'],
@@ -11307,7 +11423,7 @@ class Accounting extends AdminController
                 'refunded_on',
                 'amount',
                 db_prefix() . 'payment_modes.name as name',
-                '(select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'omni_refunds.id and ' . db_prefix() . 'acc_account_history.rel_type = "sales_refund") as count_account_historys',
+                db_prefix() . 'acc_account_history.rel_id as count_account_historys',
                 db_prefix() .'omni_refunds.id as id',
             ];
 
@@ -11319,17 +11435,17 @@ class Accounting extends AdminController
                 foreach ($status as $key => $value) {
                     if($value == 'converted'){
                         if($where_status != ''){
-                            $where_status .= ' or ((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'omni_refunds.id and ' . db_prefix() . 'acc_account_history.rel_type = "sales_refund") > 0)';
+                            $where_status .= ' or ('.db_prefix() . 'acc_account_history.rel_id is not null)';
                         }else{
-                            $where_status .= '((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'omni_refunds.id and ' . db_prefix() . 'acc_account_history.rel_type = "sales_refund") > 0)';
+                            $where_status .= '('.db_prefix() . 'acc_account_history.rel_id is not null)';
                         }
                     }
 
                     if($value == 'has_not_been_converted'){
                         if($where_status != ''){
-                            $where_status .= ' or ((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'omni_refunds.id and ' . db_prefix() . 'acc_account_history.rel_type = "sales_refund") = 0)';
+                            $where_status .= ' or ('.db_prefix() . 'acc_account_history.rel_id is null)';
                         }else{
-                            $where_status .= '((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'omni_refunds.id and ' . db_prefix() . 'acc_account_history.rel_type = "sales_refund") = 0)';
+                            $where_status .= '('.db_prefix() . 'acc_account_history.rel_id is null)';
                         }
                     }
                 }
@@ -11370,8 +11486,9 @@ class Accounting extends AdminController
             $join         = [
                 'LEFT JOIN ' . db_prefix() . 'payment_modes ON ' . db_prefix() . 'payment_modes.id = ' . db_prefix() . 'omni_refunds.payment_mode',
                 'LEFT JOIN ' . db_prefix() . 'cart ON ' . db_prefix() . 'cart.id = ' . db_prefix() . 'omni_refunds.order_id',
+                'LEFT JOIN ' . db_prefix() . 'acc_account_history ON ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'omni_refunds.id AND ' . db_prefix() . 'acc_account_history.rel_type = "sales_refund"',
             ];
-            $result       = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, ['order_number', db_prefix() .'cart.currency as currency']);
+            $result       = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, ['order_number', db_prefix() .'cart.currency as currency'], 'GROUP BY '.db_prefix() . 'omni_refunds.id');
 
             $output  = $result['output'];
             $rResult = $result['rResult'];
@@ -11391,7 +11508,7 @@ class Accounting extends AdminController
                 
                 $numberOutput .= '<div class="row-options">';
 
-                if ($aRow['count_account_historys'] == 0) {
+                if ($aRow['count_account_historys'] == '') {
                     if (has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['refunded_on'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))) {
                         $numberOutput .= '<a href="#" onclick="convert(this); return false;" class="text-success" id="purchase-order-id-'.$aRow['id'].'" data-id="'.$aRow['id'].'" data-amount="'.$aRow['amount'].'" data-type="sales_refund">' . _l('acc_convert') . '</a>';
                     }
@@ -11415,7 +11532,7 @@ class Accounting extends AdminController
                 $status_name = _l('has_not_been_converted');
                 $label_class = 'default';
 
-                if ($aRow['count_account_historys'] > 0) {
+                if ($aRow['count_account_historys'] != '') {
                     $label_class = 'success';
                     $status_name = _l('acc_converted');
                 } 
@@ -11423,7 +11540,7 @@ class Accounting extends AdminController
                 $row[] = '<span class="label label-' . $label_class . ' s-status purchase-order-return-status-' . $aRow['id'] . '">' . $status_name . '</span>';
                 
                 $options = '';
-                if($aRow['count_account_historys'] == 0 && has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['refunded_on'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))){
+                if($aRow['count_account_historys'] == '' && has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['refunded_on'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))){
                     $options = icon_btn('#', 'fa fa-share', 'btn-success', [
                         'title' => _l('acc_convert'),
                         'data-id' =>$aRow['id'],
@@ -11475,10 +11592,13 @@ class Accounting extends AdminController
         $data['expenseid']     = $id;
         $data['categories']    = $this->expenses_model->get_category();
         $data['years']         = $this->expenses_model->get_expenses_years();
-        $data['title']         = _l('accounting_bills');
+        $data['title']         = _l('bills');
         if($data['type'] == null){
-            $data['type'] = 'unpaid';
+            $data['type'] = ['unpaid', 'paid', 'approved'];
         }
+        $data['type_defaults'] = 'unpaid';
+        $data['list_vendor'] = $this->accounting_model->get_vendor();
+
         $this->load->view('bills/manage', $data);
     }
 
@@ -11505,6 +11625,7 @@ class Accounting extends AdminController
     public function bill($id = ''){
         if ($this->input->post()) {
             $data = $this->input->post();
+            
             $closing_date = strtotime(get_option('acc_closing_date'));
             $bill_date = strtotime($data['date']);
             $current_date = strtotime(date('Y-m-d'));
@@ -11589,6 +11710,12 @@ class Accounting extends AdminController
         $data['acc_bill_deposit_to'] = '';
         $data['bodyclass']  = 'bill';
         $data['currencies'] = $this->currencies_model->get();
+        $where_item = [];
+        if(acc_get_status_modules('warehouse')){
+            $where_item = 'active = 1';
+        }
+
+        $data['items'] = $this->accounting_model->get_items('', $where_item);
         $data['title']      = $title;
         $this->load->view('bills/bill', $data);
     }
@@ -11626,6 +11753,8 @@ class Accounting extends AdminController
         $data['currency'] = $this->currencies_model->get_base_currency();
         //$data['child_expenses'] = $this->accounting_model->get_child_expenses($id);
         $data['members']        = $this->staff_model->get('', ['active' => 1]);
+        $data['list_vendor'] = $this->accounting_model->get_vendor();
+        
         $this->load->view('bills/bill_preview_template', $data);
     }
 
@@ -11675,7 +11804,11 @@ class Accounting extends AdminController
             if($this->input->post('is_bulk_action')){
                 $data['bill_ids'] = $this->input->post('bill_ids');
                 foreach($data['bill_ids'] as $id_bill){
-                    $_success = $this->accounting_model->bill_appove_payable($id_bill);
+                    $bill = $this->accounting_model->get_bill($id_bill);
+                    $_success = false;
+                    if($bill && $bill->approved != 1){
+                        $_success = $this->accounting_model->bill_appove_payable($id_bill);
+                    }
                     if($_success){
                         $success = true;
                     }
@@ -11709,14 +11842,31 @@ class Accounting extends AdminController
                 $data['bill_ids'] = $this->input->post('bill_ids');
                 if($data['bill_ids'] != ''){
                     $bill_ids = explode(',', $data['bill_ids']);
+                    $new_bill_ids = [];
 
-                    foreach($bill_ids as $id_bill){
+                    foreach($bill_ids as $key => $id_bill){
                         $bill = $this->accounting_model->get_bill($id_bill);
+
                         if($bill){
-                            $data['bill_amount'] += bill_amount_left($id_bill, false);
-                            $data['max_amount'] += bill_amount_left($id_bill, false);
-                            $data['vendor'] = $bill->vendor;
+                            if($bill->approved == 1 && $bill->voided == 0 && $bill->status != 2 ){
+                                $data['bill_amount'] += bill_amount_left($id_bill, false);
+                                $data['max_amount'] += bill_amount_left($id_bill, false);
+                                $data['vendor'] = $bill->vendor;
+                                $new_bill_ids[] = $id_bill;
+                            }else{
+                                if(isset($bill_ids[$key])){
+                                    unset($bill_ids[$key]);
+                                }
+                            }
                         }
+                    }
+
+                    if(count($new_bill_ids) > 0){
+                        $data['bill_ids'] = implode(',', $new_bill_ids);
+                    }else{
+                        $data['bill_ids'] = '';
+                        set_alert('warning', _l('acc_Only_approved_invoices_can_be_pay_bill'));
+                        redirect(admin_url('accounting/bills'));
                     }
                 }
             }else{
@@ -11860,9 +12010,14 @@ class Accounting extends AdminController
             foreach ($data['bill_items'] as $value) {
                 $bill_mapping = $this->accounting_model->get_bill_mapping($value);
                 $amount += $bill_mapping->amount;
+                if($bill_mapping->type == 'item'){
+                    $name = acc_get_item_name_by_id($bill_mapping->item_id);
+                }else{
+                    $name = get_account_name_by_id($bill_mapping->account);
+                }
                 $html .= '<tr>
                    <td>
-                      '. render_input('pay_bill_item['.$value.']', '', get_account_name_by_id($bill_mapping->account),'text', array('readonly' => true)).'
+                      '. render_input('pay_bill_item['.$value.']', '', $name,'text', array('readonly' => true)).'
                    </td>
                    <td>
                       '. render_input('pay_bill_amount['.$value.']', '',number_format($bill_mapping->amount,2),'text', array('readonly' => true, 'data-type' => 'currency')).'
@@ -11924,6 +12079,7 @@ class Accounting extends AdminController
         $data['accounts'] = $this->accounting_model->get_accounts('', 'account_detail_type_id = 14');
         $data['list_checks'] = $this->accounting_model->get_checks('', '', 'issue = 1');
         $data['type'] = 'check';
+        $data['vendors'] = $this->accounting_model->get_vendor();
         
         $data['currency'] = get_base_currency();
         $this->load->view('accounting/checks/manage', $data);
@@ -12318,37 +12474,19 @@ class Accounting extends AdminController
                     $id = $data_check['id'];
                     unset($data_check['id']);
 
-                    if(isset($is_back)){
-                        if(!isset($data_check['include_company_name_address'])){
-                            $data_check['include_company_name_address'] = 0;
-                        }
-
-                        if(!isset($data_check['include_routing_account_numbers'])){
-                            $data_check['include_routing_account_numbers'] = 0;
-                        }
-
-                        if(!isset($data_check['include_check_number'])){
-                            $data_check['include_check_number'] = 0;
-                        }
-
-                        if(!isset($data_check['include_bank_name'])){
-                            $data_check['include_bank_name'] = 0;
-                        }
-                    }
+                    
 
                     $success = $this->accounting_model->update_check($data_check, $id);
-                    if($success){
 
-                        if ($save_and_print_later == true) {
-                            $href = admin_url('accounting/checks/'. $id.'?print_later=true');
-                        } else if ($save_and_print_a_check == true) {
-                            $href = admin_url('accounting/checks/'. $id.'?print_check=true');
-                        }else if ($save_and_print_multiple_check == true) {
-                            $href = admin_url('accounting/checks/'. $id.'?print_multiple_check=true');
-                        }
-
-                        set_alert('success', _l('updated_successfully', _l('check')));      
+                    if ($save_and_print_later == true) {
+                        $href = admin_url('accounting/checks/'. $id.'?print_later=true');
+                    } else if ($save_and_print_a_check == true) {
+                        $href = admin_url('accounting/checks/'. $id.'?print_check=true');
+                    }else if ($save_and_print_multiple_check == true) {
+                        $href = admin_url('accounting/checks/'. $id.'?print_multiple_check=true');
                     }
+
+                    set_alert('success', _l('updated_successfully', _l('check')));      
 
                     if ($this->input->is_ajax_request()) {
                         echo json_encode(['success' => true, 'message' => _l('updated_successfully', _l('check')), 'href' => $href]); die;
@@ -12810,7 +12948,7 @@ class Accounting extends AdminController
                 'unit_price',
                 db_prefix().'fe_assets.depreciation',
                 'status',
-                '(select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'fe_assets.id and ' . db_prefix() . 'acc_account_history.rel_type = "fe_asset") as count_account_historys',
+                db_prefix() . 'acc_account_history.rel_id as count_account_historys',
             ];
 
             $where = [];
@@ -12821,17 +12959,17 @@ class Accounting extends AdminController
                 foreach ($status as $key => $value) {
                     if($value == 'converted'){
                         if($where_status != ''){
-                            $where_status .= ' or ((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'fe_assets.id and ' . db_prefix() . 'acc_account_history.rel_type = "fe_asset") > 0)';
+                            $where_status .= ' or ('.db_prefix() . 'acc_account_history.rel_id is not null)';
                         }else{
-                            $where_status .= '((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'fe_assets.id and ' . db_prefix() . 'acc_account_history.rel_type = "fe_asset") > 0)';
+                            $where_status .= '('.db_prefix() . 'acc_account_history.rel_id is not null)';
                         }
                     }
 
                     if($value == 'has_not_been_converted'){
                         if($where_status != ''){
-                            $where_status .= ' or ((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'fe_assets.id and ' . db_prefix() . 'acc_account_history.rel_type = "fe_asset") = 0)';
+                            $where_status .= ' or ('.db_prefix() . 'acc_account_history.rel_id is null)';
                         }else{
-                            $where_status .= '((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'fe_assets.id and ' . db_prefix() . 'acc_account_history.rel_type = "fe_asset") = 0)';
+                            $where_status .= '('.db_prefix() . 'acc_account_history.rel_id is null)';
                         }
                     }
                 }
@@ -12871,9 +13009,10 @@ class Accounting extends AdminController
             $sIndexColumn = 'id';
             $sTable       = db_prefix() . 'fe_assets';
             $join         = [
-                'LEFT JOIN '.db_prefix().'fe_models ON '.db_prefix().'fe_models.id = '.db_prefix().'fe_assets.model_id'
+                'LEFT JOIN '.db_prefix().'fe_models ON '.db_prefix().'fe_models.id = '.db_prefix().'fe_assets.model_id',
+                'LEFT JOIN ' . db_prefix() . 'acc_account_history ON ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'fe_assets.id AND ' . db_prefix() . 'acc_account_history.rel_type = "fe_asset"',
             ];
-            $result       = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, ['model_name', db_prefix().'fe_models.model_no as model_no', 'checkin_out']);
+            $result       = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, ['model_name', db_prefix().'fe_models.model_no as model_no', 'checkin_out'], 'GROUP BY '.db_prefix() . 'fe_assets.id');
 
             $output  = $result['output'];
             $rResult = $result['rResult'];
@@ -12888,8 +13027,8 @@ class Accounting extends AdminController
                 
                 $numberOutput .= '<div class="row-options">';
 
-                if ($aRow['count_account_historys'] == 0) {
-                    if (has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['date_buy'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))) {
+                if ($aRow['count_account_historys'] == '') {
+                    if (has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && $aRow['date_buy'] != '' && strtotime($acc_closing_date) <= strtotime($aRow['date_buy'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))) {
                         $numberOutput .= '<a href="#" onclick="convert(this); return false;" class="text-success" id="purchase-order-id-'.$aRow['id'].'" data-id="'.$aRow['id'].'" data-amount="'.$aRow['unit_price'].'" data-type="fe_asset">' . _l('acc_convert') . '</a>';
                     }
                 }else{
@@ -12949,7 +13088,7 @@ class Accounting extends AdminController
                 $status_name = _l('has_not_been_converted');
                 $label_class = 'default';
 
-                if ($aRow['count_account_historys'] > 0) {
+                if ($aRow['count_account_historys'] != '') {
                     $label_class = 'success';
                     $status_name = _l('acc_converted');
                 } 
@@ -12957,7 +13096,7 @@ class Accounting extends AdminController
                 $row[] = '<span class="label label-' . $label_class . ' s-status purchase-order-return-status-' . $aRow['id'] . '">' . $status_name . '</span>';
                 
                 $options = '';
-                if($aRow['count_account_historys'] == 0 && has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['date_buy'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))){
+                if($aRow['count_account_historys'] == '' && has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && $aRow['date_buy'] != '' && strtotime($acc_closing_date) <= strtotime($aRow['date_buy'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))){
                     $options = icon_btn('#', 'fa fa-share', 'btn-success', [
                         'title' => _l('acc_convert'),
                         'data-id' =>$aRow['id'],
@@ -12995,7 +13134,7 @@ class Accounting extends AdminController
             }
 
             $select = [
-                'id',
+                db_prefix() . 'fe_assets.id as id',
                 'assets_name',
                 'date_buy',
                 'product_key',
@@ -13006,7 +13145,7 @@ class Accounting extends AdminController
                 'manufacturer_id',  
                 'checkin_out',     
                 'status',
-                '(select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'fe_assets.id and ' . db_prefix() . 'acc_account_history.rel_type = "fe_license") as count_account_historys',
+                db_prefix() . 'acc_account_history.rel_id as count_account_historys',
             ];
 
             $where = [];
@@ -13017,17 +13156,17 @@ class Accounting extends AdminController
                 foreach ($status as $key => $value) {
                     if($value == 'converted'){
                         if($where_status != ''){
-                            $where_status .= ' or ((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'fe_assets.id and ' . db_prefix() . 'acc_account_history.rel_type = "fe_license") > 0)';
+                            $where_status .= ' or ('.db_prefix() . 'acc_account_history.rel_id is not null)';
                         }else{
-                            $where_status .= '((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'fe_assets.id and ' . db_prefix() . 'acc_account_history.rel_type = "fe_license") > 0)';
+                            $where_status .= '('.db_prefix() . 'acc_account_history.rel_id is not null)';
                         }
                     }
 
                     if($value == 'has_not_been_converted'){
                         if($where_status != ''){
-                            $where_status .= ' or ((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'fe_assets.id and ' . db_prefix() . 'acc_account_history.rel_type = "fe_license") = 0)';
+                            $where_status .= ' or ('.db_prefix() . 'acc_account_history.rel_id is null)';
                         }else{
-                            $where_status .= '((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'fe_assets.id and ' . db_prefix() . 'acc_account_history.rel_type = "fe_license") = 0)';
+                            $where_status .= '('.db_prefix() . 'acc_account_history.rel_id is null)';
                         }
                     }
                 }
@@ -13067,8 +13206,9 @@ class Accounting extends AdminController
             $sIndexColumn = 'id';
             $sTable       = db_prefix() . 'fe_assets';
             $join         = [
+                'LEFT JOIN ' . db_prefix() . 'acc_account_history ON ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'fe_assets.id AND ' . db_prefix() . 'acc_account_history.rel_type = "fe_license"',
             ];
-            $result       = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, ['id', 'unit_price', 'seats']);
+            $result       = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, ['unit_price', 'seats'], 'GROUP BY '.db_prefix() . 'fe_assets.id');
 
             $output  = $result['output'];
             $rResult = $result['rResult'];
@@ -13085,7 +13225,7 @@ class Accounting extends AdminController
 
                 $amount = $aRow['unit_price'] * $aRow['seats'];
 
-                if ($aRow['count_account_historys'] == 0) {
+                if ($aRow['count_account_historys'] == '') {
                     if (has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['date_buy'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))) {
                         $numberOutput .= '<a href="#" onclick="convert(this); return false;" class="text-success" id="purchase-order-id-'.$aRow['id'].'" data-id="'.$aRow['id'].'" data-amount="'.$amount.'" data-type="fe_license">' . _l('acc_convert') . '</a>';
                     }
@@ -13134,7 +13274,7 @@ class Accounting extends AdminController
                 $status_name = _l('has_not_been_converted');
                 $label_class = 'default';
 
-                if ($aRow['count_account_historys'] > 0) {
+                if ($aRow['count_account_historys'] != '') {
                     $label_class = 'success';
                     $status_name = _l('acc_converted');
                 } 
@@ -13142,7 +13282,7 @@ class Accounting extends AdminController
                 $row[] = '<span class="label label-' . $label_class . ' s-status purchase-order-return-status-' . $aRow['id'] . '">' . $status_name . '</span>';
                 
                 $options = '';
-                if($aRow['count_account_historys'] == 0 && has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['date_buy'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))){
+                if($aRow['count_account_historys'] == '' && has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['date_buy'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))){
                     $options = icon_btn('#', 'fa fa-share', 'btn-success', [
                         'title' => _l('acc_convert'),
                         'data-id' =>$aRow['id'],
@@ -13179,7 +13319,7 @@ class Accounting extends AdminController
             }
 
             $select = [
-                'id',
+                db_prefix() . 'fe_assets.id as id',
                 'assets_name',
                 'category_id',
                 'series',
@@ -13190,7 +13330,7 @@ class Accounting extends AdminController
                 'unit_price',
                 'order_number',
                 'date_buy',
-                '(select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'fe_assets.id and ' . db_prefix() . 'acc_account_history.rel_type = "fe_component") as count_account_historys',
+                db_prefix() . 'acc_account_history.rel_id as count_account_historys',
             ];
 
             $where = [];
@@ -13201,17 +13341,17 @@ class Accounting extends AdminController
                 foreach ($status as $key => $value) {
                     if($value == 'converted'){
                         if($where_status != ''){
-                            $where_status .= ' or ((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'fe_assets.id and ' . db_prefix() . 'acc_account_history.rel_type = "fe_component") > 0)';
+                            $where_status .= ' or ('.db_prefix() . 'acc_account_history.rel_id is not null)';
                         }else{
-                            $where_status .= '((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'fe_assets.id and ' . db_prefix() . 'acc_account_history.rel_type = "fe_component") > 0)';
+                            $where_status .= '('.db_prefix() . 'acc_account_history.rel_id is not null)';
                         }
                     }
 
                     if($value == 'has_not_been_converted'){
                         if($where_status != ''){
-                            $where_status .= ' or ((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'fe_assets.id and ' . db_prefix() . 'acc_account_history.rel_type = "fe_component") = 0)';
+                            $where_status .= ' or ('.db_prefix() . 'acc_account_history.rel_id is null)';
                         }else{
-                            $where_status .= '((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'fe_assets.id and ' . db_prefix() . 'acc_account_history.rel_type = "fe_component") = 0)';
+                            $where_status .= '('.db_prefix() . 'acc_account_history.rel_id is null)';
                         }
                     }
                 }
@@ -13251,8 +13391,9 @@ class Accounting extends AdminController
             $sIndexColumn = 'id';
             $sTable       = db_prefix() . 'fe_assets';
             $join         = [
+                'LEFT JOIN ' . db_prefix() . 'acc_account_history ON ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'fe_assets.id AND ' . db_prefix() . 'acc_account_history.rel_type = "fe_component"',
             ];
-            $result       = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, ['id', 'unit_price']);
+            $result       = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, ['unit_price'], 'GROUP BY '.db_prefix() . 'fe_assets.id');
 
             $output  = $result['output'];
             $rResult = $result['rResult'];
@@ -13277,7 +13418,7 @@ class Accounting extends AdminController
                 $numberOutput .= '<div class="row-options">';
                 $amount = $aRow['unit_price'] * $aRow['quantity'];
 
-                if ($aRow['count_account_historys'] == 0) {
+                if ($aRow['count_account_historys'] == '') {
                     if (has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['date_buy'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))) {
                         $numberOutput .= '<a href="#" onclick="convert(this); return false;" class="text-success" id="purchase-order-id-'.$aRow['id'].'" data-id="'.$aRow['id'].'" data-amount="'.$amount.'" data-type="fe_component">' . _l('acc_convert') . '</a>';
                     }
@@ -13326,7 +13467,7 @@ class Accounting extends AdminController
                 $status_name = _l('has_not_been_converted');
                 $label_class = 'default';
 
-                if ($aRow['count_account_historys'] > 0) {
+                if ($aRow['count_account_historys'] != '') {
                     $label_class = 'success';
                     $status_name = _l('acc_converted');
                 } 
@@ -13334,7 +13475,7 @@ class Accounting extends AdminController
                 $row[] = '<span class="label label-' . $label_class . ' s-status purchase-order-return-status-' . $aRow['id'] . '">' . $status_name . '</span>';
                 
                 $options = '';
-                if($aRow['count_account_historys'] == 0 && has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['date_buy'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))){
+                if($aRow['count_account_historys'] == '' && has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['date_buy'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))){
                     $options = icon_btn('#', 'fa fa-share', 'btn-success', [
                         'title' => _l('acc_convert'),
                         'data-id' =>$aRow['id'],
@@ -13371,7 +13512,7 @@ class Accounting extends AdminController
             }
 
             $select = [
-                'id',
+                db_prefix() . 'fe_assets.id as id',
                 'assets_name',
                 'category_id',
                 'model_no',
@@ -13380,7 +13521,7 @@ class Accounting extends AdminController
                 'quantity',
                 'min_quantity',
                 'unit_price',
-                '(select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'fe_assets.id and ' . db_prefix() . 'acc_account_history.rel_type = "fe_consumable") as count_account_historys',
+                db_prefix() . 'acc_account_history.rel_id as count_account_historys',
             ];
 
             $where = [];
@@ -13391,17 +13532,17 @@ class Accounting extends AdminController
                 foreach ($status as $key => $value) {
                     if($value == 'converted'){
                         if($where_status != ''){
-                            $where_status .= ' or ((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'fe_assets.id and ' . db_prefix() . 'acc_account_history.rel_type = "fe_consumable") > 0)';
+                            $where_status .= ' or ('.db_prefix() . 'acc_account_history.rel_id is not null)';
                         }else{
-                            $where_status .= '((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'fe_assets.id and ' . db_prefix() . 'acc_account_history.rel_type = "fe_consumable") > 0)';
+                            $where_status .= '('.db_prefix() . 'acc_account_history.rel_id is not null)';
                         }
                     }
 
                     if($value == 'has_not_been_converted'){
                         if($where_status != ''){
-                            $where_status .= ' or ((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'fe_assets.id and ' . db_prefix() . 'acc_account_history.rel_type = "fe_consumable") = 0)';
+                            $where_status .= ' or ('.db_prefix() . 'acc_account_history.rel_id is null)';
                         }else{
-                            $where_status .= '((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'fe_assets.id and ' . db_prefix() . 'acc_account_history.rel_type = "fe_consumable") = 0)';
+                            $where_status .= '('.db_prefix() . 'acc_account_history.rel_id is null)';
                         }
                     }
                 }
@@ -13441,8 +13582,9 @@ class Accounting extends AdminController
             $sIndexColumn = 'id';
             $sTable       = db_prefix() . 'fe_assets';
             $join         = [
+                'LEFT JOIN ' . db_prefix() . 'acc_account_history ON ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'fe_assets.id AND ' . db_prefix() . 'acc_account_history.rel_type = "fe_consumable"',
             ];
-            $result       = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, ['id', 'unit_price']);
+            $result       = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, ['unit_price'], 'GROUP BY '.db_prefix() . 'fe_assets.id');
 
             $output  = $result['output'];
             $rResult = $result['rResult'];
@@ -13469,7 +13611,7 @@ class Accounting extends AdminController
 
                 $amount = $aRow['unit_price'] * $aRow['quantity'];
 
-                if ($aRow['count_account_historys'] == 0) {
+                if ($aRow['count_account_historys'] == '') {
                     if (has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['date_buy'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))) {
                         $numberOutput .= '<a href="#" onclick="convert(this); return false;" class="text-success" id="purchase-order-id-'.$aRow['id'].'" data-id="'.$aRow['id'].'" data-amount="'.$amount.'" data-type="fe_consumable">' . _l('acc_convert') . '</a>';
                     }
@@ -13522,7 +13664,7 @@ class Accounting extends AdminController
                 $status_name = _l('has_not_been_converted');
                 $label_class = 'default';
 
-                if ($aRow['count_account_historys'] > 0) {
+                if ($aRow['count_account_historys'] != '') {
                     $label_class = 'success';
                     $status_name = _l('acc_converted');
                 } 
@@ -13530,7 +13672,7 @@ class Accounting extends AdminController
                 $row[] = '<span class="label label-' . $label_class . ' s-status purchase-order-return-status-' . $aRow['id'] . '">' . $status_name . '</span>';
                 
                 $options = '';
-                if($aRow['count_account_historys'] == 0 && has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['date_buy'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))){
+                if($aRow['count_account_historys'] == '' && has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['date_buy'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))){
                     $options = icon_btn('#', 'fa fa-share', 'btn-success', [
                         'title' => _l('acc_convert'),
                         'data-id' =>$aRow['id'],
@@ -13564,7 +13706,7 @@ class Accounting extends AdminController
             }
 
             $select = [
-                'id',
+                db_prefix() . 'fe_asset_maintenances.id as id',
                 'asset_id',
                 'supplier_id',
                 'maintenance_type',
@@ -13575,7 +13717,7 @@ class Accounting extends AdminController
                 'notes',
                 'date_creator',
                 'warranty_improvement',
-                '(select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'fe_asset_maintenances.id and ' . db_prefix() . 'acc_account_history.rel_type = "fe_maintenance") as count_account_historys',
+                db_prefix() . 'acc_account_history.rel_id as count_account_historys',
             ];
 
             $where = [];
@@ -13586,17 +13728,17 @@ class Accounting extends AdminController
                 foreach ($status as $key => $value) {
                     if($value == 'converted'){
                         if($where_status != ''){
-                            $where_status .= ' or ((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'fe_asset_maintenances.id and ' . db_prefix() . 'acc_account_history.rel_type = "fe_maintenance") > 0)';
+                            $where_status .= ' or ('.db_prefix() . 'acc_account_history.rel_id is not null)';
                         }else{
-                            $where_status .= '((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'fe_asset_maintenances.id and ' . db_prefix() . 'acc_account_history.rel_type = "fe_maintenance") > 0)';
+                            $where_status .= '('.db_prefix() . 'acc_account_history.rel_id is not null)';
                         }
                     }
 
                     if($value == 'has_not_been_converted'){
                         if($where_status != ''){
-                            $where_status .= ' or ((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'fe_asset_maintenances.id and ' . db_prefix() . 'acc_account_history.rel_type = "fe_maintenance") = 0)';
+                            $where_status .= ' or ('.db_prefix() . 'acc_account_history.rel_id is null)';
                         }else{
-                            $where_status .= '((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'fe_asset_maintenances.id and ' . db_prefix() . 'acc_account_history.rel_type = "fe_maintenance") = 0)';
+                            $where_status .= '('.db_prefix() . 'acc_account_history.rel_id is null)';
                         }
                     }
                 }
@@ -13633,8 +13775,9 @@ class Accounting extends AdminController
             $sIndexColumn = 'id';
             $sTable       = db_prefix() . 'fe_asset_maintenances';
             $join         = [
+                'LEFT JOIN ' . db_prefix() . 'acc_account_history ON ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'fe_asset_maintenances.id AND ' . db_prefix() . 'acc_account_history.rel_type = "fe_maintenance"',
             ];
-            $result       = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, ['id']);
+            $result       = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, [], 'GROUP BY '.db_prefix() . 'fe_asset_maintenances.id');
 
             $output  = $result['output'];
             $rResult = $result['rResult'];
@@ -13647,7 +13790,7 @@ class Accounting extends AdminController
                 
                 $numberOutput .= '<div class="row-options">';
 
-                if ($aRow['count_account_historys'] == 0) {
+                if ($aRow['count_account_historys'] == '') {
                     if (has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['start_date'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))) {
                         $numberOutput .= '<a href="#" onclick="convert(this); return false;" class="text-success" id="purchase-order-id-'.$aRow['id'].'" data-id="'.$aRow['id'].'" data-amount="'.$aRow['cost'].'" data-type="fe_maintenance">' . _l('acc_convert') . '</a>';
                     }
@@ -13685,7 +13828,7 @@ class Accounting extends AdminController
                 $status_name = _l('has_not_been_converted');
                 $label_class = 'default';
 
-                if ($aRow['count_account_historys'] > 0) {
+                if ($aRow['count_account_historys'] != '') {
                     $label_class = 'success';
                     $status_name = _l('acc_converted');
                 } 
@@ -13693,7 +13836,7 @@ class Accounting extends AdminController
                 $row[] = '<span class="label label-' . $label_class . ' s-status purchase-order-return-status-' . $aRow['id'] . '">' . $status_name . '</span>';
                 
                 $options = '';
-                if($aRow['count_account_historys'] == 0 && has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['start_date'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))){
+                if($aRow['count_account_historys'] == '' && has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['start_date'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))){
                     $options = icon_btn('#', 'fa fa-share', 'btn-success', [
                         'title' => _l('acc_convert'),
                         'data-id' =>$aRow['id'],
@@ -13726,13 +13869,13 @@ class Accounting extends AdminController
             }
 
             $select = [
-                'id',
+                db_prefix() . 'fe_depreciation_items.id as id',
                 'item_id',
                 'item_id',
                 'value',
-                'date',
-                '(select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'fe_depreciation_items.id and ' . db_prefix() . 'acc_account_history.rel_type = "fe_depreciation") as count_account_historys',
-                'id',
+                db_prefix() . 'fe_depreciation_items.date as date',
+                db_prefix() . 'acc_account_history.rel_id as count_account_historys',
+                db_prefix() . 'fe_depreciation_items.id as id',
             ];
 
             $where = [];
@@ -13743,17 +13886,17 @@ class Accounting extends AdminController
                 foreach ($status as $key => $value) {
                     if($value == 'converted'){
                         if($where_status != ''){
-                            $where_status .= ' or ((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'fe_depreciation_items.id and ' . db_prefix() . 'acc_account_history.rel_type = "fe_depreciation") > 0)';
+                            $where_status .= ' or ('.db_prefix() . 'acc_account_history.rel_id is not null)';
                         }else{
-                            $where_status .= '((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'fe_depreciation_items.id and ' . db_prefix() . 'acc_account_history.rel_type = "fe_depreciation") > 0)';
+                            $where_status .= '('.db_prefix() . 'acc_account_history.rel_id is not null)';
                         }
                     }
 
                     if($value == 'has_not_been_converted'){
                         if($where_status != ''){
-                            $where_status .= ' or ((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'fe_depreciation_items.id and ' . db_prefix() . 'acc_account_history.rel_type = "fe_depreciation") = 0)';
+                            $where_status .= ' or ('.db_prefix() . 'acc_account_history.rel_id is null)';
                         }else{
-                            $where_status .= '((select count(*) from ' . db_prefix() . 'acc_account_history where ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'fe_depreciation_items.id and ' . db_prefix() . 'acc_account_history.rel_type = "fe_depreciation") = 0)';
+                            $where_status .= '('.db_prefix() . 'acc_account_history.rel_id is null)';
                         }
                     }
                 }
@@ -13790,8 +13933,9 @@ class Accounting extends AdminController
             $sIndexColumn = 'id';
             $sTable       = db_prefix() . 'fe_depreciation_items';
             $join         = [
+                'LEFT JOIN ' . db_prefix() . 'acc_account_history ON ' . db_prefix() . 'acc_account_history.rel_id = ' . db_prefix() . 'fe_depreciation_items.id AND ' . db_prefix() . 'acc_account_history.rel_type = "fe_depreciation"',
             ];
-            $result       = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, ['id']);
+            $result       = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, [], 'GROUP BY '.db_prefix() . 'fe_depreciation_items.id');
 
             $output  = $result['output'];
             $rResult = $result['rResult'];
@@ -13812,7 +13956,7 @@ class Accounting extends AdminController
                 
                 $numberOutput .= '<div class="row-options">';
 
-                if ($aRow['count_account_historys'] == 0) {
+                if ($aRow['count_account_historys'] == '') {
                     if (has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['date'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))) {
                         $numberOutput .= '<a href="#" onclick="convert(this); return false;" class="text-success" id="purchase-order-id-'.$aRow['id'].'" data-id="'.$aRow['id'].'" data-amount="'.$aRow['value'].'" data-type="fe_depreciation">' . _l('acc_convert') . '</a>';
                     }
@@ -13835,7 +13979,7 @@ class Accounting extends AdminController
                 $status_name = _l('has_not_been_converted');
                 $label_class = 'default';
 
-                if ($aRow['count_account_historys'] > 0) {
+                if ($aRow['count_account_historys'] != '') {
                     $label_class = 'success';
                     $status_name = _l('acc_converted');
                 } 
@@ -13843,7 +13987,7 @@ class Accounting extends AdminController
                 $row[] = '<span class="label label-' . $label_class . ' s-status purchase-order-return-status-' . $aRow['id'] . '">' . $status_name . '</span>';
                 
                 $options = '';
-                if($aRow['count_account_historys'] == 0 && has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['date'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))){
+                if($aRow['count_account_historys'] == '' && has_permission('accounting_transaction', '', 'create') && (($acc_closing_date != '' && strtotime($acc_closing_date) <= strtotime($aRow['date'])) || $acc_closing_date == '' || strtotime(date('Y-m-d')) <= strtotime($acc_closing_date))){
                     $options = icon_btn('#', 'fa fa-share', 'btn-success', [
                         'title' => _l('acc_convert'),
                         'data-id' =>$aRow['id'],
@@ -14444,7 +14588,11 @@ class Accounting extends AdminController
             set_alert('warning', _l('problem_deleting', _l('pay_bill')));
         }
 
-        redirect(admin_url('accounting/bills/#'.$bill));
+        if($bill == 0){
+            redirect(admin_url('accounting/pay_bills'));
+        }else{
+            redirect(admin_url('accounting/bills/#'.$bill));
+        }
     }
 
 
@@ -14847,18 +14995,39 @@ class Accounting extends AdminController
                 $number_querystring = 'number = "' . $number_filter . '"';
             }
             
-            
 
             if (isset($payee_filter) && $payee_filter != '') {
-                $temp = '';
+                $vendor_temp = '';
+                $customer_temp = '';
                 $araylengh = count($payee_filter);
                 for ($i = 0; $i < $araylengh; $i++) {
-                    $temp = $temp . $payee_filter[$i];
-                    if ($i != $araylengh - 1) {
-                        $temp = $temp . ',';
+                    $payee = explode('_', $payee_filter[$i]);
+                    if(isset($payee[1])){
+                        if($payee[0] == 'vendor'){
+                            $vendor_temp = $vendor_temp . $payee[1];
+                            if ($i != $araylengh - 1) {
+                                $vendor_temp = $vendor_temp . ',';
+                            }
+                        }else{
+                            $customer_temp = $customer_temp . $payee[1];
+                            if ($i != $araylengh - 1) {
+                                $customer_temp = $customer_temp . ',';
+                            }
+                        }
                     }
                 }
-                $payee_querystring = 'FIND_IN_SET(customer, "' . $temp . '")';
+
+                if($vendor_temp != ''){
+                    $payee_querystring .= 'FIND_IN_SET(vendor, "' . $vendor_temp . '")';
+                }
+
+                if($customer_temp != ''){
+                    if($payee_querystring != ''){
+                        $payee_querystring = '('.$payee_querystring.' OR FIND_IN_SET(customer, "' . $customer_temp . '"))';
+                    }else{
+                        $payee_querystring .= 'FIND_IN_SET(customer, "' . $customer_temp . '")';
+                    }
+                }
             }
 
             if($from_credit_filter != ''){
@@ -14886,9 +15055,8 @@ class Accounting extends AdminController
                         $temp = $temp . ',';
                     }
                 }
-                $account_querystring = 'FIND_IN_SET(account, "' . $temp . '")';
+                $account_querystring = 'FIND_IN_SET(split, "' . $temp . '")';
             }
-
 
             $arrQuery = array($from_date_querystring, $to_date_querystring, $number_querystring, $payee_querystring, $from_credit_querystring, $to_credit_querystring, $from_debit_querystring, $to_debit_querystring, $account_querystring, );
 
@@ -15277,5 +15445,226 @@ class Accounting extends AdminController
         }
 
         echo json_encode(['success' => $success, 'message' => $message]);
+    }
+
+    /**
+     * currency rate table
+     * @return [type] 
+     */
+    public function currency_rate_table(){
+        $this->app->get_table_data(module_views_path('accounting', 'setting/currencies/currency_rate_table'));
+    }
+
+    /**
+     * update automatic conversion
+     */
+    public function update_setting_currency_rate(){
+        $data = $this->input->post();
+        $success = $this->accounting_model->update_setting_currency_rate($data);
+        if($success == true){
+            $message = _l('updated_successfully', _l('setting'));
+            set_alert('success', $message);
+        }
+        redirect(admin_url('accounting/setting?group=currency_rates'));
+    }
+
+    /**
+     * Gets all currency rate online.
+     */
+    public function get_all_currency_rate_online()
+    {
+        $result = $this->accounting_model->get_all_currency_rate_online();
+        if($result){
+            set_alert('success', _l('updated_successfully', _l('acc_currency_rates')));
+        }
+        else{
+            set_alert('warning', _l('no_data_changes', _l('acc_currency_rates')));                  
+        }
+
+        redirect(admin_url('accounting/setting?group=currency_rates'));
+    }
+
+    /**
+     * update currency rate
+     * @return [type] 
+     */
+    public function update_currency_rate($id)
+    {
+        if($this->input->post()){
+            $data = $this->input->post();
+
+            $result =  $this->accounting_model->update_currency_rate($data, $id);
+            if($result){
+                set_alert('success', _l('updated_successfully', _l('acc_currency_rates')));
+            }
+            else{
+                set_alert('warning', _l('no_data_changes', _l('acc_currency_rates')));                  
+            }
+        }
+
+        redirect(admin_url('accounting/setting?group=currency_rates'));
+    }
+
+    /**
+     * Gets the currency rate online.
+     *
+     * @param        $id     The identifier
+     */
+    public function get_currency_rate_online($id)
+    {
+            $result =  $this->accounting_model->get_currency_rate_online($id);
+            echo json_encode(['value' => $result]);
+            die;
+    }
+
+
+    /**
+     * delete currency
+     * @param  [type] $id 
+     * @return [type]     
+     */
+    public function delete_currency_rate($id){
+        if($id != ''){
+            $result =  $this->accounting_model->delete_currency_rate($id);
+            if($result){
+                set_alert('success', _l('deleted_successfully', _l('acc_currency_rates')));
+            }
+            else{
+                set_alert('danger', _l('deleted_failure', _l('acc_currency_rates')));                   
+            }
+        }
+        redirect(admin_url('accounting/setting?group=currency_rates'));
+    }
+
+    /**
+     * currency rate modal
+     * @return [type] 
+     */
+    public function currency_rate_modal()
+    {
+        if (!$this->input->is_ajax_request()) {
+            show_404();
+        }
+
+        $id=$this->input->post('id');
+
+        $data=[];
+        $data['currency_rate'] = $this->accounting_model->get_currency_rate($id);
+
+        $this->load->view('setting/currencies/currency_rate_modal', $data);
+    }
+
+    /**
+     * currency rate table
+     * @return [type] 
+     */
+    public function currency_rate_logs_table(){
+        $this->app->get_table_data(module_views_path('accounting', 'setting/currencies/currency_rate_logs_table'));
+    }
+
+    public function reset_accounts(){
+        update_option('acc_add_default_account', 0);
+        update_option('acc_add_default_account_new', 0);
+
+        $affectedRows = 0;
+        if ($this->db->table_exists(db_prefix() . 'acc_accounts')) {
+            $this->db->query('DROP TABLE `'.db_prefix() .'acc_accounts`;');
+            $this->db->query('CREATE TABLE ' . db_prefix() . "acc_accounts (
+              `id` INT(11) NOT NULL AUTO_INCREMENT,
+              `name` VARCHAR(255) NOT NULL,
+              `key_name` VARCHAR(255) NULL,
+              `number` VARCHAR(45) NULL,
+              `parent_account` INT(11) NULL,
+              `account_type_id` INT(11) NOT NULL,
+              `account_detail_type_id` INT(11) NOT NULL,
+              `balance` DECIMAL(15,2) NULL,
+              `balance_as_of` DATE NULL,
+              `description` TEXT NULL,
+              `default_account` INT(11) NOT NULL DEFAULT 0,
+              `active` INT(11) NOT NULL DEFAULT 1,
+              `access_token` TEXT NULL,
+                `account_id` VARCHAR(255) NULL,
+                `plaid_status` TINYINT(5) NOT NULL DEFAULT 0 COMMENT \"1=>verified, 0=>not verified\",
+                `plaid_account_name` VARCHAR(255) NULL,
+                `bank_account` TEXT NULL,
+                `bank_routing` TEXT NULL,
+                `address_line_1` TEXT NULL,
+                `address_line_2` TEXT NULL,
+                `bank_name` varchar(255) NULL,
+              PRIMARY KEY (`id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=" . $this->db->char_set . ';');
+            $this->accounting_model->add_default_account();
+            $this->accounting_model->add_default_account_new();
+            $affectedRows++;
+        }
+
+        if (!acc_account_exists('acc_opening_balance_equity')) {
+          $this->db->query("INSERT INTO `". db_prefix() ."acc_accounts` (`name`, `key_name`, `account_type_id`, `account_detail_type_id`, `default_account`, `active`) VALUES ('', 'acc_opening_balance_equity', '10', '71', '1', '1');");
+            $affectedRows++;
+        }
+
+        echo $affectedRows;
+    }
+
+    public function table_paybill()
+    {
+        $this->app->get_table_data(module_views_path('accounting', 'pay_bills/pay_bill_table'));
+    }
+
+    /**
+     * pay bills
+     * @return [type] 
+     */
+    public function pay_bills(){
+        $data['title']      = _l('acc_paybill_management');
+        $data['list_vendor'] = $this->accounting_model->get_vendor();
+        
+        $this->load->view('pay_bills/manage', $data);
+    }
+
+    public function add_transaction_save(){
+        $data = $this->input->post();
+        
+        $success = $this->accounting_model->add_transaction_save($data);
+
+        echo json_encode([
+            'success' => $success,
+            'message' => _l('updated_successfully', _l('transaction'))
+        ]);
+        die;
+    }
+
+    public function match_transaction_save(){
+        $data = $this->input->post();
+        
+        $success = $this->accounting_model->match_transaction_save($data);
+
+        echo json_encode([
+            'success' => $success,
+            'message' => _l('updated_successfully', _l('transaction'))
+        ]);
+        die;
+    }
+
+    public function unmatch_transaction($transaction_bank_id){
+
+        $success = $this->accounting_model->unmatch_transaction($transaction_bank_id);
+        $message = _l('unmatch_fail');
+        if($success == true){
+            $message = _l('unmatched_successfully');
+        }
+
+        echo json_encode([
+            'success' => $success,
+            'message' => $message
+        ]);
+        die;
+    }
+
+    public function get_item_data($id){
+        $item = $this->accounting_model->get_items($id);
+
+        echo json_encode($item);
+        die();
     }
 }

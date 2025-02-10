@@ -966,3 +966,61 @@ function acc_check_csrf_protection()
     }
     return 'false';
 }
+
+/**
+ * get currency rate
+ * @param  [type] $from
+ * @param  [type] $to
+ * @return [type]           
+ */
+function acc_get_currency_rate($from, $to)
+{
+    $CI   = & get_instance();
+    if($from == $to){
+        return 1;
+    }
+
+    $amount_after_convertion = 1;
+
+    $CI->db->where('from_currency_name', strtoupper($from));
+    $CI->db->where('to_currency_name', strtoupper($to));
+    $currency_rates = $CI->db->get(db_prefix().'currency_rates')->row();
+    
+    if($currency_rates){
+        $amount_after_convertion = $currency_rates->to_currency_rate;
+    }
+
+    return $amount_after_convertion;
+}
+
+if (!function_exists('acc_get_vendor_company_name')) {
+	function acc_get_vendor_company_name($userid, $prevent_empty_company = false)
+	{
+	    if ($userid !== '') {
+	        $_userid = $userid;
+	    }
+	    $CI = & get_instance();
+
+	    $client = $CI->db->select('company')
+	    ->where('userid', $_userid)
+	    ->from(db_prefix() . 'pur_vendor')
+	    ->get()
+	    ->row();
+	    if ($client) {
+	        return $client->company;
+	    }
+
+	    return '';
+	}
+}
+
+function acc_get_item_name_by_id($id){
+	$CI             = &get_instance();
+	$CI->db->where('id', $id);
+	$item = $CI->db->get(db_prefix().'items')->row();
+
+	if($item){
+		return $item->description;
+	}
+	return '';
+}

@@ -26,7 +26,7 @@
         </tr>
         <tr>
           <td colspan="7">
-            <p class="text-center no-margin-top-20 no-margin-left-24"><?php echo _d($data_report['to_date']); ?></p>
+            <p class="text-center no-margin-top-20 no-margin-left-24"><?php echo _l('acc_as_of', _d($data_report['to_date'])); ?></p>
           </td>
           <td></td>
           <td></td>
@@ -50,7 +50,7 @@
           <td class="th_total_width_auto text-bold">1 - 30</td>
           <td class="th_total_width_auto text-bold">31 - 60</td>
           <td class="th_total_width_auto text-bold">61 - 90</td>
-          <td class="th_total_width_auto text-bold">91 AND OVER</td>
+          <td class="th_total_width_auto text-bold">> 90</td>
           <td class="th_total_width_auto text-bold"><?php echo _l('total'); ?></td>
         </tr>
         <?php

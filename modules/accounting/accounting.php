@@ -4,10 +4,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
 /*
 Module Name: Accounting and Bookkeeping
 Description: Accounting is the process of recording and tracking financial statements to see the financial health of an entity.
-Version: 1.3.0
+Version: 1.3.4
 Requires at least: 2.3.*
-Author: Tagrit ERP Team
-Author URI: https://tagrit.com
+Author: GreenTech Solutions
+Author URI: https://codecanyon.net/user/greentech_solutions
  */
 
 define('ACCOUNTING_MODULE_NAME', 'accounting');
@@ -78,9 +78,11 @@ hooks()->add_action('after_payment_pur_invoice_added', 'acc_automatic_pur_invoic
 hooks()->add_action('after_purchase_payment_approve', 'acc_automatic_pur_invoice_payment_convert');
 hooks()->add_action('after_payment_pur_invoice_deleted', 'acc_delete_pur_invoice_payment_convert');
 
+
 hooks()->add_action('after_pur_invoice_added', 'acc_automatic_pur_invoice_convert');
 hooks()->add_action('after_pur_invoice_updated', 'acc_automatic_pur_invoice_convert');
 hooks()->add_action('after_pur_invoice_deleted', 'acc_delete_pur_invoice_convert');
+hooks()->add_action('after_purchase_invoice_approve', 'acc_automatic_pur_invoice_convert');
 
 hooks()->add_action('after_pur_refund_added', 'acc_automatic_pur_refund_convert');
 hooks()->add_action('after_pur_refund_updated', 'acc_automatic_pur_refund_convert');
@@ -135,13 +137,14 @@ hooks()->add_action('after_client_created', 'acc_client_created');
 hooks()->add_action('before_client_updated', 'acc_client_updated',10,2);
 hooks()->add_action('after_customer_profile_company_field', 'acc_init_client_profile');
 
+//get currency
+hooks()->add_action('after_cron_run', 'acc_cronjob_currency_rates');
 hooks()->add_action('accounting_init',ACCOUNTING_MODULE_NAME.'_appint');
 hooks()->add_action('pre_activate_module', ACCOUNTING_MODULE_NAME.'_preactivate');
 hooks()->add_action('pre_deactivate_module', ACCOUNTING_MODULE_NAME.'_predeactivate');
-
 // vendor
 
-define('ACCOUNTING_REVISION', 1303);
+define('ACCOUNTING_REVISION', 134);
 
 /**
  * Register activation module hook
@@ -264,6 +267,10 @@ function accounting_load_js() {
 	$viewuri = $_SERVER['REQUEST_URI'];
 	$mediaLocale = get_media_locale();
 
+	if (!(strpos($viewuri, 'admin/accounting') === false)) {
+		echo '<script src="' . module_dir_url(ACCOUNTING_MODULE_NAME, 'assets/js/tinymce_init.js') . '?v=' . ACCOUNTING_REVISION . '"></script>';
+	}
+
 	if (!(strpos($viewuri, 'admin/accounting/banking?group=banking_register') === false)) {
 		echo '<script src="' . module_dir_url(ACCOUNTING_MODULE_NAME, 'assets/js/banking/banking_register.js') . '?v=' . ACCOUNTING_REVISION . '"></script>';
 	}
@@ -278,6 +285,11 @@ function accounting_load_js() {
 
 	if (!(strpos($viewuri, 'admin/accounting/banking?group=reconcile_bank_account') === false)) {
 		echo '<script src="' . module_dir_url(ACCOUNTING_MODULE_NAME, 'assets/js/banking/reconcile_bank_account.js') . '?v=' . ACCOUNTING_REVISION . '"></script>';
+	}
+
+	if (!(strpos($viewuri, 'admin/accounting/banking?group=banking_feeds') === false)) {
+		echo '<script src="https://cdn.plaid.com/link/v2/stable/link-initialize.js"></script>';
+		echo '<script src="' . module_dir_url(ACCOUNTING_MODULE_NAME, 'assets/js/banking/plaid_new_transaction.js') . '?v=' . ACCOUNTING_REVISION . '"></script>';
 	}
 
 	if (!(strpos($viewuri, 'admin/accounting/banking?group=plaid_new_transaction') === false)) {
@@ -401,7 +413,9 @@ function accounting_load_js() {
         echo '<script src="' . module_dir_url(ACCOUNTING_MODULE_NAME, 'assets/js/setting/income_statement_modification.js') .'?v=' . ACCOUNTING_REVISION.'"></script>';
     }
 
-    
+    if(!(strpos($viewuri, '/admin/accounting/setting?group=currency_rates') === false)){
+        echo '<script src="' . module_dir_url(ACCOUNTING_MODULE_NAME, 'assets/js/setting/currency_rate.js') .'?v=' . ACCOUNTING_REVISION.'"></script>';
+    }
 }
 
 /**
@@ -468,6 +482,18 @@ function accounting_module_init_menu_items() {
 			]);
 		}
 
+		// Checks Menu
+		if (has_permission('accounting_checks', '', 'view')) {
+			$CI->app_menu->add_sidebar_children_item('accounting', [
+				'slug' => 'accounting_checks',
+				'name' => _l('acc_checks'),
+				'icon' => 'fa fa-book',
+				'href' => admin_url('accounting/checks'),
+				'position' => 3,
+			]);
+		}
+
+
 		if (has_permission('accounting_journal_entry', '', 'view')) {
 			$CI->app_menu->add_sidebar_children_item('accounting', [
 				'slug' => 'accounting_journal_entry',
@@ -481,7 +507,7 @@ function accounting_module_init_menu_items() {
 		if (has_permission('accounting_transfer', '', 'view')) {
 			$CI->app_menu->add_sidebar_children_item('accounting', [
 				'slug' => 'accounting_transfer',
-				'name' => _l('accounting_transfer'),
+				'name' => _l('transfer'),
 				'icon' => 'fa fa-exchange',
 				'href' => admin_url('accounting/transfer'),
 				'position' => 4,
@@ -533,7 +559,7 @@ function accounting_module_init_menu_items() {
 		if (has_permission('accounting_report', '', 'view')) {
 			$CI->app_menu->add_sidebar_children_item('accounting', [
 				'slug' => 'accounting_report',
-				'name' => _l('accounting_report'),
+				'name' => _l('reports'),
 				'icon' => 'fa fa-area-chart',
 				'href' => admin_url('accounting/report'),
 				'position' => 8,
@@ -581,7 +607,6 @@ function accounting_permissions() {
 	];
 	register_staff_capabilities('accounting_transaction', $capabilities, _l('accounting_transaction'));
 
-
 	$capabilities = [];
 	$capabilities['capabilities'] = [
 		'view' => _l('permission_view'),
@@ -589,7 +614,17 @@ function accounting_permissions() {
 		'edit' => _l('permission_edit'),
 		'delete' => _l('permission_delete'),
 	];
+	register_staff_capabilities('accounting_registers', $capabilities, _l('accounting_registers'));
+
+	$capabilities = [];
+	$capabilities['capabilities'] = [
+		'view' => _l('permission_view'),
+		'create' => _l('permission_create'),
+	];
 	register_staff_capabilities('accounting_bills', $capabilities, _l('accounting_bills'));
+
+	// Checks Permission
+	register_staff_capabilities('accounting_checks', $capabilities, _l('acc_checks'));
 
 	$capabilities = [];
 	$capabilities['capabilities'] = [
@@ -641,7 +676,7 @@ function accounting_permissions() {
 		'edit' => _l('permission_edit'),
 		'delete' => _l('permission_delete'),
 	];
-	register_staff_capabilities('accounting_vendor', $capabilities, _l('accounting_vendor'));
+	register_staff_capabilities('accounting_vendor', $capabilities, _l('accounting_vendors'));
 
 
 	$capabilities = [];
@@ -1360,6 +1395,22 @@ function exporting_return_order_approved($id) {
 		}
 	}
 	return $id;
+}
+
+/**
+ * get currency rates
+ *
+ */
+function acc_cronjob_currency_rates($manually) {
+    $CI = &get_instance();
+    $CI->load->model('accounting/accounting_model');
+    if (date('G') == '16' && get_option('cr_automatically_get_currency_rate') == 1) {
+        if(date('Y-m-d') != get_option('cur_date_cronjob_currency_rates')){
+            $CI->accounting_model->cronjob_currency_rates($manually);
+        }
+    }
+
+    $CI->accounting_model->recurring_journal_entry();
 }
 
 function accounting_appint(){

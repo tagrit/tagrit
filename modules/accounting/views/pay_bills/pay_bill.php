@@ -4,43 +4,7 @@
    <div class="content">
       <div class="row">
          <div class="col-md-12">
-            <div class="panel_s mbot10">
-               <div class="panel-body _buttons">
                   <?php echo form_hidden('type',$type); ?>
-                  <div class="horizontal-scrollable-tabs preview-tabs-top">
-                   <div class="scroller arrow-left"><i class="fa fa-angle-left"></i></div>
-                   <div class="scroller arrow-right"><i class="fa fa-angle-right"></i></div>
-                   <div class="horizontal-tabs">
-
-                     <ul class="nav nav-tabs nav-tabs-horizontal no-margin" role="tablist">
-                       <?php if(has_permission('accounting_bills','','create')){ ?>
-                           <li class="<?php echo ($type == 'new_bill' ? 'active' : '') ?>">
-                             <a href="<?php echo admin_url('accounting/bill'); ?>"><?php echo _l('add_new_bill'); ?></a>
-                           </li>
-                       <?php } ?>
-                         <li class="<?php echo ($type == 'unpaid' ? 'active' : '') ?>">
-                           <a href="<?php echo admin_url('accounting/bills?type=unpaid'); ?>"><?php echo _l('unpaid_bills'); ?></a>
-                         </li>
-                         <li class="<?php echo ($type == 'approved' ? 'active' : '') ?>">
-                              <a href="<?php echo admin_url('accounting/bills?type=approved'); ?>"><?php echo _l('approved_bills'); ?></a>
-                         </li>
-                         <li class="">
-                           <a href="<?php echo admin_url('accounting/checks'); ?>"><?php echo _l('write_checks'); ?></a>
-                         </li>
-                         <li class="<?php echo ($type == 'paid' ? 'active' : '') ?>">
-                           <a href="<?php echo admin_url('accounting/bills?type=paid'); ?>"><?php echo _l('paid_bills'); ?></a>
-                         </li>
-                         <li class="<?php echo ($type == 'check_register' ? 'active' : '') ?>">
-                              <a href="<?php echo admin_url('accounting/check_register'); ?>"><?php echo _l('check_register'); ?></a>
-                         </li>
-                         <li class="<?php echo ($type == 'configure_checks' ? 'active' : '') ?>">
-                              <a href="<?php echo admin_url('accounting/configure_checks'); ?>"><?php echo _l('configure_checks'); ?></a>
-                         </li>
-                     </ul>
-                   </div>
-                 </div>
-               </div>
-            </div>
             <div class="row">
                
             <div class="clearfix"></div>
@@ -50,9 +14,15 @@
             }
 
             if(is_numeric($bill_ids) == 1){
-                $bill_items = $this->accounting_model->get_bill_mapping_details($bill_ids, 'debit');
+                $bill_debit = $this->accounting_model->get_bill_mapping_details($bill_ids, 'debit');
+                $bill_item = $this->accounting_model->get_bill_mapping_details($bill_ids, 'item');
+                $bill_items = array_merge($bill_debit, $bill_item);
                 foreach($bill_items as $key => $item){
-                    $bill_items[$key]['name'] = isset($account_name[$item['account']]) ? $account_name[$item['account']] : '';
+                    if($item['type'] == 'item'){
+                        $bill_items[$key]['name'] = acc_get_item_name_by_id($item['item_id']);
+                    }else{
+                        $bill_items[$key]['name'] = isset($account_name[$item['account']]) ? $account_name[$item['account']] : '';
+                    }
                 }
             }
             ?>
@@ -99,21 +69,22 @@
                   <div class="dropzone-previews"></div>
                   <?php } ?>
                   <hr class="hr-panel-heading" />
-                  
-                  <?php $value = (isset($pay_bill) ? $pay_bill->vendor : $vendor); ?>
-                  <?php echo render_select('vendor', $vendors, array('userid', 'company'),'vendor', $value, array(), array(), '', '', false); ?>
+                  <div class="hide">
+                      <?php $value = (isset($pay_bill) ? $pay_bill->vendor : $vendor); ?>
+                      <?php echo render_select('vendor', $vendors, array('userid', 'company'),'vendor', $value, array(), array(), '', '', false); ?>
+                  </div>
                   <?php $value = (isset($pay_bill) ? _d($pay_bill->date) : _d(date('Y-m-d'))); ?>
                   <?php echo render_date_input('date','date_paid',$value); ?>
                   <div class="row"> 
                      <div class="col-md-6">
                   <?php 
-                    $value = (isset($pay_bill) ? $pay_bill->account_debit : $acc_pay_bill_deposit_to); ?>
-                        <?php echo render_select('account_debit', $accounts, array('id','name'), 'account_debit',$value); ?>
+                    $value = (isset($pay_bill) ? $pay_bill->account_credit : $acc_pay_bill_payment_account); ?>
+                        <?php echo render_select('account_credit', $accounts, array('id','name'),'payment_account',$value); ?>
                      </div>
                      <div class="col-md-6">
                   <?php 
-                    $value = (isset($pay_bill) ? $pay_bill->account_credit : $acc_pay_bill_payment_account); ?>
-                        <?php echo render_select('account_credit', $accounts, array('id','name'),'account_credit',$value); ?>
+                    $value = (isset($pay_bill) ? $pay_bill->account_debit : $acc_pay_bill_deposit_to); ?>
+                        <?php echo render_select('account_debit', $accounts, array('id','name'), 'deposit_to',$value); ?>
                      </div>
                   </div>
                     

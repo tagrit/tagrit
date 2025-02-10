@@ -4,19 +4,20 @@
       <div class="panel-body _buttons">
          <div class="display-block text-right">
             <div class="row">
-               <div class="col-md-7">
+               <div class="col-md-12">
                   <div class="row">
-                     <div class="col-md-4">
+                     <div class="col-md-12 mbot10">
                         <a href="<?php echo admin_url('accounting/check'); ?>" class="btn btn-info pull-left new new-check-list mright5 mbot5"><?php echo _l('create_new_check'); ?></a>
                         <a href="#" class="btn btn-info pull-left new new-check-list mright5 mbot5" onclick="reprint_check(); return false;"><?php echo _l('reprint'); ?></a>
                         <!-- <a href="#" class="btn btn-info pull-left new new-check-list mright5 mbot5" onclick="print_form(); return false;"><?php echo _l('print_checks'); ?></a> -->
                         <div id="div_check_btn_left" style="display: table;"></div>
                      </div>
-                     <div class="col-md-4">
+                  
+                     <div class="col-md-2">
 
                         <div class="form-inline" style="display: flex;">
-                         <!-- <label for="bank_account_check" class="mtop10 mright10" style="white-space: nowrap;">Bank Account</label> -->
-                         <select name="bank_account_check" id="bank_account_check" data-width="100%" class="selectpicker" data-live-search="true" data-none-selected-text="<?php echo _l('Bank Account'); ?>">
+                         
+                         <select name="bank_account_check" id="bank_account_check" data-width="100%" class="selectpicker" data-live-search="true" data-none-selected-text="<?php echo _l('acc_filter_by_bank_account'); ?>">
                          <option value=""></option>
                             <?php foreach($accounts as $ven){
                                 $select = '';
@@ -26,21 +27,58 @@
                          </select>
                       </div>
                      </div>
-                     <div class="col-md-4">
-                        <div class="form-inline"  style="display: flex; width: 100%;">
-                           <label for="ending_balance" class="mtop10 mright10" style="white-space: nowrap;"><?php echo _l('balance'); ?></label>
-                           <div class="form-group" app-field-wrapper="ending_balance" style="width: 100%;">
-                              <input type="text" id="ending_balance" name="ending_balance" class="form-control" value="" style="width: 100%;" disabled="true" data-type="currency">
-                           </div>
-                        </div>
+
+                     <div class="col-md-2">
+
+                        <div class="form-inline" style="display: flex;">
+                         <!-- <label for="vendor_ft" class="mtop10 mright10" style="white-space: nowrap;">Bank Account</label> -->
+                         <select name="vendor_ft" id="vendor_ft" data-width="100%" class="selectpicker" data-live-search="true" data-none-selected-text="<?php echo _l('acc_filter_by_vendor'); ?>">
+                         <option value=""></option>
+                            <?php foreach($vendors as $vendor){
+                                $select = '';
+                                
+                                echo '<option value="'.$vendor['userid'].'" '.$select.'>'. $vendor['company'].'</option>';
+                            } ?>
+                         </select>
+                      </div>
+                     </div>
+                     <div class="col-md-2">
+                        <div class="form-inline" style="display: flex;">
+                         <?php 
+                           $statuses = [
+                              ['id' => 1, 'name' => _l('issued')],
+                              ['id' => 2, 'name' => _l('printing_error')],
+                              ['id' => 3, 'name' => _l('void')],
+                              ['id' => 4, 'name' => _l('not_issued_yet')],
+                           ];
+                         ?>
+
+                         <select name="status" id="status" data-width="100%" class="selectpicker" data-live-search="true" data-none-selected-text="<?php echo _l('acc_filter_by_status'); ?>">
+                         <option value=""></option>
+                            <?php foreach($statuses as $status){
+                                $select = '';
+                                
+                                echo '<option value="'.$status['id'].'" '.$select.'>'. $status['name'].'</option>';
+                            } ?>
+                         </select>
+                      </div>
+                     </div>
+
+                     <div class="col-md-2">
+                         <?php echo render_date_input('from_date_ft','','', ['placeholder' => _l('acc_from_date')]); ?>
+                     </div>
+                     <div class="col-md-2">
+                         <?php echo render_date_input('to_date_ft','','', ['placeholder' => _l('acc_to_date')]); ?>
+                     </div>
+                   
+                     <div class="col-md-1">
+                        <a href="<?php echo admin_url('accounting/configure_checks'); ?>"  class="btn btn-icon" data-toggle="tooltip" data-placement="top" title="<?php echo _l('configure_checks'); ?>"><i class="fa fa-gear"></i></a>
+
+                         <a href="#" class="btn btn-default btn-with-tooltip toggle-small-view hidden-xs pull-right" onclick="check_toggle_small_view('.table-checks','#check'); return false;" data-toggle="tooltip" title="<?php echo _l('estimates_toggle_table_tooltip'); ?>"><i class="fa fa-angle-double-left"></i></a>
                      </div>
                   </div>
-               </div>
-               <div class="col-md-5">
-               <div class="btn-group pull-right">
-                  <span id="div_print_later_btn"></span>
-               </div>
-               </div>
+               </div>              
+             
             </div>
          </div>
       </div>
@@ -51,38 +89,10 @@
             <div class="panel-body">
                <!-- if checkid found in url -->
                <?php echo form_hidden('checkid',$checkid); ?>
-               <div class="horizontal-scrollable-tabs">
-                  <div class="scroller arrow-left"><i class="fa fa-angle-left"></i></div>
-                  <div class="scroller arrow-right"><i class="fa fa-angle-right"></i></div>
-                  <div class="horizontal-tabs">
-                     <div class="row mbot15">
-                        <div class="col-md-12">
-                           <span class="font-size-18"><?php echo _l('check_ensure_configured_note_1'); ?></span>
-                         <a href="#" class="btn btn-default btn-with-tooltip toggle-small-view hidden-xs pull-right" onclick="check_toggle_small_view('.table-checks','#check'); return false;" data-toggle="tooltip" title="<?php echo _l('invoices_toggle_table_tooltip'); ?>"><i class="fa fa-angle-double-left"></i> <?php echo _l('expand_table'); ?></a>
-                        </div>
-                     </div>
-                     <ul class="nav nav-tabs profile-tabs row customer-profile-tabs nav-tabs-horizontal" role="tablist">
-                        <li role="presentation" class="active">
-                           <a href="#bills" aria-controls="bills" role="tab" data-toggle="tab">
-                           <?php echo _l('acc_bills'); ?>
-                           </a>
-                        </li>
-                        <li role="presentation">
-                           <a href="#checks" aria-controls="checks" role="tab" data-toggle="tab">
-                           <?php echo _l( 'checks'); ?>
-                           </a>
-                        </li>
-                     </ul>
-                  </div>
-               </div>
-               <div class="tab-content mtop15">
-                  <div role="tabpanel" class="tab-pane active" id="bills">
-                     <?php $this->load->view('accounting/checks/bills_table_html'); ?>
-                  </div>
-                  <div role="tabpanel" class="tab-pane" id="checks">
-                     <?php $this->load->view('accounting/checks/checks_table_html'); ?>
-                  </div>
-               </div>
+              
+              
+               <?php $this->load->view('accounting/checks/checks_table_html'); ?>
+                
             </div>
          </div>
       </div>

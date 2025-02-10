@@ -64,8 +64,8 @@
     });
   });
 
-    $('li.menu-item-accounting_expenses').addClass('active');
-    $('li.sub-menu-item-accounting_bills').addClass('active');
+    $('li.sub-menu-item-accounting_checks').addClass('active');
+ 
     appValidateForm($('#check-form'), {
       },check_form_handler);
 
@@ -855,5 +855,20 @@ function save_and_print_multiple_check(){
 
   $('.additional').html(hidden_input('save_and_print_multiple_check', 'true'));
   $('#check-form').submit();
+}
+
+function open_config(){
+  "use strict";
+
+  if($('#config_div').hasClass('hide')){
+    $('#config_div').removeClass('hide');
+    $('#i-angel').removeClass('fa-angle-left');
+    $('#i-angel').addClass('fa-angle-down');
+
+  }else{
+    $('#config_div').addClass('hide');
+    $('#i-angel').addClass('fa-angle-left');
+    $('#i-angel').removeClass('fa-angle-down');
+  }
 }
 </script>

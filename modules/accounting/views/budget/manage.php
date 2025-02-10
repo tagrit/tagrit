@@ -135,8 +135,7 @@
             <?php echo render_input('fiscal_year_for_this_budget','fiscal_year_for_this_budget',date('Y'),'number'); ?>
             <?php echo _l('year_and_type_note_1'); ?>
             <br>
-            <?php echo _l('year_and_type_note_2'); ?>
-            <br>
+            
             <div class="form-group">
               <div class="radio radio-primary">
                 <input type="radio" id="profit_and_loss_accounts" name="budget_type" value="profit_and_loss_accounts" checked>
@@ -175,11 +174,13 @@
               <div class="radio radio-primary">
                 <input type="radio" id="create_budget_from_scratch" name="data_source" value="create_budget_from_scratch" checked>
                 <label for="create_budget_from_scratch"><?php echo _l('create_budget_from_scratch'); ?></label>
+                </br><?php echo _l('acc_create_budget_from_scratch_description'); ?>
               </div>
 
               <div class="radio radio-primary">
                 <input type="radio" id="create_budget_from_prior_fiscal_year_transactions" name="data_source" value="create_budget_from_prior_fiscal_year_transactions">
                 <label for="create_budget_from_prior_fiscal_year_transactions"><?php echo _l('create_budget_from_prior_fiscal_year_transactions'); ?></label>
+                </br><?php echo _l('acc_create_budget_from_prior_fiscal_year_transactions_description'); ?>
               </div>
             </div>
           </div>
