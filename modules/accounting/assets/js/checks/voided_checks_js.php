@@ -10,8 +10,8 @@ var hidden_columns = [];
 
 (function($) {
   "use strict";
-    $('li.menu-item-accounting_expenses').addClass('active');
-    $('li.sub-menu-item-accounting_bills').addClass('active');
+
+    $('li.sub-menu-item-accounting_checks').addClass('active');
 
     $('a').click(function() {
         $(window).unbind('beforeunload');

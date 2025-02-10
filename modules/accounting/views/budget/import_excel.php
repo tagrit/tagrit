@@ -31,8 +31,7 @@ $file_header[] = _l('acc_amount');
                   <?php echo render_input('fiscal_year_for_this_budget','fiscal_year_for_this_budget',date('Y'),'number'); ?>
                   <?php echo _l('year_and_type_note_1'); ?>
                   <br>
-                  <?php echo _l('year_and_type_note_2'); ?>
-                  <br>
+                 
                   <div class="form-group">
                     <div class="radio radio-primary">
                       <input type="radio" id="profit_and_loss_accounts" name="budget_type" value="profit_and_loss_accounts" checked>

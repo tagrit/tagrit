@@ -1,8 +1,7 @@
 <script>
 (function($) {
   "use strict";
-    $('li.menu-item-accounting_expenses').addClass('active');
-    $('li.sub-menu-item-accounting_bills').addClass('active');
+   $('li.sub-menu-item-accounting_checks').addClass('active');
 })(jQuery);
     
  function print_sample_check() {

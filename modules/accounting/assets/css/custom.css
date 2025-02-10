@@ -31,7 +31,7 @@
   width: 100%;
 }
 .frcard{
-  display: flex;
+
   justify-content: center;
 }
 .signature{
@@ -67,6 +67,7 @@
     z-index: 10000;
     position: absolute;
     margin-top: 80px;
+    margin-left: 300px;
 }
 
 img {
@@ -128,4 +129,19 @@ img {
 
 .text-wrap {
   word-break: break-word !important;
+}
+
+.width-250{
+  width: 250px;
+}
+
+.acc-text-info{
+  color: #31708f !important;
+}
+
+.acc-text-success{
+  color: #3c763d !important;
+}
+.bill-card{
+  height: 349px !important;
 }

@@ -35,25 +35,32 @@ if ($this->ci->input->post('type')) {
     $type = $this->ci->input->post('type');
     switch ($type) {
         case 'unpaid':
-            array_push($where, 'AND ' . db_prefix() . 'expenses.approved = 0');
-            break;
+        array_push($where, 'AND ' . db_prefix() . 'expenses.approved = 0');
+        break;
         case 'paid':
-            array_push($where, 'AND (' . db_prefix() . 'expenses.status = 2 or ' . db_prefix() . 'expenses.voided = 1 or ' . db_prefix() . 'expenses.status = 3)');
-            break;
+        array_push($where, 'AND (' . db_prefix() . 'expenses.status = 2 or ' . db_prefix() . 'expenses.voided = 1 or ' . db_prefix() . 'expenses.status = 3)');
+        break;
         case 'approved':
-            array_push($where, 'AND ' . db_prefix() . 'expenses.approved = 1');
-            array_push($where, 'AND ' . db_prefix() . 'expenses.voided = 0');
-            array_push($where, 'AND ' . db_prefix() . 'expenses.status != 2');
-            break;
+        array_push($where, 'AND ' . db_prefix() . 'expenses.approved = 1');
+        array_push($where, 'AND ' . db_prefix() . 'expenses.voided = 0');
+        array_push($where, 'AND ' . db_prefix() . 'expenses.status != 2');
+        break;
         case 'voided':
-            array_push($where, 'AND ' . db_prefix() . 'expenses.voided = 1');
-            break;
+        array_push($where, 'AND ' . db_prefix() . 'expenses.voided = 1');
+        break;
         default:
-            array_push($where, 'AND ' . db_prefix() . 'expenses.approved = 0');
-            break;
+        array_push($where, 'AND ' . db_prefix() . 'expenses.approved = 0');
+        break;
     }
 }else{
     array_push($where, 'AND ' . db_prefix() . 'expenses.approved = 0');
+
+}
+
+if ($this->ci->input->post('vendor_id') && $this->ci->input->post('vendor_id') != '') {
+    $vendor_id = $this->ci->input->post('vendor_id');
+   
+    array_push($where, 'AND '.db_prefix().'pur_vendor.userid IN (' . implode(', ', $vendor_id) . ')');
 }
 
 $from_date = '';
@@ -88,7 +95,7 @@ $sTable       = db_prefix() . 'expenses';
 // Fix for big queries. Some hosting have max_join_limit
 
 $result = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, [
-     'vendor'
+     'vendor', db_prefix().'expenses.approved'
 ]);
 $output  = $result['output'];
 $rResult = $result['rResult'];

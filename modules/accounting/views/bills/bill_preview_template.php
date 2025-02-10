@@ -103,92 +103,170 @@
           <div class="clearfix"></div>
           <hr class="hr-panel-heading" />
         <?php } ?>
-               <div class="col-md-6">
-                  <p>
 
-                    <div id="amountWrapper">
-                      <span class="bold font-medium"><?php echo _l('acc_vendor').': '; ?></span>
-                      <a href="<?php echo admin_url('accounting/vendor/'.$expense->vendor); ?>"><?php echo acc_get_vendor_name($expense->vendor); ?></a>
+         <?php $card_image = site_url('modules/accounting/assets/images/check_card3.png') ?>
+                     <div class="row check-card bill-card" style="background: url('<?php echo new_html_entity_decode($card_image); ?>')">
+                        <h3 class="no-margin"><?php echo _l('acc_bill'); ?></h3>
+                     </br>
+                     <?php $vendor =  isset($expense) ? $expense->vendor : '' ;?>
+
+                     <div class="row">
+                        <div class="col-md-2">
+                           <label for="vendor"><?php echo _l('acc_vendor'); ?></label>
+                        </div>
+
+                        <div class="col-md-5">
+                           <?php echo render_select('vendor', $list_vendor, array('userid','company'), '', $vendor, ['disabled' => true]); ?>
+                        </div>
+                        <div class="col-md-2">
+                           <label for="date"><?php echo _l('bill_date'); ?></label>
+                        </div>
+                        <div class="col-md-3">
+                           <?php $value = (isset($expense) ? _d($expense->date) : _d(date('Y-m-d')));
+                           $date_attrs = array();
+                           $date_attrs['disabled'] = true;
+                           if(isset($expense) && $expense->recurring > 0 && $expense->last_recurring_date != null) {
+                             $date_attrs['disabled'] = true;
+                          }
+                          ?>
+                          <?php echo render_date_input('date','',$value,$date_attrs);?>
+                       </div>
+
+                    </div>
+                    <div class="row">
+                     <div class="col-md-2">
+                        <label for="expense_name"><i class="fa fa-question-circle pull-left" data-toggle="tooltip" data-title="<?php echo _l('expense_name_help'); ?> - <?php echo _l('expense_field_billable_help',_l('expense_name')); ?>"></i><?php echo _l('expense_name'); ?></label>
+                        
+                     </div>
+                     <div class="col-md-5">
+                        <?php $value = (isset($expense) ? $expense->expense_name : ''); ?>
+                        <?php echo render_input('expense_name','',$value,'text', ['disabled' => true]); ?>
+                     </div>
+                     <div class="col-md-2">
+                        <label for="reference_no"><?php echo _l('expense_add_edit_reference_no'); ?></label>
+                     </div>
+                     <div class="col-md-3">
+                        <?php $value = (isset($expense) ? $expense->reference_no : ''); ?>
+                        <?php echo render_input('reference_no','',$value,'text', ['disabled' => true]); ?>
+                     </div>
+                  </div>
+
+                  <div class="row">
+                     <div class="col-md-2">
+                        <label for="note"><i class="fa fa-question-circle pull-left" data-toggle="tooltip" data-title="<?php echo _l('expense_field_billable_help',_l('acc_memo')); ?>"></i><?php echo _l('acc_memo'); ?></label>
+                     </div>
+                     <div class="col-md-5">
+                        <?php $value = (isset($expense) ? $expense->note : ''); ?>
+                        <?php echo render_textarea('note','',$value,array('rows'=>1, 'disabled' => true),array()); ?>
+                     </div>
+                     <div class="col-md-2">
+                        <label for="due_date"><?php echo _l('acc_due_date'); ?></label>
+
+                     </div>
+                     <div class="col-md-3">
+                        <?php $due_date = (isset($expense) ? _d($expense->due_date) : _d(date('Y-m-d')));
+                        echo render_date_input('due_date','',$due_date,$date_attrs); ?>
+                     </div>
+                  </div>
+
+                  <div class="row">
+                     <div class="col-md-7">
+                        <?php if(isset($expense) && $expense->attachment !== ''){ ?>
+                           <div class="row">
+                              <div class="col-md-10">
+                                 <i class="<?php echo get_mime_class($expense->filetype); ?>"></i> <a href="<?php echo admin_url('accounting/download_file/bill/'.$expense->id); ?>"><?php echo $expense->attachment; ?></a>
+                              </div>
+                              <?php if($expense->attachment_added_from == get_staff_user_id() || is_admin()){ ?>
+                                 <div class="col-md-2 text-right">
+                                    <a href="<?php echo admin_url('accounting/delete_bill_attachment/'.$expense->id); ?>" class="text-danger _delete"><i class="fa fa fa-times"></i></a>
+                                 </div>
+                              <?php } ?>
+                           </div>
+                           
+                        <?php } ?>
+                      
+                     </div>
+                  </div>
+
+               </div>
+                <div class="horizontal-scrollable-tabs preview-tabs-top mtop25">
+                    <div class="scroller arrow-left"><i class="fa fa-angle-left"></i></div>
+                      <div class="scroller arrow-right"><i class="fa fa-angle-right"></i></div>
+                      <div class="horizontal-tabs">
+                        <ul class="nav nav-tabs nav-tabs-horizontal mbot15" role="tablist">
+                            <li role="presentation" class="active">
+                               <a href="#expenses" aria-controls="expenses" role="tab" id="tab_out_of_stock" data-toggle="tab">
+                                  <?php echo _l('expenses') ?>
+                               </a>
+                            </li>
+                            <li role="presentation">
+                               <a href="#items" aria-controls="items" role="tab" id="tab_out_of_stock" data-toggle="tab">
+                                  <?php echo _l('items') ?>
+                               </a>
+                            </li>
+                        </ul>
+                        </div>
+                    </div>
+                    <div class="tab-content">
+                      <div role="tabpanel" class="tab-pane active" id="expenses">
+                        <table class="table items items-preview invoice-items-preview" data-type="invoice">
+                            <thead>
+                                <tr>
+                                    <th align="left" width="70%"><?php echo _l('debit_account'); ?></th>
+                                    <th width="30%" align="right"><?php echo _l('amount'); ?></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach($expense->debit_account as $debit_account){ ?>
+                                    <tr>
+                                        <td align="left"><?php echo get_account_name_by_id($debit_account['account']); ?></td>
+                                        <td align="right"><?php echo app_format_money($debit_account['amount'], $currency->name); ?></td>
+                                    </tr>
+                                <?php } ?>
+                            </tbody>
+                        </table>
+                        <table class="table items items-preview invoice-items-preview" data-type="invoice">
+                            <thead>
+                                <tr>
+                                    <th align="left" width="70%"><?php echo _l('credit_account'); ?></th>
+                                    <th width="30%" align="right"><?php echo _l('amount'); ?></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach($expense->credit_account as $credit_account){ ?>
+                                    <tr>
+                                        <td align="left"><?php echo get_account_name_by_id($credit_account['account']); ?></td>
+                                        <td align="right"><?php echo app_format_money($credit_account['amount'], $currency->name); ?></td>
+                                    </tr>
+                                <?php } ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="items">
+                        <table class="table items items-preview invoice-items-preview" data-type="invoice">
+                            <thead>
+                                <tr>
+                                    <th width="35%"><?php echo _l('item'); ?></th>
+                                    <th width="35%"><?php echo _l('description'); ?></th>
+                                    <th width="10%"><?php echo _l('qty'); ?></th>
+                                    <th width="10%" align="right"><?php echo _l('cost'); ?></th>
+                                    <th width="10%" align="right"><?php echo _l('amount'); ?></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach($expense->bill_items as $item){ ?>
+                                    <tr>
+                                        <td align="left"><?php echo acc_get_item_name_by_id($item['item_id']); ?></td>
+                                        <td align="left"><?php echo html_entity_decode($item['description']); ?></td>
+                                        <td align="left"><?php echo html_entity_decode($item['qty']); ?></td>
+                                        <td align="right"><?php echo app_format_money($item['cost'], $currency->name); ?></td>
+                                        <td align="right"><?php echo app_format_money($item['amount'], $currency->name); ?></td>
+                                    </tr>
+                                <?php } ?>
+                            </tbody>
+                        </table>
                     </div>
 
-                   
-
-                           <p>
-                            <span class="bold"><?php echo _l('bill_date'); ?></span> <span class="text-muted"><?php echo _d($expense->date); ?></span><br>
-                            <span class="bold"><?php echo _l('acc_due_date').': '; ?></span> <span class="text-muted"><?php echo _d($expense->due_date); ?></span>
-                           </p>
-
-                           
-                    
-                  </p>
-              
-                 
-                  <?php if($expense->note != ''){ ?>
-                  <p class="bold mbot5"><?php echo _l('expense_note'); ?></p>
-                  <p class="text-muted mbot15"><?php echo $expense->note; ?></p>
-                  <?php } ?>
-                  <?php if($expense->reason_for_void != ''){ ?>
-                  <p class="bold mbot5"><?php echo _l('reason_for_void'); ?></p>
-                  <p class="text-muted mbot15"><?php echo $expense->reason_for_void; ?></p>
-                  <?php } ?>
-               </div>
-               <div class="col-md-6" id="expenseReceipt">
-                  <h4 class="bold mbot25"><?php echo _l('acc_attachment'); ?></h4>
-                  <?php if(empty($expense->attachment)) { ?>
-                  <?php echo form_open('admin/accounting/add_bill_attachment/'.$expense->id,array('class'=>'mtop10 dropzone dropzone-expense-preview dropzone-manual','id'=>'expense-receipt-upload')); ?>
-                  <div id="dropzoneDragArea" class="dz-default dz-message">
-                     <span><?php echo _l('acc_attachment'); ?></span>
-                  </div>
-                  <?php echo form_close(); ?>
-                  <?php }  else { ?>
-                  <div class="row">
-                     <div class="col-md-10">
-                        <i class="<?php echo get_mime_class($expense->filetype); ?>"></i> <a href="<?php echo admin_url('accounting/download_file/bill/'.$expense->id); ?>"><?php echo $expense->attachment; ?></a>
-                     </div>
-                     <?php if($expense->attachment_added_from == get_staff_user_id() || is_admin()){ ?>
-                     <div class="col-md-2 text-right">
-                        <a href="<?php echo admin_url('accounting/delete_bill_attachment/'.$expense->id.'/1'); ?>" class="text-danger _delete"><i class="fa fa fa-times"></i></a>
-                     </div>
-                    <?php } ?>
-                  </div>
-                  <?php } ?>
-               </div>
-               <div class="col-md-12">
-                    <table class="table items items-preview invoice-items-preview" data-type="invoice">
-                        <thead>
-                            <tr>
-                                <th align="left" width="70%"><?php echo _l('debit_account'); ?></th>
-                                <th width="30%" align="right"><?php echo _l('amount'); ?></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach($expense->debit_account as $debit_account){ ?>
-                                <tr>
-                                    <td align="left"><?php echo get_account_name_by_id($debit_account['account']); ?></td>
-                                    <td align="right"><?php echo app_format_money($debit_account['amount'], $currency->name); ?></td>
-                                </tr>
-                            <?php } ?>
-                        </tbody>
-                    </table>
-               </div>
-               <div class="col-md-12">
-                    <table class="table items items-preview invoice-items-preview" data-type="invoice">
-                        <thead>
-                            <tr>
-                                <th align="left" width="70%"><?php echo _l('credit_account'); ?></th>
-                                <th width="30%" align="right"><?php echo _l('amount'); ?></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach($expense->credit_account as $credit_account){ ?>
-                                <tr>
-                                    <td align="left"><?php echo get_account_name_by_id($credit_account['account']); ?></td>
-                                    <td align="right"><?php echo app_format_money($credit_account['amount'], $currency->name); ?></td>
-                                </tr>
-                            <?php } ?>
-                        </tbody>
-                    </table>
-               </div>
                 <?php
                     $total = $expense->amount;
                     $bil_amount_left = bill_amount_left($expense->id);
@@ -213,11 +291,9 @@
                     </table>
                </div>
             </div>
-
-            
          </div>
+     </div>
          <div role="tabpanel" class="tab-pane ptop10" id="list_expense"  >
-           
                 <div class="table-responsive">
                   <table class="table dt-table table-hover table-striped no-mtop">
                       <thead>

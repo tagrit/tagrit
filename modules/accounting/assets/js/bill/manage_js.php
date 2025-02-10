@@ -5,6 +5,9 @@
         "type": '[name="type"]',
         "from_date": '[name="from_date"]',
         "to_date": '[name="to_date"]',
+        "type": "select[name='type']",
+        "vendor_id": "select[name='vendor_id[]']",
+
     };
 
 (function($) {
@@ -26,6 +29,12 @@
     $('input[name="to_date"]').on('change', function() {
       init_bill_table();
     });
+
+    $(' select[name="type"], select[name="vendor_id[]"]').on('change', function() {
+        init_bill_table();
+    });
+
+
 })(jQuery);
 
 
@@ -45,7 +54,7 @@ function init_bill_table() {
 
   }else{
     initDataTable('.table-bills', admin_url+'accounting/bills_table', [], [0], Expenses_ServerParams, [3, 'desc']).columns([1, 5, 7]).visible(false, false).columns.adjust();
-    $('.dataTables_length').parents('.row').eq(0).after('<div class="row"><div class="col-md-12"><a href="#" onclick="bulk_approve(); return false;" class="btn btn-default btn_pay_bills" ><?php echo _l('bulk_approve'); ?></a></div></div>');
+    $('.dataTables_length').parents('.row').eq(0).after('<div class="row"><div class="col-md-6"><a href="#" onclick="bulk_approve(); return false;" class="btn btn-default btn_pay_bills mright5" ><?php echo _l('bulk_approve'); ?></a><a href="#" onclick="pay_bills(); return false;" class="btn btn-default btn_pay_bills" ><?php echo _l('acc_pay_bills'); ?></a> <i class="fa fa-question-circle" data-toggle="tooltip" data-title="<?php echo _l('acc_pay_bills_to_vendor'); ?>"></i></div></div>');
   }
 }
 
