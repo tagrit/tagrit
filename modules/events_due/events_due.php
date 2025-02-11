@@ -30,8 +30,96 @@ class Events_Due_System
         // Register admin menu items
         hooks()->add_action('admin_init', [$this, 'init_menu_items_and_create_permissions']);
 
+        // Corrected hooks to use [$this, 'method_name'] instead of a plain function name
+        hooks()->add_action('app_admin_head', [$this, 'events_due_head_components']);
+        hooks()->add_action('app_admin_footer', [$this, 'events_due_footer_components']);
 
     }
+
+    /**
+     * Add head components
+     */
+    public function events_due_head_components()
+    {
+        $viewuri = $_SERVER['REQUEST_URI'];
+
+        //events css
+        if (strpos($viewuri, 'admin/events_due/events') !== false) {
+            echo '<link href="' . module_dir_url(EVENTS_DUE_MODULE_NAME, 'assets/css/events/list_events.css') . '" rel="stylesheet" type="text/css" />';
+        }
+
+        if (strpos($viewuri, 'admin/events_due/events/create') !== false) {
+            echo '<link href="' . module_dir_url(EVENTS_DUE_MODULE_NAME, 'assets/css/events/create_event.css') . '" rel="stylesheet" type="text/css" />';
+        }
+
+        if (strpos($viewuri, 'admin/events_due/events/edit') !== false) {
+            echo '<link href="' . module_dir_url(EVENTS_DUE_MODULE_NAME, 'assets/css/events/edit_event.css') . '" rel="stylesheet" type="text/css" />';
+        }
+
+
+        //registration css
+        if (strpos($viewuri, 'admin/events_due/registrations') !== false) {
+            echo '<link href="' . module_dir_url(EVENTS_DUE_MODULE_NAME, 'assets/css/registrations/list_registrations.css') . '" rel="stylesheet" type="text/css" />';
+        }
+
+        //dashboard css
+        if (strpos($viewuri, 'admin/events_due/dashboard') !== false) {
+            echo '<link href="' . module_dir_url(EVENTS_DUE_MODULE_NAME, 'assets/css/dashboard.css') . '" rel="stylesheet" type="text/css" />';
+        }
+
+        //reports css
+        if (strpos($viewuri, 'admin/events_due/reports') !== false) {
+            echo '<link href="' . module_dir_url(EVENTS_DUE_MODULE_NAME, 'assets/css/reports.css') . '" rel="stylesheet" type="text/css" />';
+        }
+
+        //settings css
+        if (strpos($viewuri, 'admin/events_due/settings') !== false) {
+            echo '<link href="' . module_dir_url(EVENTS_DUE_MODULE_NAME, 'assets/css/settings.css') . '" rel="stylesheet" type="text/css" />';
+        }
+
+
+    }
+
+
+    public function events_due_footer_components()
+    {
+        $viewuri = $_SERVER['REQUEST_URI'];
+
+        //events js
+        if (strpos($viewuri, 'admin/events_due/events') !== false) {
+            echo '<script src="' . module_dir_url(EVENTS_DUE_MODULE_NAME, 'assets/js/events/list_events.js') . '"></script>';
+        }
+
+        if (strpos($viewuri, 'admin/events_due/events/create') !== false) {
+            echo '<script src="' . module_dir_url(EVENTS_DUE_MODULE_NAME, 'assets/js/events/create_event.js') . '"></script>';
+        }
+
+        if (strpos($viewuri, 'admin/events_due/events/edit') !== false) {
+            echo '<script src="' . module_dir_url(EVENTS_DUE_MODULE_NAME, 'assets/js/events/edit_event.js') . '"></script>';
+        }
+
+        //registration css
+        if (strpos($viewuri, 'admin/events_due/registrations') !== false) {
+            echo '<script src="' . module_dir_url(EVENTS_DUE_MODULE_NAME, 'assets/js/registrations/list_registrations.js') . '"></script>';
+        }
+
+        //dashboard js
+        if (strpos($viewuri, 'admin/events_due/dashboard') !== false) {
+            echo '<script src="' . module_dir_url(EVENTS_DUE_MODULE_NAME, 'assets/js/dashboard.js') . '"></script>';
+        }
+
+        //reports js
+        if (strpos($viewuri, 'admin/events_due/reports') !== false) {
+            echo '<script src="' . module_dir_url(EVENTS_DUE_MODULE_NAME, 'assets/js/reports.js') . '"></script>';
+        }
+
+        //settings js
+        if (strpos($viewuri, 'admin/events_due/settings') !== false) {
+            echo '<script src="' . module_dir_url(EVENTS_DUE_MODULE_NAME, 'assets/js/settings.js') . '"></script>';
+        }
+
+    }
+
 
     public function uninstall()
     {
