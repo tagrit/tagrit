@@ -28,31 +28,31 @@ foreach ($environments as $key => $env) {
 // Define database credentials
 $db_config = [
     'local' => [
-        'BASE_URL'  => 'http://localhost/tagrit',
+        'BASE_URL'  => 'http://localhost/tagrit/',
         'USERNAME'  => 'root',
         'PASSWORD'  => '',
         'DB_NAME'   => 'tagrit_main'
     ],
     'dev' => [
-        'BASE_URL'  => 'https://dev.tagrit.com',
+        'BASE_URL'  => 'https://dev.tagrit.com/',
         'USERNAME'  => 'tagrit_dev',
         'PASSWORD'  => '?=HeYVENjdEi',
         'DB_NAME'   => 'tagrit_dev'
     ],
     'autoupdate' => [
-        'BASE_URL'  => 'https://autoupdate.tagrit.com',
+        'BASE_URL'  => 'https://autoupdate.tagrit.com/',
         'USERNAME'  => 'tagrit_tagrit',
         'PASSWORD'  => 'Y)GxB~MGB8-T',
         'DB_NAME'   => 'tagrit_auto_update'
     ],
     'staging' => [
-        'BASE_URL'  => 'https://staging.tagrit.com',
+        'BASE_URL'  => 'https://staging.tagrit.com/',
         'USERNAME'  => 'tagrit_staging',
         'PASSWORD'  => 'CnlKs6btjof&',
         'DB_NAME'   => 'tagrit_staging'
     ],
     'production' => [
-        'BASE_URL'  => 'https://app.tagrit.com',
+        'BASE_URL'  => 'https://app.tagrit.com/',
         'USERNAME'  => 'tagrit_auth',
         'PASSWORD'  => 'Mynewpass123#%',
         'DB_NAME'   => 'tagrit_live'
@@ -64,17 +64,11 @@ if (!isset($db_config[$environment])) {
     $environment = 'production';
 }
 
-define('APP_BASE_URL_DEFAULT', 'https://app.tagrit.com');
-define('APP_DB_USERNAME_DEFAULT', 'tagrit_auth');
-define('APP_DB_PASSWORD_DEFAULT', 'Mynewpass123#%');
-define('APP_DB_NAME_DEFAULT', 'tagrit_live');
-
 // Define constants
-//define('APP_BASE_URL_DEFAULT', $db_config[$environment]['BASE_URL']);
-//define('APP_DB_USERNAME_DEFAULT', $db_config[$environment]['USERNAME']);
-//define('APP_DB_PASSWORD_DEFAULT', $db_config[$environment]['PASSWORD']);
-//define('APP_DB_NAME_DEFAULT', $db_config[$environment]['DB_NAME']);
-
+define('APP_BASE_URL_DEFAULT', $db_config[$environment]['BASE_URL']);
+define('APP_DB_USERNAME_DEFAULT', $db_config[$environment]['USERNAME']);
+define('APP_DB_PASSWORD_DEFAULT', $db_config[$environment]['PASSWORD']);
+define('APP_DB_NAME_DEFAULT', $db_config[$environment]['DB_NAME']);
 define('APP_DB_HOSTNAME_DEFAULT', 'localhost');
 define('APP_ENC_KEY', '85bec75a1a6136881a01c08b1fdc31d8');
 
