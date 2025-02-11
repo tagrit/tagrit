@@ -28,31 +28,31 @@ foreach ($environments as $key => $env) {
 // Define database credentials
 $db_config = [
     'local' => [
-        'BASE_URL'  => 'http://localhost/tagrit',
+        'BASE_URL'  => 'http://localhost/tagrit/',
         'USERNAME'  => 'root',
         'PASSWORD'  => '',
-        'DB_NAME'   => 'tagrit'
+        'DB_NAME'   => 'tagrit_main'
     ],
     'dev' => [
-        'BASE_URL'  => 'https://dev.tagrit.com',
+        'BASE_URL'  => 'https://dev.tagrit.com/',
         'USERNAME'  => 'tagrit_dev',
         'PASSWORD'  => '?=HeYVENjdEi',
         'DB_NAME'   => 'tagrit_dev'
     ],
     'autoupdate' => [
-        'BASE_URL'  => 'https://autoupdate.tagrit.com',
+        'BASE_URL'  => 'https://autoupdate.tagrit.com/',
         'USERNAME'  => 'tagrit_tagrit',
         'PASSWORD'  => 'Y)GxB~MGB8-T',
         'DB_NAME'   => 'tagrit_auto_update'
     ],
     'staging' => [
-        'BASE_URL'  => 'https://staging.tagrit.com',
+        'BASE_URL'  => 'https://staging.tagrit.com/',
         'USERNAME'  => 'tagrit_staging',
         'PASSWORD'  => 'CnlKs6btjof&',
         'DB_NAME'   => 'tagrit_staging'
     ],
     'production' => [
-        'BASE_URL'  => 'https://app.tagrit.com',
+        'BASE_URL'  => 'https://app.tagrit.com/',
         'USERNAME'  => 'tagrit_auth',
         'PASSWORD'  => 'Mynewpass123#%',
         'DB_NAME'   => 'tagrit_live'
