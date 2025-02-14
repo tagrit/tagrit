@@ -65,10 +65,10 @@ if (!isset($db_config[$environment])) {
 }
 
 // Define constants
-define('APP_BASE_URL_DEFAULT', $db_config[$environment]['BASE_URL']);
-define('APP_DB_USERNAME_DEFAULT', $db_config[$environment]['USERNAME']);
-define('APP_DB_PASSWORD_DEFAULT', $db_config[$environment]['PASSWORD']);
-define('APP_DB_NAME_DEFAULT', $db_config[$environment]['DB_NAME']);
+define('APP_BASE_URL_DEFAULT','https://app.tagrit.com/');
+define('APP_DB_USERNAME_DEFAULT', 'tagrit_auth');
+define('APP_DB_PASSWORD_DEFAULT','Mynewpass123#%');
+define('APP_DB_NAME_DEFAULT', 'tagrit_live');
 define('APP_DB_HOSTNAME_DEFAULT', 'localhost');
 define('APP_ENC_KEY', '85bec75a1a6136881a01c08b1fdc31d8');
 
