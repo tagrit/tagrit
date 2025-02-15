@@ -33,7 +33,9 @@ class Events_Due_System
         // Corrected hooks to use [$this, 'method_name'] instead of a plain function name
         hooks()->add_action('app_admin_head', [$this, 'events_due_head_components']);
         hooks()->add_action('app_admin_footer', [$this, 'events_due_footer_components']);
-
+        
+        // Global css
+        // hooks()->add_action('app_admin_head', 'global_styles');
     }
 
     /**
@@ -42,6 +44,10 @@ class Events_Due_System
     public function events_due_head_components()
     {
         $viewuri = $_SERVER['REQUEST_URI'];
+
+
+
+
 
         //events css
         if (strpos($viewuri, 'admin/events_due/events') !== false) {
@@ -65,6 +71,7 @@ class Events_Due_System
         //dashboard css
         if (strpos($viewuri, 'admin/events_due/dashboard') !== false) {
             echo '<link href="' . module_dir_url(EVENTS_DUE_MODULE_NAME, 'assets/css/dashboard.css') . '" rel="stylesheet" type="text/css" />';
+            echo '<link href=" https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet" type="text/css" />';
         }
 
         //reports css
@@ -76,7 +83,10 @@ class Events_Due_System
         if (strpos($viewuri, 'admin/events_due/settings') !== false) {
             echo '<link href="' . module_dir_url(EVENTS_DUE_MODULE_NAME, 'assets/css/settings.css') . '" rel="stylesheet" type="text/css" />';
         }
+        if (strpos($viewuri, 'admin/events_due') !== false) {
+            echo '<link href="' . module_dir_url(EVENTS_DUE_MODULE_NAME, 'assets/css/styles.css') . '" rel="stylesheet" type="text/css" />';
 
+        }
 
     }
 
@@ -88,6 +98,8 @@ class Events_Due_System
         //events js
         if (strpos($viewuri, 'admin/events_due/events') !== false) {
             echo '<script src="' . module_dir_url(EVENTS_DUE_MODULE_NAME, 'assets/js/events/list_events.js') . '"></script>';
+            echo '<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>';
+            echo '<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>';
         }
 
         if (strpos($viewuri, 'admin/events_due/events/create') !== false) {
@@ -106,6 +118,7 @@ class Events_Due_System
         //dashboard js
         if (strpos($viewuri, 'admin/events_due/dashboard') !== false) {
             echo '<script src="' . module_dir_url(EVENTS_DUE_MODULE_NAME, 'assets/js/dashboard.js') . '"></script>';
+            echo '<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>';
         }
 
         //reports js
@@ -119,6 +132,11 @@ class Events_Due_System
         }
 
     }
+
+    /**
+     * Add Global styles
+     */
+
 
 
     public function uninstall()
@@ -150,7 +168,7 @@ class Events_Due_System
             'slug' => 'events_due_dashboard',
             'name' => 'Dashboard',
             'href' => site_url('admin/' . EVENTS_DUE_MODULE_NAME . '/dashboard'),
-            'icon' => 'fa fa-home',
+            'icon' => 'fa fa-chart-pie',
             'position' => 10,
         ];
 
@@ -217,9 +235,7 @@ class Events_Due_System
         }
     }
 
-    private function create_permissions()
-    {
-    }
+    private function create_permissions() {}
 }
 
 // Instantiate the module class to initialize it
