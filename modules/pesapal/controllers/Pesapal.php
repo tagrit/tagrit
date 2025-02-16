@@ -213,55 +213,6 @@ class Pesapal extends App_Controller
         }
     }
 
-    private function getPesapalToken()
-    {
-
-        $consumer_key = $this->pesapal_gateway->getSetting('test_mode_enabled') == '1' ? $this->pesapal_gateway->getSetting('consumer_key_demo') : $this->pesapal_gateway->getSetting('consumer_key');
-        $consumer_secret = $this->pesapal_gateway->getSetting('test_mode_enabled') == '1' ? $this->pesapal_gateway->getSetting('consumer_secret_demo') : $this->pesapal_gateway->getSetting('consumer_secret');
-
-        $url = "https://pay.pesapal.com/v3/api/Auth/RequestToken";
-
-        $headers = [
-            "Content-Type: application/json"
-        ];
-
-        $data = json_encode([
-            "consumer_key" => $consumer_key,
-            "consumer_secret" => $consumer_secret
-        ]);
-
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-        $response = curl_exec($ch);
-        curl_close($ch);
-
-        $response_data = json_decode($response, true);
-        return $response_data['token'] ?? null;
-    }
-
-
-    private function checkPesapalPaymentStatus($pesapal_tracking_id, $token)
-    {
-        $url = "https://pay.pesapal.com/v3/api/Transactions/GetTransactionStatus?orderTrackingId={$pesapal_tracking_id}";
-
-        $headers = [
-            "Authorization: Bearer " . $token,
-            "Content-Type: application/json"
-        ];
-
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        $response = curl_exec($ch);
-        curl_close($ch);
-
-        return json_decode($response, true);
-    }
-
-
     public function success($invoiceid, $hash)
     {
 
@@ -293,36 +244,25 @@ class Pesapal extends App_Controller
 
         $pesapal_txn_count = total_rows(db_prefix() . 'pesapal_txn', array('reference_code' => $reference));
 
+        //Insert
+        $insert_id = false;
         if ($pesapal_txn_count == 0) {
-            $this->db->insert(db_prefix() . 'pesapal_txn', $payment_status);
+            $insert_id = $this->db->insert(db_prefix() . 'pesapal_txn', $payment_status);
         }
 
-        $token = $this->getPesapalToken(); // Get authentication token
+        if ($insert_id && !is_null($pesapal_tracking_id)) {
 
-        if ($token) {
-            $response = $this->checkPesapalPaymentStatus($pesapal_tracking_id, $token);
+            $this->db->where('id', $invoiceid);
+            $this->db->update(db_prefix() . 'invoices', ['status' => 2]);
 
-            if (!empty($response) && isset($response['status'])) {
-                $status = strtoupper($response['status']);
+            // Update Pesapal transaction status
+            $this->db->where('reference_code', $reference);
+            $this->db->update(db_prefix() . 'pesapal_txn', ['txn_status' => 'COMPLETED']);
 
-                if ($status === "COMPLETED") {
-                    // Update invoice status to Paid
-                    $this->db->where('id', $invoiceid);
-                    $this->db->update(db_prefix() . 'invoices', ['status' => 2]);
+            set_alert('success', _l('online_payment_recorded_success'));
 
-                    // Update Pesapal transaction status
-                    $this->db->where('reference_code', $reference);
-                    $this->db->update(db_prefix() . 'pesapal_txn', ['txn_status' => 'COMPLETED']);
-
-                    set_alert('success', _l('Invoice marked as paid successfully.'));
-                } else {
-                    set_alert('warning', _l('Payment pending or failed. Please check Pesapal dashboard.'));
-                }
-            } else {
-                set_alert('danger', _l('Failed to verify transaction status with Pesapal.'));
-            }
         } else {
-            set_alert('danger', _l('Could not authenticate with Pesapal API.'));
+            set_alert('danger', _l('online_payment_recorded_success_fail_database'));
         }
 
         $this->session->unset_userdata('pesapal_total');
