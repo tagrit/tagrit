@@ -298,9 +298,12 @@ class Pesapal extends App_Controller
         }
 
         $token = $this->getPesapalToken(); // Get authentication token
+        log_message('debug', 'Pesapal Token: ' . $token);
 
         if ($token) {
+
             $response = $this->checkPesapalPaymentStatus($pesapal_tracking_id, $token);
+            log_message('debug', 'Pesapal Token: ' . $response);
 
             if (!empty($response) && isset($response['status'])) {
                 $status = strtoupper($response['status']);
