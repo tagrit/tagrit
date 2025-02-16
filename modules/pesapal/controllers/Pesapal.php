@@ -219,7 +219,7 @@ class Pesapal extends App_Controller
         $consumer_key = $this->pesapal_gateway->getSetting('test_mode_enabled') == '1' ? $this->pesapal_gateway->getSetting('consumer_key_demo') : $this->pesapal_gateway->getSetting('consumer_key');
         $consumer_secret = $this->pesapal_gateway->getSetting('test_mode_enabled') == '1' ? $this->pesapal_gateway->getSetting('consumer_secret_demo') : $this->pesapal_gateway->getSetting('consumer_secret');
 
-        $url = "https://pay.pesapal.com/pesapalv3/api/Auth/RequestToken";
+        $url = "https://pay.pesapal.com/v3/api/Auth/RequestToken";
 
         $headers = [
             "Content-Type: application/json"
@@ -245,7 +245,7 @@ class Pesapal extends App_Controller
 
     private function checkPesapalPaymentStatus($pesapal_tracking_id, $token)
     {
-        $url = "https://pay.pesapal.com/pesapalv3/api/Transactions/GetTransactionStatus?orderTrackingId={$pesapal_tracking_id}";
+        $url = "https://pay.pesapal.com/v3/api/Transactions/GetTransactionStatus?orderTrackingId={$pesapal_tracking_id}";
 
         $headers = [
             "Authorization: Bearer " . $token,
