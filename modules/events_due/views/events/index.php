@@ -19,21 +19,21 @@
                                 <i class="fa fa-plus"></i> <?php echo _l('New Event'); ?>
                             </button>
                         </div>
-                        <hr class="hr-panel-separator" />
+                        <hr class="hr-panel-separator"/>
 
                         <table class="table dt-table table-events" id="events-table">
                             <thead>
-                                <tr>
-                                    <th><?php echo _l('Event Name'); ?></th>
-                                    <th><?php echo _l('Setup'); ?></th>
-                                    <th><?php echo _l('Division'); ?></th>
-                                    <th><?php echo _l('Start Date'); ?></th>
-                                    <th><?php echo _l('End Date'); ?></th>
-                                    <th><?php echo _l('Venue'); ?></th>
-                                    <th><?php echo _l('Name of Delegate'); ?></th>
-                                    <th><?php echo _l('Email'); ?></th>
-                                    <th><?php echo _l('Phone'); ?></th>
-                                </tr>
+                            <tr>
+                                <th><?php echo _l('Event Name'); ?></th>
+                                <th><?php echo _l('Setup'); ?></th>
+                                <th><?php echo _l('Division'); ?></th>
+                                <th><?php echo _l('Start Date'); ?></th>
+                                <th><?php echo _l('End Date'); ?></th>
+                                <th><?php echo _l('Venue'); ?></th>
+                                <th><?php echo _l('Name of Delegate'); ?></th>
+                                <th><?php echo _l('Email'); ?></th>
+                                <th><?php echo _l('Phone'); ?></th>
+                            </tr>
                             </thead>
                             <tbody></tbody>
                         </table>
@@ -45,39 +45,76 @@
 </div>
 
 <!-- Drawer Overlay -->
-<div class="drawer-overlay" onclick="closeEventDrawer()" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:999; transition: opacity 0.3s;"></div>
+<div class="drawer-overlay" onclick="closeEventDrawer()"
+     style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:999; transition: opacity 0.3s;"></div>
 
 <!-- Event Drawer -->
-<div class="drawer" id="eventDrawer" style="position:fixed; right:-80%; top:0; width:80%; height:100%; background:white; z-index:1000; box-shadow:-2px 0 5px rgba(0,0,0,0.1); transition: right 0.3s;">
-    <div class="drawer-header" style="padding: 20px; display: flex; justify-content: space-between; align-items: center;">
+<div class="drawer" id="eventDrawer"
+     style="position:fixed; right:-80%; top:0; width:80%; height:100%; background:white; z-index:1000; box-shadow:-2px 0 5px rgba(0,0,0,0.1); transition: right 0.3s;">
+    <div class="drawer-header"
+         style="padding: 20px; display: flex; justify-content: space-between; align-items: center;">
         <h3 class="drawer-title" id="drawerTitle"><?php echo _l('New Event'); ?></h3>
-        <button type="button" class="drawer-close" onclick="closeEventDrawer()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer;">
+        <button type="button" class="drawer-close" onclick="closeEventDrawer()"
+                style="background: none; border: none; font-size: 1.5rem; cursor: pointer;">
             <i class="fa fa-times"></i>
         </button>
     </div>
-    
+
     <div class="drawer-body" style="padding: 20px; overflow-y: auto; height: calc(100% - 100px);">
         <form id="event-form">
             <input type="hidden" name="id" id="event_id">
-            
-            <div class="form-group">
-                <label for="event_name" class="required"><?php echo _l('Event Name'); ?></label>
-                <input type="text" id="event_name" name="event_name" class="form-control" required>
-            </div>
 
             <div class="form-group">
-                <label for="setup"><?php echo _l('Setup'); ?></label>
-                <select id="setup" name="setup" class="form-control selectpicker" data-none-selected-text="<?php echo _l('Dropdown Non Selected Text'); ?>">
-                    <option value="Physical">Physical</option>
-                    <option value="Virtual">Virtual</option>
-                </select>
+                    <label for="setup"><?php echo _l('Event Name'); ?></label>
+                    <select id="setup" name="setup"
+                            data-live-search="true"
+                            class="form-control selectpicker"
+                            data-none-selected-text="<?php echo _l('Dropdown Non Selected Text'); ?>">
+                        <option value="Physical">DSAC 101: DATA ANALYSIS TRAINING</option>
+                        <option value="Virtual">DSAC 102: DATA ANALYSIS TRAINING</option>
+                    </select>
             </div>
 
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label for="type"><?php echo _l('Type'); ?></label>
-                        <input type="text" id="type" name="type" class="form-control">
+                        <label for="setup"><?php echo _l('Setup'); ?></label>
+                        <select id="setup" name="setup"
+                                data-live-search="true"
+                                class="form-control selectpicker"
+                                data-none-selected-text="<?php echo _l('Dropdown Non Selected Text'); ?>">
+                            <option value="Physical">Physical</option>
+                            <option value="Virtual">Virtual</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="setup"><?php echo _l('Venue'); ?></label>
+                            <select id="setup" name="setup"
+                                    data-live-search="true"
+                                    class="form-control selectpicker"
+                                    data-none-selected-text="<?php echo _l('Dropdown Non Selected Text'); ?>">
+                                <option value="Physical">Mombasa</option>
+                                <option value="Virtual">Nairobi</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="setup"><?php echo _l('Type'); ?></label>
+                        <select id="setup" name="setup"
+                                data-live-search="true"
+                                class="form-control selectpicker"
+                                data-none-selected-text="<?php echo _l('Dropdown Non Selected Text'); ?>">
+                            <option value="Physical">Local</option>
+                            <option value="Virtual">International</option>
+                        </select>
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -102,57 +139,14 @@
                     </div>
                 </div>
             </div>
-
-            <div class="form-group">
-                <label for="venue"><?php echo _l('Venue'); ?></label>
-                <input type="text" id="venue" name="venue" class="form-control">
-            </div>
-
-            <div class="form-group">
-                <label for="delegate_name" class="required"><?php echo _l('Delegate Name'); ?></label>
-                <input type="text" id="delegate_name" name="delegate_name" class="form-control" required>
-            </div>
-
-            <div class="form-group">
-                <label for="date_of_birth"><?php echo _l('Date of Birth'); ?></label>
-                <input type="date" id="date_of_birth" name="date_of_birth" class="form-control">
-            </div>
-
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="mobile_no" class="required"><?php echo _l('Mobile No'); ?></label>
-                        <input type="text" id="mobile_no" name="mobile_no" class="form-control" required>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="email" class="required"><?php echo _l('Email'); ?></label>
-                        <input type="email" id="email" name="email" class="form-control" required>
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="organization"><?php echo _l('Organization'); ?></label>
-                <input type="text" id="organization" name="organization" class="form-control">
-            </div>
+            <button type="submit" style="margin-top: 20px;" class="btn btn-primary btn-block">Submit Event</button>
         </form>
-    </div>
-    
-    <div class="drawer-footer" style="padding: 20px; display: flex; justify-content: flex-end;">
-        <button type="button" class="btn btn-default mr-2" onclick="closeEventDrawer()">
-            <?php echo _l('Close'); ?>
-        </button>
-        <button type="button" class="btn btn-primary" onclick="saveEvent()">
-            <?php echo _l('Submit'); ?>
-        </button>
     </div>
 </div>
 <?php init_tail(); ?>
 <script>
     // Initialize selectpicker
-    $(document).ready(function() {
+    $(document).ready(function () {
         $('.selectpicker').selectpicker();
     });
 
