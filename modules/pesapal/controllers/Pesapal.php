@@ -252,11 +252,30 @@ public function success($invoiceid, $hash)
       $insert_id = $this->db->insert(db_prefix() . 'pesapal_txn', $payment_status);
     }
 
-    if ($insert_id && !is_null($pesapal_tracking_id)) {
-        set_alert('success', _l('online_payment_recorded_success'));
-      } else {
-        set_alert('danger', _l('online_payment_recorded_success_fail_database'));
-      }
+    // Fetch the actual payment status from Pesapal
+    $payment_status_url = "https://www.pesapal.com/api/querypaymentstatus?pesapal_merchant_reference={$reference}&pesapal_transaction_tracking_id={$pesapal_tracking_id}";
+    $response = file_get_contents($payment_status_url);
+
+    if ($response) {
+        $xml = simplexml_load_string($response);
+        $status = (string) $xml->status;
+
+        if ($status === "COMPLETED") {
+            // Update invoice status to Paid
+            $this->db->where('id', $invoiceid);
+            $this->db->update(db_prefix() . 'invoices', ['status' => 2]);
+
+            // Update Pesapal transaction status
+            $this->db->where('reference_code', $reference);
+            $this->db->update(db_prefix() . 'pesapal_txn', ['txn_status' => 'COMPLETED']);
+
+            set_alert('success', _l('Invoice marked as paid successfully.'));
+        } else {
+            set_alert('warning', _l('Payment pending or failed. Please check Pesapal dashboard.'));
+        }
+    } else {
+        set_alert('danger', _l('Failed to verify transaction status with Pesapal.'));
+    }
 
   $this->session->unset_userdata('pesapal_total');
   redirect(site_url('invoice/' . $invoiceid . '/' . $hash));
