@@ -24,21 +24,24 @@ class Pesapal extends App_Controller
 
         //convert currency if not KES
         if ($this->pesapal_gateway->getSetting('currencies') !== 'KES') {
-
             $from_currency = $this->pesapal_gateway->getSetting('currencies');
             $to_currency = "KES";
             $api_url = "https://api.exchangerate-api.com/v4/latest/{$from_currency}";
 
             $response = file_get_contents($api_url);
-            $data = json_decode($response, true);
+            $exchange_data = json_decode($response, true); // Use a separate variable
 
-            if ($data && isset($data['rates'][$to_currency])) {
-                $exchange_rate = $data['rates'][$to_currency];
-                $data['total'] = number_format($data['total']) * $exchange_rate;
+            if ($exchange_data && isset($exchange_data['rates'][$to_currency])) {
+                $exchange_rate = $exchange_data['rates'][$to_currency];
+
+                // Ensure $data['total'] is properly formatted as a number
+                $data['total'] = floatval($data['total']) * $exchange_rate;
+
             } else {
                 set_alert('danger', "Failed to get exchange rate.");
             }
         }
+
 
         $currency = 'KES';
         $signature_method = new OAuthSignatureMethod_HMAC_SHA1();
