@@ -18,13 +18,32 @@ class Pesapal extends App_Controller
         $data['total'] = $this->session->userdata('pesapal_total');
 
         //pesapal params
-
         $token = $params = NULL;
-
         $consumer_key = $this->pesapal_gateway->getSetting('test_mode_enabled') == '1' ? $this->pesapal_gateway->getSetting('consumer_key_demo') : $this->pesapal_gateway->getSetting('consumer_key');
         $consumer_secret = $this->pesapal_gateway->getSetting('test_mode_enabled') == '1' ? $this->pesapal_gateway->getSetting('consumer_secret_demo') : $this->pesapal_gateway->getSetting('consumer_secret');
-        $currency = $this->pesapal_gateway->getSetting('currencies');
 
+        //convert currency if not KES
+        if ($this->pesapal_gateway->getSetting('currencies') !== 'KES') {
+            $from_currency = $this->pesapal_gateway->getSetting('currencies');
+            $to_currency = "KES";
+            $api_url = "https://api.exchangerate-api.com/v4/latest/{$from_currency}";
+
+            $response = file_get_contents($api_url);
+            $exchange_data = json_decode($response, true); // Use a separate variable
+
+            if ($exchange_data && isset($exchange_data['rates'][$to_currency])) {
+                $exchange_rate = $exchange_data['rates'][$to_currency];
+
+                // Ensure $data['total'] is properly formatted as a number
+                $data['total'] = floatval($data['total']) * $exchange_rate;
+
+            } else {
+                set_alert('danger', "Failed to get exchange rate.");
+            }
+        }
+
+
+        $currency = 'KES';
         $signature_method = new OAuthSignatureMethod_HMAC_SHA1();
         $iframelink = $this->pesapal_gateway->get_action_url() . 'PostPesapalDirectOrderV4';
         $contact = null;
@@ -96,7 +115,8 @@ class Pesapal extends App_Controller
                 <b><?php echo format_invoice_number($data['invoice']->id); ?></b>
             </a>
         </h3>
-        <h4><?php echo _l('payment_total', app_format_money($data['total'], $data['invoice']->currency_name)); ?></h4>
+        <h4><?php echo 'KES' . ' ' . number_format($data['total'], 2); ?>
+        </h4>
         <hr/>
         <?php if (!empty($data['iframe_src'])) { ?>
         <iframe src="<?php echo $data['iframe_src']; ?>" width="100%" height="700px" scrolling="no" frameBorder="0">
