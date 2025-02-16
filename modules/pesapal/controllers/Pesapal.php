@@ -115,7 +115,7 @@ class Pesapal extends App_Controller
                 <b><?php echo format_invoice_number($data['invoice']->id); ?></b>
             </a>
         </h3>
-        <h4><?php echo _l('payment_total', app_format_money($data['total'], 'KES')); ?></h4>
+        <h4><?php echo _l('payment_total', app_format_money($data['total'], $data['invoice']->currency_name)); ?></h4>
         <hr/>
         <?php if (!empty($data['iframe_src'])) { ?>
         <iframe src="<?php echo $data['iframe_src']; ?>" width="100%" height="700px" scrolling="no" frameBorder="0">
