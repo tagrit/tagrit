@@ -55,7 +55,12 @@ jobs:
 
             cd ~/$DEPLOY_DIR || { echo "❌ Deployment directory not found!"; exit 1; }
 
+            # Configure Git and GET Changes with a CI/CD user identity
+            git config --global user.email "kevinamayi20@gmail.com"
+            git config --global user.name "KEVINAMAYI"
             git remote set-url origin https://${{ secrets.USER_TOKEN }}@github.com/tagrit/tagrit.git
+            git add .
+            git commit -m "Auto-commit before reset on $(date +'%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
             git fetch --all
             git reset --hard origin/$BRANCH_NAME
             git pull origin $BRANCH_NAME --rebase --force
@@ -72,8 +77,12 @@ jobs:
             # Navigate to the correct directory
             cd /var/www/html/tagrit || { echo "❌ Deployment directory not found!"; exit 1; }
 
-            # Pull the latest changes from GitHub
+            # Configure Git and GET Changes with a CI/CD user identity
+            git config --global user.email "kevinamayi20@gmail.com"
+            git config --global user.name "KEVINAMAYI"
             git remote set-url origin https://${{ secrets.USER_TOKEN }}@github.com/tagrit/tagrit.git
+            git add .
+            git commit -m "Auto-commit before reset on $(date +'%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
             git fetch --all
             git reset --hard origin/master
             git pull origin master --rebase --force
