@@ -27,20 +27,15 @@ class Gtsverify extends AdminController{
     public function activate(){
         $license_code = strip_tags(trim($_POST["purchase_key"]));
         $client_name = strip_tags(trim($_POST["username"])); 
-        $api = new SageAccountingLic();
-        $activate_response = $api->activate_license($license_code, $client_name);
-        $msg = '';
-        if(empty($activate_response)){
-          $msg = 'Server is unavailable.';
-        }else{
-          $msg = $activate_response['message'];
-        }
+        // $api = new SageAccountingLic();
+        // $activate_response = $api->activate_license($license_code, $client_name);
+        $msg = 'License activation bypassed.'; // Updated message
 
         $res = array();
-        $res['status'] = $activate_response['status'];
+        $res['status'] = true; 
         $res['message'] = $msg;
         if ($res['status']) {
-            $res['original_url']= $this->input->post('original_url');
+            $res['original_url'] = $this->input->post('original_url');
         }
         echo json_encode($res);
     }    
