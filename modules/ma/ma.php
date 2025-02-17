@@ -45,7 +45,7 @@ function ma_add_head_components(){
     $viewuri = $_SERVER['REQUEST_URI'];
 
     if (!(strpos($viewuri, 'admin/ma/') === false)) {
-        echo '<link href="' . module_dir_url(MA_MODULE_NAME, 'assets/css/custom.css') . '?v=' . MA_REVISION . '"  rel="stylesheet" type="text/css" />';
+//        echo '<link href="' . module_dir_url(MA_MODULE_NAME, 'assets/css/custom.css') . '?v=' . MA_REVISION . '"  rel="stylesheet" type="text/css" />';
     }
 
     if (!(strpos($viewuri, 'admin/ma/campaign_detail') === false)) {
