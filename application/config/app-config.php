@@ -65,11 +65,11 @@ if (!isset($db_config[$environment])) {
 }
 
 // Define constants
-define('APP_BASE_URL_DEFAULT', $db_config[$environment]['BASE_URL']);
-define('APP_DB_USERNAME_DEFAULT', $db_config[$environment]['USERNAME']);
-define('APP_DB_PASSWORD_DEFAULT', $db_config[$environment]['PASSWORD']);
-define('APP_DB_NAME_DEFAULT', $db_config[$environment]['DB_NAME']);
-define('APP_DB_HOSTNAME_DEFAULT', 'localhost');
+define('APP_BASE_URL', $db_config[$environment]['BASE_URL']);
+define('APP_DB_USERNAME', $db_config[$environment]['USERNAME']);
+define('APP_DB_PASSWORD', $db_config[$environment]['PASSWORD']);
+define('APP_DB_NAME', $db_config[$environment]['DB_NAME']);
+define('APP_DB_HOSTNAME', 'localhost');
 define('APP_ENC_KEY', '85bec75a1a6136881a01c08b1fdc31d8');
 
 /**
