@@ -1,4 +1,7 @@
 /.idea/php.xml
 /.idea/vcs.xml
+/modules/*.zip
 install.sql
 README.md
+uploads
+/vendor
