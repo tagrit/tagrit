@@ -4,4 +4,4 @@
 install.sql
 README.md
 uploads
-vendor
+/vendor
