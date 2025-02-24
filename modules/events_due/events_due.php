@@ -68,7 +68,7 @@ class Events_Due_System
             echo '<link href="' . module_dir_url(EVENTS_DUE_MODULE_NAME, 'assets/css/registrations/list_registrations.css') . '" rel="stylesheet" type="text/css" />';
         }
 
-//        dashboard css
+        // dashboard css
         if (strpos($viewuri, 'admin/events_due/dashboard') !== false) {
             echo '<link href="' . module_dir_url(EVENTS_DUE_MODULE_NAME, 'assets/css/dashboard.css') . '" rel="stylesheet" type="text/css" />';
         }

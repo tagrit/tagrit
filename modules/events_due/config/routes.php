@@ -24,6 +24,7 @@ $route['admin/events_due/registrations/update'] = 'events_due/registrations/upda
 
 //settings
 $route['admin/events_due/settings/main'] = 'events_due/settings/main';
+$route['admin/events_due/settings/import_client_event_registration'] = 'events_due/settings/import_client_event_registration';
 
 //reports
 $route['admin/events_due/reports/main'] = 'events_due/reports/main';
