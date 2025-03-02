@@ -237,7 +237,7 @@ if (!$CI->db->table_exists(db_prefix() . '_additional_funds_details')) {
 
 
 // Insert example data for `tbl_expense_categories`
-$CI->db->query('INSERT INTO `' . db_prefix() . '_expense_categories` (`name`) VALUES
+$CI->db->query('INSERT IGNORE INTO `' . db_prefix() . '_expense_categories` (`name`) VALUES
 ("Transport"),
 ("Printing"),
 ("Hotel Conferencing"),
@@ -249,7 +249,7 @@ $CI->db->query('INSERT INTO `' . db_prefix() . '_expense_categories` (`name`) VA
 ("CPD Allowance"),
 ("Additional Funds");');
 
-$CI->db->query('INSERT INTO `' . db_prefix() . '_expense_subcategories` (`name`, `category_id`) VALUES
+$CI->db->query('INSERT IGNORE INTO `' . db_prefix() . '_expense_subcategories` (`name`, `category_id`) VALUES
 -- Category ID 1
 ("Flight Tickets", 1),
 ("Taxi Charges", 1),
@@ -285,7 +285,11 @@ $CI->db->query('INSERT INTO `' . db_prefix() . '_expense_subcategories` (`name`,
 ("Mpesa Transactions", 8),
 ("Other Costs1", 8),
 ("Other Costs2", 8),
+
+-- Category ID 9
 ("CPD Allowance", 9),
+
+-- Category ID 10
 ("Additional Funds", 10);');
 
 // Example data for categories

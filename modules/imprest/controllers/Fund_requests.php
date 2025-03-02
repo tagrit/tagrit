@@ -41,7 +41,7 @@ class Fund_requests extends AdminController
                 $data['max_unreconciled_amount'] = $unSerializedData['max_unreconciled_amount'];
             }
 
-            $fund_request_details = $this->Fund_request_model->get_fund_request_details();
+            $fund_request_details = $this->Fund_request_model->get_fund_request_details(null,true);
 
             if (!empty($fund_request_details)) {
                 $data['totalAmountRequested'] = $fund_request_details['total_amount_requested'] - $this->Fund_request_model->get_pending_approval_amount();
@@ -132,7 +132,7 @@ class Fund_requests extends AdminController
             $data['mandatory_fields'] = unserialize($serializedData);
         }
 
-        $fund_request_details = $this->Fund_request_model->get_fund_request_details();
+        $fund_request_details = $this->Fund_request_model->get_fund_request_details(null,true);
 
         if (!empty($fund_request_details)) {
             $data['totalAmountRequested'] = $fund_request_details['total_amount_requested'] - $this->Fund_request_model->get_pending_approval_amount();
