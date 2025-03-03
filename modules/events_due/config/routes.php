@@ -13,9 +13,12 @@ $route['admin/events_due/events/create'] = 'events_due/events/create';
 $route['admin/events_due/events/store'] = 'events_due/events/store';
 $route['admin/events_due/events/edit/(:num)'] = 'events_due/events/edit/$event_id';
 $route['admin/events_due/events/update'] = 'events_due/events/update';
+$route['admin/events_due/events/store_event_name'] = 'events_due/events/store_event_name';
 
 
-//registration categories
+
+
+//registrations
 $route['admin/events_due/registrations'] = 'events_due/registrations/index';
 $route['admin/events_due/registrations/create'] = 'events_due/registrations/store';
 $route['admin/events_due/registrations/store'] = 'events_due/registrations/store';

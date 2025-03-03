@@ -60,22 +60,77 @@
         </button>
     </div>
 
-    <div class="drawer-body" style="padding: 20px; overflow-y: auto; height: calc(100% - 100px);">
+    <div class="drawer-body" style="padding: 20px; padding-right:40px; overflow-y: auto; height: calc(100% - 100px);">
         <form id="event-form">
             <input type="hidden" name="id" id="event_id">
 
             <div class="form-group">
-                    <label for="setup"><?php echo _l('Event Name'); ?></label>
-                    <select id="setup" name="setup"
-                            data-live-search="true"
-                            class="form-control selectpicker"
-                            data-none-selected-text="<?php echo _l('Dropdown Non Selected Text'); ?>">
-                        <option value="Physical">DSAC 101: DATA ANALYSIS TRAINING</option>
-                        <option value="Virtual">DSAC 102: DATA ANALYSIS TRAINING</option>
-                    </select>
+                <div class="row align-items-end">
+                    <div class="col-md-11">
+                        <label for="setup"><?php echo _l('Event Name'); ?></label>
+                        <select id="setup" name="setup"
+                                data-live-search="true"
+                                class="form-control selectpicker"
+                                data-none-selected-text="<?php echo _l('Dropdown Non Selected Text'); ?>">
+                            <?php foreach ($event_names as $event_name): ?>
+                                <option value="<?= htmlspecialchars($event_name->id); ?>"><?= htmlspecialchars($event_name->event_name); ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div style="margin-top:26px;" class="col-md-1 d-flex justify-content-end">
+                        <button type="button" class="btn btn-primary btn-sm"
+                                data-toggle="modal" data-target="#addEventName">
+                            +
+                        </button>
+                    </div>
+                </div>
             </div>
 
             <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="setup"><?php echo _l('Event Location'); ?></label>
+                        <select id="setup" name="setup"
+                                data-live-search="true"
+                                class="form-control selectpicker"
+                                data-none-selected-text="<?php echo _l('Dropdown Non Selected Text'); ?>">
+                            <?php foreach ($event_locations as $event_location): ?>
+                                <option value="<?= htmlspecialchars($event_location->id); ?>"><?= htmlspecialchars($event_location->name); ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="setup"><?php echo _l('Event Venue'); ?></label>
+                            <select id="setup" name="setup"
+                                    data-live-search="true"
+                                    class="form-control selectpicker"
+                                    data-none-selected-text="<?php echo _l('Dropdown Non Selected Text'); ?>">
+                                <?php foreach ($event_venues as $event_venue): ?>
+                                    <option value="<?= htmlspecialchars($event_venue->id); ?>"><?= htmlspecialchars($event_venue->name); ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="setup"><?php echo _l('Event Type'); ?></label>
+                        <select id="setup" name="setup"
+                                data-live-search="true"
+                                class="form-control selectpicker"
+                                data-none-selected-text="<?php echo _l('Dropdown Non Selected Text'); ?>">
+                            <option value="Physical">Local</option>
+                            <option value="Virtual">International</option>
+                        </select>
+                    </div>
+                </div>
+
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="setup"><?php echo _l('Setup'); ?></label>
@@ -86,41 +141,6 @@
                             <option value="Physical">Physical</option>
                             <option value="Virtual">Virtual</option>
                         </select>
-                    </div>
-                </div>
-                <div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="setup"><?php echo _l('Venue'); ?></label>
-                            <select id="setup" name="setup"
-                                    data-live-search="true"
-                                    class="form-control selectpicker"
-                                    data-none-selected-text="<?php echo _l('Dropdown Non Selected Text'); ?>">
-                                <option value="Physical">Mombasa</option>
-                                <option value="Virtual">Nairobi</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="setup"><?php echo _l('Type'); ?></label>
-                        <select id="setup" name="setup"
-                                data-live-search="true"
-                                class="form-control selectpicker"
-                                data-none-selected-text="<?php echo _l('Dropdown Non Selected Text'); ?>">
-                            <option value="Physical">Local</option>
-                            <option value="Virtual">International</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="division"><?php echo _l('Division'); ?></label>
-                        <input type="text" id="division" name="division" class="form-control">
                     </div>
                 </div>
             </div>
@@ -139,10 +159,51 @@
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="division"><?php echo _l('Division'); ?></label>
+                        <input type="text" id="division" name="division" class="form-control">
+                    </div>
+                </div>
+            </div>
             <button type="submit" style="margin-top: 20px;" class="btn btn-primary btn-block">Submit Event</button>
         </form>
     </div>
 </div>
+
+<div class="modal fade" id="addEventName" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">Add Even Name</h4>
+            </div>
+            <?php echo form_open('admin/events_due/events/store_event_name', [
+                'id' => 'create-event-name-form',
+                'enctype' => 'multipart/form-data'
+            ]); ?>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <label for="subcategory_name" class="form-label">Event Name</label>
+                        <input type="text" id="event_name" name="event_name" class="form-control"
+                               placeholder="Enter event name" required>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default"
+                        data-dismiss="modal"><?php echo _l('close'); ?></button>
+                <button type="submit" class="btn btn-primary"><?php echo _l('Add Event Name'); ?></button>
+            </div>
+            <?php echo form_close(); ?>
+        </div>
+    </div>
+</div>
+
 <?php init_tail(); ?>
 <script>
     // Initialize selectpicker

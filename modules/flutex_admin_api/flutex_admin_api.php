@@ -33,7 +33,7 @@ get_instance()->load->helper(FLUTEX_ADMIN_API.'/flutex_admin_api');
 hooks()->add_action('admin_init', 'add_flutex_admin_api_settings_tabs');
 function add_flutex_admin_api_settings_tabs()
 {
-    get_instance()->app_tabs->add_settings_tab('flutex_admin_api', [
+    get_instance()->app->add_settings_section('flutex_admin_api', [
         'name'     => _l('flutex_admin_settings'),
         'view'     => 'flutex_admin_api/flutex_admin_settings',
         'icon'     => 'fas fa-mobile-alt',

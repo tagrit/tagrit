@@ -32,7 +32,7 @@ class Dashboard extends AdminController
         $data['fund_requests'] = $this->Fund_request_model->get();
         $data['labels'] = $labels;
         $data['values'] = $values;
-        $fund_request_details = $this->Fund_request_model->get_fund_request_details();
+        $fund_request_details = $this->Fund_request_model->get_fund_request_details(null,true);
 
         if (!empty($fund_request_details)) {
             $data['totalAmountRequested'] = $fund_request_details['total_amount_requested'] - $this->Fund_request_model->get_pending_approval_amount();

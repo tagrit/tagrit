@@ -24,7 +24,6 @@ if (!$CI->db->table_exists(db_prefix() . 'events_due_locations')) {
     $CI->db->query('CREATE TABLE `' . db_prefix() . 'events_due_locations` (
         `id` INT NOT NULL AUTO_INCREMENT,
         `name` VARCHAR(255) NOT NULL,
-        `country` VARCHAR(100) NOT NULL,
         `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         PRIMARY KEY (`id`)
@@ -44,24 +43,38 @@ if (!$CI->db->table_exists(db_prefix() . 'events_due_venues')) {
     ) ENGINE=InnoDB DEFAULT CHARSET=' . $CI->db->char_set . ';');
 }
 
+// Create table `{database_prefix}_events_due_name`
+if (!$CI->db->table_exists(db_prefix() . 'events_due_name')) {
+    $CI->db->query('CREATE TABLE `' . db_prefix() . 'events_due_name` (
+        `id` INT NOT NULL AUTO_INCREMENT,
+        `event_name` VARCHAR(255) NOT NULL,
+        `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=' . $CI->db->char_set . ';');
+}
+
+
 // Create table `{database_prefix}_events_due_events`
 if (!$CI->db->table_exists(db_prefix() . 'events_due_events')) {
     $CI->db->query('CREATE TABLE `' . db_prefix() . 'events_due_events` (
         `id` INT NOT NULL AUTO_INCREMENT,
-        `event_name` VARCHAR(255) NOT NULL,
-        `event_code` VARCHAR(100) NOT NULL UNIQUE,
+        `event_name_id` INT NOT NULL,
         `location_id` INT NOT NULL,
         `venue_id` INT NOT NULL,
         `type` ENUM("Physical", "Virtual") NOT NULL,
         `duration` ENUM("5 Days", "7 Days", "10 Days", "14 Days") NOT NULL,
-        `cost_net` DECIMAL(10,2) NOT NULL,
+        `division` VARCHAR(255) NOT NULL,
+        `cost_net` DECIMAL(10,2) NOT NULL DEFAULT 0,
         `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         PRIMARY KEY (`id`),
-        FOREIGN KEY (`location_id`) REFERENCES ' . db_prefix() . 'events_due_locations(`id`),
-        FOREIGN KEY (`venue_id`) REFERENCES ' . db_prefix() . 'events_due_venues(`id`)
+        FOREIGN KEY (`event_name_id`) REFERENCES `' . db_prefix() . 'events_due_name`(`id`) ON DELETE CASCADE,
+        FOREIGN KEY (`location_id`) REFERENCES `' . db_prefix() . 'events_due_locations`(`id`) ON DELETE CASCADE,
+        FOREIGN KEY (`venue_id`) REFERENCES `' . db_prefix() . 'events_due_venues`(`id`) ON DELETE CASCADE
     ) ENGINE=InnoDB DEFAULT CHARSET=' . $CI->db->char_set . ';');
 }
+
 
 
 // Create table `{database_prefix}_events_due_registrations`
@@ -95,4 +108,46 @@ if (!$CI->db->table_exists(db_prefix() . 'events_due_invoices')) {
         PRIMARY KEY (`id`),
         FOREIGN KEY (`registration_id`) REFERENCES ' . db_prefix() . 'events_due_registrations(`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=' . $CI->db->char_set . ';');
+}
+
+//insert locations
+$locations = [
+    'Diani', 'Mombasa', 'Machakos', 'Nakuru', 'Naivasha',
+    'Kisumu', 'Thika', 'Eldoret', 'Dubai', 'Arusha',
+    'Malaysia', 'Singapore'
+];
+
+foreach ($locations as $location) {
+    $CI->db->insert(db_prefix() . 'events_due_locations', ['name' => $location]);
+}
+
+//insert venues
+$venues = [
+    ['name' => 'Sarova Hotel', 'location' => 'Mombasa'],
+    ['name' => 'Voyager Hotel', 'location' => 'Mombasa'],
+    ['name' => 'Baobab Hotel', 'location' => 'Diani'],
+    ['name' => 'Seo Hotel', 'location' => 'Machakos'],
+    ['name' => 'Maanzoni Lodge', 'location' => 'Machakos'],
+    ['name' => 'Blooming Suites Hotel', 'location' => 'Naivasha'],
+    ['name' => 'Eseriani Hotel', 'location' => 'Naivasha'],
+    ['name' => 'Sarova Woodlands Hotel', 'location' => 'Nakuru'],
+    ['name' => 'Ole Ken Hotel', 'location' => 'Nakuru'],
+    ['name' => 'Sarova Imperial', 'location' => 'Kisumu'],
+    ['name' => 'The Luke Hotel', 'location' => 'Thika'],
+    ['name' => 'Mt. Meru Hotel', 'location' => 'Arusha'],
+    ['name' => 'Ibis Bencoolen', 'location' => 'Singapore'],
+];
+
+foreach ($venues as $venue) {
+    // Get location_id based on location name
+    $query = $CI->db->get_where(db_prefix() . 'events_due_locations', ['name' => $venue['location']]);
+    $location = $query->row();
+
+    if ($location) {
+        // Insert venue with the correct location_id
+        $CI->db->insert(db_prefix() . 'events_due_venues', [
+            'name' => $venue['name'],
+            'location_id' => $location->id,
+        ]);
+    }
 }
