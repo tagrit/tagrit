@@ -1,0 +1,75 @@
+.o_not_full.oe_button_box{
+	position: relative;
+	display: block;
+	margin-bottom: -2;
+	margin-top: -12px;
+	margin-left: -16px;
+	margin-right: -16px;
+	text-align: right;
+}
+
+button.btn.oe_stat_button{
+	color: #4c4c4c;
+	height: 44px;
+	padding: 0 6px 0 0 !important;
+	text-align: left;
+	white-space: nowrap;
+	background-color: transparent;
+	opacity: 0.8;
+	border-radius: 0px;
+	margin-bottom: 0;
+}
+
+i.fa.fa-fw.o_button_icon.fa-pie-chart, i.fa.fa-fw.o_button_icon.fa-bar-chart{
+	margin-left: 6px;
+	display: inline-block;
+	vertical-align: middle;
+	line-height: 44px;
+	width: 30%;
+	font-size: 25px;
+
+}
+
+.o_field_widget.o_stat_info{
+	display: inline-block;
+	vertical-align: middle;
+	font-weight: 500;
+	padding-right: 6px;
+	line-height: 1.3;
+	font-size: 13px;
+}
+span.o_stat_value{
+	font-weight: 700;
+	color: #f1673c;
+	line-height: 1.2;
+}
+
+span.o_stat_text{
+
+	line-height: 1.2;
+}
+
+span.o_stat_value {
+	display: block;
+	max-width: 100%;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	vertical-align: top;
+}
+
+button.btn.oe_stat_button {
+	width: 20.5%;
+}
+span.o_stat_value, span.o_stat_text {
+	text-transform: none;
+	color: #f1673c;
+
+}
+i.fa.fa-fw.o_button_icon.fa-pie-chart, i.fa.fa-fw.o_button_icon.fa-bar-chart {
+	color: #ff5722;
+}
+
+.variant_note{
+	font-style: italic;
+}
