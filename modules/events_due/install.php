@@ -79,7 +79,6 @@ if (!$CI->db->table_exists(db_prefix() . 'events_due_events')) {
 }
 
 
-
 // Create table `{database_prefix}_events_due_registrations`
 if (!$CI->db->table_exists(db_prefix() . 'events_due_registrations')) {
     $CI->db->query('CREATE TABLE `' . db_prefix() . 'events_due_registrations` (
