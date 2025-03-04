@@ -14,6 +14,7 @@ $route['admin/events_due/events/store'] = 'events_due/events/store';
 $route['admin/events_due/events/edit/(:num)'] = 'events_due/events/edit/$event_id';
 $route['admin/events_due/events/update'] = 'events_due/events/update';
 $route['admin/events_due/events/store_event_name'] = 'events_due/events/store_event_name';
+$route['admin/events_due/events/store'] = 'events_due/events/store';
 
 
 
