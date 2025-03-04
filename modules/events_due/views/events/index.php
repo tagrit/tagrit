@@ -29,13 +29,24 @@
                                 <th><?php echo _l('Division'); ?></th>
                                 <th><?php echo _l('Start Date'); ?></th>
                                 <th><?php echo _l('End Date'); ?></th>
+                                <th><?php echo _l('Location'); ?></th>
                                 <th><?php echo _l('Venue'); ?></th>
-                                <th><?php echo _l('Name of Delegate'); ?></th>
-                                <th><?php echo _l('Email'); ?></th>
-                                <th><?php echo _l('Phone'); ?></th>
                             </tr>
                             </thead>
-                            <tbody></tbody>
+                            <tbody>
+                            <?php foreach ($events as $event): ?>
+                                <tr class="data-row">
+                                    <td><?php echo $event->event_name; ?></td>
+                                    <td><?php echo $event->setup; ?></td>
+                                    <td><?php echo $event->division; ?></td>
+                                    <td><?php echo $event->start_date; ?></td>
+                                    <td><?php echo $event->end_date; ?></td>
+                                    <td><?php echo $event->location; ?></td>
+                                    <td><?php echo $event->venue; ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+
+                            </tbody>
                         </table>
                     </div>
                 </div>
