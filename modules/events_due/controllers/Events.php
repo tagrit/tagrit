@@ -28,8 +28,61 @@ class Events extends AdminController
 
     }
 
+    private function validateEvent()
+    {
+        $this->form_validation->set_rules('event_name_id', 'Event Name', 'required');
+        $this->form_validation->set_rules('location_id', 'Location', 'required');
+        $this->form_validation->set_rules('venue_id', 'Venue', 'required|numeric'); // Venue ID should be numeric
+        $this->form_validation->set_rules('event_type', 'Event Type', 'required'); // Adjusted length
+        $this->form_validation->set_rules('setup', 'Event Setup', 'required'); // Removed min/max length for numeric
+        $this->form_validation->set_rules('start_date', 'Start Date', 'required'); // Use valid_date if handling dates
+        $this->form_validation->set_rules('end_date', 'End Date', 'required'); // Custom callback to check range
+        $this->form_validation->set_rules('division', 'Event Division', 'required');
+    }
+
+
     public function store()
     {
+
+        $this->validateEvent();
+        if ($this->form_validation->run() == FALSE) {
+
+            $data['show_event_modal'] = true;
+            redirect('admin/events_due/events',$data);
+
+        } else {
+
+            try {
+
+                $data = [
+                    'event_name_id' => $this->input->post('event_name_id'),
+                    'location_id' => $this->input->post('location_id'),
+                    'venue_id' => $this->input->post('venue_id'),
+                    'type' => $this->input->post('event_type'),
+                    'setup' => $this->input->post('setup'),
+                    'start_date' => $this->input->post('start_date'),
+                    'end_date' => $this->input->post('end_date'),
+                    'division' => $this->input->post('division'),
+                ];
+
+                // Insert data into the database
+                if ($this->Event_model->create($data)) {
+                    set_alert('success', 'Event Added successfully.');
+                    redirect('admin/events_due/events');
+                } else {
+                    set_alert('danger', 'An error occurred while adding the event.');
+                    $this->load->view('events/index');
+                }
+
+            } catch (Exception $exception) {
+
+                set_alert('danger', 'An error occurred: ' . $exception->getMessage());
+                redirect('admin/events_due/events');
+                log_message('error', $exception->getMessage());
+
+            }
+
+        }
 
     }
 
