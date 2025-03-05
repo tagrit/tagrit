@@ -1,8 +1,14 @@
 <div class="row">
-  <a href="#" class="btn btn-info pull-right" onclick="sync_transaction(); return false;"><?php echo _l('synchronize_data_from_accounting_system'); ?></a>
+  <?php if($organizations || $region == 'central_european'){ ?>
+  <a href="#" class="btn btn-info pull-right" onclick="sync_transaction(); return false;"><?php echo _l('sa_synchronize_data_from_accounting_system'); ?></a>
+  <?php } ?>
+
 </div>
 <div class="row">
 <hr>
+  <div class="col-md-3">
+    <?php echo render_select('organization',$organizations,array('ID','Name'),'company', '', array(), array(), '', '', false); ?>
+  </div>
   <div class="col-md-3">
     <?php $status = [ 
           1 => ['id' => 'synchronized', 'name' => _l('synchronized')],

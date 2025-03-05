@@ -4,24 +4,24 @@ defined('BASEPATH') or exit('No direct script access allowed');
 /*
 Module Name: Sage Accounting integration
 Description: Sage Accounting integration
-Version: 1.0.0
+Version: 1.0.2
 Requires at least: 2.3.*
 Author: GreenTech Solutions
 Author URI: https://codecanyon.net/user/greentech_solutions
 */
 
 define('SAGE_ACCOUNTING_INTEGRATION_MODULE_NAME', 'sage_accounting_integration');
-define('SAGE_ACCOUNTING_INTEGRATION_REVISION', 100);
+define('SAGE_ACCOUNTING_INTEGRATION_REVISION', 102);
 
 hooks()->add_action('after_cron_run', 'cron_sage_accounting_integrations');
 hooks()->add_action('admin_init', 'sage_accounting_integration_module_init_menu_items');
 hooks()->add_action('admin_init', 'sage_accounting_integration_permissions');
 hooks()->add_action('app_admin_head', 'sage_accounting_integration_head_components');
 hooks()->add_action('app_admin_footer', 'sage_accounting_integration_add_footer_components');
+
 hooks()->add_action('sage_accounting_integration_init',SAGE_ACCOUNTING_INTEGRATION_MODULE_NAME.'_appint');
 hooks()->add_action('pre_activate_module', SAGE_ACCOUNTING_INTEGRATION_MODULE_NAME.'_preactivate');
 hooks()->add_action('pre_deactivate_module', SAGE_ACCOUNTING_INTEGRATION_MODULE_NAME.'_predeactivate');
-
 /**
  * Register activation module hook
  */
@@ -146,28 +146,60 @@ function sage_accounting_integration_add_footer_components() {
 	if (!(strpos($viewuri, 'admin/sage_accounting_integration/sync_logs') === false)) {
 		echo '<script src="' . module_dir_url(SAGE_ACCOUNTING_INTEGRATION_MODULE_NAME, 'assets/js/sync_logs.js') . '?v=' . SAGE_ACCOUNTING_INTEGRATION_REVISION . '"></script>';
 	}
+
+	if (!(strpos($viewuri, 'admin/sage_accounting_integration/setting') === false)) {
+		echo '<script src="' . module_dir_url(SAGE_ACCOUNTING_INTEGRATION_MODULE_NAME, 'assets/js/setting.js') . '?v=' . SAGE_ACCOUNTING_INTEGRATION_REVISION . '"></script>';
+	}
 }
 
 function cron_sage_accounting_integrations(){
 	$CI = &get_instance();
 
-	if(get_option('acc_integration_sage_accounting_active') == 1 && get_option('acc_integration_sage_accounting_initialized') == 1){
-        $CI->load->model('sage_accounting_integration/sage_accounting_integration_model');
-        $CI->sage_accounting_integration_model->init_sage_accounting_config();
+	$last_cron_run                  = get_option('acc_integration_sage_accounting_last_cron_run');
+    $seconds = 1800;
 
-        if(get_option('acc_integration_sage_accounting_sync_from_system') == 1){
-            $CI->sage_accounting_integration_model->create_sage_accounting_customer();
-            $CI->sage_accounting_integration_model->create_sage_accounting_invoice();
-            $CI->sage_accounting_integration_model->create_sage_accounting_payment();
-            $CI->sage_accounting_integration_model->create_sage_accounting_expense();
-        }
+    if ($last_cron_run == '' || (time() > ($last_cron_run + $seconds))) {
+		if(get_option('acc_integration_sage_accounting_active') == 1 && get_option('acc_integration_sage_accounting_connected') == 1){
+	        update_option('acc_integration_sage_accounting_last_cron_run', time());
+			
+	        $CI->load->model('sage_accounting_integration/sage_accounting_integration_model');
+	        $CI->sage_accounting_integration_model->init_sage_accounting_config();
 
-        if(get_option('acc_integration_sage_accounting_sync_to_system') == 1){
-            $CI->sage_accounting_integration_model->get_sage_accounting_customer();
-            $CI->sage_accounting_integration_model->get_sage_accounting_invoice();
-            $CI->sage_accounting_integration_model->get_sage_accounting_payment();
-            $CI->sage_accounting_integration_model->get_sage_accounting_expense();
-        }
+	        if(get_option('acc_integration_sage_accounting_sync_from_system') == 1){
+	        	if(get_option('acc_integration_sage_accounting_region') == 'south_african'){
+	        		$sync_to_system_organizations = explode(',', get_option('acc_integration_sage_accounting_sync_from_system_organizations'));
+	    			foreach ($sync_to_system_organizations as $organization_id) {
+		        		$CI->sage_accounting_integration_model->create_sage_accounting_customer_sa($organization_id);
+			            $CI->sage_accounting_integration_model->create_sage_accounting_invoice_sa($organization_id);
+			            $CI->sage_accounting_integration_model->create_sage_accounting_payment_sa($organization_id);
+			            $CI->sage_accounting_integration_model->create_sage_accounting_expense_sa($organization_id);
+			        }
+	        	}else{
+		            $CI->sage_accounting_integration_model->create_sage_accounting_customer();
+		            $CI->sage_accounting_integration_model->create_sage_accounting_invoice();
+		            $CI->sage_accounting_integration_model->create_sage_accounting_payment();
+		            $CI->sage_accounting_integration_model->create_sage_accounting_expense();
+	        	}
+	        }
+
+	        if(get_option('acc_integration_sage_accounting_sync_to_system') == 1){
+	        	if(get_option('acc_integration_sage_accounting_region') == 'south_african'){
+	        		$sync_to_system_organizations = explode(',', get_option('acc_integration_sage_accounting_sync_to_system_organizations'));
+
+	    			foreach ($sync_to_system_organizations as $organization_id) {
+		        		$CI->sage_accounting_integration_model->get_sage_accounting_customer_sa($organization_id);
+			            $CI->sage_accounting_integration_model->get_sage_accounting_invoice_sa($organization_id);
+			            $CI->sage_accounting_integration_model->get_sage_accounting_payment_sa($organization_id);
+			            $CI->sage_accounting_integration_model->get_sage_accounting_expense_sa($organization_id);
+			        }
+	        	}else{
+		            $CI->sage_accounting_integration_model->get_sage_accounting_customer();
+		            $CI->sage_accounting_integration_model->get_sage_accounting_invoice();
+		            $CI->sage_accounting_integration_model->get_sage_accounting_payment();
+		            $CI->sage_accounting_integration_model->get_sage_accounting_expense();
+		        }
+	        }
+	    }
     }
 }
 function sage_accounting_integration_appint(){

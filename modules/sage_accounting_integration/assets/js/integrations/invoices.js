@@ -7,6 +7,7 @@ var fnServerParams;
       "status": '[name="status"]',
       "from_date": '[name="from_date"]',
       "to_date": '[name="to_date"]',
+      "organization": '[name="organization"]',
     };
 
   init_invoices_table();
@@ -21,6 +22,10 @@ var fnServerParams;
 	$('input[name="to_date"]').on('change', function() {
     init_invoices_table();
 	});
+
+  $('select[name="organization"]').on('change', function() {
+    init_invoices_table();
+  });
 
 })(jQuery);
 
@@ -41,6 +46,7 @@ function manual_sync(invoker){
     data.id = $(invoker).data('id');
     data.type = $(invoker).data('type');
     data.software = $(invoker).data('software');
+    data.organization_id = $(invoker).data('organization-id');
 
     var html = '';
       html += '<div class="Box">';
@@ -74,6 +80,7 @@ function sync_transaction(invoker){
     var data = {};
     data.type = 'invoice';
     data.software = $('input[name="software"]').val();
+    data.organization_id = $('select[name="organization"]').val();
 
     var html = '';
       html += '<div class="Box">';

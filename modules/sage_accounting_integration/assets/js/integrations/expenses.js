@@ -9,8 +9,12 @@ var id, type, amount;
       "status": '[name="status"]',
       "from_date": '[name="from_date"]',
       "to_date": '[name="to_date"]',
+      "organization": '[name="organization"]',
     };
 
+  $('select[name="organization"]').on('change', function() {
+    init_expenses_table();
+  });
 
 	$('select[name="status"]').on('change', function() {
 	    init_expenses_table();
@@ -43,6 +47,7 @@ function manual_sync(invoker){
     data.id = $(invoker).data('id');
     data.type = $(invoker).data('type');
     data.software = $(invoker).data('software');
+    data.organization_id = $(invoker).data('organization-id');
 
     var html = '';
       html += '<div class="Box">';
@@ -76,6 +81,7 @@ function sync_transaction(invoker){
     var data = {};
     data.type = 'expense';
     data.software = $('input[name="software"]').val();
+    data.organization_id = $('select[name="organization"]').val();
 
     var html = '';
       html += '<div class="Box">';
