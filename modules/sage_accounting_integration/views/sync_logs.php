@@ -13,6 +13,9 @@
                 </div>
                 <div class="row">
                   <div class="col-md-3">
+                    <?php echo render_select('organization',$organizations,array('ID','Name'),'company', '', array(), array(), '', '', false); ?>
+                  </div>
+                  <div class="col-md-3">
                     <?php $transaction_type = [ 
                           1 => ['id' => 'customer', 'name' => _l('sync_customer')],
                           2 => ['id' => 'invoice', 'name' => _l('sync_invoice')],

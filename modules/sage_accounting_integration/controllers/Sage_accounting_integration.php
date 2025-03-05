@@ -15,6 +15,11 @@ class Sage_accounting_integration extends AdminController {
      */
     public function setting()
     {
+        if(get_option('acc_integration_sage_accounting_region') == 'south_african'){
+            $this->load->model('sage_accounting_integration_model');
+            $data['organizations'] = $this->sage_accounting_integration_model->get_sage_accounting_organizations();
+        }
+
     	$data['title'] = _l('setting');
     	$this->load->view('setting', $data);
     }
@@ -50,6 +55,12 @@ class Sage_accounting_integration extends AdminController {
 
         $data['tabs']['view'] = 'integrations/includes/' . $data['group'];
 
+        $data['region']         = get_option('acc_integration_sage_accounting_region');
+        if(get_option('acc_integration_sage_accounting_region') == 'south_african'){
+            $this->load->model('sage_accounting_integration_model');
+            $data['organizations'] = $this->sage_accounting_integration_model->get_sage_accounting_organizations();
+        }
+
         $this->load->view('integrations/manage', $data);
     }
 
@@ -58,6 +69,7 @@ class Sage_accounting_integration extends AdminController {
         if ($this->input->is_ajax_request()) {
             $this->load->model('currencies_model');
             $currency = $this->currencies_model->get_base_currency();
+            $region = get_option('acc_integration_sage_accounting_region');
            
             $select = [
                 db_prefix() . 'expenses_categories.name as category_name',
@@ -119,6 +131,8 @@ class Sage_accounting_integration extends AdminController {
                 array_push($where, 'AND (' . db_prefix() . 'expenses.date <= "' . $to_date . '")');
             }
 
+            $organization_id = $this->input->post('organization');
+
             $aColumns     = $select;
             $sIndexColumn = 'id';
             $sTable       = db_prefix() . 'expenses';
@@ -126,9 +140,10 @@ class Sage_accounting_integration extends AdminController {
                 'JOIN ' . db_prefix() . 'expenses_categories ON ' . db_prefix() . 'expenses_categories.id = ' . db_prefix() . 'expenses.category',
                 'LEFT JOIN ' . db_prefix() . 'payment_modes ON ' . db_prefix() . 'payment_modes.id = ' . db_prefix() . 'expenses.paymentmode',
                 'LEFT JOIN ' . db_prefix() . 'currencies ON ' . db_prefix() . 'currencies.id = ' . db_prefix() . 'expenses.currency',
-                'LEFT JOIN ' . db_prefix() . 'acc_integration_logs ON ' . db_prefix() . 'acc_integration_logs.rel_id = ' . db_prefix() . 'expenses.id AND ' . db_prefix() . 'acc_integration_logs.rel_type = "expense" AND software = "'.$software.'"',
-                'LEFT JOIN ' . db_prefix() . 'acc_integration_error_logs ON ' . db_prefix() . 'acc_integration_error_logs.rel_id = ' . db_prefix() . 'expenses.id AND ' . db_prefix() . 'acc_integration_error_logs.rel_type = "expense" AND ' . db_prefix() . 'acc_integration_error_logs.software = "'.$software.'"'
+                'LEFT JOIN ' . db_prefix() . 'acc_integration_logs ON ' . db_prefix() . 'acc_integration_logs.rel_id = ' . db_prefix() . 'expenses.id AND ' . db_prefix() . 'acc_integration_logs.rel_type = "expense" AND software = "'.$software.'" AND ' . db_prefix() . 'acc_integration_logs.organization_id = "'.$organization_id.'"',
+                'LEFT JOIN ' . db_prefix() . 'acc_integration_error_logs ON ' . db_prefix() . 'acc_integration_error_logs.rel_id = ' . db_prefix() . 'expenses.id AND ' . db_prefix() . 'acc_integration_error_logs.rel_type = "expense" AND ' . db_prefix() . 'acc_integration_error_logs.software = "'.$software.'" AND ' . db_prefix() . 'acc_integration_error_logs.organization_id = "'.$organization_id.'"'
             ];
+
             $result       = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, [db_prefix(). 'currencies.name as currency_name', 
                 db_prefix() . 'expenses.id as id']);
 
@@ -155,13 +170,19 @@ class Sage_accounting_integration extends AdminController {
                 
                 $row[] = '<span class="label label-' . $label_class . ' s-status expense-status-' . $aRow['id'] . '">' . $status_name . '</span>';
                 $row[] = html_entity_decode($aRow['error_detail'] ?? '');
-                $row[] = icon_btn('#', 'fa fa-share', 'btn-success', [
+
+                if($organization_id != '' || $region == 'central_european'){
+                    $row[] = icon_btn('#', 'fa fa-share', 'btn-success', [
                         'title' => _l('manual_sync'),
                         'data-id' =>$aRow['id'],
+                        'data-organization-id' =>$organization_id,
                         'data-type' => 'expense',
                         'data-software' => $software,
                         'onclick' => 'manual_sync(this); return false;'
                     ]);
+                }else{
+                    $row[] = '';
+                }
                 
                 $output['aaData'][] = $row;
             }
@@ -177,6 +198,7 @@ class Sage_accounting_integration extends AdminController {
             $this->load->model('currencies_model');
 
             $currency = $this->currencies_model->get_base_currency();
+            $region = get_option('acc_integration_sage_accounting_region');
            
             $select = [
                 'number',
@@ -236,13 +258,15 @@ class Sage_accounting_integration extends AdminController {
                 array_push($where, 'AND (' . db_prefix() . 'invoices.date <= "' . $to_date . '")');
             }
 
+            $organization_id = $this->input->post('organization');
+
             $aColumns     = $select;
             $sIndexColumn = 'id';
             $sTable       = db_prefix() . 'invoices';
             $join         = [
                 'LEFT JOIN ' . db_prefix() . 'currencies ON ' . db_prefix() . 'currencies.id = ' . db_prefix() . 'invoices.currency',
-                'LEFT JOIN ' . db_prefix() . 'acc_integration_logs ON ' . db_prefix() . 'acc_integration_logs.rel_id = ' . db_prefix() . 'invoices.id AND ' . db_prefix() . 'acc_integration_logs.rel_type = "invoice" AND software = "'.$software.'"',
-                'LEFT JOIN ' . db_prefix() . 'acc_integration_error_logs ON ' . db_prefix() . 'acc_integration_error_logs.rel_id = ' . db_prefix() . 'invoices.id AND ' . db_prefix() . 'acc_integration_error_logs.rel_type = "invoice" AND ' . db_prefix() . 'acc_integration_error_logs.software = "'.$software.'"'
+                'LEFT JOIN ' . db_prefix() . 'acc_integration_logs ON ' . db_prefix() . 'acc_integration_logs.rel_id = ' . db_prefix() . 'invoices.id AND ' . db_prefix() . 'acc_integration_logs.rel_type = "invoice" AND software = "'.$software.'"  AND ' . db_prefix() . 'acc_integration_logs.organization_id = "'.$organization_id.'"',
+                'LEFT JOIN ' . db_prefix() . 'acc_integration_error_logs ON ' . db_prefix() . 'acc_integration_error_logs.rel_id = ' . db_prefix() . 'invoices.id AND ' . db_prefix() . 'acc_integration_error_logs.rel_type = "invoice" AND ' . db_prefix() . 'acc_integration_error_logs.software = "'.$software.'" AND ' . db_prefix() . 'acc_integration_error_logs.organization_id = "'.$organization_id.'"'
 
                         ];
             $result       = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, [
@@ -275,13 +299,19 @@ class Sage_accounting_integration extends AdminController {
 
                 $row[] = '<span class="label label-' . $label_class . ' s-status invoice-status-' . $aRow['id'] . '">' . $status_name . '</span>';
                 $row[] = html_entity_decode($aRow['error_detail'] ?? '');
-                $row[] = icon_btn('#', 'fa fa-share', 'btn-success', [
+
+                if($organization_id != '' || $region == 'central_european'){
+                    $row[] = icon_btn('#', 'fa fa-share', 'btn-success', [
                         'title' => _l('manual_sync'),
                         'data-id' =>$aRow['id'],
+                        'data-organization-id' =>$organization_id,
                         'data-type' => 'invoice',
                         'data-software' => $software,
                         'onclick' => 'manual_sync(this); return false;'
                     ]);
+                }else{
+                    $row[] = '';
+                }
 
                 $output['aaData'][] = $row;
             }
@@ -297,6 +327,7 @@ class Sage_accounting_integration extends AdminController {
             $this->load->model('currencies_model');
 
             $currency = $this->currencies_model->get_base_currency();
+            $region = get_option('acc_integration_sage_accounting_region');
             
             $select = [
                 db_prefix() .'invoicepaymentrecords.date as date',
@@ -355,6 +386,8 @@ class Sage_accounting_integration extends AdminController {
                 array_push($where, 'AND (' . db_prefix() . 'invoicepaymentrecords.date <= "' . $to_date . '")');
             }
 
+            $organization_id = $this->input->post('organization');
+
             $aColumns     = $select;
             $sIndexColumn = 'id';
             $sTable       = db_prefix() . 'invoicepaymentrecords';
@@ -362,8 +395,8 @@ class Sage_accounting_integration extends AdminController {
                 'LEFT JOIN ' . db_prefix() . 'payment_modes ON ' . db_prefix() . 'payment_modes.id = ' . db_prefix() . 'invoicepaymentrecords.paymentmode',
                 'LEFT JOIN ' . db_prefix() . 'invoices ON ' . db_prefix() . 'invoices.id = ' . db_prefix() . 'invoicepaymentrecords.invoiceid',
                 'LEFT JOIN ' . db_prefix() . 'currencies ON ' . db_prefix() . 'currencies.id = ' . db_prefix() . 'invoices.currency',
-                'LEFT JOIN ' . db_prefix() . 'acc_integration_logs ON ' . db_prefix() . 'acc_integration_logs.rel_id = ' . db_prefix() . 'invoicepaymentrecords.id AND ' . db_prefix() . 'acc_integration_logs.rel_type = "payment" AND software = "'.$software.'"',
-                'LEFT JOIN ' . db_prefix() . 'acc_integration_error_logs ON ' . db_prefix() . 'acc_integration_error_logs.rel_id = ' . db_prefix() . 'invoicepaymentrecords.id AND ' . db_prefix() . 'acc_integration_error_logs.rel_type = "payment" AND ' . db_prefix() . 'acc_integration_error_logs.software = "'.$software.'"'
+                'LEFT JOIN ' . db_prefix() . 'acc_integration_logs ON ' . db_prefix() . 'acc_integration_logs.rel_id = ' . db_prefix() . 'invoicepaymentrecords.id AND ' . db_prefix() . 'acc_integration_logs.rel_type = "payment" AND software = "'.$software.'" AND ' . db_prefix() . 'acc_integration_logs.organization_id = "'.$organization_id.'"',
+                'LEFT JOIN ' . db_prefix() . 'acc_integration_error_logs ON ' . db_prefix() . 'acc_integration_error_logs.rel_id = ' . db_prefix() . 'invoicepaymentrecords.id AND ' . db_prefix() . 'acc_integration_error_logs.rel_type = "payment" AND ' . db_prefix() . 'acc_integration_error_logs.software = "'.$software.'" AND ' . db_prefix() . 'acc_integration_error_logs.organization_id = "'.$organization_id.'"'
 
                         ];
                 
@@ -392,13 +425,19 @@ class Sage_accounting_integration extends AdminController {
 
                 $row[] = '<span class="label label-' . $label_class . ' s-status payment-status-' . $aRow['id'] . '">' . $status_name . '</span>';
                 $row[] = html_entity_decode($aRow['error_detail'] ?? '');
-                $row[] = icon_btn('#', 'fa fa-share', 'btn-success', [
+
+                if($organization_id != '' || $region == 'central_european'){
+                    $row[] = icon_btn('#', 'fa fa-share', 'btn-success', [
                         'title' => _l('manual_sync'),
                         'data-id' =>$aRow['id'],
+                        'data-organization-id' =>$organization_id,
                         'data-type' => 'payment',
                         'data-software' => $software,
                         'onclick' => 'manual_sync(this); return false;'
                     ]);
+                }else{
+                    $row[] = '';
+                }
 
                 $output['aaData'][] = $row;
             }
@@ -414,6 +453,7 @@ class Sage_accounting_integration extends AdminController {
             $this->load->model('currencies_model');
 
             $currency = $this->currencies_model->get_base_currency();
+            $region = get_option('acc_integration_sage_accounting_region');
             
             $select = [
                 
@@ -475,13 +515,15 @@ class Sage_accounting_integration extends AdminController {
                 array_push($where, 'AND (' . db_prefix() . 'invoicepaymentrecords.date <= "' . $to_date . '")');
             }
 
+            $organization_id = $this->input->post('organization');
+
             $aColumns     = $select;
             $sIndexColumn = 'userid';
             $sTable       = db_prefix() . 'clients';
             $join         = [
                 'LEFT JOIN ' . db_prefix() . 'contacts ON ' . db_prefix() . 'contacts.userid=' . db_prefix() . 'clients.userid AND ' . db_prefix() . 'contacts.is_primary=1',
-                'LEFT JOIN ' . db_prefix() . 'acc_integration_logs ON ' . db_prefix() . 'acc_integration_logs.rel_id = ' . db_prefix() . 'clients.userid AND ' . db_prefix() . 'acc_integration_logs.rel_type = "customer" AND software = "'.$software.'"',
-                'LEFT JOIN ' . db_prefix() . 'acc_integration_error_logs ON ' . db_prefix() . 'acc_integration_error_logs.rel_id = ' . db_prefix() . 'clients.userid AND ' . db_prefix() . 'acc_integration_error_logs.rel_type = "customer" AND ' . db_prefix() . 'acc_integration_error_logs.software = "'.$software.'"'
+                'LEFT JOIN ' . db_prefix() . 'acc_integration_logs ON ' . db_prefix() . 'acc_integration_logs.rel_id = ' . db_prefix() . 'clients.userid AND ' . db_prefix() . 'acc_integration_logs.rel_type = "customer" AND software = "'.$software.'" AND ' . db_prefix() . 'acc_integration_logs.organization_id = "'.$organization_id.'"',
+                'LEFT JOIN ' . db_prefix() . 'acc_integration_error_logs ON ' . db_prefix() . 'acc_integration_error_logs.rel_id = ' . db_prefix() . 'clients.userid AND ' . db_prefix() . 'acc_integration_error_logs.rel_type = "customer" AND ' . db_prefix() . 'acc_integration_error_logs.software = "'.$software.'" AND ' . db_prefix() . 'acc_integration_error_logs.organization_id = "'.$organization_id.'"'
 
                         ];
                 
@@ -559,13 +601,21 @@ class Sage_accounting_integration extends AdminController {
 
                 $row[] = '<span class="label label-' . $label_class . ' s-status">' . $status_name . '</span>';
                 $row[] = html_entity_decode($aRow['error_detail'] ?? '');
-                $row[] = icon_btn('#', 'fa fa-share', 'btn-success', [
+                
+
+                if($organization_id != '' || $region == 'central_european'){
+                    $row[] = icon_btn('#', 'fa fa-share', 'btn-success', [
                         'title' => _l('manual_sync'),
                         'data-id' =>$aRow['userid'],
+                        'data-organization-id' =>$organization_id,
                         'data-type' => 'customer',
                         'data-software' => $software,
                         'onclick' => 'manual_sync(this); return false;'
                     ]);
+                }else{
+                    $row[] = '';
+                }
+
                 $output['aaData'][] = $row;
             }
 
@@ -577,13 +627,21 @@ class Sage_accounting_integration extends AdminController {
     public function manual_sync()
     {
         $data = $this->input->post();
-        $this->load->model('sage_accounting_integration_model');
 
+        $this->load->model('sage_accounting_integration_model');
         $init_function = 'init_'.$data['software'].'_config';
         $this->sage_accounting_integration_model->$init_function();
 
+
         $function = 'create_'.$data['software'].'_'.$data['type'];
-        $result = $this->sage_accounting_integration_model->$function($data['id']);
+        if(get_option('acc_integration_sage_accounting_region') == 'south_african'){
+            $organization_id = $this->input->post('organization_id');
+            $function .= '_sa';
+            $result = $this->sage_accounting_integration_model->$function($organization_id, $data['id']);
+        }else{
+            $result = $this->sage_accounting_integration_model->$function($data['id']);
+        }
+
 
         if($result === true){
             $success = true;
@@ -600,13 +658,20 @@ class Sage_accounting_integration extends AdminController {
 
     public function sync_transaction_from_accounting(){
         $data = $this->input->post();
-        $this->load->model('sage_accounting_integration_model');
 
+        $this->load->model('sage_accounting_integration_model');
         $init_function = 'init_'.$data['software'].'_config';
         $this->sage_accounting_integration_model->$init_function();
 
         $function = 'get_'.$data['software'].'_'.$data['type'];
-        $result = $this->sage_accounting_integration_model->$function();
+        if(get_option('acc_integration_sage_accounting_region') == 'south_african'){
+            $organization_id = $this->input->post('organization_id');
+            $function .= '_sa';
+            $result = $this->sage_accounting_integration_model->$function($organization_id);
+        }else{
+            $result = $this->sage_accounting_integration_model->$function();
+        }
+
 
         $success = true;
         $message = _l('sync_successfully');
@@ -679,7 +744,11 @@ class Sage_accounting_integration extends AdminController {
     public function sync_logs(){
         $data= [];
         $data['title'] = _l('sync_logs');
-        
+        if(get_option('acc_integration_sage_accounting_region') == 'south_african'){
+            $this->load->model('sage_accounting_integration_model');
+            $data['organizations'] = $this->sage_accounting_integration_model->get_sage_accounting_organizations();
+        }
+
         $this->load->view('sync_logs', $data);
     }
 
@@ -701,6 +770,11 @@ class Sage_accounting_integration extends AdminController {
             $software = $this->input->post('software');
             array_push($where, 'AND ( software = "'. $software . '")');
 
+            if ($this->input->post('organization')) {
+                $organization_id = $this->input->post('organization');
+                array_push($where, 'AND ( organization_id = "'. $organization_id . '")');
+            }
+            
             if ($this->input->post('status')) {
                 $status = $this->input->post('status');
                 $where_status = '';
@@ -802,5 +876,20 @@ class Sage_accounting_integration extends AdminController {
             echo json_encode($output);
             die();
         }
+    }
+
+    public function test_connect(){
+        $data = $this->input->post();
+
+        $this->load->model('sage_accounting_integration_model');
+        $success = $this->sage_accounting_integration_model->test_connect($data);
+        $message = _l('connection_failed');
+
+        if ($success) {
+            $message = _l('connection_successful');
+        }
+
+        echo json_encode(['success' => $success, 'message' => $message]);
+        die();
     }
 }

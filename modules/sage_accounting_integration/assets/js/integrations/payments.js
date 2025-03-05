@@ -7,6 +7,7 @@ var fnServerParams;
       "status": '[name="status"]',
       "from_date": '[name="from_date"]',
       "to_date": '[name="to_date"]',
+      "organization": '[name="organization"]',
     };
 
   init_payments_table();
@@ -23,6 +24,9 @@ var fnServerParams;
     init_payments_table();
 	});
 
+  $('select[name="organization"]').on('change', function() {
+    init_payments_table();
+  });
 })(jQuery);
 
 function init_payments_table() {
@@ -42,6 +46,7 @@ function manual_sync(invoker){
     data.id = $(invoker).data('id');
     data.type = $(invoker).data('type');
     data.software = $(invoker).data('software');
+    data.organization_id = $(invoker).data('organization-id');
 
     var html = '';
       html += '<div class="Box">';
@@ -75,6 +80,7 @@ function sync_transaction(invoker){
     var data = {};
     data.type = 'payment';
     data.software = $('input[name="software"]').val();
+    data.organization_id = $('select[name="organization"]').val();
 
     var html = '';
       html += '<div class="Box">';
