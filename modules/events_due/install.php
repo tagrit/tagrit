@@ -62,11 +62,14 @@ if (!$CI->db->table_exists(db_prefix() . 'events_due_events')) {
         `event_name_id` INT NOT NULL,
         `location_id` INT NOT NULL,
         `venue_id` INT NOT NULL,
-        `type` ENUM("Physical", "Virtual") NOT NULL,
-        `duration` ENUM("5 Days", "7 Days", "10 Days", "14 Days") NOT NULL,
+        `setup` ENUM("Physical", "Virtual") NOT NULL,
+        `duration` ENUM("5 Days", "7 Days", "10 Days", "14 Days") NOT NULL DEFAULT "5 Days",
         `division` VARCHAR(255) NOT NULL,
+        `type` ENUM("Local", "International") NOT NULL,
         `cost_net` DECIMAL(10,2) NOT NULL DEFAULT 0,
         `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        `start_date` VARCHAR(255),
+        `end_date` VARCHAR(255),
         `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         PRIMARY KEY (`id`),
         FOREIGN KEY (`event_name_id`) REFERENCES `' . db_prefix() . 'events_due_name`(`id`) ON DELETE CASCADE,
@@ -74,7 +77,6 @@ if (!$CI->db->table_exists(db_prefix() . 'events_due_events')) {
         FOREIGN KEY (`venue_id`) REFERENCES `' . db_prefix() . 'events_due_venues`(`id`) ON DELETE CASCADE
     ) ENGINE=InnoDB DEFAULT CHARSET=' . $CI->db->char_set . ';');
 }
-
 
 
 // Create table `{database_prefix}_events_due_registrations`

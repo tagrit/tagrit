@@ -29,13 +29,24 @@
                                 <th><?php echo _l('Division'); ?></th>
                                 <th><?php echo _l('Start Date'); ?></th>
                                 <th><?php echo _l('End Date'); ?></th>
+                                <th><?php echo _l('Location'); ?></th>
                                 <th><?php echo _l('Venue'); ?></th>
-                                <th><?php echo _l('Name of Delegate'); ?></th>
-                                <th><?php echo _l('Email'); ?></th>
-                                <th><?php echo _l('Phone'); ?></th>
                             </tr>
                             </thead>
-                            <tbody></tbody>
+                            <tbody>
+                            <?php foreach ($events as $event): ?>
+                                <tr class="data-row">
+                                    <td><?php echo $event->event_name; ?></td>
+                                    <td><?php echo $event->setup; ?></td>
+                                    <td><?php echo $event->division; ?></td>
+                                    <td><?php echo $event->start_date; ?></td>
+                                    <td><?php echo $event->end_date; ?></td>
+                                    <td><?php echo $event->location; ?></td>
+                                    <td><?php echo $event->venue; ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -61,114 +72,130 @@
     </div>
 
     <div class="drawer-body" style="padding: 20px; padding-right:40px; overflow-y: auto; height: calc(100% - 100px);">
-        <form id="event-form">
-            <input type="hidden" name="id" id="event_id">
+        <?php echo form_open('admin/events_due/events/store', [
+            'id' => 'create-event-name-form',
+            'enctype' => 'multipart/form-data'
+        ]); ?>
 
-            <div class="form-group">
-                <div class="row align-items-end">
-                    <div class="col-md-11">
-                        <label for="setup"><?php echo _l('Event Name'); ?></label>
-                        <select id="setup" name="setup"
+        <div class="form-group">
+            <div class="row align-items-end">
+                <div class="col-md-11">
+                    <label for="event_name_id"><?php echo _l('Event Name'); ?></label>
+                    <select id="event_name_id" name="event_name_id"
+                            data-live-search="true"
+                            class="form-control selectpicker"
+                            data-none-selected-text="<?php echo _l('Dropdown Non Selected Text'); ?>">
+                        <?php foreach ($event_names as $event_name): ?>
+                            <option value="<?= htmlspecialchars($event_name->id); ?>"><?= htmlspecialchars($event_name->event_name); ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div style="margin-top:26px;" class="col-md-1 d-flex justify-content-end">
+                    <button type="button" class="btn btn-primary btn-sm"
+                            data-toggle="modal" data-target="#addEventName">
+                        +
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="location_id"><?php echo _l('Event Location'); ?></label>
+                    <select id="location_id" name="location_id"
+                            data-live-search="true"
+                            class="form-control selectpicker"
+                            data-none-selected-text="<?php echo _l('Dropdown Non Selected Text'); ?>">
+                        <?php foreach ($event_locations as $event_location): ?>
+                            <option value="<?= htmlspecialchars($event_location->id); ?>"><?= htmlspecialchars($event_location->name); ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                    <?php echo form_error('location_id', '<div class="error-message">', '</div>'); ?>
+
+                </div>
+            </div>
+            <div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="venue_id"><?php echo _l('Event Venue'); ?></label>
+                        <select id="venue_id" name="venue_id"
                                 data-live-search="true"
                                 class="form-control selectpicker"
                                 data-none-selected-text="<?php echo _l('Dropdown Non Selected Text'); ?>">
-                            <?php foreach ($event_names as $event_name): ?>
-                                <option value="<?= htmlspecialchars($event_name->id); ?>"><?= htmlspecialchars($event_name->event_name); ?></option>
+                            <?php foreach ($event_venues as $event_venue): ?>
+                                <option value="<?= htmlspecialchars($event_venue->id); ?>"><?= htmlspecialchars($event_venue->name); ?></option>
                             <?php endforeach; ?>
                         </select>
+                        <?php echo form_error('venue_id', '<div class="error-message">', '</div>'); ?>
+
                     </div>
-                    <div style="margin-top:26px;" class="col-md-1 d-flex justify-content-end">
-                        <button type="button" class="btn btn-primary btn-sm"
-                                data-toggle="modal" data-target="#addEventName">
-                            +
-                        </button>
-                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="event_type"><?php echo _l('Event Type'); ?></label>
+                    <select id="event_type" name="event_type"
+                            data-live-search="true"
+                            class="form-control selectpicker"
+                            data-none-selected-text="<?php echo _l('Dropdown Non Selected Text'); ?>">
+                        <option value="Local">Local</option>
+                        <option value="International">International</option>
+                    </select>
+                    <?php echo form_error('event_type', '<div class="error-message">', '</div>'); ?>
+
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="setup"><?php echo _l('Event Location'); ?></label>
-                        <select id="setup" name="setup"
-                                data-live-search="true"
-                                class="form-control selectpicker"
-                                data-none-selected-text="<?php echo _l('Dropdown Non Selected Text'); ?>">
-                            <?php foreach ($event_locations as $event_location): ?>
-                                <option value="<?= htmlspecialchars($event_location->id); ?>"><?= htmlspecialchars($event_location->name); ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-                </div>
-                <div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="setup"><?php echo _l('Event Venue'); ?></label>
-                            <select id="setup" name="setup"
-                                    data-live-search="true"
-                                    class="form-control selectpicker"
-                                    data-none-selected-text="<?php echo _l('Dropdown Non Selected Text'); ?>">
-                                <?php foreach ($event_venues as $event_venue): ?>
-                                    <option value="<?= htmlspecialchars($event_venue->id); ?>"><?= htmlspecialchars($event_venue->name); ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="setup"><?php echo _l('Setup'); ?></label>
+                    <select id="setup" name="setup"
+                            data-live-search="true"
+                            class="form-control selectpicker"
+                            data-none-selected-text="<?php echo _l('Dropdown Non Selected Text'); ?>">
+                        <option value="Physical">Physical</option>
+                        <option value="Virtual">Virtual</option>
+                    </select>
+                    <?php echo form_error('setup', '<div class="error-message">', '</div>'); ?>
 
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="setup"><?php echo _l('Event Type'); ?></label>
-                        <select id="setup" name="setup"
-                                data-live-search="true"
-                                class="form-control selectpicker"
-                                data-none-selected-text="<?php echo _l('Dropdown Non Selected Text'); ?>">
-                            <option value="Physical">Local</option>
-                            <option value="Virtual">International</option>
-                        </select>
-                    </div>
                 </div>
+            </div>
+        </div>
 
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="setup"><?php echo _l('Setup'); ?></label>
-                        <select id="setup" name="setup"
-                                data-live-search="true"
-                                class="form-control selectpicker"
-                                data-none-selected-text="<?php echo _l('Dropdown Non Selected Text'); ?>">
-                            <option value="Physical">Physical</option>
-                            <option value="Virtual">Virtual</option>
-                        </select>
-                    </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="start_date" class="required"><?php echo _l('Start Date'); ?></label>
+                    <input type="date" id="start_date" name="start_date" class="form-control" required>
                 </div>
-            </div>
+                <?php echo form_error('start_date', '<div class="error-message">', '</div>'); ?>
 
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="start_date" class="required"><?php echo _l('Start Date'); ?></label>
-                        <input type="date" id="start_date" name="start_date" class="form-control" required>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="end_date" class="required"><?php echo _l('End Date'); ?></label>
-                        <input type="date" id="end_date" name="end_date" class="form-control" required>
-                    </div>
-                </div>
             </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="form-group">
-                        <label for="division"><?php echo _l('Division'); ?></label>
-                        <input type="text" id="division" name="division" class="form-control">
-                    </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="end_date" class="required"><?php echo _l('End Date'); ?></label>
+                    <input type="date" id="end_date" name="end_date" class="form-control" required>
                 </div>
+                <?php echo form_error('end_date', '<div class="error-message">', '</div>'); ?>
+
             </div>
-            <button type="submit" style="margin-top: 20px;" class="btn btn-primary btn-block">Submit Event</button>
-        </form>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="division"><?php echo _l('Division'); ?></label>
+                    <input type="text" id="division" name="division" class="form-control">
+                </div>
+                <?php echo form_error('division', '<div class="error-message">', '</div>'); ?>
+
+            </div>
+        </div>
+        <button type="submit" style="margin-top: 20px;" class="btn btn-primary btn-block">Submit Event</button>
+        <?php echo form_close(); ?>
     </div>
 </div>
 
@@ -210,6 +237,11 @@
     $(document).ready(function () {
         $('.selectpicker').selectpicker();
     });
+
+    const showEventModal = <?php echo isset($show_event_modal) && $show_event_modal ? 'true' : 'false'; ?>;
+    if (showEventModal) {
+        openEventDrawer();
+    }
 
     // Open drawer
     function openEventDrawer() {
