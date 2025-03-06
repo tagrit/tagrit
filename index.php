@@ -2,6 +2,10 @@
 if (!ini_get('date.timezone')) {
     date_default_timezone_set('GMT');
 }
+
+// Load Composer autoload globally
+require_once __DIR__ . '/vendor/autoload.php';
+
 /**
  * CodeIgniter
  *
@@ -63,9 +67,9 @@ $host = $_SERVER['HTTP_HOST'] ?? '';
 if (strpos($host, 'dev') !== false ||
     strpos($host, 'staging') !== false ||
     strpos($host, 'autoupdate') !== false) {
-    define('ENVIRONMENT', 'development');
+    define('ENVIRONMENT', 'production');
 } else {
-    define('ENVIRONMENT', 'development');
+    define('ENVIRONMENT', 'production');
 }
 
 /*
