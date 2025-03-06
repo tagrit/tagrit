@@ -58,4 +58,18 @@ class Event_location_model extends App_Model
             return false; // Return false if no event is found
         }
     }
+
+    public function getOrCreateLocationId($locationName)
+    {
+        $location = $this->db->where('name', $locationName)->get($this->table)->row();
+
+        if ($location) {
+            return $location->id; // Return existing location ID
+        }
+
+        // Insert new location and return its ID
+        $this->db->insert($this->table, ['name' => $locationName, 'created_at' => date('Y-m-d H:i:s')]);
+        return $this->db->insert_id();
+    }
+
 }

@@ -51,15 +51,6 @@ class Registrations extends AdminController
             ->row('id'); // Get only the event_id field
     }
 
-    public function get_client_by_email($email)
-    {
-        return $this->db->select('id')
-            ->from(db_prefix() . 'events_due_clients')
-            ->where('email', $email)
-            ->get()
-            ->row('id');
-    }
-
 
     public function store()
     {
@@ -82,7 +73,7 @@ class Registrations extends AdminController
                 ];
 
                 // Check if client already exists
-                $existing_client_id = $this->get_client_by_email($customer_data['email']);
+                $existing_client_id = $this->Client_model->get_client_by_email($customer_data['email']);
 
                 if ($existing_client_id) {
                     $client_id = $existing_client_id; // Use existing client ID

@@ -24,6 +24,16 @@ class Client_model extends App_Model
     }
 
 
+    public function get_client_by_email($email)
+    {
+        return $this->db->select('id')
+            ->from(db_prefix() . 'events_due_clients')
+            ->where('email', $email)
+            ->get()
+            ->row('id');
+    }
+
+
     public function create($data)
     {
         $this->db->insert(db_prefix() . $this->table, $data);
