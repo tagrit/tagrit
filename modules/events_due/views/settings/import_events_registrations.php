@@ -1,5 +1,4 @@
 <div class="row">
-    <?php echo form_open('admin/event_due/settings/import_client_event_registration', ['id' => 'import-client-event-registration']); ?>
     <div class="col-md-12">
         <div class="panel_s">
             <div class="panel-body">
@@ -51,6 +50,12 @@
                 <p style="font-size: 13px; font-weight: bold; margin-bottom: 15px;">
                     Import Clients Event Registrations
                 </p>
+
+                <?php echo form_open('admin/events_due/settings/upload_excel', [
+                    'id' => 'register-for-event-form',
+                    'enctype' => 'multipart/form-data'
+                ]); ?>
+
                 <div style="margin-bottom: 15px;">
                     <label for="csv_file"
                            style="font-size: 14px; vertical-align: middle; display: block; margin-bottom: 5px;">
@@ -60,8 +65,10 @@
                            style="width: 100%; padding: 8px; font-size: 16px; border: 1px solid #ccc; border-radius: 5px;">
                 </div>
                 <button style="margin-top:20px;" type="submit" class="btn btn-success">Import</button>
+
+                <?php echo form_close(); ?>
+
             </div>
         </div>
     </div>
-    <?php echo form_close(); ?>
 </div>
