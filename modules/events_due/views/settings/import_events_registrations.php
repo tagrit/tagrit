@@ -19,6 +19,7 @@
                             <th style="border: 1px solid #ccc; padding: 8px; font-weight: bold;">Division</th>
                             <th style="border: 1px solid #ccc; padding: 8px; font-weight: bold;">Start Date</th>
                             <th style="border: 1px solid #ccc; padding: 8px; font-weight: bold;">End Date</th>
+                            <th style="border: 1px solid #ccc; padding: 8px; font-weight: bold;">Location</th>
                             <th style="border: 1px solid #ccc; padding: 8px; font-weight: bold;">Venue</th>
                             <th style="border: 1px solid #ccc; padding: 8px; font-weight: bold;">Name of Delegate</th>
                             <th style="border: 1px solid #ccc; padding: 8px; font-weight: bold;">Date & Month of Birth
@@ -30,6 +31,7 @@
                         </thead>
                         <tbody>
                         <tr>
+                            <td style="border: 1px solid #ccc; padding: 8px;">Sample Data</td>
                             <td style="border: 1px solid #ccc; padding: 8px;">Sample Data</td>
                             <td style="border: 1px solid #ccc; padding: 8px;">Sample Data</td>
                             <td style="border: 1px solid #ccc; padding: 8px;">Sample Data</td>
