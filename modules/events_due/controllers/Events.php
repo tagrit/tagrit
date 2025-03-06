@@ -16,6 +16,7 @@ class Events extends AdminController
 
     public function index()
     {
+        $data['events'] = $this->Event_model->get();
         $data['event_name'] = $this->Event_name_model->get();
         $data['event_names'] = $this->Event_name_model->get();
         $data['event_locations'] = $this->Event_location_model->get();
