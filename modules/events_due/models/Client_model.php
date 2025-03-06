@@ -26,7 +26,8 @@ class Client_model extends App_Model
 
     public function create($data)
     {
-        return $this->db->insert(db_prefix() . $this->table, $data);
+        $this->db->insert(db_prefix() . $this->table, $data);
+        return $this->db->insert_id();
     }
 
     public function update($id, $data)

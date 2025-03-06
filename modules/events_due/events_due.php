@@ -183,7 +183,7 @@ class Events_Due_System
         $menu['children'][] = [
             'slug' => 'event_registration',
             'name' => 'Event Registration',
-            'href' => admin_url(EVENTS_DUE_MODULE_NAME . '/registrations'),
+            'href' => admin_url(EVENTS_DUE_MODULE_NAME . '/registrations/create'),
             'icon' => 'fa fa-calendar-plus',
             'position' => 12,
         ];
