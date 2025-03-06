@@ -31,6 +31,7 @@ $route['admin/events_due/durations'] = 'events_due/events/durations/index';
 //settings
 $route['admin/events_due/settings/main'] = 'events_due/settings/main';
 $route['admin/events_due/settings/upload_excel'] = 'events_due/settings/upload_excel';
+$route['admin/events_due/settings/download_sample'] = 'events_due/settings/download_sample';
 
 //reports
 $route['admin/events_due/reports/main'] = 'events_due/reports/main';

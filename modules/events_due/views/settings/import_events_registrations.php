@@ -3,8 +3,12 @@
         <div class="panel_s">
             <div class="panel-body">
 
-                <div style="text-align:right;">
-                    <button style="margin-bottom:-20px;" type="submit" class="btn">Download Sample</button>
+                <div style="text-align:right; padding: 10px;">
+                    <a style="margin-bottom:-20px; padding: 10px 15px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px; display: inline-block;"
+                       class="btn"
+                       href="<?php echo admin_url('events_due/settings/download_sample'); ?>">
+                        Download Sample
+                    </a>
                 </div>
 
                 <div style="margin-bottom: 40px; max-height: 300px; overflow-y: auto; padding: 5px;">

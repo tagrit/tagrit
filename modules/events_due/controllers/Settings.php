@@ -1,8 +1,11 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-use PhpOffice\PhpSpreadsheet\IOFactory;
+require __DIR__ . '/../../../vendor/autoload.php';
 
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class Settings extends AdminController
 {
@@ -157,6 +160,48 @@ class Settings extends AdminController
         }
 
         redirect(admin_url('events_due/settings/main'));
+    }
+
+
+    public function download_sample()
+    {
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // Set headers
+        $headers = [
+            'Event Name', 'Setup', 'Type', 'Division', 'Start Date', 'End Date', 'Location',
+            'Venue', 'Name of Delegate', 'Date & Month of Birth', 'Mobile No', 'Email Address', 'Organization'
+        ];
+
+        // Add headers to first row
+        $col = 'A';
+        foreach ($headers as $header) {
+            $sheet->setCellValue($col . '1', $header);
+            $col++;
+        }
+
+        // Add sample data
+        $sampleData = [
+            'Sample Event', 'Conference', 'Workshop', 'HR', '2025-01-01', '2025-01-03',
+            'Nairobi', 'KICC', 'John Doe', '01 Jan 1990', '1234567890', 'john@example.com', 'XYZ Ltd'
+        ];
+
+        $col = 'A';
+        foreach ($sampleData as $data) {
+            $sheet->setCellValue($col . '2', $data);
+            $col++;
+        }
+
+        // Generate and download file
+        $filename = 'sample_event_registration.xlsx';
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="' . $filename . '"');
+        header('Cache-Control: max-age=0');
+
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('php://output');
+        exit;
     }
 
 
