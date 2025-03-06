@@ -15,6 +15,7 @@ class Event_model extends App_Model
     {
         $this->db->select('
         tblevents_due_events.id,
+        tblevents_due_events.event_name_id,
         tblevents_due_events.start_date,
         tblevents_due_events.end_date,
         tblevents_due_events.setup,
