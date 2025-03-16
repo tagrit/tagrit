@@ -27,107 +27,160 @@
                         <div class="card mtop15">
                             <div class="card-body">
                                 <div class="row">
-                                    <!-- Client Details -->
+
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="first_name" class="control-label">First Name *</label>
-                                            <input type="text" id="first_name" name="first_name"
-                                                   class="form-control"
-                                                   required>
+                                            <label for="events">Event:</label>
+                                            <select class="form-control selectpicker" data-live-search="true"
+                                                    name="event_id" id="events" required>
+                                                <?php if (!empty($events)): ?>
+                                                    <?php foreach ($events as $index => $event): ?>
+                                                        <option value="<?= htmlspecialchars($event->id) ?>" <?= $index === 0 ? 'selected' : '' ?>>
+                                                            <?= strlen($event->name) > 90 ? htmlspecialchars(substr($event->name, 0, 27)) . '...' : htmlspecialchars($event->name) ?>
+                                                        </option>
+                                                    <?php endforeach; ?>
+                                                <?php else: ?>
+                                                    <option value="" disabled selected>No events available</option>
+                                                <?php endif; ?>
+                                            </select>
                                         </div>
                                     </div>
 
                                     <!-- Client Details -->
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="last_name" class="control-label">Last Name *</label>
-                                            <input type="text" id="last_name" name="last_name" class="form-control"
-                                                   required>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="email" class="control-label">Email Address *</label>
-                                            <input type="email" id="email" name="email" class="form-control"
-                                                   required>
-                                        </div>
-                                    </div>
-
-
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="phone_number" class="control-label">Phone Number *</label>
-                                            <input type="text" id="phone_number" name="phone_number"
-                                                   class="form-control"
-                                                   required>
-                                        </div>
-                                    </div>
-
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="organization" class="control-label">Organization *</label>
                                             <input type="text" id="organization" name="organization"
+                                                   class="form-control"
+                                                   required>
+                                        </div>
+                                    </div>
+
+                                    <!-- Client Details -->
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="location" class="control-label">Location*</label>
+                                            <input type="text" id="location" name="location" class="form-control"
+                                                   required>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="venue" class="control-label">Venue*</label>
+                                            <input type="venue" id="email" name="venue" class="form-control"
+                                                   required>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="start_date" class="control-label">Start Date*</label>
+                                            <input type="date" id="start_date" name="start_date" class="form-control"
+                                                   required>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="end_date" class="control-label">End Date*</label>
+                                            <input type="date" id="end_date" name="end_date" class="form-control"
+                                                   required>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="no_of_delegates" class="control-label">Number of
+                                                Delegates*</label>
+                                            <input type="text" id="no_of_delegates" name="no_of_delegates"
                                                    class="form-control" required>
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="event_name_id"><?php echo _l('Event'); ?></label>
-                                            <select id="event_name_id" name="event_name_id"
-                                                    data-live-search="true"
-                                                    class="form-control selectpicker"
-                                                    data-none-selected-text="<?php echo _l('Dropdown Non Selected Text'); ?>">
-                                                <?php foreach ($events as $event): ?>
-                                                    <option value="<?= htmlspecialchars($event->event_name_id); ?>"><?= htmlspecialchars($event->event_name); ?></option>
-                                                <?php endforeach; ?>
-                                            </select>
+                                            <label for="charges_per_delegates" class="control-label">Charges Per
+                                                Delegates*</label>
+                                            <input type="text" id="charges_per_delegates" name="charges_per_delegates"
+                                                   class="form-control" required>
                                         </div>
                                     </div>
 
-                                    <!-- Location and Venue -->
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="location_id" class="control-label">Location *</label>
-                                            <select id="location_id" name="location_id"
-                                                    class="form-control selectpicker"
-                                                    data-live-search="true" required>
-                                                <option value="">Select Location</option>
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="venue_id" class="control-label">Venue *</label>
-                                            <select id="venue_id" name="venue_id" class="form-control selectpicker"
-                                                    data-live-search="true" required>
-                                                <option value="">Select Venue</option>
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <!-- Duration -->
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="duration" class="control-label">Duration *</label>
-                                            <select id="duration" name="duration" class="form-control selectpicker"
-                                                    data-live-search="true" required>
-                                                <option value="">Select Period</option>
-                                            </select>
-                                        </div>
-                                    </div>
 
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="setup" class="control-label">Setup*</label>
                                             <select id="setup" name="setup" class="form-control selectpicker"
                                                     data-live-search="true" required>
-                                                <option value="">Select Type</option>
+                                                <option value="">Select Setup</option>
+                                                <option value="Physical">Physical</option>
+                                                <option value="Virtual">Virtual</option>
                                             </select>
                                         </div>
                                     </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="setup" class="control-label">Type*</label>
+                                            <select id="type" name="type" class="form-control selectpicker"
+                                                    data-live-search="true" required>
+                                                <option value="">Select Type</option>
+                                                <option value="Local">Local</option>
+                                                <option value="International">International</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="division" class="control-label">Charges</label>
+                                            <input type="number" id="division" name="division" class="form-control"
+                                                   placeholder="Enter division" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="revenue" class="control-label">Charges</label>
+                                            <input type="number" id="revenue" name="revenue" class="form-control"
+                                                   placeholder="Enter revenue" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <label class="custom-label">Delegates Details</label>
+                                        <div id="delegates-container">
+                                            <div class="row align-items-center delegate-entry">
+                                                <div class="col-md-3">
+                                                    <input type="text" name="delegates[0][first_name]"
+                                                           class="form-control"
+                                                           placeholder="First Name" required>
+                                                </div>
+                                                <div style="margin-left:-20px;" class="col-md-3">
+                                                    <input type="text" name="delegates[0][last_name]"
+                                                           class="form-control"
+                                                           placeholder="Last Name" required>
+                                                </div>
+                                                <div style="margin-left:-20px;" class="col-md-3">
+                                                    <input type="email" name="delegates[0][email]" class="form-control"
+                                                           placeholder="Email" required>
+                                                </div>
+                                                <div style="margin-left:-20px;" class="col-md-3">
+                                                    <input type="text" name="delegates[0][phone]" class="form-control"
+                                                           placeholder="Phone" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button id="add-delegate" type="button"
+                                                class="mtop10 btn btn-info d-flex align-items-center justify-content-center"
+                                                style="width:210px; border-radius: 5px; font-weight: bold;">
+                                            </i> Add Delegate
+                                        </button>
+                                    </div>
+
+
                                 </div>
                             </div>
                         </div>

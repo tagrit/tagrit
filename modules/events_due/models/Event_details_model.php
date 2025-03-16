@@ -2,14 +2,14 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Event_model extends App_Model
+class Event_details_model extends App_Model
 {
     private $table;
 
     public function __construct()
     {
         parent::__construct();
-        $this->table = db_prefix() . '_events';
+        $this->table = db_prefix() . '_events_details';
 
     }
 
@@ -43,35 +43,6 @@ class Event_model extends App_Model
     {
         $this->db->where('id', $id);
         return $this->db->delete($this->table);
-    }
-
-
-    /**
-     * Get or create an event and return its event_id
-     *
-     * @param array $data Event details (e.g., ['name' => 'Some Event', 'location' => 'XYZ'])
-     * @return int|false The event ID or false on failure
-     */
-    public function getOrCreateEventId($data)
-    {
-        if (!isset($data['name']) || empty($data['name'])) {
-            return false; // Event name is required
-        }
-
-        // Check if the event already exists
-        $this->db->where('name', $data['name']);
-        $existingEvent = $this->db->get($this->table)->row_array();
-
-        if ($existingEvent) {
-            return $existingEvent['id']; // Return existing event_id
-        }
-
-        // Insert a new event if it doesn't exist
-        if ($this->db->insert($this->table, $data)) {
-            return $this->db->insert_id(); // Return new event_id
-        }
-
-        return false; // Return false if insertion failed
     }
 
 }

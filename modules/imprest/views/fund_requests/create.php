@@ -440,18 +440,20 @@
             ]); ?>
 
             <div class="category-section">
-
                 <label for="events">Event:</label>
-
-                <select name="event_id" id="events" required>
-                    <option value="" disabled selected>Select an event</option>
-                    <?php foreach ($events as $event): ?>
-                        <option value="<?= htmlspecialchars($event->id) ?>">
-                            <?= strlen($event->name) > 90 ? htmlspecialchars(substr($event->name, 0, 27)) . '...' : htmlspecialchars($event->name) ?>
-                        </option>
-                    <?php endforeach; ?>
+                <select class="form-control selectpicker" data-live-search="true" name="event_id" id="events" required>
+                    <?php if (!empty($events)): ?>
+                        <?php foreach ($events as $index => $event): ?>
+                            <option value="<?= htmlspecialchars($event->id) ?>" <?= $index === 0 ? 'selected' : '' ?>>
+                                <?= strlen($event->name) > 90 ? htmlspecialchars(substr($event->name, 0, 27)) . '...' : htmlspecialchars($event->name) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <option value="" disabled selected>No events available</option>
+                    <?php endif; ?>
                 </select>
             </div>
+
 
             <?php if (!empty($mandatory_fields)): ?>
                 <hr style="border-color:grey;">
@@ -504,6 +506,7 @@
                                        class="custom-input"
                                        placeholder="Enter number" required>
                             </div>
+
                         <?php endif; ?>
 
 
@@ -529,11 +532,67 @@
                             </div>
                         <?php endif; ?>
 
+                        <?php if (in_array('setup', $mandatory_fields ?? [])): ?>
+                            <div class="custom-col">
+                                <label for="setup" class="control-label">Setup</label>
+                                <select id="setup" name="setup" class="form-control selectpicker"
+                                        data-live-search="true" required>
+                                    <option value="">Select Setup</option>
+                                    <option value="Physical">Physical</option>
+                                    <option value="Virtual">Virtual</option>
+                                </select>
+                            </div>
+                        <?php endif; ?>
+
+                        <?php if (in_array('type', $mandatory_fields ?? [])): ?>
+                            <div class="custom-col">
+                                <label for="type" class="control-label">Type</label>
+                                <select id="type" name="type" class="form-control selectpicker"
+                                        data-live-search="true" required>
+                                    <option value="">Select Type</option>
+                                    <option value="Local">Local</option>
+                                    <option value="International">International</option>
+                                </select>
+                            </div>
+                        <?php endif; ?>
+
                         <?php if (in_array('revenue', $mandatory_fields ?? [])): ?>
                             <div class="custom-col">
                                 <label for="revenue" class="custom-label">Revenue</label>
                                 <input type="number" id="revenue" name="revenue" class="custom-input"
                                        placeholder="Enter revenue" required>
+                            </div>
+                        <?php endif; ?>
+
+                    </div>
+                    <div class="custom-row">
+                        <?php if (in_array('delegates_details', $mandatory_fields ?? [])): ?>
+                            <div class="col-12">
+                                <label class="custom-label">Delegates Details</label>
+                                <div id="delegates-container">
+                                    <div class="row align-items-center delegate-entry">
+                                        <div class="col-md-3">
+                                            <input type="text" name="delegates[0][first_name]" class="custom-input"
+                                                   placeholder="First Name" required>
+                                        </div>
+                                        <div style="margin-left:-20px;" class="col-md-3">
+                                            <input type="text" name="delegates[0][last_name]" class="custom-input"
+                                                   placeholder="Last Name" required>
+                                        </div>
+                                        <div style="margin-left:-20px;" class="col-md-3">
+                                            <input type="email" name="delegates[0][email]" class="custom-input"
+                                                   placeholder="Email" required>
+                                        </div>
+                                        <div style="margin-left:-20px;" class="col-md-3">
+                                            <input type="text" name="delegates[0][phone]" class="custom-input"
+                                                   placeholder="Phone" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="button" id="add-delegate" class="custom-button" style="margin-top: 10px;">
+                                    Add
+                                    Delegate
+                                </button>
                             </div>
                         <?php endif; ?>
                     </div>
@@ -591,7 +650,6 @@
             <?php echo form_close(); ?>
 
         </div>
-
     </div>
     <?php endif; ?>
 
@@ -963,4 +1021,44 @@
 
     }
 
+    let delegateIndex = 1;
+
+    document.getElementById("add-delegate").addEventListener("click", function () {
+        let delegateContainer = document.getElementById("delegates-container");
+
+        let delegateEntry = document.createElement("div");
+        delegateEntry.classList.add("row", "align-items-center", "delegate-entry");
+        delegateEntry.innerHTML = `
+            <div class="mtop4 col-md-3">
+                <input type="text" name="delegates[${delegateIndex}][first_name]" class="custom-input" placeholder="First Name" required>
+            </div>
+            <div style="margin-left:-20px;" class="mtop4 col-md-3">
+                <input type="text" name="delegates[${delegateIndex}][last_name]" class="custom-input" placeholder="Last Name" required>
+            </div>
+            <div style="margin-left:-20px;" class="mtop4 col-md-3">
+                <input type="email" name="delegates[${delegateIndex}][email]" class="custom-input" placeholder="Email" required>
+            </div>
+            <div style="margin-left:-20px;" class="mtop4 col-md-3">
+                <input type="text" name="delegates[${delegateIndex}][phone]" class="custom-input" placeholder="Phone" required>
+            </div>
+            <div style="margin-left:-20px;" class="mtop4 col-md-1 text-center">
+                <button style="color:red; padding:8px; background-color: transparent;" type="button" class="remove-delegate custom-button">
+                    <i class="fas fa-trash-alt"></i>
+                </button>
+            </div>
+        `;
+
+        delegateContainer.appendChild(delegateEntry);
+        delegateIndex++;
+
+        delegateEntry.querySelector(".remove-delegate").addEventListener("click", function () {
+            delegateEntry.remove();
+        });
+    });
+
+    document.querySelectorAll(".remove-delegate").forEach(button => {
+        button.addEventListener("click", function () {
+            this.closest(".delegate-entry").remove();
+        });
+    });
 </script>

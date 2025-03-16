@@ -65,7 +65,7 @@ class Events_Due_System
 
         //registration css
         if (strpos($viewuri, 'admin/events_due/registrations') !== false) {
-            echo '<link href="' . module_dir_url(EVENTS_DUE_MODULE_NAME, 'assets/css/registrations/list_registrations.css') . '" rel="stylesheet" type="text/css" />';
+            echo '<link href="' . module_dir_url(EVENTS_DUE_MODULE_NAME, 'assets/css/registrations/create_registrations.css') . '" rel="stylesheet" type="text/css" />';
         }
 
         // dashboard css
@@ -74,7 +74,7 @@ class Events_Due_System
         }
 
         //reports css
-        if (strpos($viewuri, 'admin/events_due/reports') !== false) {
+        if (strpos($viewuri, 'admin/events_due/reports/main') !== false) {
             echo '<link href="' . module_dir_url(EVENTS_DUE_MODULE_NAME, 'assets/css/reports.css') . '" rel="stylesheet" type="text/css" />';
         }
 
@@ -109,10 +109,11 @@ class Events_Due_System
             echo '<script src="' . module_dir_url(EVENTS_DUE_MODULE_NAME, 'assets/js/events/edit_event.js') . '"></script>';
         }
 
-        //registration css
+        //registration js
         if (strpos($viewuri, 'admin/events_due/registrations') !== false) {
-            echo '<script src="' . module_dir_url(EVENTS_DUE_MODULE_NAME, 'assets/js/registrations/list_registrations.js') . '"></script>';
+            echo '<script defer src="' . module_dir_url(EVENTS_DUE_MODULE_NAME, 'assets/js/registrations/create_registrations.js') . '"></script>';
         }
+
 
         //dashboard js
         if (strpos($viewuri, 'admin/events_due/dashboard') !== false) {
@@ -121,7 +122,7 @@ class Events_Due_System
         }
 
         //reports js
-        if (strpos($viewuri, 'admin/events_due/reports') !== false) {
+        if (strpos($viewuri, 'admin/events_due/reports/main') !== false) {
             echo '<script src="' . module_dir_url(EVENTS_DUE_MODULE_NAME, 'assets/js/reports.js') . '"></script>';
         }
 

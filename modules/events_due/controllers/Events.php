@@ -7,133 +7,128 @@ class Events extends AdminController
     {
         parent::__construct();
         $this->load->model('Event_model');
-        $this->load->model('Event_name_model');
-        $this->load->model('Event_location_model');
-        $this->load->model('Event_venue_model');
         $this->load->library('form_validation');
 
     }
 
+    public function validate()
+    {
+        $this->form_validation->set_rules('name', 'Event Name', 'required');
+    }
+
+
     public function index()
     {
         $data['events'] = $this->Event_model->get();
-        $data['event_name'] = $this->Event_name_model->get();
-        $data['event_names'] = $this->Event_name_model->get();
-        $data['event_locations'] = $this->Event_location_model->get();
-        $data['event_venues'] = $this->Event_venue_model->get();
         $this->load->view('events/index', $data);
     }
+
 
     public function create()
     {
         $this->load->view('events/create');
-
-    }
-
-    private function validateEvent()
-    {
-        $this->form_validation->set_rules('event_name_id', 'Event Name', 'required');
-        $this->form_validation->set_rules('location_id', 'Location', 'required');
-        $this->form_validation->set_rules('venue_id', 'Venue', 'required|numeric'); // Venue ID should be numeric
-        $this->form_validation->set_rules('event_type', 'Event Type', 'required'); // Adjusted length
-        $this->form_validation->set_rules('setup', 'Event Setup', 'required'); // Removed min/max length for numeric
-        $this->form_validation->set_rules('start_date', 'Start Date', 'required'); // Use valid_date if handling dates
-        $this->form_validation->set_rules('end_date', 'End Date', 'required'); // Custom callback to check range
-        $this->form_validation->set_rules('division', 'Event Division', 'required');
     }
 
 
     public function store()
     {
+        if ($this->input->post()) {
 
-        $this->validateEvent();
-        if ($this->form_validation->run() == FALSE) {
+            $this->validate();
 
-            $data['show_event_modal'] = true;
-            redirect('admin/events_due/events',$data);
-
-        } else {
-
-            try {
-
+            if ($this->form_validation->run() === false) {
+                set_alert('danger', validation_errors());
+            } else {
+                // Save Data
                 $data = [
-                    'event_name_id' => $this->input->post('event_name_id'),
-                    'location_id' => $this->input->post('location_id'),
-                    'venue_id' => $this->input->post('venue_id'),
-                    'type' => $this->input->post('event_type'),
-                    'setup' => $this->input->post('setup'),
-                    'start_date' => $this->input->post('start_date'),
-                    'end_date' => $this->input->post('end_date'),
-                    'division' => $this->input->post('division'),
+                    'name' => $this->input->post('name')
                 ];
 
-                // Insert data into the database
-                if ($this->Event_model->create($data)) {
-                    set_alert('success', 'Event Added successfully.');
-                    redirect('admin/events_due/events');
+                $insert_id = $this->Event_model->add($data);
+
+                if ($insert_id) {
+                    set_alert('success', 'Event created successfully!');
+                    redirect(admin_url('events_due/events/index'));
                 } else {
-                    set_alert('danger', 'An error occurred while adding the event.');
-                    $this->load->view('events/index');
+                    set_alert('danger', 'Failed to create event.');
                 }
-
-            } catch (Exception $exception) {
-
-                set_alert('danger', 'An error occurred: ' . $exception->getMessage());
-                redirect('admin/events_due/events');
-                log_message('error', $exception->getMessage());
-
             }
-
         }
 
+        $this->load->view('events/create');
+    }
+
+    // Optional: Custom validation for dates
+    public function validate_date($date)
+    {
+        if (strtotime($date) === false) {
+            $this->form_validation->set_message('validate_date', 'The {field} field must be a valid date.');
+            return false;
+        }
+        return true;
     }
 
     public function edit($event_id)
     {
-        $this->load->view('events/edit');
+        $data['event'] = $this->Event_model->get($event_id);
+        $this->load->view('events/edit', $data);
     }
 
-    public function update($event_id)
+    public function update()
     {
+        // Get the event ID from the POST request
+        $event_id = $this->input->post('event_id');
 
-    }
+        if (empty($event_id)) {
+            set_alert('danger', 'Event ID is missing.');
+            redirect('events_due/events/index');
+            return; // Stop further execution if no event ID is provided
+        }
 
-    public function validateEventName()
-    {
-        // Set validation rules
-        $this->form_validation->set_rules('event_name', 'Event Name', 'required|trim|min_length[3]|is_unique[' . db_prefix() . 'events_due_name.event_name]',
-            array(
-                'required' => 'The Event Name field is required.',
-            )
-        );
-    }
+        // Fetch the event from the database
+        $event = $this->Event_model->get($event_id);
 
+        // If event not found, show 404 error
+        if (empty($event)) {
+            show_404();
+        }
 
-    public function store_event_name()
-    {
+        // Run form validation
+        $this->validate(); // Assume the validate function handles the validation rules
 
-        $this->validateEventName();
-
-        if ($this->form_validation->run() == FALSE) {
-            $this->load->view('events/index');
+        // Check if form validation passed
+        if ($this->form_validation->run() === FALSE) {
+            set_alert('danger', validation_errors());
         } else {
+            // Prepare data to be updated
+            $data = [
+                'name' => $this->input->post('name'),
+//                'venue' => $this->input->post('venue'),
+//                'start_date' => $this->input->post('start_date'),
+//                'end_date' => $this->input->post('end_date'),
+//                'no_of_delegates' => $this->input->post('no_of_delegates'),
+//                'charges_per_delegate' => $this->input->post('charges_per_delegate'),
+//                'division' => $this->input->post('division'),
+//                'facilitator' => $this->input->post('facilitator'),
+//                'revenue' => $this->input->post('revenue'),
+            ];
 
-            // Prepare data for insertion
-            $data = array(
-                'event_name' => $this->input->post('event_name', TRUE), // Sanitize input
-                'created_at' => date('Y-m-d H:i:s'),
-                'updated_at' => date('Y-m-d H:i:s')
-            );
-
-            // Insert data into the database
-            if ($this->Event_name_model->create($data)) {
-                set_alert('success', 'Event Name added successfully.');
-                redirect('admin/events_due/events');
+            // Attempt to update the event
+            if ($this->Event_model->update($event['id'], $data)) {
+                // If update is successful
+                set_alert('success', 'Event updated successfully!');
+                redirect('events_due/events/index');
             } else {
-                set_alert('danger', 'An error occurred while adding the event.');
-                $this->load->view('events/index');
+                // If update fails
+                set_alert('danger', 'Failed to update event.');
+                redirect('events/edit/' . $event['id']);
             }
         }
 
+        $data['event'] = $event;
+        $this->load->view('events/edit', $data);
+
     }
+
+
 }

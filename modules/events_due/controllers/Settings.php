@@ -13,7 +13,7 @@ class Settings extends AdminController
         $this->load->model('Event_model');
         $this->load->model('Event_name_model');
         $this->load->model('Event_venue_model');
-        $this->load->model('Event_location_model');
+        $this->load->model('Event_details_model');
         $this->load->model('Registration_model');
         $this->load->model('Client_model');
 
@@ -21,12 +21,12 @@ class Settings extends AdminController
 
     public function main()
     {
-        $group = $this->input->get('group', true) ?? 'import_event_registrations';
+        $group = $this->input->get('group', true) ?? 'import_events_registrations';
         $data['group'] = $group;
 
         switch ($group) {
-            case 'import_event_registration':
-                $data['group_content'] = $this->load->view('settings/import_event_registrations', $data, true);
+            case 'import_events_registrations':
+                $data['group_content'] = $this->load->view('settings/import_events_registrations', $data, true);
                 break;
             default:
                 $data['group_content'] = $this->load->view('settings/import_events_registrations', [], true);
@@ -49,112 +49,147 @@ class Settings extends AdminController
 
         $file_ext = pathinfo($_FILES['csv_file']['name'], PATHINFO_EXTENSION);
         $data = [];
+        $events_clients = []; // Stores all clients grouped by event_id
 
-        if ($file_ext == 'csv') {
+        $this->db->trans_begin(); // Start transaction
 
-            // Handle CSV file
-            $file = fopen($_FILES['csv_file']['tmp_name'], 'r');
-            fgetcsv($file); // Skip headers
+        try {
+            if ($file_ext == 'csv') {
+                // Handle CSV file
+                $file = fopen($_FILES['csv_file']['tmp_name'], 'r');
+                fgetcsv($file); // Skip headers
 
-            while (($row = fgetcsv($file, 1000, ",")) !== FALSE) {
-                // Prepare event data
-                $eventNameId = $this->Event_name_model->getOrCreateEventId($row[0] ?? '');
-                $location_id = $this->Event_location_model->getOrCreateLocationId($row[6] ?? '');
-                $venue_id = $this->Event_venue_model->getOrCreateVenueId($row[7] ?? '');
+                while (($row = fgetcsv($file, 1000, ",")) !== FALSE) {
 
-                $eventData = [
-                    'event_name_id' => $eventNameId,
-                    'setup' => $row[1] ?? '',
-                    'type' => $row[2] ?? '',
-                    'division' => $row[3] ?? '',
-                    'start_date' => date('Y-m-d', strtotime($row[4] ?? '')),
-                    'end_date' => date('Y-m-d', strtotime($row[5] ?? '')),
-                    'location_id' => $location_id,
-                    'venue_id' => $venue_id,
-                ];
+                    // Skip empty rows
+                    if (empty(array_filter($row))) {
+                        continue;
+                    }
 
-                // Check if event exists
-                $existingEvent = $this->db->where($eventData)->get(db_prefix() . 'events_due_events')->row();
-                $event_id = $existingEvent ? $existingEvent->id : $this->Event_model->create($eventData);
+                    $event_data = [
+                        'name' => $row[0] ?? ''
+                    ];
 
-                // Prepare client data
-                $customer_data = [
-                    'full_name' => $row[8] ?? '',
-                    'email' => $row[11] ?? '',
-                    'phone_number' => $row[10] ?? '',
-                    'organization_name' => $row[12] ?? '',
-                ];
+                    $eventId = $this->Event_model->getOrCreateEventId($event_data);
 
-                // Check if client exists
-                $existing_client_id = $this->Client_model->get_client_by_email($row[11]);
-                $client_id = $existing_client_id ?: $this->Client_model->create($customer_data);
+                    $eventData = [
+                        'event_id' => $eventId,
+                        'setup' => $row[1] ?? '',
+                        'type' => $row[2] ?? '',
+                        'division' => $row[3] ?? '',
+                        'start_date' => date('Y-m-d', strtotime($row[4] ?? '')),
+                        'end_date' => date('Y-m-d', strtotime($row[5] ?? '')),
+                        'location' => $row[6],
+                        'venue' => $row[6],
+                        'organization' => $row[11] ?? '',
+                        'revenue' => '0',
+                        'facilitator' => 'capabuil',
+                        'no_of_delegates' => '1',
+                        'charges_per_delegate' => '1',
+                        'trainers' => serialize(['capabuil']),
+                    ];
 
-                // Register client to event
-                $data[] = [
-                    'event_id' => $event_id,
-                    'client_id' => $client_id,
-                ];
-            }
-            fclose($file);
+                    $existingEvent = $this->db->where($eventData)->get(db_prefix() . '_events_details')->row();
+                    $event_detail_id = $existingEvent ? $existingEvent->id : $this->Event_details_model->add($eventData);
 
-        } elseif (in_array($file_ext, ['xls', 'xlsx'])) {
-            // Handle Excel file
-            $spreadsheet = IOFactory::load($_FILES['csv_file']['tmp_name']);
-            $worksheet = $spreadsheet->getActiveSheet();
+                    $nameParts = explode(' ', $row[7] ?? '', 2);
 
-            foreach ($worksheet->getRowIterator(2) as $row) {
-                $cells = [];
-                foreach ($row->getCellIterator() as $cell) {
-                    $cells[] = trim($cell->getValue());
+                    $customer_data = [
+                        'first_name' => $nameParts[0] ?? '',
+                        'last_name' => $nameParts[1] ?? '',
+                        'email' => $row[10] ?? '',
+                        'phone' => $row[9] ?? '',
+                    ];
+
+                    if (!isset($events_clients[$event_detail_id])) {
+                        $events_clients[$event_detail_id] = [];
+                    }
+                    $events_clients[$event_detail_id][] = $customer_data;
                 }
+                fclose($file);
+            } elseif (in_array($file_ext, ['xls', 'xlsx'])) {
+                // Handle Excel file
+                $spreadsheet = IOFactory::load($_FILES['csv_file']['tmp_name']);
+                $worksheet = $spreadsheet->getActiveSheet();
 
-                $eventNameId = $this->Event_name_model->getOrCreateEventId($cells[0] ?? '');
-                $location_id = $this->Event_location_model->getOrCreateLocationId($cells[6] ?? '');
-                $venue_id = $this->Event_venue_model->getOrCreateVenueId($cells[7] ?? '');
+                foreach ($worksheet->getRowIterator(2) as $row) {
+                    $cells = [];
+                    foreach ($row->getCellIterator() as $cell) {
+                        $cells[] = trim($cell->getValue());
+                    }
 
-                $eventData = [
-                    'event_name_id' => $eventNameId,
-                    'setup' => $cells[1] ?? '',
-                    'type' => $cells[2] ?? '',
-                    'division' => $cells[3] ?? '',
-                    'start_date' => date('Y-m-d', strtotime($cells[4] ?? '')),
-                    'end_date' => date('Y-m-d', strtotime($cells[5] ?? '')),
-                    'location_id' => $location_id,
-                    'venue_id' => $venue_id,
-                ];
+                    // Skip row if all key fields are empty
+                    if (empty($cells[0]) && empty($cells[7]) && empty($cells[9]) && empty($cells[10])) {
+                        continue;
+                    }
 
-                $existingEvent = $this->db->where($eventData)->get(db_prefix() . 'events_due_events')->row();
-                $event_id = $existingEvent ? $existingEvent->id : $this->Event_model->create($eventData);
+                    $event_data = [
+                        'name' => $cells[0] ?? ''
+                    ];
 
-                $customer_data = [
-                    'full_name' => $cells[8] ?? '',
-                    'email' => $cells[11] ?? '',
-                    'phone_number' => $cells[10] ?? '',
-                    'organization_name' => $cells[12] ?? '',
-                ];
+                    $eventId = $this->Event_model->getOrCreateEventId($event_data);
 
-                $existing_client_id = $this->Client_model->get_client_by_email($cells[11]);
-                $client_id = $existing_client_id ?: $this->Client_model->create($customer_data);
+                    $eventData = [
+                        'event_id' => $eventId,
+                        'setup' => $cells[1] ?? '',
+                        'type' => $cells[2] ?? '',
+                        'division' => $cells[3] ?? '',
+                        'start_date' => date('Y-m-d', strtotime($cells[4] ?? '')),
+                        'end_date' => date('Y-m-d', strtotime($cells[5] ?? '')),
+                        'location' => $cells[6],
+                        'venue' => $cells[6],
+                        'organization' => $cells[11] ?? '',
+                        'revenue' => '0',
+                        'facilitator' => 'capabuil',
+                        'no_of_delegates' => '1',
+                        'charges_per_delegate' => '1',
+                        'trainers' => serialize(['capabuil']),
+                    ];
 
+                    $existingEvent = $this->db->where($eventData)->get(db_prefix() . '_events_details')->row();
+                    $event_detail_id = $existingEvent ? $existingEvent->id : $this->Event_details_model->add($eventData);
+
+                    $nameParts = explode(' ', $cells[7] ?? '', 2);
+
+                    $customer_data = [
+                        'first_name' => $nameParts[0] ?? '',
+                        'last_name' => $nameParts[1] ?? '',
+                        'email' => $cells[10] ?? '',
+                        'phone' => $cells[9] ?? '',
+                    ];
+
+                    if (!isset($events_clients[$event_detail_id])) {
+                        $events_clients[$event_detail_id] = [];
+                    }
+                    $events_clients[$event_detail_id][] = $customer_data;
+                }
+            } else {
+                set_alert('danger', 'Invalid file format. Upload a CSV or Excel file.');
+                redirect(admin_url('events_due/settings'));
+                return;
+            }
+
+
+            foreach ($events_clients as $event_detail_id => $clients) {
                 $data[] = [
-                    'event_id' => $event_id,
-                    'client_id' => $client_id,
+                    'event_detail_id' => $event_detail_id,
+                    'clients' => serialize($clients)
                 ];
             }
-        } else {
-            set_alert('danger', 'Invalid file format. Upload a CSV or Excel file.');
-            redirect(admin_url('events_due/settings'));
-            return;
-        }
 
-        // Batch insert after processing all rows
-        if (!empty($data)) {
+            // Batch insert all records at once
+            if (!empty($data)) {
+                $this->db->insert_batch(db_prefix() . 'events_due_registrations', $data);
+            } else {
+                throw new Exception('No valid data found in the file.');
+            }
 
-            $this->db->insert_batch(db_prefix() . 'events_due_registrations', $data);
-
+            $this->db->trans_commit(); // Commit transaction
             set_alert('success', 'Events Registration imported successfully.');
-        } else {
-            set_alert('danger', 'No valid data found in the file.');
+        } catch (Exception $e) {
+            $this->db->trans_rollback(); // Rollback transaction
+            log_message('error', 'Upload failed: ' . $e->getMessage());
+            set_alert('danger', 'Failed to import registrations. Please try again.');
         }
 
         redirect(admin_url('events_due/settings/main'));

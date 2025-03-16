@@ -41,7 +41,7 @@ class Fund_requests extends AdminController
                 $data['max_unreconciled_amount'] = $unSerializedData['max_unreconciled_amount'];
             }
 
-            $fund_request_details = $this->Fund_request_model->get_fund_request_details(null,true);
+            $fund_request_details = $this->Fund_request_model->get_fund_request_details(null, true);
 
             if (!empty($fund_request_details)) {
                 $data['totalAmountRequested'] = $fund_request_details['total_amount_requested'] - $this->Fund_request_model->get_pending_approval_amount();
@@ -109,6 +109,7 @@ class Fund_requests extends AdminController
 
     public function create()
     {
+
         $data = [];
 
         $query = $this->db->select('fund_reconciliation')
@@ -132,7 +133,7 @@ class Fund_requests extends AdminController
             $data['mandatory_fields'] = unserialize($serializedData);
         }
 
-        $fund_request_details = $this->Fund_request_model->get_fund_request_details(null,true);
+        $fund_request_details = $this->Fund_request_model->get_fund_request_details(null, true);
 
         if (!empty($fund_request_details)) {
             $data['totalAmountRequested'] = $fund_request_details['total_amount_requested'] - $this->Fund_request_model->get_pending_approval_amount();
@@ -271,6 +272,8 @@ class Fund_requests extends AdminController
 
             $subcategories = $this->input->post('subcategories');
             $amounts = $this->input->post('amounts');
+            $serializedClientData = serialize(['clients' => $this->input->post('delegates')]);
+
 
             $fund_request_id = $this->Fund_request_model->add($this->input->post('event_id'), $subcategories, $amounts);
 
@@ -342,6 +345,7 @@ class Fund_requests extends AdminController
 
             $data = [
                 'venue' => $this->input->post('venue') ?? '',
+                'event_id' => $this->input->post('event_id') ?? '',
                 'organization' => $this->input->post('organization') ?? '',
                 'start_date' => $this->input->post('start_date') ?? '',
                 'end_date' => $this->input->post('end_date') ?? '',
@@ -351,9 +355,19 @@ class Fund_requests extends AdminController
                 'trainers' => serialize($this->input->post('trainers')) ?? '',
                 'facilitator' => $this->input->post('facilitator') ?? '',
                 'revenue' => $this->input->post('revenue') ?? '',
+                'setup' => $this->input->post('setup') ?? '',
+                'type' => $this->input->post('type') ?? '',
             ];
 
             $event_detail_id = $this->Event_details_model->add($data);
+
+            //register event
+            $insert_data = [
+                'event_detail_id' => $event_detail_id,
+                'clients' => serialize($this->input->post('delegates')),
+            ];
+
+            $this->db->insert(db_prefix() . 'events_due_registrations', $insert_data);
 
             $this->Fund_request_model->update($fund_request_id, [
                 'event_detail_id' => $event_detail_id

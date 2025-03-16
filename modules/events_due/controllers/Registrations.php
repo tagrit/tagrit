@@ -8,8 +8,8 @@ class Registrations extends AdminController
         parent::__construct();
         $this->load->model('Registration_model');
         $this->load->model('Event_model');
-        $this->load->model('Client_model');
         $this->load->model('Registration_model');
+        $this->load->model('Event_details_model');
         $this->load->library('form_validation');
 
     }
@@ -17,16 +17,27 @@ class Registrations extends AdminController
     public function validateRegistration()
     {
 
-        $this->form_validation->set_rules('first_name', 'First Name', 'trim|required|min_length[2]|max_length[50]');
-        $this->form_validation->set_rules('last_name', 'Last Name', 'trim|required|min_length[2]|max_length[50]');
-        $this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email|max_length[100]');
-        $this->form_validation->set_rules('phone_number', 'Phone Number', 'trim|required|min_length[10]|max_length[20]');
-        $this->form_validation->set_rules('organization', 'Organization', 'trim|required');
-        $this->form_validation->set_rules('event_name_id', 'Event Name ID', 'trim|required|integer');
-        $this->form_validation->set_rules('location_id', 'Location ID', 'trim|required|integer');
-        $this->form_validation->set_rules('venue_id', 'Venue ID', 'trim|required|integer');
-        $this->form_validation->set_rules('duration', 'Duration', 'trim|required');
-        $this->form_validation->set_rules('setup', 'Setup', 'trim|required');
+        // Set validation rules
+        $this->form_validation->set_rules('location', 'Location', 'required');
+        $this->form_validation->set_rules('venue', 'Venue', 'required');
+        $this->form_validation->set_rules('start_date', 'Start Date', 'required');
+        $this->form_validation->set_rules('end_date', 'End Date', 'required');
+        $this->form_validation->set_rules('organization', 'Organization', 'required');
+        $this->form_validation->set_rules('no_of_delegates', 'Number of Delegates', 'required|numeric');
+        $this->form_validation->set_rules('charges_per_delegates', 'Charges Per Delegate', 'required|numeric');
+        $this->form_validation->set_rules('setup', 'Setup', 'required');
+        $this->form_validation->set_rules('division', 'Division', 'required');
+        $this->form_validation->set_rules('revenue', 'Charges', 'required|numeric');
+
+        // Validate delegate details dynamically
+        if (!empty($_POST['delegates'])) {
+            foreach ($_POST['delegates'] as $key => $delegate) {
+                $this->form_validation->set_rules("delegates[$key][first_name]", 'First Name', 'trim|required');
+                $this->form_validation->set_rules("delegates[$key][last_name]", 'Last Name', 'trim|required');
+                $this->form_validation->set_rules("delegates[$key][email]", 'Email', 'trim|required|valid_email');
+                $this->form_validation->set_rules("delegates[$key][phone]", 'Phone', 'trim|required');
+            }
+        }
 
     }
 
@@ -54,59 +65,64 @@ class Registrations extends AdminController
 
     public function store()
     {
+
         $this->validateRegistration();
 
         if ($this->form_validation->run() == FALSE) {
-
             redirect('admin/events_due/registrations/create');
-
         } else {
+            // Start database transaction
+            $this->db->trans_begin();
 
             try {
-
-                //customer data
-                $customer_data = [
-                    'full_name' => $this->input->post('first_name') . ' ' . $this->input->post('last_name'),
-                    'email' => $this->input->post('email'),
-                    'phone_number' => $this->input->post('phone_number'),
-                    'organization_name' => $this->input->post('organization'),
+                $data = [
+                    'venue' => $this->input->post('venue') ?? '',
+                    'location' => $this->input->post('location') ?? '',
+                    'event_id' => $this->input->post('event_id') ?? '',
+                    'organization' => $this->input->post('organization') ?? '',
+                    'start_date' => $this->input->post('start_date') ?? '',
+                    'end_date' => $this->input->post('end_date') ?? '',
+                    'no_of_delegates' => $this->input->post('no_of_delegates') ?? '',
+                    'charges_per_delegate' => $this->input->post('charges_per_delegate') ?? '',
+                    'division' => $this->input->post('division') ?? '',
+                    'trainers' => serialize($this->input->post('trainers') ?? ['capabuil']),
+                    'facilitator' => $this->input->post('facilitator') ?? 'capabuil',
+                    'revenue' => $this->input->post('revenue') ?? '',
+                    'setup' => $this->input->post('setup') ?? '',
+                    'type' => $this->input->post('type') ?? '',
                 ];
 
-                // Check if client already exists
-                $existing_client_id = $this->Client_model->get_client_by_email($customer_data['email']);
+                $event_detail_id = $this->Event_details_model->add($data);
 
-                if ($existing_client_id) {
-                    $client_id = $existing_client_id; // Use existing client ID
-                } else {
-                    $client_id = $this->Client_model->create($customer_data); // Create new client
+                // Register event
+                $insert_data = [
+                    'event_detail_id' => $event_detail_id,
+                    'clients' => serialize($this->input->post('delegates') ?? []),
+                ];
+
+                $this->db->insert(db_prefix() . 'events_due_registrations', $insert_data);
+
+                // Commit transaction if everything is fine
+                if ($this->db->trans_status() === FALSE) {
+                    throw new Exception('Transaction failed.');
                 }
 
-                //insert event registration
-                $postData = $this->input->post();
-                $event_id = $this->get_registration_event_id($postData);
+                $this->db->trans_commit();
 
-
-                if ($this->Registration_model->create([
-                    'event_id' => $event_id,
-                    'client_id' => $client_id
-                ])) {
-                    set_alert('success', 'Event Resgistration was successful.');
-                    redirect('admin/events_due/registrations/create');
-                } else {
-                    set_alert('danger', 'An error occurred while registering the client.');
-                    $this->load->view('registrations/create');
-                }
+                // Set success message and redirect
+                set_alert('success', 'Registration successfully completed!');
+                redirect('admin/events_due/registrations/create');
 
             } catch (Exception $exception) {
+                // Rollback transaction on failure
+                $this->db->trans_rollback();
 
                 set_alert('danger', 'An error occurred: ' . $exception->getMessage());
-                redirect('admin/events_due/registrations/create');
                 log_message('error', $exception->getMessage());
 
+                redirect('admin/events_due/registrations/create');
             }
-
         }
     }
-
 
 }
