@@ -6,15 +6,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
  **/
 $route['admin/events_due/dashboard'] = 'events_due/dashboard/index';
 
-
 //events
-$route['admin/events_due/events'] = 'events_due/events/index';
+$route['admin/events_due/events/index'] = 'events_due/events/index';
 $route['admin/events_due/events/create'] = 'events_due/events/create';
 $route['admin/events_due/events/store'] = 'events_due/events/store';
 $route['admin/events_due/events/edit/(:num)'] = 'events_due/events/edit/$event_id';
 $route['admin/events_due/events/update'] = 'events_due/events/update';
-$route['admin/events_due/events/store_event_name'] = 'events_due/events/store_event_name';
-$route['admin/events_due/events/store'] = 'events_due/events/store';
 
 //registrations
 $route['admin/events_due/registrations/create'] = 'events_due/registrations/create';
@@ -35,4 +32,5 @@ $route['admin/events_due/settings/download_sample'] = 'events_due/settings/downl
 
 //reports
 $route['admin/events_due/reports/main'] = 'events_due/reports/main';
+$route['admin/events_due/reports/fetch_filtered_data'] = 'events_due/reports/fetch_filtered_data';
 

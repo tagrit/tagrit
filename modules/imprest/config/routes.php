@@ -7,21 +7,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
 $route['admin/imprest/dashboard'] = 'imprest/dashboard/index';
 $route['admin/imprest/email_worker/send_email'] = 'imprest/email_worker/send_email';
 
-
-//events
-$route['admin/imprest/events/index'] = 'imprest/events/index';
-$route['admin/imprest/events/create'] = 'imprest/events/create';
-$route['admin/imprest/events/store'] = 'imprest/events/store';
-$route['admin/imprest/events/edit/(:num)'] = 'imprest/events/edit/$event_id';
-$route['admin/imprest/events/update'] = 'imprest/events/update';
-
-
 //expense categories
 $route['admin/imprest/expense_categories'] = 'imprest/expense_categories/index';
 $route['admin/imprest/expense_categories/store'] = 'imprest/expense_categories/store';
 $route['admin/imprest/expense_categories/add_subcategory'] = 'imprest/expense_categories/add_subcategory';
 $route['admin/imprest/expense_categories/delete_subcategory/(:num)'] = 'imprest/expense_categories/delete_subcategory/$subcategory_is';
-
 
 //fund requests
 $route['admin/imprest/fund_requests'] = 'imprest/fund_requests/index';
