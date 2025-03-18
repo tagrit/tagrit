@@ -121,8 +121,6 @@
                         <th><?php echo _l('Organization'); ?></th>
                         <th><?php echo _l('start Date'); ?></th>
                         <th><?php echo _l('End Date'); ?></th>
-                        <th><?php echo _l('Action'); ?></th>
-
                     </tr>
                     </thead>
                     <tbody>
@@ -157,13 +155,6 @@
                             </td>
                             <td>
                                 <?php echo $registration->end_date; ?>
-                            </td>
-                            <td>
-                                <a style="color:white;"
-                                   href="#"
-                                   class="btn btn-info">
-                                    <i class="fa fa-eye"></i> View
-                                </a>
                             </td>
                         </tr>
                     <?php endforeach; ?>
