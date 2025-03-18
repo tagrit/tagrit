@@ -38,37 +38,43 @@
                         </a>
                     </div>
                     <?php if (!empty($events)) : ?>
-                        <table class="table dt-table" id="example">
-                            <thead class="table-head">
+                        <table class="table dt-table" id="events-table">
+                            <thead>
                             <tr>
-                                <th>Event</th>
+                                <th><?php echo _l('Event'); ?></th>
+                                <th><?php echo _l('Start Date'); ?></th>
+                                <th><?php echo _l('End Date'); ?></th>
+                                <th><?php echo _l('Location'); ?></th>
+                                <th><?php echo _l('Venue'); ?></th>
+                                <th><?php echo _l('Action'); ?></th>
                             </tr>
                             </thead>
                             <tbody>
                             <?php foreach ($events as $event) : ?>
-                                <tr class="data-row">
+                                <tr>
                                     <td>
                                         <div class="d-flex flex-column justify-content-center">
                                             <p style="font-weight: bold; font-size: 14px;">
-                                                <?php echo htmlspecialchars($event->name ?? '', ENT_QUOTES, 'UTF-8'); ?>
+                                                <?php echo $event->event_name; ?>
                                             </p>
-                                            <div class="action-buttons">
-                                                <p>
-                                                    <a href="<?php echo admin_url('imprest/events/edit/' . $event->id); ?>"
-                                                       style="color:red; background:none; border:none; padding:0; cursor:pointer;">
-                                                        Edit
-                                                    </a>
-                                                </p>
-                                            </div>
                                         </div>
+                                    </td>
+                                    <td><?php echo $event->start_date; ?></td>
+                                    <td><?php echo $event->end_date; ?></td>
+                                    <td><?php echo $event->location; ?></td>
+                                    <td><?php echo $event->venue; ?></td>
+                                    <td>
+                                        <a style="color:white;" href="#" class="btn btn-info">
+                                            <i class="fa fa-eye"></i> View
+                                        </a>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
                             </tbody>
                         </table>
                     <?php else : ?>
-                        <p style="text-align: center; font-weight: bold; font-size:15px;">
-                        <td colspan="5" class="text-center">No events available.</td>
+                        <p class="text-center">
+                            No events available.
                         </p>
                     <?php endif; ?>
                 </div>

@@ -46,9 +46,6 @@ class Events_Due_System
         $viewuri = $_SERVER['REQUEST_URI'];
 
 
-
-
-
         //events css
         if (strpos($viewuri, 'admin/events_due/events') !== false) {
             echo '<link href="' . module_dir_url(EVENTS_DUE_MODULE_NAME, 'assets/css/events/list_events.css') . '" rel="stylesheet" type="text/css" />';
@@ -114,7 +111,6 @@ class Events_Due_System
             echo '<script defer src="' . module_dir_url(EVENTS_DUE_MODULE_NAME, 'assets/js/registrations/create_registrations.js') . '"></script>';
         }
 
-
         //dashboard js
         if (strpos($viewuri, 'admin/events_due/dashboard') !== false) {
             echo '<script src="' . module_dir_url(EVENTS_DUE_MODULE_NAME, 'assets/js/dashboard.js') . '"></script>';
@@ -132,12 +128,6 @@ class Events_Due_System
         }
 
     }
-
-    /**
-     * Add Global styles
-     */
-
-
 
     public function uninstall()
     {
@@ -158,7 +148,7 @@ class Events_Due_System
         // Define the base menu
         $menu = [
             'slug' => EVENTS_DUE_MODULE_NAME,
-            'name' => 'Events Due',
+            'name' => 'Events',
             'icon' => 'fa fa-calendar-check',
             'position' => 5,
             'children' => []
@@ -174,7 +164,7 @@ class Events_Due_System
 
         $menu['children'][] = [
             'slug' => 'events_due_events',
-            'name' => 'Events',
+            'name' => 'View Events',
             'href' => site_url('admin/' . EVENTS_DUE_MODULE_NAME . '/events'),
             'icon' => 'fa fa-calendar-alt',
             'position' => 11,
