@@ -276,13 +276,21 @@ class Fund_reconciliations extends AdminController
                 ->group_start() // Start grouping the WHERE conditions
                 ->where('cleared', 0)
                 ->or_where('cleared', 2)
+                ->or_where('cleared', 3)
                 ->group_end() // End grouping
+                ->where('amount_requested >', 0)
                 ->get(db_prefix() . '_fund_request_items')
                 ->result();
 
             if (!empty($unclearedItems)) {
                 throw new Exception('Kindly make sure all Fund Request Items are cleared!');
             }
+
+            //lets update the cleared items to have a cleared status
+            $this->db->where('fund_request_id', $fund_request_id);
+            $this->db->update(db_prefix() . '_fund_request_items', [
+                'cleared' => 1
+            ]);
 
             // Update the fund request status to approved
             if (!$this->Fund_request_model->update($fund_request_id, [
@@ -306,7 +314,7 @@ class Fund_reconciliations extends AdminController
 
                 // Fetch the ID from acc_accounts where name matches category_name --> Debiting Account
                 $debiting_account = $this->db->select('id')
-                    ->from(db_prefix().'acc_accounts')
+                    ->from(db_prefix() . 'acc_accounts')
                     ->where('name', $row['category_name'])
                     ->get()
                     ->row();
@@ -324,7 +332,7 @@ class Fund_reconciliations extends AdminController
 
                 // Fetch the ID from acc_accounts where name matches $staff --> Crediting Account
                 $crediting_account = $this->db->select('id')
-                    ->from(db_prefix().'acc_accounts')
+                    ->from(db_prefix() . 'acc_accounts')
                     ->where('name', $staff)
                     ->get()
                     ->row();
@@ -332,7 +340,7 @@ class Fund_reconciliations extends AdminController
 
                 //fetch relationship id
                 $rel = $this->db->select('id')
-                    ->from(db_prefix().'expenses_categories')
+                    ->from(db_prefix() . 'expenses_categories')
                     ->where('name', $row['category_name'])
                     ->get()
                     ->row();
