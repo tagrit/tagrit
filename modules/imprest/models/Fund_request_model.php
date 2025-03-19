@@ -88,7 +88,7 @@ class Fund_request_model extends App_Model
     }
 
 
-    public function get_fund_request_details($id = null)
+    public function get_fund_request_details($id = null,$check_max_reconciliation_amount=false)
     {
         $this->db->select('
     fr.id as fund_request_id,
@@ -141,6 +141,11 @@ class Fund_request_model extends App_Model
 
         if ($id !== null) {
             $this->db->where('fr.id', $id);
+        }
+
+        // Prevent rejected fund requests if check_max_reconciliation_amount is true
+        if ($check_max_reconciliation_amount) {
+            $this->db->where('fr.status !=', 'rejected'); // Adjust according to your database structure
         }
 
         // Check if the user has permission to view all fund requests

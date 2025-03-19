@@ -9,10 +9,15 @@ var fnServerParams;
       "type": '[name="type"]',
       "from_date": '[name="from_date"]',
       "to_date": '[name="to_date"]',
+      "organization": '[name="organization"]',
     };
 
   init_sync_logs_table();
 
+  $('select[name="organization"]').on('change', function() {
+    init_sync_logs_table();
+  });
+  
   $('select[name="status"]').on('change', function() {
     init_sync_logs_table();
   });

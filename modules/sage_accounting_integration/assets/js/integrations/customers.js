@@ -5,14 +5,18 @@ var fnServerParams;
   fnServerParams = {
       "status": '[name="status"]',
       "software": '[name="software"]',
+      "organization": '[name="organization"]',
     };
-
+ 
   init_customers_table();
 
   $('select[name="status"]').on('change', function() {
     init_customers_table();
   });
 
+  $('select[name="organization"]').on('change', function() {
+    init_customers_table();
+  });
 })(jQuery);
 
 function init_customers_table() {
@@ -31,6 +35,7 @@ function manual_sync(invoker){
     data.id = $(invoker).data('id');
     data.type = $(invoker).data('type');
     data.software = $(invoker).data('software');
+    data.organization_id = $(invoker).data('organization-id');
 
     var html = '';
       html += '<div class="Box">';
@@ -64,6 +69,7 @@ function sync_transaction(invoker){
     var data = {};
     data.type = 'customer';
     data.software = $('input[name="software"]').val();
+    data.organization_id = $('select[name="organization"]').val();
 
     var html = '';
       html += '<div class="Box">';
