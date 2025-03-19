@@ -15,6 +15,7 @@ $environments = [
     'app'         => 'production'
 ];
 
+
 // Default to production
 $environment = 'production';
 
