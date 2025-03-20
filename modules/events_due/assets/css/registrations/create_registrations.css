@@ -59,5 +59,14 @@
     position: absolute;
     right: 15px; /* Keep close button aligned to the right */
 }
+.input-group .btn {
+    height: auto;
+    min-height: 38px; /* Ensures it matches Bootstrap's default input height */
+    padding: 6px 15px; /* Keeps the button well-sized */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 
 
