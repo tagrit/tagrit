@@ -13,7 +13,7 @@ class Events extends AdminController
 
     public function validate()
     {
-        $this->form_validation->set_rules('name', 'Event Name', 'required');
+        $this->form_validation->set_rules('event_name', 'Event Name', 'required');
     }
 
 
@@ -21,12 +21,6 @@ class Events extends AdminController
     {
         $data['events'] = $this->Event_model->event_details();
         $this->load->view('events/index', $data);
-    }
-
-
-    public function create()
-    {
-        $this->load->view('events/create');
     }
 
 
@@ -41,14 +35,14 @@ class Events extends AdminController
             } else {
                 // Save Data
                 $data = [
-                    'name' => $this->input->post('name')
+                    'name' => $this->input->post('event_name')
                 ];
 
                 $insert_id = $this->Event_model->add($data);
 
                 if ($insert_id) {
                     set_alert('success', 'Event created successfully!');
-                    redirect(admin_url('events_due/events/index'));
+                    redirect(admin_url('events_due/registrations/create'));
                 } else {
                     set_alert('danger', 'Failed to create event.');
                 }

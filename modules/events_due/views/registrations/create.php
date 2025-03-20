@@ -27,22 +27,30 @@
                         <div class="card mtop15">
                             <div class="card-body">
                                 <div class="row">
-
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="events">Event:</label>
-                                            <select class="form-control selectpicker" data-live-search="true"
-                                                    name="event_id" id="events" required>
-                                                <?php if (!empty($events)): ?>
-                                                    <?php foreach ($events as $index => $event): ?>
-                                                        <option value="<?= htmlspecialchars($event->id) ?>" <?= $index === 0 ? 'selected' : '' ?>>
-                                                            <?= strlen($event->name) > 90 ? htmlspecialchars(substr($event->name, 0, 27)) . '...' : htmlspecialchars($event->name) ?>
-                                                        </option>
-                                                    <?php endforeach; ?>
-                                                <?php else: ?>
-                                                    <option value="" disabled selected>No events available</option>
-                                                <?php endif; ?>
-                                            </select>
+                                            <div class="input-group">
+                                                <select class="form-control selectpicker no-border-right"
+                                                        data-live-search="true" name="event_id" id="events" required>
+                                                    <?php if (!empty($events)): ?>
+                                                        <?php foreach ($events as $index => $event): ?>
+                                                            <option value="<?= htmlspecialchars($event->id) ?>" <?= $index === 0 ? 'selected' : '' ?>>
+                                                                <?= strlen($event->name) > 90 ? htmlspecialchars(substr($event->name, 0, 27)) . '...' : htmlspecialchars($event->name) ?>
+                                                            </option>
+                                                        <?php endforeach; ?>
+                                                    <?php else: ?>
+                                                        <option value="" disabled selected>No events available</option>
+                                                    <?php endif; ?>
+                                                </select>
+                                                <div class="input-group-append">
+                                                    <button style="margin-top:0px;" type="button"
+                                                            class="btn btn-default no-border-left"
+                                                            data-toggle="modal" data-target="#newEventModal">
+                                                        <i class="fa fa-plus"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
 
@@ -55,6 +63,10 @@
                                                    required>
                                         </div>
                                     </div>
+                                </div>
+
+                                <div class="row">
+
 
                                     <!-- Client Details -->
                                     <div class="col-md-6">
@@ -197,6 +209,35 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="newEventModal" tabindex="-1" role="dialog" aria-labelledby="newEventModalLabel"
+     aria-hidden="true">
+    <?php echo form_open('admin/events_due/events/store', [
+        'id' => 'create-new-event-form',
+        'enctype' => 'multipart/form-data'
+    ]); ?>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header d-flex justify-content-between px-3">
+                <h6 class="modal-title mb-0" id="newEventModalLabel">Add New Event</h6>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="eventName">Event Name</label>
+                    <input type="text" class="form-control" id="eventName" name="event_name" required>
+                </div>
+            </div>
+            <div style="margin-top:-20px;" class="modal-footer">
+                <button type="submit" class="btn btn-primary">Save Event</button>
+            </div>
+        </div>
+    </div>
+    <?php echo form_close(); ?>
+</div>
+
 <?php init_tail(); ?>
 <script>
     $(document).ready(function () {

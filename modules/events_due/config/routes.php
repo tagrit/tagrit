@@ -8,7 +8,6 @@ $route['admin/events_due/dashboard'] = 'events_due/dashboard/index';
 
 //events
 $route['admin/events_due/events/index'] = 'events_due/events/index';
-$route['admin/events_due/events/create'] = 'events_due/events/create';
 $route['admin/events_due/events/store'] = 'events_due/events/store';
 $route['admin/events_due/events/edit/(:num)'] = 'events_due/events/edit/$event_id';
 $route['admin/events_due/events/update'] = 'events_due/events/update';
