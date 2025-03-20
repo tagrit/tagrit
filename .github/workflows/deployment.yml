@@ -70,7 +70,7 @@ jobs:
 
             # Install dependencies using PHP 8.2
             echo "📦 Running composer install with PHP 8.2..."
-            $PHP_BIN /usr/local/bin/composer install --no-dev --optimize-autoloader
+            $PHP_BIN composer install --no-dev --optimize-autoloader
 
             echo "✅ Deployment to $DEPLOY_DIR completed successfully!"
           EOF
