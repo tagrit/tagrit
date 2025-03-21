@@ -42,10 +42,18 @@ class Events extends AdminController
 
                 if ($insert_id) {
                     set_alert('success', 'Event created successfully!');
-                    redirect(admin_url('events_due/registrations/create'));
+
+                    $referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
+
+                    if (strpos($referer, 'admin/imprest/fund_requests/create') !== false) {
+                        redirect(admin_url('imprest/fund_requests/create'));
+                    } else {
+                        redirect(admin_url('events_due/registrations/create'));
+                    }
                 } else {
                     set_alert('danger', 'Failed to create event.');
                 }
+
             }
         }
 

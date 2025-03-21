@@ -32,9 +32,9 @@
                     <div style="padding:15px; margin-bottom:10px;">
                         <a style="text-decoration: none; margin-left:-10px; border: 2px solid black;"
                            class="custom-button"
-                           href="<?php echo admin_url('events_due/events/create') ?>">
-                            <i class="fa fa-plus" aria-hidden="true"></i>
-                            <span style="margin-left: 10px;">Create Event</span>
+                           href="<?php echo admin_url('events_due/registrations/create') ?>">
+                            <i class="fa fa-user-plus" aria-hidden="true"></i>
+                            <span style="margin-left: 10px;">Register For Event</span>
                         </a>
                     </div>
                     <?php if (!empty($events)) : ?>

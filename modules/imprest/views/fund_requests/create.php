@@ -414,6 +414,77 @@
         font-weight: bold;
     }
 
+    /*example css*/
+    .no-border-right {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        border-right: none !important;
+    }
+
+    /* Remove left border of button */
+    .no-border-left {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+        border-left: none !important;
+    }
+
+    .input-group-append .btn {
+        box-shadow: none !important;
+        outline: none !important;
+    }
+
+    .input-group,
+    .input-group-append,
+    .input-group .form-control {
+        box-shadow: none !important;
+        outline: none !important;
+    }
+
+    .modal-header {
+        padding: 10px 15px; /* Reduce top/bottom padding */
+    }
+
+    .modal-title {
+        margin: 0;
+        font-size: 1.25rem; /* Adjust size if needed */
+    }
+
+    .modal-body {
+        padding: 15px;
+    }
+
+    .modal-footer {
+        margin-right: -3px;
+        text-align: right;
+    }
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 20px; /* Reduce padding */
+        position: relative;
+    }
+
+    .modal-title {
+        flex-grow: 1;
+        margin: 0;
+        font-size: 1.25rem;
+    }
+
+    .close {
+        position: absolute;
+        right: 15px; /* Keep close button aligned to the right */
+    }
+
+    .input-group .btn {
+        height: auto;
+        min-height: 38px; /* Ensures it matches Bootstrap's default input height */
+        padding: 6px 15px; /* Keeps the button well-sized */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
 
 </style>
 
@@ -440,20 +511,30 @@
             ]); ?>
 
             <div class="category-section">
-                <label for="events">Event:</label>
-                <select class="form-control selectpicker" data-live-search="true" name="event_id" id="events" required>
-                    <?php if (!empty($events)): ?>
-                        <?php foreach ($events as $index => $event): ?>
-                            <option value="<?= htmlspecialchars($event->id) ?>" <?= $index === 0 ? 'selected' : '' ?>>
-                                <?= strlen($event->name) > 90 ? htmlspecialchars(substr($event->name, 0, 27)) . '...' : htmlspecialchars($event->name) ?>
-                            </option>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <option value="" disabled selected>No events available</option>
-                    <?php endif; ?>
-                </select>
+                <div class="form-group">
+                    <label for="events">Event:</label>
+                    <div class="input-group">
+                        <select class="form-control selectpicker no-border-right" data-live-search="true"
+                                name="event_id" id="events" required style="display: none;">
+                            <?php if (!empty($events)): ?>
+                                <?php foreach ($events as $index => $event): ?>
+                                    <option value="<?= htmlspecialchars($event->id) ?>" <?= $index === 0 ? 'selected' : '' ?>>
+                                        <?= strlen($event->name) > 90 ? htmlspecialchars(substr($event->name, 0, 27)) . '...' : htmlspecialchars($event->name) ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <option value="" disabled selected>No events available</option>
+                            <?php endif; ?>
+                        </select>
+                        <div class="input-group-append">
+                            <button style="margin-top:0px;" type="button" class="btn btn-default no-border-left"
+                                    data-toggle="modal" data-target="#newEventModal">
+                                <i class="fa fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
-
 
             <?php if (!empty($mandatory_fields)): ?>
                 <hr style="border-color:grey;">
@@ -652,10 +733,37 @@
         </div>
     </div>
     <?php endif; ?>
-
-
 </div>
 </div>
+
+<div class="modal fade" id="newEventModal" tabindex="-1" role="dialog" aria-labelledby="newEventModalLabel"
+     aria-hidden="true">
+    <?php echo form_open('admin/events_due/events/store', [
+        'id' => 'create-new-event-form',
+        'enctype' => 'multipart/form-data'
+    ]); ?>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header d-flex justify-content-between px-3">
+                <h6 class="modal-title mb-0" id="newEventModalLabel">Add New Event</h6>
+                <p type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span>&times;</span>
+                </p>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="eventName">Event Name</label>
+                    <input type="text" class="form-control" id="eventName" name="event_name" required>
+                </div>
+            </div>
+            <div style="margin-top:-20px;" class="modal-footer">
+                <button type="submit" class="btn btn-primary">Save Event</button>
+            </div>
+        </div>
+    </div>
+    <?php echo form_close(); ?>
+</div>
+
 <?php init_tail(); ?>
 <script>
 
