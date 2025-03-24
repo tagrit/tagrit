@@ -25,7 +25,6 @@ class Gtsverify extends AdminController{
      * @return json
      */
     public function activate(){
-        // Always return success response
         $res = array(
             'status' => true,
             'message' => 'License activated successfully',
