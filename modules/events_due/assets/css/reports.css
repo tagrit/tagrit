@@ -1,4 +1,12 @@
 /*example css*/
-.content{
-    color:red;
+.far-right {
+    display: block;
+    margin-left: auto;
+    margin-right:20px;
+}
+
+.dt-buttons.btn-group .btn {
+    padding-bottom: 6.5px !important;
+    padding-top: 6.5px !important;
+    visibility: hidden;
 }

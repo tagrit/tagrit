@@ -6,6 +6,7 @@ var fnServerParams = {};
         "stage_id": '[name="stage_id"]',
     }
 
+    $( document ).ready(function() {
     init_leads_table();
     $.get(admin_url + 'ma/get_data_stage_detail_chart/'+$('input[name=stage_id]').val()).done(function(res) {
         res = JSON.parse(res);
@@ -78,6 +79,7 @@ var fnServerParams = {};
             },
             series: res.data_stage_campaign_detail.data
         });
+    });
     });
   })(jQuery);
 

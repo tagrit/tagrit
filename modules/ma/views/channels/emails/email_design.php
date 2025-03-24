@@ -4,6 +4,20 @@
    <div class="content">
       <div class="panel_s">
          <div class="panel-body">
+            <?php echo form_hidden('csrf_token_hash', $this->security->get_csrf_hash()); ?>
+            <?php echo form_open(admin_url('ma/email_design_save'),array('id'=>'email-template-form','autocomplete'=>'off')); ?>
+            <?php echo form_hidden('id',(isset($email_design) ? $email_design->id : '') ); ?>
+            <?php echo form_hidden('email_id',(isset($email_design) ? $email_design->email_id : '') ); ?>
+            <?php $value = (isset($email_design) ? $email_design->subject : ''); ?>
+            <div class="row mbot20">
+               <div class="col-md-6">
+                  <?php echo render_input('subject','subject',$value); ?>
+               </div>
+            </div>
+            <?php echo form_close(); ?>
+            <?php echo form_hidden('data_design',(isset($email_design) ? $email_design->data_design : '')); ?>
+            <?php echo form_hidden('data_html',(isset($email_design) ? $email_design->data_html : '')); ?>
+            <?php echo form_hidden('ma_unlayer_custom_fonts', get_option('ma_unlayer_custom_fonts')); ?>
             <div id="EmailEditor" class="EmailEditor"></div>
             <hr>
             <h4 class="no-margin">
@@ -65,14 +79,6 @@
                   </div>
                </div>
             </div>
-            <?php echo form_hidden('csrf_token_hash', $this->security->get_csrf_hash()); ?>
-            <?php echo form_open(admin_url('ma/email_design_save'),array('id'=>'email-template-form','autocomplete'=>'off')); ?>
-            <?php echo form_hidden('id',(isset($email_design) ? $email_design->id : '') ); ?>
-            <?php echo form_hidden('email_id',(isset($email_design) ? $email_design->email_id : '') ); ?>
-            <?php echo form_close(); ?>
-            <?php echo form_hidden('data_design',(isset($email_design) ? $email_design->data_design : '')); ?>
-            <?php echo form_hidden('data_html',(isset($email_design) ? $email_design->data_html : '')); ?>
-            <?php echo form_hidden('ma_unlayer_custom_fonts', get_option('ma_unlayer_custom_fonts')); ?>
             <div class="btn-bottom-toolbar btn-toolbar-container-out text-right">
                <a href="#" onclick="save_template(); return false;" class="btn btn-primary mbot15" id="btn-submit"><?php echo _l('submit'); ?></a>
            </div>

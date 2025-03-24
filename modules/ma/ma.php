@@ -4,11 +4,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
 /*
 Module Name: Marketing Automation
 Description: This module helps you to identify potential customers, automating the process of nurturing those leads to sales-readiness.
-Version: 1.0.9
+Version: 1.1.3
 Requires at least: 2.3.*
 Author: GreenTech Solutions
 Author URI: https://codecanyon.net/user/greentech_solutions
-
 */
 
 
@@ -26,7 +25,7 @@ hooks()->add_action('ma_init',MA_MODULE_NAME.'_appint');
 hooks()->add_action('pre_activate_module', MA_MODULE_NAME.'_preactivate');
 hooks()->add_action('pre_deactivate_module', MA_MODULE_NAME.'_predeactivate');
 
-define('MA_REVISION', 109);
+define('MA_REVISION', 1132);
 
 $CI = &get_instance();
 
@@ -45,7 +44,7 @@ function ma_add_head_components(){
     $viewuri = $_SERVER['REQUEST_URI'];
 
     if (!(strpos($viewuri, 'admin/ma/') === false)) {
-//        echo '<link href="' . module_dir_url(MA_MODULE_NAME, 'assets/css/custom.css') . '?v=' . MA_REVISION . '"  rel="stylesheet" type="text/css" />';
+        echo '<link href="' . module_dir_url(MA_MODULE_NAME, 'assets/css/custom.css') . '?v=' . MA_REVISION . '"  rel="stylesheet" type="text/css" />';
     }
 
     if (!(strpos($viewuri, 'admin/ma/campaign_detail') === false)) {
@@ -70,6 +69,10 @@ function ma_add_head_components(){
 function ma_add_footer_components(){
     $CI = &get_instance();
     $viewuri = $_SERVER['REQUEST_URI'];
+
+    if (!(strpos($viewuri, 'admin/ma') === false)) {
+        echo '<script src="' . module_dir_url(MA_MODULE_NAME, 'assets/js/tinymce_init.js') . '?v=' . MA_REVISION . '"></script>';
+    }
 
     if (!(strpos($viewuri, 'admin/') === false)) {
         if(get_option('ma_lead_required_phone') == 1){
@@ -367,10 +370,10 @@ register_language_files(MA_MODULE_NAME, [MA_MODULE_NAME]);
  */
 function ma_module_init_menu_items()
 {
-    if (has_permission('ma_dashboard', '', 'view') || has_permission('ma_segments', '', 'view') || has_permission('ma_components', '', 'view') || has_permission('ma_campaigns', '', 'view') || has_permission('ma_channels', '', 'view') || has_permission('ma_points', '', 'view') || has_permission('ma_stages', '', 'view') || has_permission('ma_reports', '', 'view') || has_permission('ma_setting', '', 'view') || has_permission('ma_segments', '', 'view_own') || has_permission('ma_components', '', 'view_own') || has_permission('ma_campaigns', '', 'view_own') || has_permission('ma_channels', '', 'view_own') || has_permission('ma_points', '', 'view_own') || has_permission('ma_stages', '', 'view_own')) {
+    if (has_permission('ma_dashboard', '', 'view') || has_permission('ma_segments', '', 'view') || has_permission('ma_components', '', 'view') || has_permission('ma_campaigns', '', 'view') || has_permission('ma_channels', '', 'view') || has_permission('ma_points', '', 'view') || has_permission('ma_stages', '', 'view') || has_permission('ma_report', '', 'view') || has_permission('ma_setting', '', 'view') || has_permission('ma_segments', '', 'view_own') || has_permission('ma_components', '', 'view_own') || has_permission('ma_campaigns', '', 'view_own') || has_permission('ma_channels', '', 'view_own') || has_permission('ma_points', '', 'view_own') || has_permission('ma_stages', '', 'view_own')) {
         $CI = &get_instance();
         $CI->app_menu->add_sidebar_menu_item('ma', [
-                'name'     => _l('Marketing'),
+                'name'     => _l('marketing_automation'),
                 'href'     => admin_url('ma'),
                 'icon'     => 'fa fa-hashtag',
                 'position' => 30
@@ -447,7 +450,7 @@ function ma_module_init_menu_items()
             ]);
         }
 
-        if (has_permission('ma_reports', '', 'view')) {
+        if (has_permission('ma_report', '', 'view')) {
             $CI->app_menu->add_sidebar_children_item('ma', [
                 'slug' => 'ma-reports',
                 'name' => _l('reports'),
@@ -604,7 +607,6 @@ function ma_add_lead_tabs_content($lead)
         echo $CI->load->view('ma/leads/campaigns_tab', ['campaigns' => $campaigns, 'lead' => $lead]);
     }
 }
-
 function ma_appint(){
     $CI = & get_instance();    
     require_once 'libraries/gtsslib.php';
@@ -641,4 +643,3 @@ function ma_predeactivate($module_name){
         $ma_api->deactivate_license();
     }
 }
-

@@ -1,0 +1,375 @@
+<?php defined('BASEPATH') or exit('No direct script access allowed'); ?>
+<?php init_head(); ?>
+<div id="wrapper">
+    <div class="content">
+        <div class="section-header">
+            <h1>Events</h1>
+            <div class="section-header-breadcrumb">
+                <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
+                <div class="breadcrumb-item">Event Registrations</div>
+            </div>
+        </div>
+        <div class="panel_s">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4 class="no-margin" style="color: #34395e;font-weight: 600;">Event Registration Form</h4>
+                        <hr class="hr-panel-heading"/>
+                    </div>
+
+                    <?php echo form_open('admin/events_due/registrations/store', [
+                        'id' => 'register-for-event-form',
+                        'enctype' => 'multipart/form-data'
+                    ]); ?>
+
+                    <!-- Form Container -->
+                    <div class="col-md-12">
+                        <div class="card mtop15">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="events">Event:</label>
+                                            <div class="input-group">
+                                                <select class="form-control selectpicker no-border-right"
+                                                        data-live-search="true" name="event_id" id="events" required>
+                                                    <?php if (!empty($events)): ?>
+                                                        <?php foreach ($events as $index => $event): ?>
+                                                            <option value="<?= htmlspecialchars($event->id) ?>" <?= $index === 0 ? 'selected' : '' ?>>
+                                                                <?= strlen($event->name) > 90 ? htmlspecialchars(substr($event->name, 0, 27)) . '...' : htmlspecialchars($event->name) ?>
+                                                            </option>
+                                                        <?php endforeach; ?>
+                                                    <?php else: ?>
+                                                        <option value="" disabled selected>No events available</option>
+                                                    <?php endif; ?>
+                                                </select>
+                                                <div class="input-group-append">
+                                                    <button style="margin-top:0px;" type="button"
+                                                            class="btn btn-default no-border-left"
+                                                            data-toggle="modal" data-target="#newEventModal">
+                                                        <i class="fa fa-plus"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Client Details -->
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="organization" class="control-label">Organization *</label>
+                                            <input type="text" id="organization" name="organization"
+                                                   class="form-control"
+                                                   required>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+
+
+                                    <!-- Client Details -->
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="location" class="control-label">Location*</label>
+                                            <input type="text" id="location" name="location" class="form-control"
+                                                   required>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="venue" class="control-label">Venue*</label>
+                                            <input type="venue" id="email" name="venue" class="form-control"
+                                                   required>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="start_date" class="control-label">Start Date*</label>
+                                            <input type="date" id="start_date" name="start_date" class="form-control"
+                                                   required>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="end_date" class="control-label">End Date*</label>
+                                            <input type="date" id="end_date" name="end_date" class="form-control"
+                                                   required>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="no_of_delegates" class="control-label">Number of
+                                                Delegates*</label>
+                                            <input type="text" id="no_of_delegates" name="no_of_delegates"
+                                                   class="form-control" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="charges_per_delegates" class="control-label">Charges Per
+                                                Delegates*</label>
+                                            <input type="text" id="charges_per_delegates" name="charges_per_delegates"
+                                                   class="form-control" required>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="setup" class="control-label">Setup*</label>
+                                            <select id="setup" name="setup" class="form-control selectpicker"
+                                                    data-live-search="true" required>
+                                                <option value="">Select Setup</option>
+                                                <option value="Physical">Physical</option>
+                                                <option value="Virtual">Virtual</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="setup" class="control-label">Type*</label>
+                                            <select id="type" name="type" class="form-control selectpicker"
+                                                    data-live-search="true" required>
+                                                <option value="">Select Type</option>
+                                                <option value="Local">Local</option>
+                                                <option value="International">International</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="division" class="control-label">Charges</label>
+                                            <input type="number" id="division" name="division" class="form-control"
+                                                   placeholder="Enter division" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="revenue" class="control-label">Charges</label>
+                                            <input type="number" id="revenue" name="revenue" class="form-control"
+                                                   placeholder="Enter revenue" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <label class="custom-label">Delegates Details</label>
+                                        <div id="delegates-container">
+                                            <div class="row align-items-center delegate-entry">
+                                                <div class="col-md-3">
+                                                    <input type="text" name="delegates[0][first_name]"
+                                                           class="form-control"
+                                                           placeholder="First Name" required>
+                                                </div>
+                                                <div style="margin-left:-20px;" class="col-md-3">
+                                                    <input type="text" name="delegates[0][last_name]"
+                                                           class="form-control"
+                                                           placeholder="Last Name" required>
+                                                </div>
+                                                <div style="margin-left:-20px;" class="col-md-3">
+                                                    <input type="email" name="delegates[0][email]" class="form-control"
+                                                           placeholder="Email" required>
+                                                </div>
+                                                <div style="margin-left:-20px;" class="col-md-3">
+                                                    <input type="text" name="delegates[0][phone]" class="form-control"
+                                                           placeholder="Phone" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button id="add-delegate" type="button"
+                                                class="mtop10 btn btn-info d-flex align-items-center justify-content-center"
+                                                style="width:210px; border-radius: 5px; font-weight: bold;">
+                                            </i> Add Delegate
+                                        </button>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="col-md-12 mtop15">
+                        <button type="submit" class="btn btn-primary btn-block">Submit Registration</button>
+                    </div>
+                    <?php echo form_close(); ?>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="newEventModal" tabindex="-1" role="dialog" aria-labelledby="newEventModalLabel"
+     aria-hidden="true">
+    <?php echo form_open('admin/events_due/events/store', [
+        'id' => 'create-new-event-form',
+        'enctype' => 'multipart/form-data'
+    ]); ?>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header d-flex justify-content-between px-3">
+                <h6 class="modal-title mb-0" id="newEventModalLabel">Add New Event</h6>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="eventName">Event Name</label>
+                    <input type="text" class="form-control" id="eventName" name="event_name" required>
+                </div>
+            </div>
+            <div style="margin-top:-20px;" class="modal-footer">
+                <button type="submit" class="btn btn-primary">Save Event</button>
+            </div>
+        </div>
+    </div>
+    <?php echo form_close(); ?>
+</div>
+
+<?php init_tail(); ?>
+<script>
+    $(document).ready(function () {
+
+        // When event is selected, fetch locations
+        $('#event_name_id').change(function () {
+            const eventNameId = $(this).val();
+
+            if (eventNameId) {
+                $.ajax({
+                    url: '<?= base_url('admin/events_due/locations') ?>',
+                    type: 'POST',
+                    data: {event_name_id: eventNameId},
+                    dataType: 'json',
+                    success: function (response) {
+                        console.log('Response:', response);
+
+                        $('#location_id').empty().append('<option value="">Select Location</option>');
+
+                        if (response.success) {
+                            $.each(response.data, function (key, value) {
+                                $('#location_id').append('<option value="' + value.id + '">' + value.name + '</option>');
+                            });
+                        } else {
+                            console.error('Error:', response.error);
+                            alert('Error: ' + response.error);
+                        }
+
+                        $('#location_id').selectpicker('refresh');
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('AJAX Error:', status, error, xhr);
+                        alert('Failed to fetch locations. Please try again.');
+                    }
+                });
+            } else {
+                $('#location_id').empty().append('<option value="">Select Location</option>');
+                $('#location_id').selectpicker('refresh');
+            }
+        });
+
+
+        // When location is selected, fetch venues
+        $('#location_id').change(function () {
+            const locationId = $(this).val();
+
+            if (locationId) {
+                $.ajax({
+                    url: '<?= base_url('admin/events_due/venues') ?>',
+                    type: 'POST',
+                    data: {location_id: locationId},
+                    dataType: 'json',
+                    success: function (response) {
+
+                        $('#venue_id').empty().append('<option value="">Select Venue</option>');
+
+                        if (response.success) {
+                            $.each(response.data, function (key, value) {
+                                $('#venue_id').append('<option value="' + value.id + '">' + value.name + '</option>');
+                            });
+                        } else {
+                            console.error('Error:', response.error);
+                            alert('Error: ' + response.error);
+                        }
+
+                        $('#venue_id').selectpicker('refresh');
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('AJAX Error:', status, error, xhr);
+                        alert('Failed to fetch locations. Please try again.');
+                    }
+                });
+            } else {
+                $('#venue_id').empty().append('<option value="">Select Location</option>');
+                $('#venue_id').selectpicker('refresh');
+            }
+        });
+
+        // when venue and location is set choose setup
+        $('#venue_id').change(function () {
+
+            const eventNameId = $('#event_name_id').val();
+            const locationId = $('#location_id').val();
+            const venueId = $(this).val();
+
+            if (venueId) {
+                $.ajax({
+                    url: '<?= base_url('admin/events_due/setups') ?>',
+                    type: 'POST',
+                    data: {
+                        event_name_id: eventNameId,
+                        location_id: locationId,
+                        venue_id: venueId,
+                    },
+                    dataType: 'json',
+                    success: function (response) {
+                        $('#setup').empty().append('<option value="">Select Setup</option>');
+                        $.each(response.data, function (key, value) {
+                            $('#setup').append('<option value="' + value.setup + '">' + value.setup + '</option>');
+                        });
+                        $('#setup').selectpicker('refresh');
+                    }
+                });
+            }
+        });
+
+        // when venue and location is set choose setup
+        $('#venue_id').change(function () {
+
+            const eventNameId = $('#event_name_id').val();
+            const locationId = $('#location_id').val();
+            const venueId = $(this).val();
+
+            if (venueId) {
+                $.ajax({
+                    url: '<?= base_url('admin/events_due/durations') ?>',
+                    type: 'POST',
+                    data: {
+                        event_name_id: eventNameId,
+                        location_id: locationId,
+                        venue_id: venueId,
+                    },
+                    dataType: 'json',
+                    success: function (response) {
+                        $('#duration').empty().append('<option value="">Select Setup</option>');
+                        $.each(response.data, function (key, value) {
+                            $('#duration').append('<option value="' + value + '">' + value + '</option>');
+                        });
+                        $('#duration').selectpicker('refresh');
+                    }
+                });
+            }
+        });
+    });
+</script>

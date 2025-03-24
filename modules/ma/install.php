@@ -719,3 +719,46 @@ if (!$CI->db->field_exists('confirm' ,db_prefix() . 'ma_email_logs')) {
 }
 
 add_option('ma_unlayer_custom_fonts', '');
+
+if (!$CI->db->field_exists('failed_debugger' ,db_prefix() . 'ma_email_logs')) {
+    $CI->db->query('ALTER TABLE `' . db_prefix() . 'ma_email_logs`
+          ADD COLUMN `failed_debugger` TEXT NULL');
+}
+
+if (!$CI->db->field_exists('subject' ,db_prefix() . 'ma_email_designs')) {
+    $CI->db->query('ALTER TABLE `' . db_prefix() . 'ma_email_designs`
+          ADD COLUMN `subject` TEXT NULL');
+}
+
+if (!$CI->db->table_exists(db_prefix() . 'ma_smtp_configs')) {
+    $CI->db->query('CREATE TABLE ' . db_prefix() . "ma_smtp_configs (
+      `id` INT(11) NOT NULL AUTO_INCREMENT,
+      `name` TEXT NOT NULL,
+      `configs` TEXT NULL,
+      `is_default` TINYINT(11) NOT NULL DEFAULT 0,
+      `addedfrom` INT(11) NULL,
+      `dateadded` DATETIME NOT NULL,
+      PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=" . $CI->db->char_set . ';');
+}
+
+if (!$CI->db->field_exists('smtp_config' ,db_prefix() . 'ma_campaigns')) {
+    $CI->db->query('ALTER TABLE `' . db_prefix() . 'ma_campaigns`
+          ADD COLUMN `smtp_config` int(11) NULL,
+          ADD COLUMN `email_limit_config` int(11) NULL'
+      );
+}
+
+if (!$CI->db->table_exists(db_prefix() . 'ma_email_limit_configs')) {
+    $CI->db->query('CREATE TABLE ' . db_prefix() . "ma_email_limit_configs (
+      `id` INT(11) NOT NULL AUTO_INCREMENT,
+      `name` TEXT NOT NULL,
+      `configs` TEXT NULL,
+      `is_default` TINYINT(11) NOT NULL DEFAULT 0,
+      `addedfrom` INT(11) NULL,
+      `dateadded` DATETIME NOT NULL,
+      PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=" . $CI->db->char_set . ';');
+}
+
+add_option('ma_unlayer_project_id');

@@ -4,53 +4,104 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Event_model extends App_Model
 {
-    private $table = 'events_due_events';
+    private $table;
 
     public function __construct()
     {
         parent::__construct();
+        $this->table = db_prefix() . '_events';
+
     }
 
-    public function get($event_id=null)
+    public function get($id = null)
+    {
+        if ($id) {
+            $this->db->where('id', $id);
+            return $this->db->get($this->table)->row_array();
+        }
+        return $this->db->get($this->table)->result();
+    }
+
+    public function add($data): bool|int
+    {
+        if ($this->db->insert($this->table, $data)) {
+            return $this->db->insert_id();
+        } else {
+            // Log the error for debugging purposes
+            log_message('error', 'Insert failed for shipment stop: ' . $this->db->last_query());
+            return false;
+        }
+    }
+
+    public function event_details($event_id = null)
     {
         $this->db->select('
-        tblevents_due_events.id,
+        tblevents_due_events.event_id,
         tblevents_due_events.start_date,
         tblevents_due_events.end_date,
         tblevents_due_events.setup,
-        tblevents_due_events.duration,
         tblevents_due_events.division,
         tblevents_due_events.type,
-        tblevents_due_events.cost_net,
-        tblevents_due_name.event_name AS event_name,
-        tblevents_due_locations.name AS location,
-        tblevents_due_venues.name AS venue
+        tblevents_due_events.revenue,
+        tblevents_due_name.name AS event_name,
+        tblevents_due_events.location,
+        tblevents_due_events.venue,
+        tblevents_due_events.organization,
+        tblevents_due_registrations.clients AS serialized_clients
     ');
-        $this->db->from(db_prefix() . 'events_due_events AS tblevents_due_events');
-        $this->db->join(db_prefix() . 'events_due_name AS tblevents_due_name', 'tblevents_due_events.event_name_id = tblevents_due_name.id', 'left');
-        $this->db->join(db_prefix() . 'events_due_locations AS tblevents_due_locations', 'tblevents_due_events.location_id = tblevents_due_locations.id', 'left');
-        $this->db->join(db_prefix() . 'events_due_venues AS tblevents_due_venues', 'tblevents_due_events.venue_id = tblevents_due_venues.id', 'left');
+
+        $this->db->from(db_prefix() . '_events_details AS tblevents_due_events');
+        $this->db->join(db_prefix() . '_events AS tblevents_due_name', 'tblevents_due_events.event_id = tblevents_due_name.id', 'left');
+        $this->db->join(db_prefix() . 'events_due_registrations AS tblevents_due_registrations', 'tblevents_due_events.id = tblevents_due_registrations.event_detail_id', 'inner');
 
         if ($event_id) {
-            $this->db->where('tbl_events_due_events.id', $event_id);
+            $this->db->where('tblevents_due_events.id', $event_id);
         }
 
         return $this->db->get()->result();
+
     }
 
 
-    public function create($data)
+    public function update($id, $data): bool
     {
-        return $this->db->insert(db_prefix() . $this->table, $data);
-    }
-
-    public function update($id, $data)
-    {
-        return $this->db->where('id', $id)->update(db_prefix() . $this->table, $data);
+        $this->db->where('id', $id);
+        return $this->db->update($this->table, $data);
     }
 
     public function delete($id)
     {
-        return $this->db->where('id', $id)->delete(db_prefix() . $this->table);
+        $this->db->where('id', $id);
+        return $this->db->delete($this->table);
     }
+
+
+    /**
+     * Get or create an event and return its event_id
+     *
+     * @param array $data Event details (e.g., ['name' => 'Some Event', 'location' => 'XYZ'])
+     * @return int|false The event ID or false on failure
+     */
+    public function getOrCreateEventId($data)
+    {
+        if (!isset($data['name']) || empty($data['name'])) {
+            return false; // Event name is required
+        }
+
+        // Check if the event already exists
+        $this->db->where('name', $data['name']);
+        $existingEvent = $this->db->get($this->table)->row_array();
+
+        if ($existingEvent) {
+            return $existingEvent['id']; // Return existing event_id
+        }
+
+        // Insert a new event if it doesn't exist
+        if ($this->db->insert($this->table, $data)) {
+            return $this->db->insert_id(); // Return new event_id
+        }
+
+        return false; // Return false if insertion failed
+    }
+
 }

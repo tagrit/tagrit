@@ -93,6 +93,11 @@
                                 <?php echo _l('test_campaign'); ?>
                              </a>
                           </li>
+                          <li role="presentation" >
+                             <a href="#configs" aria-controls="configs" role="tab" id="tab_expiry_date" data-toggle="tab">
+                                <?php echo _l('configs'); ?>
+                             </a>
+                          </li>
                       </ul>
                       </div>
                   </div>
@@ -334,7 +339,6 @@
                        array_push($table_data,$_t);
                       }
                      
-                      $table_data = hooks()->apply_filters('leads_table_columns', $table_data);
                       render_datatable($table_data,'leads-campaign',
                       array('customizable-table'),
                       array(
@@ -490,6 +494,18 @@
                       <?php }else{ ?>
                         <a href="#" onclick="test_campaign(); return false;" class="btn btn-primary mbot15"><?php echo _l('start_test'); ?></a>
                       <?php } ?>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="configs">
+                     <?php echo form_open_multipart(admin_url('ma/save_campaign_configs/'.$campaign->id),array('id'=>'test-campaign-form'));?>
+                     <div class="row">
+                     <div class="col-md-6">
+                      <?php $value = ( isset($campaign) ? $campaign->smtp_config : ''); ?>
+                      <?php echo render_select('smtp_config',$smtp_configs,array('id','name'), 'smtp_config', $value); ?>
+                      <?php $value = ( isset($campaign) ? $campaign->email_limit_config : ''); ?>
+                      <?php echo render_select('email_limit_config',$email_limit_configs,array('id','name'), 'email_limit_config', $value); ?>
+                        <button type="submit" class="btn btn-primary btn-submit"><?php echo _l('submit'); ?></button>
+                     </div>
+                     <?php echo form_close(); ?>  
                     </div>
                   </div>
                </div>

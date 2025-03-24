@@ -2,6 +2,7 @@
   "use strict";
 
 
+    $( document ).ready(function() {
   appValidateForm($('#text-messages-form'),{
     name:'required',
     category:'required',
@@ -11,5 +12,6 @@
     e.preventDefault();
     var textArea = $('textarea[name="' + $(this).data('to') + '"]');
     textArea.val(textArea.val() + $(this).text());
+  });
   });
 })(jQuery);

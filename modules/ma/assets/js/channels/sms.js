@@ -1,5 +1,6 @@
 (function($) {
   "use strict";
+    $( document ).ready(function() {
   appValidateForm($('#sms-form'),{
     name:'required',
     category:'required',
@@ -13,6 +14,7 @@
   $('select[name=sms_template]').on('change', function(){
     var id = $(this).val();
     get_exam_template(id);
+  });
   });
 
 })(jQuery);

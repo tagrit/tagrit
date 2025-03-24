@@ -1,11 +1,14 @@
 <div class="row">
-    <?php echo form_open('admin/event_due/settings/import_client_event_registration', ['id' => 'import-client-event-registration']); ?>
     <div class="col-md-12">
         <div class="panel_s">
             <div class="panel-body">
 
-                <div style="text-align:right;">
-                    <button style="margin-bottom:-20px;" type="submit" class="btn">Download Sample</button>
+                <div style="text-align:right; padding: 10px;">
+                    <a style="margin-bottom:-20px; padding: 10px 15px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px; display: inline-block;"
+                       class="btn"
+                       href="<?php echo admin_url('events_due/settings/download_sample'); ?>">
+                        Download Sample
+                    </a>
                 </div>
 
                 <div style="margin-bottom: 40px; max-height: 300px; overflow-y: auto; padding: 5px;">
@@ -20,6 +23,7 @@
                             <th style="border: 1px solid #ccc; padding: 8px; font-weight: bold;">Division</th>
                             <th style="border: 1px solid #ccc; padding: 8px; font-weight: bold;">Start Date</th>
                             <th style="border: 1px solid #ccc; padding: 8px; font-weight: bold;">End Date</th>
+                            <th style="border: 1px solid #ccc; padding: 8px; font-weight: bold;">Location</th>
                             <th style="border: 1px solid #ccc; padding: 8px; font-weight: bold;">Venue</th>
                             <th style="border: 1px solid #ccc; padding: 8px; font-weight: bold;">Name of Delegate</th>
                             <th style="border: 1px solid #ccc; padding: 8px; font-weight: bold;">Date & Month of Birth
@@ -43,6 +47,7 @@
                             <td style="border: 1px solid #ccc; padding: 8px;">Sample Data</td>
                             <td style="border: 1px solid #ccc; padding: 8px;">Sample Data</td>
                             <td style="border: 1px solid #ccc; padding: 8px;">Sample Data</td>
+                            <td style="border: 1px solid #ccc; padding: 8px;">Sample Data</td>
                         </tr>
                         </tbody>
                     </table>
@@ -51,6 +56,12 @@
                 <p style="font-size: 13px; font-weight: bold; margin-bottom: 15px;">
                     Import Clients Event Registrations
                 </p>
+
+                <?php echo form_open('admin/events_due/settings/upload_excel', [
+                    'id' => 'register-for-event-form',
+                    'enctype' => 'multipart/form-data'
+                ]); ?>
+
                 <div style="margin-bottom: 15px;">
                     <label for="csv_file"
                            style="font-size: 14px; vertical-align: middle; display: block; margin-bottom: 5px;">
@@ -60,8 +71,10 @@
                            style="width: 100%; padding: 8px; font-size: 16px; border: 1px solid #ccc; border-radius: 5px;">
                 </div>
                 <button style="margin-top:20px;" type="submit" class="btn btn-success">Import</button>
+
+                <?php echo form_close(); ?>
+
             </div>
         </div>
     </div>
-    <?php echo form_close(); ?>
 </div>

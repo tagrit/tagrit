@@ -65,6 +65,13 @@ jobs:
             git reset --hard origin/$BRANCH_NAME
             git pull origin $BRANCH_NAME --rebase --force
 
+            # Install dependencies,Ensure the correct PHP version is used
+            PHP_BIN="/opt/cpanel/ea-php82/root/usr/bin/php"
+
+            # Install dependencies using PHP 8.2
+            echo "📦 Running composer install with PHP 8.2..."
+            $PHP_BIN ~/bin/composer install --ignore-platform-req=ext-fileinfo
+
             echo "✅ Deployment to $DEPLOY_DIR completed successfully!"
           EOF
 
@@ -86,6 +93,10 @@ jobs:
             git fetch --all
             git reset --hard origin/master
             git pull origin master --rebase --force
+
+            # Install dependencies
+            echo "📦 Running composer install..."
+            composer install --no-dev --optimize-autoloader
 
             echo "✅ Deployment to DigitalOcean completed successfully!"
           EOF

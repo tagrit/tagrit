@@ -6,6 +6,7 @@ var fnServerParams = {};
         "point_action_id": '[name="point_action_id"]',
     }
 
+    $( document ).ready(function() {
     init_leads_table();
 
     $.get(admin_url + 'ma/get_data_point_action_chart/'+$('input[name=point_action_id]').val()).done(function(res) {
@@ -117,6 +118,7 @@ var fnServerParams = {};
         series: res.data_point_action_by_campaign.data
     });
   });
+    });
 })(jQuery);
 
 

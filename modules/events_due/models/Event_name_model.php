@@ -9,9 +9,10 @@ class Event_name_model extends App_Model
     public function __construct()
     {
         parent::__construct();
+
     }
 
-    public function get($id=null)
+    public function get($id = null)
     {
         if ($id) {
             return $this->db->where('id', $id)->get(db_prefix() . $this->table)->row_array();
@@ -34,5 +35,24 @@ class Event_name_model extends App_Model
     public function delete($id)
     {
         return $this->db->where('id', $id)->delete(db_prefix() . $this->table);
+    }
+
+    public function getOrCreateEventId($eventName)
+    {
+        // Check if the event already exists
+        $event_name= $this->db->where('event_name', $eventName)->get(db_prefix().$this->table)->row();
+
+        if ($event_name) {
+            return $event_name->id; // Return existing event ID
+        }
+
+        // Insert new event
+        $data = [
+            'event_name' => $eventName,
+        ];
+
+        $this->db->insert($this->table, $data);
+
+        return $this->db->insert_id(); // Return the newly inserted ID
     }
 }

@@ -4,7 +4,9 @@ var fnServerParams;
 
 		fnServerParams = {
     };
+    $( document ).ready(function() {
     init_point_triggers_table();
+    });
 
 })(jQuery);
 

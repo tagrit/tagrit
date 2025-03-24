@@ -1,6 +1,7 @@
 <script type="text/javascript">
 (function($) {
   "use strict";
+    $( document ).ready(function() {
     $.get(admin_url + 'ma/get_data_text_message_chart').done(function(res) {
     res = JSON.parse(res);
 
@@ -73,6 +74,7 @@
   });
 
   init_sms_log_table();
+  });
 })(jQuery);
 
 function init_sms_log_table() {

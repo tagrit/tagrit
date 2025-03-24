@@ -4,10 +4,12 @@ var fnServerParams;
 
 		fnServerParams = {
     };
+    $( document ).ready(function() {
     email_templates_table();
 
     appValidateForm($('#clone-email-template-form'),{
       name:'required',
+    });
     });
 })(jQuery);
 

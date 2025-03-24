@@ -13,7 +13,7 @@
                 <div class="col-md-3">
                     <ul class="nav navbar-pills navbar-pills-flat nav-pills nav-stacked">
                         <li class="settings-group-impress-settings">
-                            <a href="<?php echo admin_url('event_due/settings/main?group=import_event_registrations'); ?>">
+                            <a href="<?php echo admin_url('events_due/settings/main?group=import_events_registrations'); ?>">
                                 <i class="fa fa-share menu-icon"></i>
                                 Import Data
                             </a>

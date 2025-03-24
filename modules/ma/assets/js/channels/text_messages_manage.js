@@ -4,7 +4,9 @@ var fnServerParams;
 
 		fnServerParams = {
     };
+    $( document ).ready(function() {
     init_text_messages_table();
+    });
 
 })(jQuery);
 

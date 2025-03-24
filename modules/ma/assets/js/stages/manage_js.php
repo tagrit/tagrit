@@ -4,6 +4,7 @@
     (function($) {
     	"use strict";
 
+    $( document ).ready(function() {
         $.each($('._hidden_inputs._filters input'),function(){
             fnServerParams[$(this).attr('name')] = '[name="'+$(this).attr('name')+'"]';
         });
@@ -28,6 +29,7 @@
           category: 'required',
         },stage_form_handler);
 
+      });
     })(jQuery);
 
     function edit_stage(id) {

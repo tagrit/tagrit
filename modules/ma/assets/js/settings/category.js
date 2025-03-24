@@ -4,6 +4,7 @@ var fnServerParams;
 
 		fnServerParams = {
     };
+    $( document ).ready(function() {
     init_category_table();
 
     $('.add-new-category').on('click', function(){
@@ -21,6 +22,7 @@ var fnServerParams;
       name: 'required',
       type: 'required',
     },category_form_handler);
+    });
     
 })(jQuery);
 

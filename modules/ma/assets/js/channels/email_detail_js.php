@@ -6,6 +6,7 @@ var fnServerParams = {};
         "email_id": '[name="email_id"]',
     }
 
+    $( document ).ready(function() {
     init_leads_table();
    $.get(admin_url + 'ma/get_data_email_chart/'+$('input[name=email_id]').val()).done(function(res) {
     res = JSON.parse(res);
@@ -100,6 +101,7 @@ var fnServerParams = {};
       to_language: 'required',
     });
 
+  });
   })(jQuery);
 
 function send_example(invoker) {

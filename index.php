@@ -2,6 +2,10 @@
 if (!ini_get('date.timezone')) {
     date_default_timezone_set('GMT');
 }
+
+// Load Composer autoload globally
+require_once __DIR__ . '/vendor/autoload.php';
+
 /**
  * CodeIgniter
  *

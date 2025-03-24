@@ -26,6 +26,8 @@
                     echo '<i class=" fa fa-sliders menu-icon" aria-hidden="true"></i>';
                 }elseif ($gr == 'unlayer_custom_fonts') {
                     echo '<i class=" fa fa-file-code menu-icon" aria-hidden="true"></i>';
+                }elseif ($gr == 'unlayer') {
+                    echo '<i class=" fa fa-th menu-icon" aria-hidden="true"></i>';
                 } ?>
                 <?php echo _l($gr); ?>
               </a>
