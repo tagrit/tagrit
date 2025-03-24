@@ -32,7 +32,7 @@ $db_config = [
         'BASE_URL'  => 'http://localhost/tagrit/',
         'USERNAME'  => 'root',
         'PASSWORD'  => '',
-        'DB_NAME'   => 'tagrit_main'
+        'DB_NAME'   => 'tagrit'
     ],
     'dev' => [
         'BASE_URL'  => 'https://dev.tagrit.com/',

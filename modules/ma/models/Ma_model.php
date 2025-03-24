@@ -1634,6 +1634,10 @@ class Ma_model extends App_Model
             $this->db->where('campaign_id', $id);
             $this->db->delete(db_prefix() . 'ma_point_action_logs');
 
+            $this->db->where('campaign_id', $id);
+            $this->db->where('delivery = 0 AND failed = 0 AND email IS NOT NULL');
+            $this->db->delete(db_prefix() . 'ma_email_logs');
+
             return true;
         }
 
@@ -2148,7 +2152,7 @@ class Ma_model extends App_Model
         $campaign = $this->get_campaign($id);
         $workflow = json_decode(json_decode($campaign->workflow ?? '') ?? '', true);
         
-        if(!isset($workflow['drawflow']['Home']['data'])){
+        if(!isset($workflow['drawflow']['Home']['data']) || $campaign->published != 1){
             return false;
         }
 
@@ -2208,7 +2212,6 @@ class Ma_model extends App_Model
      */
     public function run_workflow_node($data){
         $output = $this->check_workflow_node_log($data);
-        
         if(!$output){
             switch ($data['node']['class']) {
                 case 'email':
@@ -2321,17 +2324,19 @@ class Ma_model extends App_Model
             switch ($data['node']['data']['complete_action']) {
                 case 'right_away':
                     $email = $this->get_email($data['node']['data']['email']);
-                    $log_id = $this->save_email_log([
-                        'lead_id' => (isset($data['lead']) ? $data['lead']['id'] : 0), 
-                        'client_id' => (isset($data['client']) ? $data['client']['userid'] : 0), 
-                        'email_id' => $email->id, 
-                        'email_template_id' => $email->email_template, 
-                        'campaign_id' => $data['campaign']->id,
-                        'email' => $data['contact']['email'],
-                    ]);
-                    
-                    if($testing || get_option('ma_email_sending_limit') != 1){
-                        $this->ma_send_email($data['contact']['email'], $email, $data, $log_id);
+                    if($email){
+                        $log_id = $this->save_email_log([
+                            'lead_id' => (isset($data['lead']) ? $data['lead']['id'] : 0), 
+                            'client_id' => (isset($data['client']) ? $data['client']['userid'] : 0), 
+                            'email_id' => $email->id, 
+                            'email_template_id' => $email->email_template, 
+                            'campaign_id' => $data['campaign']->id,
+                            'email' => $data['contact']['email'],
+                        ]);
+                        
+                        if($testing || get_option('ma_email_sending_limit') != 1){
+                            $this->ma_send_email($data['contact']['email'], $email, $data, $log_id);
+                        }
                     }
 
                     return true;
@@ -2348,30 +2353,38 @@ class Ma_model extends App_Model
 
                     foreach ($data['node']['inputs']['input_1']['connections'] as $connection) {
                         $this->db->where('campaign_id', $data['campaign']->id);
-                        if(isset($data['lead'])){
-                            $this->db->where('lead_id', $data['lead']['id']);
+
+                        if($testing){
+                            $this->db->where('node_id', $connection['node']);
+                            $logs = $this->db->get(db_prefix().'ma_campaign_test_logs')->row();
                         }else{
-                            $this->db->where('client_id', $data['client']['id']);
+                            if(isset($data['lead'])){
+                                $this->db->where('lead_id', $data['lead']['id']);
+                            }else{
+                                $this->db->where('client_id', $data['client']['id']);
+                            }
+                            $this->db->where('node_id', $connection['node']);
+                            $logs = $this->db->get(db_prefix().'ma_campaign_flows')->row();
                         }
-                        $this->db->where('node_id', $connection['node']);
-                        $logs = $this->db->get(db_prefix().'ma_campaign_flows')->row();
 
                         if($logs){
                             $time = date('Y-m-d H:i:s', strtotime($logs->dateadded." +".$data['node']['data']['waiting_number']." ".$data['node']['data']['waiting_type']));
 
                             if(date('Y-m-d H:i:s') >= $time){
                                 $email = $this->get_email($data['node']['data']['email']);
-                                $log_id = $this->save_email_log([
-                                    'lead_id' => (isset($data['lead']) ? $data['lead']['id'] : 0), 
-                                    'client_id' => (isset($data['client']) ? $data['client']['userid'] : 0), 
-                                    'email_id' => $email->id, 
-                                    'email_template_id' => $email->email_template, 
-                                    'campaign_id' => $data['campaign']->id,
-                                    'email' => $data['contact']['email'],
-                                ]);
+                                if($email){
+                                    $log_id = $this->save_email_log([
+                                        'lead_id' => (isset($data['lead']) ? $data['lead']['id'] : 0), 
+                                        'client_id' => (isset($data['client']) ? $data['client']['userid'] : 0), 
+                                        'email_id' => $email->id, 
+                                        'email_template_id' => $email->email_template, 
+                                        'campaign_id' => $data['campaign']->id,
+                                        'email' => $data['contact']['email'],
+                                    ]);
 
-                                if($testing || get_option('ma_email_sending_limit') != 1){
-                                    $this->ma_send_email($data['contact']['email'], $email, $data, $log_id);
+                                    if($testing || get_option('ma_email_sending_limit') != 1){
+                                        $this->ma_send_email($data['contact']['email'], $email, $data, $log_id);
+                                    }
                                 }
 
                                 return true;
@@ -2385,17 +2398,19 @@ class Ma_model extends App_Model
 
                     if(date('Y-m-d H:i:s') >= $time){
                         $email = $this->get_email($data['node']['data']['email']);
-                        $log_id = $this->save_email_log([
-                            'lead_id' => (isset($data['lead']) ? $data['lead']['id'] : 0), 
-                            'client_id' => (isset($data['client']) ? $data['client']['userid'] : 0), 
-                            'email_id' => $email->id, 
-                            'email_template_id' => $email->email_template, 
-                            'campaign_id' => $data['campaign']->id,
-                            'email' => $data['contact']['email'],
-                        ]);
+                        if($email){
+                            $log_id = $this->save_email_log([
+                                'lead_id' => (isset($data['lead']) ? $data['lead']['id'] : 0), 
+                                'client_id' => (isset($data['client']) ? $data['client']['userid'] : 0), 
+                                'email_id' => $email->id, 
+                                'email_template_id' => $email->email_template, 
+                                'campaign_id' => $data['campaign']->id,
+                                'email' => $data['contact']['email'],
+                            ]);
 
-                        if($testing || get_option('ma_email_sending_limit') != 1){
-                            $success = $this->ma_send_email($data['contact']['email'], $email, $data, $log_id);
+                            if($testing || get_option('ma_email_sending_limit') != 1){
+                                $success = $this->ma_send_email($data['contact']['email'], $email, $data, $log_id);
+                            }
                         }
 
                         return true;
@@ -2403,21 +2418,23 @@ class Ma_model extends App_Model
 
                     break;
                 case 'exact_time_and_date':
-                    $time = $data['node']['data']['exact_time_and_date'];
+                    $time = to_sql_date($data['node']['data']['exact_time_and_date'], true);
 
                     if(date('Y-m-d H:i:s') >= $time){
                         $email = $this->get_email($data['node']['data']['email']);
-                        $log_id = $this->save_email_log([
-                            'lead_id' => (isset($data['lead']) ? $data['lead']['id'] : 0), 
-                            'client_id' => (isset($data['client']) ? $data['client']['userid'] : 0), 
-                            'email_id' => $email->id, 
-                            'email_template_id' => $email->email_template, 
-                            'campaign_id' => $data['campaign']->id,
-                            'email' => $data['contact']['email'],
-                        ]);
+                        if($email){
+                            $log_id = $this->save_email_log([
+                                'lead_id' => (isset($data['lead']) ? $data['lead']['id'] : 0), 
+                                'client_id' => (isset($data['client']) ? $data['client']['userid'] : 0), 
+                                'email_id' => $email->id, 
+                                'email_template_id' => $email->email_template, 
+                                'campaign_id' => $data['campaign']->id,
+                                'email' => $data['contact']['email'],
+                            ]);
 
-                        if($testing || get_option('ma_email_sending_limit') != 1){
-                            $success = $this->ma_send_email($data['contact']['email'], $email, $data, $log_id);
+                            if($testing || get_option('ma_email_sending_limit') != 1){
+                                $success = $this->ma_send_email($data['contact']['email'], $email, $data, $log_id);
+                            }
                         }
 
                         return true;
@@ -2524,7 +2541,7 @@ class Ma_model extends App_Model
 
                     break;
                 case 'exact_time_and_date':
-                    $time = $data['node']['data']['exact_time_and_date'];
+                    $time = to_sql_date($data['node']['data']['exact_time_and_date'], true);
 
                     if(date('Y-m-d H:i:s') >= $time){
                         $sms = $this->get_sms($data['node']['data']['sms']);
@@ -4119,82 +4136,94 @@ class Ma_model extends App_Model
             foreach($object as $id){
                 switch ($type) {
                     case 'point_action':
-                        $point_action = $this->get_point_action($id);
-                        if($point_action){
-                            $this->db->where('point_action_id', $id);
-                            $this->db->where('campaign_id', $campaign_id);
-                            $point_action->total = $this->db->count_all_results(db_prefix().'ma_point_action_logs');
-                            $data_return[] = $point_action;
+                        if (is_numeric($id)) {
+                            $point_action = $this->get_point_action($id);
+                            if($point_action){
+                                $this->db->where('point_action_id', $id);
+                                $this->db->where('campaign_id', $campaign_id);
+                                $point_action->total = $this->db->count_all_results(db_prefix().'ma_point_action_logs');
+                                $data_return[] = $point_action;
+                            }
                         }
                         break;
                     case 'email':
-                        $email_template = $this->get_email($id);
-                        if($email_template){
-                            $this->db->where('email_id', $id);
-                            $this->db->where('campaign_id', $campaign_id);
-                            $this->db->where('(lead_id != 0 or client_id != 0)');
-                            $this->db->where('(delivery = 1 OR failed = 1)');
-                            $email_template->total = $this->db->count_all_results(db_prefix().'ma_email_logs');
+                        if (is_numeric($id)) {
+                            $email_template = $this->get_email($id);
+                            if($email_template){
+                                $this->db->where('email_id', $id);
+                                $this->db->where('campaign_id', $campaign_id);
+                                $this->db->where('(lead_id != 0 or client_id != 0)');
+                                $this->db->where('(delivery = 1 OR failed = 1)');
+                                $email_template->total = $this->db->count_all_results(db_prefix().'ma_email_logs');
 
-                            $this->db->where('email_id', $id);
-                            $this->db->where('campaign_id', $campaign_id);
-                            $this->db->where('open', 1);
-                            $this->db->where('(lead_id != 0 or client_id != 0)');
-                            $this->db->where('(delivery = 1 OR failed = 1)');
-                            $email_template->open = $this->db->count_all_results(db_prefix().'ma_email_logs');
-                            $email_template->open_percent = $email_template->total != 0 ? round(($email_template->open/$email_template->total) * 100, 2) : 0;
+                                $this->db->where('email_id', $id);
+                                $this->db->where('campaign_id', $campaign_id);
+                                $this->db->where('open', 1);
+                                $this->db->where('(lead_id != 0 or client_id != 0)');
+                                $this->db->where('(delivery = 1 OR failed = 1)');
+                                $email_template->open = $this->db->count_all_results(db_prefix().'ma_email_logs');
+                                $email_template->open_percent = $email_template->total != 0 ? round(($email_template->open/$email_template->total) * 100, 2) : 0;
 
-                            $this->db->where('email_id', $id);
-                            $this->db->where('campaign_id', $campaign_id);
-                            $this->db->where('click', 1);
-                            $this->db->where('(lead_id != 0 or client_id != 0)');
-                            $this->db->where('(delivery = 1 OR failed = 1)');
-                            $email_template->click = $this->db->count_all_results(db_prefix().'ma_email_logs');
-                            $email_template->click_percent = $email_template->total != 0 ? round(($email_template->click/$email_template->total) * 100, 2) : 0;
+                                $this->db->where('email_id', $id);
+                                $this->db->where('campaign_id', $campaign_id);
+                                $this->db->where('click', 1);
+                                $this->db->where('(lead_id != 0 or client_id != 0)');
+                                $this->db->where('(delivery = 1 OR failed = 1)');
+                                $email_template->click = $this->db->count_all_results(db_prefix().'ma_email_logs');
+                                $email_template->click_percent = $email_template->total != 0 ? round(($email_template->click/$email_template->total) * 100, 2) : 0;
 
-                            $email_template->average_time_to_open = $this->get_average_time_to_open_email($campaign_id, $id);
-                            $data_return[] = $email_template;
+                                $email_template->average_time_to_open = $this->get_average_time_to_open_email($campaign_id, $id);
+                                $data_return[] = $email_template;
+                            }
                         }
                         break;
                     case 'segment':
-                        $segment = $this->get_segment($id);
-                        if($segment){
-                            $this->db->where('segment_id', $id);
-                            $this->db->where('campaign_id', $campaign_id);
-                            $segment->total = $this->db->count_all_results(db_prefix().'ma_lead_segments');
-                            $data_return[] = $segment;
+                        if (is_numeric($id)) {
+                            $segment = $this->get_segment($id);
+                            if($segment){
+                                $this->db->where('segment_id', $id);
+                                $this->db->where('campaign_id', $campaign_id);
+                                $segment->total = $this->db->count_all_results(db_prefix().'ma_lead_segments');
+                                $data_return[] = $segment;
+                            }
                         }
                         break;
 
                     case 'customer_segment':
-                        $segment = $this->get_segment($id);
-                        if($segment){
-                            $this->db->where('segment_id', $id);
-                            $this->db->where('campaign_id', $campaign_id);
-                            $segment->total = $this->db->count_all_results(db_prefix().'ma_lead_segments');
-                            $data_return[] = $segment;
+                        if (is_numeric($id)) {
+                            $segment = $this->get_segment($id);
+                            if($segment){
+                                $this->db->where('segment_id', $id);
+                                $this->db->where('campaign_id', $campaign_id);
+                                $segment->total = $this->db->count_all_results(db_prefix().'ma_lead_segments');
+                                $data_return[] = $segment;
+                            }
                         }
                         break;
 
                     case 'stage':
-                        $stage = $this->get_stage($id);
-                        if($stage){
-                            $this->db->where('stage_id', $id);
-                            $this->db->where('campaign_id', $campaign_id);
-                            $stage->total = $this->db->count_all_results(db_prefix().'ma_lead_stages');
-                            $stage->percent = $total_lead != 0 ? round(($stage->total / $total_lead) * 100, 2) : 0;
+                        if (is_numeric($id)) {
+                            $stage = $this->get_stage($id);
+                            if($stage){
+                                $this->db->where('stage_id', $id);
+                                $this->db->where('campaign_id', $campaign_id);
+                                $stage->total = $this->db->count_all_results(db_prefix().'ma_lead_stages');
+                                $stage->percent = $total_lead != 0 ? round(($stage->total / $total_lead) * 100, 2) : 0;
 
-                            $data_return[] = $stage;
+                                $data_return[] = $stage;
+                            }
                         }
                         break;
                     case 'sms':
-                        $sms = $this->get_sms($id);
-                        if($sms){
-                            $this->db->where('sms_id', $id);
-                            $this->db->where('campaign_id', $campaign_id);
-                            $sms->total = $this->db->count_all_results(db_prefix().'ma_sms_logs');
-                            
-                            $data_return[] = $sms;
+                        if (is_numeric($id)) {
+                            $sms = $this->get_sms($id);
+                            if($sms){
+                                $this->db->where('sms_id', $id);
+                                $this->db->where('campaign_id', $campaign_id);
+                                $sms->total = $this->db->count_all_results(db_prefix().'ma_sms_logs');
+                                
+                                $data_return[] = $sms;
+                            }
                         }
                         break;
                     
@@ -4545,8 +4574,15 @@ class Ma_model extends App_Model
             $merge_fields = array_merge($merge_fields, $this->leads_merge_fields->format($data['lead']['id']));
 
             $lead_name = $merge_fields['{lead_name}'];
-            $lead_last_name = (strpos($lead_name, '') === false) ? '' : preg_replace('#.*\s([\w-]*)$#', '$1', $lead_name);
-            $lead_first_name = trim(preg_replace('#'.preg_quote($lead_last_name, '#').'#', '', $lead_name));
+            $name_arr = explode(' ', $lead_name);
+            if(count($name_arr) == 1){
+                $lead_last_name = '';
+                $lead_first_name = $lead_name;
+            }else{
+                $lead_first_name = $name_arr[0];
+                unset($name_arr[0]);
+                $lead_last_name = implode(' ', $name_arr);
+            }
 
             $content = stripos($content ?? '', '{lead_first_name}') !== false
                 ? str_replace('{lead_first_name}', $lead_first_name, $content ?? '')
@@ -4561,8 +4597,20 @@ class Ma_model extends App_Model
                 ? str_replace($key, $val, $content ?? '')
                 : str_replace($key, '', $content ?? '');
             }
+        }elseif(isset($data['contact'])){
+            if(isset($data['contact']['name'])){
+                $lead_name = $data['contact']['name'];
+                $lead_last_name = (strpos($lead_name, '') === false) ? '' : preg_replace('#.*\s([\w-]*)$#', '$1', $lead_name);
+                $lead_first_name = trim(preg_replace('#'.preg_quote($lead_last_name, '#').'#', '', $lead_name));
 
+                $content = stripos($content ?? '', '{lead_first_name}') !== false
+                    ? str_replace('{lead_first_name}', $lead_first_name, $content ?? '')
+                    : str_replace('{lead_first_name}', '', $content ?? '');
 
+                $content = stripos($content ?? '', '{lead_last_name}') !== false
+                    ? str_replace('{lead_last_name}', $lead_last_name, $content ?? '')
+                    : str_replace('{lead_last_name}', '', $content ?? '');
+            }
         }
 
         if(isset($data['client'])){
@@ -4580,28 +4628,20 @@ class Ma_model extends App_Model
             $this->db->where('id', $log_id);
             $email_log = $this->db->get(db_prefix().'ma_email_logs')->row();
 
-            $dom = new DOMDocument();
-            $dom->loadHTML(html_entity_decode($content ?? ''), LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
-
-            // Lấy danh sách tất cả các thẻ a
-            $anchors = $dom->getElementsByTagName('a');
-
-            // Thêm sự kiện chuyển hướng vào mỗi thẻ a
-            foreach ($anchors as $anchor) {
-                $a_text = trim($anchor->nodeValue);
-                $href = $anchor->getAttribute('href');
-
-                if($a_text == 'ACCEPT_BTN'){
-                    $anchor->setAttribute('href', site_url('ma/ma_public/click/'.$email_log->hash.'?confirm=1&href='.$href));
-                }elseif($a_text == 'DECLINE_BTN'){
-                    $anchor->setAttribute('href', site_url('ma/ma_public/click/'.$email_log->hash.'?confirm=0&href='.$href));
-                }else{
-                    $anchor->setAttribute('href', site_url('ma/ma_public/click/'.$email_log->hash.'?href='.$href));
+            $a_content = explode('</a>', $content);
+            if(count($a_content) > 1){
+                foreach($a_content as $index => $value){
+                    if (strpos($value, 'ACCEPT_BTN') !== false) {
+                        $a_content[$index] = str_replace('<a href="', '<a href="'.site_url('ma/ma_public/click/'.$email_log->hash.'?confirm=1&href='), $value);
+                    }elseif (strpos($value, 'DECLINE_BTN') !== false) {
+                        $a_content[$index] =str_replace('<a href="', '<a href="'.site_url('ma/ma_public/click/'.$email_log->hash.'?confirm=0&href='), $value);
+                    }else{
+                        $a_content[$index] =str_replace('<a href="', '<a href="'.site_url('ma/ma_public/click/'.$email_log->hash.'?href='), $value);
+                    }
                 }
             }
 
-            // Chuyển đổi DOMDocument trở lại chuỗi HTML
-            $content = $dom->saveHTML();
+            $content = implode('</a>', $a_content);
             $content = str_replace('ACCEPT_BTN', _l('accept'), $content ?? '');
             $content = str_replace('DECLINE_BTN', _l('decline'), $content ?? '');
             
@@ -4828,7 +4868,7 @@ class Ma_model extends App_Model
     public function email_design_save($data){
         if(isset($data['id']) && $data['id'] != ''){
             $this->db->where('id', $data['id']);
-            $this->db->update(db_prefix() . 'ma_email_designs', ['data_html' => json_encode($data['data_html']), 'data_design' => json_encode($data['data_design'])]);
+            $this->db->update(db_prefix() . 'ma_email_designs', ['subject' => $data['subject'], 'data_html' => json_encode($data['data_html']), 'data_design' => json_encode($data['data_design'])]);
 
             if ($this->db->affected_rows() > 0) {
                 return true;
@@ -5091,8 +5131,7 @@ class Ma_model extends App_Model
     {   
         $this->load->model('emails_model');
 
-        $subject = $ma_email_object->subject;
-
+        $subject = $this->get_email_subject_by_contact($ma_email_object->id, $data, $email_design_id);
         $content = $this->get_email_content_by_contact($ma_email_object->id, $data, $email_design_id);
 
         $message = $this->parse_content_merge_fields(json_decode($content ?? ''), $data, $log_id);
@@ -5101,8 +5140,6 @@ class Ma_model extends App_Model
         if($ma_email_object->from_name != ''){
             $from_name = $ma_email_object->from_name;
         }
-
-        
 
         $bcc_address = '';
         if($ma_email_object->bcc_address != ''){
@@ -5120,30 +5157,53 @@ class Ma_model extends App_Model
 
         $from_email = get_option('smtp_email');
 
+        $systemBCC = '';
         $this->load->config('email');
         if(get_option('ma_smtp_type') == 'other_smtp'){
-            $from_email = trim(get_option('ma_smtp_email'));
-
-            $this->email->useragent  = trim(get_option('ma_mail_engine'));
-            $this->email->protocol  = trim(get_option('ma_email_protocol'));
-            $this->email->smtp_crypto  = trim(get_option('ma_smtp_encryption'));
-            $this->email->smtp_host  = trim(get_option('ma_smtp_host'));
-
-            if (get_option('ma_smtp_username') == '') {
-                $this->email->smtp_user    = trim(get_option('ma_smtp_email'));
-            } else {
-                $this->email->smtp_user    = trim(get_option('ma_smtp_username'));
+            if(isset($data['campaign']) && is_numeric($data['campaign']->smtp_config)){
+                $smtp_config = $this->get_smtp_configs($data['campaign']->smtp_config);
             }
 
-            $charset = strtoupper(get_option('ma_smtp_email_charset'));
+            if(!isset($smtp_config)){
+                $smtp_config = $this->get_base_smtp_configs();
+            }
+
+            $config_option = json_decode($smtp_config->configs ?? '', true);
+            $ma_mail_engine = isset($config_option['ma_mail_engine']) ? $config_option['ma_mail_engine'] : '';
+            $ma_email_protocol = isset($config_option['ma_email_protocol']) ? $config_option['ma_email_protocol'] : '';
+            $ma_smtp_encryption = isset($config_option['ma_smtp_encryption']) ? $config_option['ma_smtp_encryption'] : '';
+            $ma_smtp_host = isset($config_option['ma_smtp_host']) ? $config_option['ma_smtp_host'] : '';
+            $ma_smtp_port = isset($config_option['ma_smtp_port']) ? $config_option['ma_smtp_port'] : '';
+            $ma_smtp_email = isset($config_option['ma_smtp_email']) ? $config_option['ma_smtp_email'] : '';
+            $ma_smtp_username = isset($config_option['ma_smtp_username']) ? $config_option['ma_smtp_username'] : '';
+            $ma_smtp_password = isset($config_option['ma_smtp_password']) ? $config_option['ma_smtp_password'] : '';
+            $ma_smtp_email_charset = isset($config_option['ma_smtp_email_charset']) ? $config_option['ma_smtp_email_charset'] : '';
+            $ma_bcc_emails = isset($config_option['ma_bcc_emails']) ? $config_option['ma_bcc_emails'] : '';
+
+            $from_email = trim($ma_smtp_email);
+
+            $this->email->useragent  = trim($ma_mail_engine);
+            $this->email->protocol  = trim($ma_email_protocol);
+            $this->email->smtp_crypto  = trim($ma_smtp_encryption);
+            $this->email->smtp_host  = trim($ma_smtp_host);
+
+            if ($ma_smtp_username == '') {
+                $this->email->smtp_user    = trim($ma_smtp_email);
+            } else {
+                $this->email->smtp_user    = trim($ma_smtp_username);
+            }
+
+            $charset = strtoupper($ma_smtp_email_charset);
             $charset = trim($charset);
             if ($charset == '' || strcasecmp($charset,'utf8') == 'utf8') {
                 $charset = 'utf-8';
             }
 
             $this->email->charset  = $charset;
-            $this->email->smtp_pass  = $this->encryption->decrypt(get_option('ma_smtp_password'));
-            $this->email->smtp_port  = trim(get_option('ma_smtp_port'));
+            $this->email->smtp_pass  = $ma_smtp_password;
+            $this->email->smtp_port  = trim($ma_smtp_port);
+            $systemBCC = $ma_bcc_emails;
+
         }
 
         if($ma_email_object->from_address != ''){
@@ -5176,7 +5236,6 @@ class Ma_model extends App_Model
             }
         }
 
-        $systemBCC = get_option('ma_bcc_emails');
         if ($systemBCC != '') {
             if ($bcc != '') {
                 $bcc .= ', ' . $systemBCC;
@@ -5238,6 +5297,7 @@ class Ma_model extends App_Model
         $this->email->set_alt_message(strip_html_tags($cnf['message'], '<br/>, <br>, <br />'));       
         if (!filter_var($cnf['email'], FILTER_VALIDATE_EMAIL)) {
             $success = false;
+            $failed_debugger = 'Invalid email';
         }else{
             $success = $this->email->send();
         }
@@ -5254,7 +5314,7 @@ class Ma_model extends App_Model
         }else{
             if($log_id != ''){
                 $this->db->where('id', $log_id);
-                $this->db->update(db_prefix().'ma_email_logs', ['failed' => 1, 'failed_time' => date('Y-m-d H:i:s')]);
+                $this->db->update(db_prefix().'ma_email_logs', ['failed' => 1, 'failed_time' => date('Y-m-d H:i:s'), 'failed_debugger' => $failed_debugger ?? $this->email->print_debugger()]);
             }
         }
 
@@ -5463,6 +5523,7 @@ class Ma_model extends App_Model
             $this->db->update(db_prefix() . 'ma_email_designs', [
                 'data_design' => $design->data_design,
                 'data_html' => $design->data_html,
+                'subject' => $design->subject,
             ]);
 
             if ($this->db->affected_rows() > 0) {
@@ -5474,6 +5535,7 @@ class Ma_model extends App_Model
                 'language' => $data['to_language'],
                 'data_design' => $design->data_design,
                 'data_html' => $design->data_html,
+                'subject' => $design->subject,
             ]);
             $insert_id = $this->db->insert_id();
             if ($insert_id) {
@@ -5785,6 +5847,50 @@ class Ma_model extends App_Model
             }
         }
 
+        return '';
+    }
+
+    /**
+     * get email content by contact
+     * @param  integer $email_id 
+     * @param  integer $lead   
+     * @return string       
+     */
+    public function get_email_subject_by_contact($email_id, $data, $email_design_id = ''){
+        if($email_design_id == ''){
+            $language = '';
+            if(isset($data['lead'])){
+                $language = $data['lead']['default_language'];
+            }elseif(isset($data['client'])){
+                $language = $data['client']['default_language'];
+            }
+
+            if($language == ''){
+                $language = get_option('active_language');
+            }
+
+            $this->db->where('email_id', $email_id);
+            $this->db->where('language', $language);
+            $design = $this->db->get(db_prefix().'ma_email_designs')->row();
+            
+            if ($design) {
+                return $design->subject;
+            }else{
+                $this->db->where('email_id', $email_id);
+                $design2 = $this->db->get(db_prefix().'ma_email_designs')->row();
+
+                if ($design2) {
+                    return $design2->subject;
+                }
+            }
+        }else{
+            $this->db->where('id', $email_design_id);
+            $design = $this->db->get(db_prefix().'ma_email_designs')->row();
+
+            if ($design) {
+                return $design->subject;
+            }
+        }
 
         return '';
     }
@@ -6216,13 +6322,35 @@ class Ma_model extends App_Model
         return $affectedRows;
     }
 
-    public function check_email_sending_limit(){
+    public function check_email_sending_limit($email_log){
         if(get_option('ma_email_sending_limit') == 1){
-            $time = date('Y-m-d H:i:s', strtotime("now -".get_option('ma_email_interval')." ".get_option('ma_email_repeat_every')));
+            $email_limit_config_id = $email_log['email_limit_config_id'];
+            $email_limit_config = $this->get_email_limit_configs($email_limit_config_id);
+
+            $config_option = json_decode($email_limit_config->configs ?? '', true);
+            $ma_email_limit = isset($config_option['ma_email_limit']) ? $config_option['ma_email_limit'] : '';
+            $ma_email_interval = isset($config_option['ma_email_interval']) ? $config_option['ma_email_interval'] : '';
+            $ma_email_repeat_every = isset($config_option['ma_email_repeat_every']) ? $config_option['ma_email_repeat_every'] : '';
+            $ma_second_sending_limit_choice = isset($config_option['ma_second_sending_limit_choice']) ? $config_option['ma_second_sending_limit_choice'] : '';
+
+            $ma_email_limit_2 = isset($config_option['ma_email_limit_2']) ? $config_option['ma_email_limit_2'] : '';
+            $ma_email_interval_2 = isset($config_option['ma_email_interval_2']) ? $config_option['ma_email_interval_2'] : '';
+            $ma_email_repeat_every_2 = isset($config_option['ma_email_repeat_every_2']) ? $config_option['ma_email_repeat_every_2'] : '';
+
+            $campaign_ids = $this->get_campaign_by_email_limit_config($email_limit_config->id, $email_limit_config->is_default, true);
+            $where_campaign = '';
+            if(count($campaign_ids) > 0){
+                $where_campaign = 'campaign_id IN ('.implode(',', $campaign_ids).')';
+            }
+
+            $time = date('Y-m-d H:i:s', strtotime("now -".$ma_email_interval." ".$ma_email_repeat_every));
             
             $this->db->where('(delivery_time >= "'.$time.'" OR failed_time >= "'.$time.'")');
             $this->db->where('(lead_id != 0 OR client_id != 0)');
             $this->db->where('(delivery = 1 OR failed = 1)');
+            if($where_campaign != ''){
+                $this->db->where($where_campaign);
+            }
             $this->db->where('bcc_address', 1);
             $count_bcc = $this->db->count_all_results(db_prefix().'ma_email_logs');
 
@@ -6230,11 +6358,43 @@ class Ma_model extends App_Model
             $this->db->where('(lead_id != 0 or client_id != 0)');
             $this->db->where('(delivery = 1 OR failed = 1)');
             $this->db->where('bcc_address', 0);
+            if($where_campaign != ''){
+                $this->db->where($where_campaign);
+            }
             $count = $this->db->count_all_results(db_prefix().'ma_email_logs');
 
             $total = $count + ($count_bcc * 2);
-            if($total >= get_option('ma_email_limit')){
+
+            if($total >= $ma_email_limit){
                 return false;
+            }
+
+            if($ma_second_sending_limit_choice == 1){
+                $time = date('Y-m-d H:i:s', strtotime("now -".$ma_email_interval_2." ".$ma_email_repeat_every_2));
+
+                $this->db->where('(delivery_time >= "'.$time.'" OR failed_time >= "'.$time.'")');
+                $this->db->where('(lead_id != 0 OR client_id != 0)');
+                $this->db->where('(delivery = 1 OR failed = 1)');
+                $this->db->where('bcc_address', 1);
+                if($where_campaign != ''){
+                    $this->db->where($where_campaign);
+                }
+                $count_bcc = $this->db->count_all_results(db_prefix().'ma_email_logs');
+
+                $this->db->where('(delivery_time >= "'.$time.'" OR failed_time >= "'.$time.'")');
+                $this->db->where('(lead_id != 0 or client_id != 0)');
+                $this->db->where('(delivery = 1 OR failed = 1)');
+                $this->db->where('bcc_address', 0);
+                if($where_campaign != ''){
+                    $this->db->where($where_campaign);
+                }
+                $count = $this->db->count_all_results(db_prefix().'ma_email_logs');
+
+                $total = $count + ($count_bcc * 2);
+
+                if($total >= $ma_email_limit_2){
+                    return false;
+                }
             }
         }
         return true;
@@ -6280,15 +6440,19 @@ class Ma_model extends App_Model
         if($email_log['lead_id'] != 0){
             $this->load->model('leads_model');
             $lead = $this->leads_model->get($email_log['lead_id']);
-            $data['lead'] = (array)$lead;
+            if($lead){
+                $data['lead'] = (array)$lead;
+            }
         }elseif($email_log['client_id'] != 0){
             $client = $this->clients_model->get($email_log['client_id']);
-            $data['client'] = (array)$client;
+            if($client){
+                $data['client'] = (array)$client;
+            }
         }
 
         $this->load->model('emails_model');
 
-        $subject = $ma_email_object->subject;
+        $subject = $this->get_email_subject_by_contact($ma_email_object->id, $data);
 
         $content = $this->get_email_content_by_contact($ma_email_object->id, $data);
 
@@ -6300,9 +6464,7 @@ class Ma_model extends App_Model
         }
 
         $from_email = get_option('smtp_email');
-        if($ma_email_object->from_address != ''){
-            $from_email = $ma_email_object->from_address;
-        }
+        
 
         $bcc_address = '';
         if($ma_email_object->bcc_address != ''){
@@ -6318,6 +6480,60 @@ class Ma_model extends App_Model
 
         $from_name = $this->parse_content_merge_fields($from_name, $data);
 
+        $systemBCC = '';
+        $this->load->config('email');
+        if(get_option('ma_smtp_type') == 'other_smtp'){
+            $campaign = $this->get_campaign($email_log['campaign_id']);
+            if(isset($campaign) && is_numeric($campaign->smtp_config)){
+                $smtp_config = $this->get_smtp_configs($campaign->smtp_config);
+            }
+
+            if(!isset($smtp_config)){
+                $smtp_config = $this->get_base_smtp_configs();
+            }
+
+            $config_option = json_decode($smtp_config->configs ?? '', true);
+            $ma_mail_engine = isset($config_option['ma_mail_engine']) ? $config_option['ma_mail_engine'] : '';
+            $ma_email_protocol = isset($config_option['ma_email_protocol']) ? $config_option['ma_email_protocol'] : '';
+            $ma_smtp_encryption = isset($config_option['ma_smtp_encryption']) ? $config_option['ma_smtp_encryption'] : '';
+            $ma_smtp_host = isset($config_option['ma_smtp_host']) ? $config_option['ma_smtp_host'] : '';
+            $ma_smtp_port = isset($config_option['ma_smtp_port']) ? $config_option['ma_smtp_port'] : '';
+            $ma_smtp_email = isset($config_option['ma_smtp_email']) ? $config_option['ma_smtp_email'] : '';
+            $ma_smtp_username = isset($config_option['ma_smtp_username']) ? $config_option['ma_smtp_username'] : '';
+            $ma_smtp_password = isset($config_option['ma_smtp_password']) ? $config_option['ma_smtp_password'] : '';
+            $ma_smtp_email_charset = isset($config_option['ma_smtp_email_charset']) ? $config_option['ma_smtp_email_charset'] : '';
+            $ma_bcc_emails = isset($config_option['ma_bcc_emails']) ? $config_option['ma_bcc_emails'] : '';
+
+
+            $from_email = trim($ma_smtp_email);
+
+            $this->email->useragent  = trim($ma_mail_engine);
+            $this->email->protocol  = trim($ma_email_protocol);
+            $this->email->smtp_crypto  = trim($ma_smtp_encryption);
+            $this->email->smtp_host  = trim($ma_smtp_host);
+
+            if ($ma_smtp_username == '') {
+                $this->email->smtp_user    = trim($ma_smtp_email);
+            } else {
+                $this->email->smtp_user    = trim($ma_smtp_username);
+            }
+
+            $charset = strtoupper($ma_smtp_email_charset);
+            $charset = trim($charset);
+            if ($charset == '' || strcasecmp($charset,'utf8') == 'utf8') {
+                $charset = 'utf-8';
+            }
+
+            $this->email->charset  = $charset;
+            $this->email->smtp_pass  = $ma_smtp_password;
+            $this->email->smtp_port  = trim($ma_smtp_port);
+            $systemBCC = $ma_bcc_emails;
+        }
+
+        if($ma_email_object->from_address != ''){
+            $from_email = $ma_email_object->from_address;
+        }
+
         $cnf = [
             'from_email' => $from_email,
             'from_name'  => $from_name,
@@ -6329,30 +6545,6 @@ class Ma_model extends App_Model
         ];
 
         $cnf['message'] = check_for_links($cnf['message']);
-
-        $this->load->config('email');
-        if(get_option('ma_smtp_type') == 'other_smtp'){
-            $this->email->useragent  = trim(get_option('ma_mail_engine'));
-            $this->email->protocol  = trim(get_option('ma_email_protocol'));
-            $this->email->smtp_crypto  = trim(get_option('ma_smtp_encryption'));
-            $this->email->smtp_host  = trim(get_option('ma_smtp_host'));
-
-            if (get_option('ma_smtp_username') == '') {
-                $this->email->smtp_user    = trim(get_option('ma_smtp_email'));
-            } else {
-                $this->email->smtp_user    = trim(get_option('ma_smtp_username'));
-            }
-
-            $charset = strtoupper(get_option('ma_smtp_email_charset'));
-            $charset = trim($charset);
-            if ($charset == '' || strcasecmp($charset,'utf8') == 'utf8') {
-                $charset = 'utf-8';
-            }
-
-            $this->email->charset  = $charset;
-            $this->email->smtp_pass  = $this->encryption->decrypt(get_option('ma_smtp_password'));
-            $this->email->smtp_port  = trim(get_option('ma_smtp_port'));
-        }
 
 
         $this->email->clear(true);
@@ -6369,7 +6561,6 @@ class Ma_model extends App_Model
             }
         }
 
-        $systemBCC = get_option('ma_bcc_emails');
         if ($systemBCC != '') {
             if ($bcc != '') {
                 $bcc .= ', ' . $systemBCC;
@@ -6436,21 +6627,27 @@ class Ma_model extends App_Model
             return true;
         }else{
             $this->db->where('id', $email_log['id']);
-            $this->db->update(db_prefix().'ma_email_logs', ['failed' => 1, 'failed_time' => date('Y-m-d H:i:s')]);
+            $this->db->update(db_prefix().'ma_email_logs', ['failed' => 1, 'failed_time' => date('Y-m-d H:i:s'), 'failed_debugger' => $this->email->print_debugger()]);
         }
 
         return false;
     }
 
     public function ma_cron_email_limit(){
-        $this->db->where('delivery = 0 AND failed = 0 AND email IS NOT NULL');
+        $this->db->select('*, '.db_prefix(). 'ma_email_logs.id as id, '.db_prefix(). 'ma_email_limit_configs.id as email_limit_config_id');
+        $this->db->where('(lead_id != 0 OR client_id != 0) AND delivery = 0 AND failed = 0 AND email IS NOT NULL');
+        $this->db->join(db_prefix() . 'ma_campaigns', '' . db_prefix() . 'ma_campaigns.id = ' . db_prefix() . 'ma_email_logs.campaign_id', 'left');
+        $this->db->join(db_prefix() . 'ma_email_limit_configs', '(' . db_prefix() . 'ma_email_limit_configs.id = ' . db_prefix() . 'ma_campaigns.email_limit_config OR (' . db_prefix() . 'ma_campaigns.email_limit_config IS NULL AND ' . db_prefix() . 'ma_email_limit_configs.is_default = 1))', 'left');
         $email_logs = $this->db->get(db_prefix(). 'ma_email_logs')->result_array();
-        
+
+        $email_limited = [];
         foreach ($email_logs as $log) {
-            if(!$this->check_email_sending_limit()){
-                break;
+
+            if(in_array($log['email_limit_config_id'], $email_limited) || !$this->check_email_sending_limit($log)){
+                $email_limited[] = $log['email_limit_config_id'];
+                continue;
             }
-            
+
             $this->ma_send_email_limit($log);
         }
 
@@ -6500,10 +6697,41 @@ class Ma_model extends App_Model
 
         $planned_time = '';
         if($email_waiting_sent > 0){
-            $ma_email_limit = get_option('ma_email_limit');
+            $campaign = $this->get_campaign($campaign_id);
+            if(isset($campaign) && is_numeric($campaign->email_limit_config)){
+                $email_limit_config = $this->get_email_limit_configs($campaign->email_limit_config);
+            }
+
+            if(!isset($email_limit_config)){
+                $email_limit_config = $this->get_base_email_limit_configs();
+            }
+
+            $config_option = json_decode($email_limit_config->configs ?? '', true);
+            $ma_email_limit = isset($config_option['ma_email_limit']) ? $config_option['ma_email_limit'] : '';
+            $ma_email_interval = isset($config_option['ma_email_interval']) ? $config_option['ma_email_interval'] : '';
+            $ma_email_repeat_every = isset($config_option['ma_email_repeat_every']) ? $config_option['ma_email_repeat_every'] : '';
+            $ma_second_sending_limit_choice = isset($config_option['ma_second_sending_limit_choice']) ? $config_option['ma_second_sending_limit_choice'] : '';
+
+            $ma_email_limit_2 = isset($config_option['ma_email_limit_2']) ? $config_option['ma_email_limit_2'] : '';
+            $ma_email_interval_2 = isset($config_option['ma_email_interval_2']) ? $config_option['ma_email_interval_2'] : '';
+            $ma_email_repeat_every_2 = isset($config_option['ma_email_repeat_every_2']) ? $config_option['ma_email_repeat_every_2'] : '';
+
+            $ma_email_limit = $ma_email_limit;
             if($ma_email_limit != 0 && $ma_email_limit != ''){
-                $t = get_option('ma_email_interval') * round($email_waiting_sent / $ma_email_limit);
-                $planned_time = date('Y-m-d H:i:s', strtotime("now +".$t." ".get_option('ma_email_repeat_every')));
+                $t = $ma_email_interval * round($email_waiting_sent / $ma_email_limit);
+                $planned_time = date('Y-m-d H:i:s', strtotime("now +".$t." ".$ma_email_repeat_every));
+            }
+
+            $planned_time_2 = '';
+            if($ma_second_sending_limit_choice == 1){
+                $ma_email_limit_2 = $ma_email_limit_2;
+                if($ma_email_limit_2 != 0 && $ma_email_limit_2 != ''){
+                    $t = $ma_email_interval_2 * round($email_waiting_sent / $ma_email_limit_2);
+                    $planned_time_2 = date('Y-m-d H:i:s', strtotime("now +".$t." ".$ma_email_repeat_every_2));
+                }
+            }
+            if($planned_time_2 != '' && $planned_time != '' && $planned_time_2 > $planned_time){
+                $planned_time = $planned_time_2;
             }
         }
 
@@ -6525,6 +6753,7 @@ class Ma_model extends App_Model
      */
     public function save_email_limit_setting($data){
         $affectedRows = 0;
+
         foreach ($data['settings'] as $name => $val) {
             if (update_option($name, $val)) {
                 $affectedRows++;
@@ -6582,6 +6811,7 @@ class Ma_model extends App_Model
         if($campaign_test){
             $data['campaign_test'] = $campaign_test;
             $data['contact']['email'] = $campaign_test->email;
+            $data['contact']['name'] = $campaign_test->name;
 
             if($data['campaign_test']->delete_lead == 1 || $data['campaign_test']->remove_from_campaign == 1){
                 return false;
@@ -7474,5 +7704,314 @@ class Ma_model extends App_Model
         }
 
         return false;
+    }
+
+    public function email_sending_limit_stats(){
+        $return_arr = [];
+        if(get_option('ma_email_sending_limit') == 1){
+            $email_limit_configs = $this->get_email_limit_configs();
+
+            foreach ($email_limit_configs as $key => $config) {
+                $return_arr[$config['id']] = [];
+                $config_option = json_decode($config['configs'] ?? '', true);
+                $ma_email_limit = isset($config_option['ma_email_limit']) ? $config_option['ma_email_limit'] : '';
+                $ma_email_interval = isset($config_option['ma_email_interval']) ? $config_option['ma_email_interval'] : '';
+                $ma_email_repeat_every = isset($config_option['ma_email_repeat_every']) ? $config_option['ma_email_repeat_every'] : '';
+                $ma_second_sending_limit_choice = isset($config_option['ma_second_sending_limit_choice']) ? $config_option['ma_second_sending_limit_choice'] : '';
+
+                $ma_email_limit_2 = isset($config_option['ma_email_limit_2']) ? $config_option['ma_email_limit_2'] : '';
+                $ma_email_interval_2 = isset($config_option['ma_email_interval_2']) ? $config_option['ma_email_interval_2'] : '';
+                $ma_email_repeat_every_2 = isset($config_option['ma_email_repeat_every_2']) ? $config_option['ma_email_repeat_every_2'] : '';
+
+                $campaign_ids = $this->get_campaign_by_email_limit_config($config['id'], $config['is_default'], true);
+                $where_campaign = '';
+                if(count($campaign_ids) > 0){
+                    $where_campaign = 'campaign_id IN ('.implode(',', $campaign_ids).')';
+                }
+
+                $time = date('Y-m-d H:i:s', strtotime("now -".$ma_email_interval." ".$ma_email_repeat_every));
+                
+                $this->db->where('(delivery_time >= "'.$time.'" OR failed_time >= "'.$time.'")');
+                $this->db->where('(lead_id != 0 OR client_id != 0)');
+                $this->db->where('(delivery = 1 OR failed = 1)');
+                $this->db->where('bcc_address', 1);
+                if($where_campaign != ''){
+                    $this->db->where($where_campaign);
+                }
+                $count_bcc = $this->db->count_all_results(db_prefix().'ma_email_logs');
+
+                $this->db->where('(delivery_time >= "'.$time.'" OR failed_time >= "'.$time.'")');
+                $this->db->where('(lead_id != 0 or client_id != 0)');
+                $this->db->where('(delivery = 1 OR failed = 1)');
+                $this->db->where('bcc_address', 0);
+                if($where_campaign != ''){
+                    $this->db->where($where_campaign);
+                }
+                $count = $this->db->count_all_results(db_prefix().'ma_email_logs');
+
+                $total = $count + ($count_bcc * 2);
+                if($ma_email_limit != ''){
+                    $return_arr[$config['id']][] = ['total' => $total, 'limit' => $ma_email_limit];
+                }
+
+                if($ma_second_sending_limit_choice == 1){
+                    $time = date('Y-m-d H:i:s', strtotime("now -".$ma_email_interval_2." ".$ma_email_repeat_every_2));
+
+                    $this->db->where('(delivery_time >= "'.$time.'" OR failed_time >= "'.$time.'")');
+                    $this->db->where('(lead_id != 0 OR client_id != 0)');
+                    $this->db->where('(delivery = 1 OR failed = 1)');
+                    $this->db->where('bcc_address', 1);
+                    if($where_campaign != ''){
+                        $this->db->where($where_campaign);
+                    }
+                    $count_bcc = $this->db->count_all_results(db_prefix().'ma_email_logs');
+
+                    $this->db->where('(delivery_time >= "'.$time.'" OR failed_time >= "'.$time.'")');
+                    $this->db->where('(lead_id != 0 or client_id != 0)');
+                    $this->db->where('(delivery = 1 OR failed = 1)');
+                    $this->db->where('bcc_address', 0);
+                    if($where_campaign != ''){
+                        $this->db->where($where_campaign);
+                    }
+                    $count = $this->db->count_all_results(db_prefix().'ma_email_logs');
+
+                    $total = $count + ($count_bcc * 2);
+                    if($ma_email_limit_2 != ''){
+                        $return_arr[$config['id']][] = ['total' => $total, 'limit' => $ma_email_limit_2];
+                    }
+                }
+            }
+        }
+
+        return $return_arr;
+    }
+
+    /**
+     * Get smtp_config
+     * @param  mixed $id smtp_config id (Optional)
+     * @return mixed     object or array
+     */
+    public function get_smtp_configs($id = '', $where = [])
+    {
+        if (is_numeric($id)) {
+            $this->db->where('id', $id);
+
+            $smtp_config = $this->db->get(db_prefix() . 'ma_smtp_configs')->row();
+
+            return $smtp_config;
+        }
+
+        $this->db->where($where);
+        return $this->db->get(db_prefix() . 'ma_smtp_configs')->result_array();
+    }
+
+    public function get_base_smtp_configs()
+    {
+        $this->db->where('is_default', 1);
+        $smtp_config = $this->db->get(db_prefix() . 'ma_smtp_configs')->row();
+        if ($smtp_config) {
+            return $smtp_config;
+        }
+        
+        return $this->db->get(db_prefix() . 'ma_smtp_configs')->row();
+    }
+
+    /**
+     * add email language
+     * @param array $data
+     */
+    public function add_smtp_config($data){
+
+        $data['addedfrom'] = get_staff_user_id();
+        $data['dateadded'] = date('Y-m-d H:i:s');
+        $this->db->insert(db_prefix() . 'ma_smtp_configs', $data);
+        $insert_id = $this->db->insert_id();
+        if ($insert_id) {
+            return $insert_id;
+        }
+
+        return false;
+    }
+
+    /**
+     * add email language
+     * @param array $data
+     */
+    public function save_smtp_config($data){
+        $id = $data['id'];
+        unset($data['id']);
+
+        $name = $data['name'];
+        unset($data['name']);
+
+        $configs = json_encode($data);
+
+        $this->db->where('id', $id);
+        $this->db->update(db_prefix() . 'ma_smtp_configs', ['name' => $name, 'configs' => $configs]);
+        if ($this->db->affected_rows() > 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function save_campaign_configs($data, $id){
+        $this->db->where('id', $id);
+        $this->db->update(db_prefix() . 'ma_campaigns', $data);
+        if ($this->db->affected_rows() > 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function set_smtp_config_default($id){
+        $this->db->where('id', $id);
+        $this->db->update(db_prefix() . 'ma_smtp_configs', [
+            'is_default' => 1,
+        ]);
+        if ($this->db->affected_rows() > 0) {
+            $this->db->where('id !=', $id);
+            $this->db->update(db_prefix() . 'ma_smtp_configs', [
+                'is_default' => 0,
+            ]);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public function get_email_limit_configs($id = '', $where = [])
+    {
+        if (is_numeric($id)) {
+            $this->db->where('id', $id);
+
+            $email_limit_config = $this->db->get(db_prefix() . 'ma_email_limit_configs')->row();
+
+            return $email_limit_config;
+        }
+
+        $this->db->where($where);
+        return $this->db->get(db_prefix() . 'ma_email_limit_configs')->result_array();
+    }
+
+    public function get_base_email_limit_configs()
+    {
+        $this->db->where('is_default', 1);
+        $email_limit_config = $this->db->get(db_prefix() . 'ma_email_limit_configs')->row();
+        if ($email_limit_config) {
+            return $email_limit_config;
+        }
+        
+        return $this->db->get(db_prefix() . 'ma_email_limit_configs')->row();
+    }
+
+    /**
+     * add email language
+     * @param array $data
+     */
+    public function add_email_limit_config($data){
+
+        $data['addedfrom'] = get_staff_user_id();
+        $data['dateadded'] = date('Y-m-d H:i:s');
+        $this->db->insert(db_prefix() . 'ma_email_limit_configs', $data);
+        $insert_id = $this->db->insert_id();
+        if ($insert_id) {
+            return $insert_id;
+        }
+
+        return false;
+    }
+
+    public function delete_email_limit_config($id)
+    {
+        $this->db->where('id', $id);
+        $this->db->delete(db_prefix() . 'ma_email_limit_configs');
+        if ($this->db->affected_rows() > 0) {
+            $this->db->where('email_limit_config', $id);
+            $this->db->update(db_prefix() . 'ma_campaigns', ['email_limit_config' => 0]);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public function delete_smtp_config($id)
+    {
+        $this->db->where('id', $id);
+        $this->db->delete(db_prefix() . 'ma_smtp_configs');
+        if ($this->db->affected_rows() > 0) {
+
+            $this->db->where('smtp_config', $id);
+            $this->db->update(db_prefix() . 'ma_campaigns', ['smtp_config' => 0]);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * add email language
+     * @param array $data
+     */
+    public function save_email_limit_config($data){
+        $id = $data['id'];
+        unset($data['id']);
+
+        $name = $data['name'];
+        unset($data['name']);
+
+        $configs = json_encode($data);
+
+        $this->db->where('id', $id);
+        $this->db->update(db_prefix() . 'ma_email_limit_configs', ['name' => $name, 'configs' => $configs]);
+        if ($this->db->affected_rows() > 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function set_email_limit_config_default($id){
+        $this->db->where('id', $id);
+        $this->db->update(db_prefix() . 'ma_email_limit_configs', [
+            'is_default' => 1,
+        ]);
+        if ($this->db->affected_rows() > 0) {
+            $this->db->where('id !=', $id);
+            $this->db->update(db_prefix() . 'ma_email_limit_configs', [
+                'is_default' => 0,
+            ]);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public function get_campaign_by_email_limit_config($id, $is_default = false, $return_ids = false)
+    {
+        $this->db->where('published', 1);
+
+        if($is_default == 1){
+            $this->db->where('(email_limit_config = '. $id.' or email_limit_config = 0  or email_limit_config IS NULL)');
+        }else{
+            $this->db->where('email_limit_config', $id);
+        }
+
+        if($return_ids == true){
+            $campaign_ids = $this->db->get(db_prefix() . 'ma_campaigns')->result_array();
+            $ids = [];
+            foreach ($campaign_ids as $key => $value) {
+                $ids[] = $value['id'];
+            }
+
+            return $ids;
+        }else{
+            return $this->db->get(db_prefix() . 'ma_campaigns')->result_array();
+        }
     }
 }

@@ -1,9 +1,9 @@
 (function($) {
   "use strict";
+    $( document ).ready(function() {
   appValidateForm($('#email-form'),{
     name:'required',
     category:'required',
-    subject:'required',
   });
 
   if($('select[name=email_template]').val() != ''){
@@ -13,6 +13,7 @@
   $('select[name=email_template]').on('change', function(){
     var id = $(this).val();
     get_exam_template(id);
+  });
   });
 
 })(jQuery);

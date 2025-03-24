@@ -4,6 +4,7 @@ loadEditor = () => {
     this.editor = unlayer.createEditor({
       ...options,
       id: 'EmailEditor',
+      projectId: '<?php echo $project_id; ?>',
       displayMode: 'email',
     });
     if($("input[name=data_design]").val() != ''){
@@ -43,12 +44,14 @@ loadEditor = () => {
 (function($) {
     "use strict";
 
+    $( document ).ready(function() {
     loadScript(loadEditor);
 
     appValidateForm($('#email-template-form'), {
       name: 'required',
       type: 'required',
     },template_form_handler);
+    });
 })(jQuery);
 
 function save_template(){
@@ -71,7 +74,7 @@ function template_form_handler(form) {
     var formData = new FormData($(form)[0]);
 
     var data_design = new File([$("input[name=data_design]").val()], "data_design.txt", { type: "text/plain" });
-    var data_html = new File([$("input[name=data_html]").val()], "data_html.txt", { type: "text/plain" });
+    var data_html = new File([encodeHTML($("input[name=data_html]").val())], "data_html.txt", { type: "text/plain" });
     formData.append("data_html", data_html);
     formData.append("data_design", data_design);
 
@@ -100,5 +103,10 @@ function template_form_handler(form) {
     });
 
     return false;
+}
+
+
+function encodeHTML(html) {
+    return btoa(unescape(encodeURIComponent(html)));
 }
 </script>

@@ -6,6 +6,7 @@ var fnServerParams = {};
         "segment_id": '[name="segment_id"]',
     }
 
+    $( document ).ready(function() {
     init_leads_table();
     init_client_table();
 
@@ -80,6 +81,7 @@ var fnServerParams = {};
             },
             series: res.data_segment_campaign_detail.data
         });
+  });
   });
   })(jQuery);
 

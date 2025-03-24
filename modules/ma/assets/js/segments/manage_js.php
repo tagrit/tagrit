@@ -3,11 +3,13 @@
     (function($) {
     	"use strict";
 
+    $( document ).ready(function() {
         $.each($('._hidden_inputs._filters input'),function(){
             fnServerParams[$(this).attr('name')] = '[name="'+$(this).attr('name')+'"]';
         });
 
         init_segment_manage();
+        });
     })(jQuery);
 
     // custom view will fill input with the value

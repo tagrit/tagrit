@@ -6,6 +6,7 @@ var fnServerParams = {};
         "text_message_id": '[name="text_message_id"]',
     }
 
+    $( document ).ready(function() {
     init_leads_table();
    $.get(admin_url + 'ma/get_data_text_message_chart/'+$('input[name=text_message_id]').val()).done(function(res) {
     res = JSON.parse(res);
@@ -149,6 +150,7 @@ var fnServerParams = {};
     {
       from_language: 'required',
       to_language: 'required',
+    });
     });
   })(jQuery);
 

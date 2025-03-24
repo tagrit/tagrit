@@ -1,5 +1,6 @@
 (function(){
   "use strict";
+    $( document ).ready(function() {
     var addMoreVendorsInputKey = $('.list_approve select[name^="type"]').length+1;
 
   $("body").on('click', '.new_vendor_requests', function() {
@@ -64,6 +65,7 @@
           $('.div_lead_type').addClass('hide');
           $('.div_customer_type').removeClass('hide');
         }
+    });
     });
     
 })(jQuery);

@@ -1,9 +1,11 @@
 (function($) {
 	"use strict";
 
-    appValidateForm($('.campaign-form'), 
-    {
-      name: 'required', 
-      category: 'required', 
+    $( document ).ready(function() {
+      appValidateForm($('.campaign-form'), 
+      {
+        name: 'required', 
+        category: 'required', 
+      });
     });
 })(jQuery);

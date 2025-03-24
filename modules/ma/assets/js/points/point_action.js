@@ -1,6 +1,7 @@
 (function($) {
 	"use strict";
 
+    $( document ).ready(function() {
     appValidateForm($('#point-action-form'), 
     {
       name: 'required', 
@@ -39,4 +40,5 @@
   $("body").on('click', '.remove_item_ladder', function() {
       $(this).parents('#item_ladder_setting').remove();
   });
+    });
 })(jQuery);

@@ -4,7 +4,9 @@ var fnServerParams;
 
 		fnServerParams = {
     };
+    $( document ).ready(function() {
     init_marketing_messages_table();
+  });
 
 })(jQuery);
 
