@@ -51,6 +51,7 @@
                                                     </button>
                                                 </div>
                                             </div>
+                                            <?php echo form_error('event_id', '<div class="error-message">', '</div>'); ?>
                                         </div>
                                     </div>
 
@@ -59,29 +60,32 @@
                                         <div class="form-group">
                                             <label for="organization" class="control-label">Organization *</label>
                                             <input type="text" id="organization" name="organization"
-                                                   class="form-control"
-                                                   required>
+                                                   class="form-control">
+                                            <?php echo form_error('organization', '<div class="error-message">', '</div>'); ?>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="row">
-
-
                                     <!-- Client Details -->
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="location" class="control-label">Location*</label>
-                                            <input type="text" id="location" name="location" class="form-control"
-                                                   required>
+                                            <label for="location_id" class="control-label">Location*</label>
+                                            <select id="location_id" name="location_id"
+                                                    class="form-control selectpicker"
+                                                    data-live-search="true" required>
+                                                <option value="">Select Location</option>
+                                            </select>
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="venue" class="control-label">Venue*</label>
-                                            <input type="venue" id="email" name="venue" class="form-control"
-                                                   required>
+                                            <label for="venue_id" class="control-label">Venue*</label>
+                                            <select id="venue_id" name="venue_id" class="form-control selectpicker"
+                                                    data-live-search="true" required>
+                                                <option value="">Select Venue</option>
+                                            </select>
                                         </div>
                                     </div>
 
@@ -106,7 +110,7 @@
                                         <div class="form-group">
                                             <label for="no_of_delegates" class="control-label">Number of
                                                 Delegates*</label>
-                                            <input type="text" id="no_of_delegates" name="no_of_delegates"
+                                            <input type="number" id="no_of_delegates" name="no_of_delegates"
                                                    class="form-control" required>
                                         </div>
                                     </div>
@@ -115,7 +119,7 @@
                                         <div class="form-group">
                                             <label for="charges_per_delegates" class="control-label">Charges Per
                                                 Delegates*</label>
-                                            <input type="text" id="charges_per_delegates" name="charges_per_delegates"
+                                            <input type="number" id="charges_per_delegates" name="charges_per_delegates"
                                                    class="form-control" required>
                                         </div>
                                     </div>
@@ -147,15 +151,15 @@
 
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="division" class="control-label">Charges</label>
-                                            <input type="number" id="division" name="division" class="form-control"
+                                            <label for="division" class="control-label">Division</label>
+                                            <input type="text" id="division" name="division" class="form-control"
                                                    placeholder="Enter division" required>
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="revenue" class="control-label">Charges</label>
+                                            <label for="revenue" class="control-label">Revenue</label>
                                             <input type="number" id="revenue" name="revenue" class="form-control"
                                                    placeholder="Enter revenue" required>
                                         </div>
@@ -242,43 +246,36 @@
 <script>
     $(document).ready(function () {
 
-        // When event is selected, fetch locations
-        $('#event_name_id').change(function () {
-            const eventNameId = $(this).val();
+        function fetchLocations() {
+            $.ajax({
+                url: '<?= base_url('admin/events_due/locations') ?>',
+                type: 'POST',
+                dataType: 'json',
+                success: function (response) {
+                    console.log('Response:', response);
 
-            if (eventNameId) {
-                $.ajax({
-                    url: '<?= base_url('admin/events_due/locations') ?>',
-                    type: 'POST',
-                    data: {event_name_id: eventNameId},
-                    dataType: 'json',
-                    success: function (response) {
-                        console.log('Response:', response);
+                    $('#location_id').empty().append('<option value="">Select Location</option>');
 
-                        $('#location_id').empty().append('<option value="">Select Location</option>');
-
-                        if (response.success) {
-                            $.each(response.data, function (key, value) {
-                                $('#location_id').append('<option value="' + value.id + '">' + value.name + '</option>');
-                            });
-                        } else {
-                            console.error('Error:', response.error);
-                            alert('Error: ' + response.error);
-                        }
-
-                        $('#location_id').selectpicker('refresh');
-                    },
-                    error: function (xhr, status, error) {
-                        console.error('AJAX Error:', status, error, xhr);
-                        alert('Failed to fetch locations. Please try again.');
+                    if (response.success) {
+                        $.each(response.data, function (key, value) {
+                            $('#location_id').append('<option value="' + value.id + '">' + value.name + '</option>');
+                        });
+                    } else {
+                        console.error('Error:', response.error);
+                        alert('Error: ' + response.error);
                     }
-                });
-            } else {
-                $('#location_id').empty().append('<option value="">Select Location</option>');
-                $('#location_id').selectpicker('refresh');
-            }
-        });
 
+                    $('#location_id').selectpicker('refresh');
+                },
+                error: function (xhr, status, error) {
+                    console.error('AJAX Error:', status, error, xhr);
+                    alert('Failed to fetch locations. Please try again.');
+                }
+            });
+
+        }
+
+        fetchLocations();
 
         // When location is selected, fetch venues
         $('#location_id').change(function () {
@@ -316,60 +313,5 @@
             }
         });
 
-        // when venue and location is set choose setup
-        $('#venue_id').change(function () {
-
-            const eventNameId = $('#event_name_id').val();
-            const locationId = $('#location_id').val();
-            const venueId = $(this).val();
-
-            if (venueId) {
-                $.ajax({
-                    url: '<?= base_url('admin/events_due/setups') ?>',
-                    type: 'POST',
-                    data: {
-                        event_name_id: eventNameId,
-                        location_id: locationId,
-                        venue_id: venueId,
-                    },
-                    dataType: 'json',
-                    success: function (response) {
-                        $('#setup').empty().append('<option value="">Select Setup</option>');
-                        $.each(response.data, function (key, value) {
-                            $('#setup').append('<option value="' + value.setup + '">' + value.setup + '</option>');
-                        });
-                        $('#setup').selectpicker('refresh');
-                    }
-                });
-            }
-        });
-
-        // when venue and location is set choose setup
-        $('#venue_id').change(function () {
-
-            const eventNameId = $('#event_name_id').val();
-            const locationId = $('#location_id').val();
-            const venueId = $(this).val();
-
-            if (venueId) {
-                $.ajax({
-                    url: '<?= base_url('admin/events_due/durations') ?>',
-                    type: 'POST',
-                    data: {
-                        event_name_id: eventNameId,
-                        location_id: locationId,
-                        venue_id: venueId,
-                    },
-                    dataType: 'json',
-                    success: function (response) {
-                        $('#duration').empty().append('<option value="">Select Setup</option>');
-                        $.each(response.data, function (key, value) {
-                            $('#duration').append('<option value="' + value + '">' + value + '</option>');
-                        });
-                        $('#duration').selectpicker('refresh');
-                    }
-                });
-            }
-        });
     });
 </script>

@@ -14,13 +14,7 @@ class Locations extends AdminController
     {
         try {
 
-            $event_name_id = $this->input->post('event_name_id');
-
-            if (empty($event_name_id)) {
-                throw new Exception('Event ID is required.');
-            }
-
-            $locations = $this->Event_location_model->get_event_locations($event_name_id);
+            $locations = $this->Event_location_model->get();
 
             if (!$locations) {
                 throw new Exception('No locations found for the selected event.');
