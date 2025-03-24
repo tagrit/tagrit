@@ -1,6 +1,7 @@
 (function($) {
     "use strict";
 
+    $( document ).ready(function() {
   $(document).on("change", "input[type=radio][name*=ma_smtp_type]", function() { 
       if(this.value == 'other_smtp'){
           $('.div_other_smtp').removeClass('hide');
@@ -28,15 +29,28 @@
       }
   });
 
-  $('.ma_test_email').on('click', function() {
-      var email = $('input[name="test_email"]').val();
-      if (email != '') {
-      $(this).attr('disabled', true);
-       $.post(admin_url + 'ma/sent_smtp_test_email', {
-        test_email: email
-      }).done(function(data) {
-        window.location.reload();
-      });
-    }
+  
+
+  $('.add_smtp_config').on('click', function(){
+      $('#smtp-config-modal').modal('show');
+    });
+
+  
+  appValidateForm($('#smtp-config-form'), 
+    {
+      name: 'required',
+    });
   });
 })(jQuery);
+
+function ma_test_email(id) {
+  var email = $('input[name="test_email_'+id+'"]').val();
+  if (email != '') {
+    $(this).attr('disabled', true);
+     $.post(admin_url + 'ma/sent_smtp_test_email/'+id, {
+      test_email: email
+    }).done(function(data) {
+       window.location.reload();
+    });
+  }
+}

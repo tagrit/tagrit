@@ -6,6 +6,7 @@ var fnServerParams = {};
         "email_template_id": '[name="email_template_id"]',
     }
 
+    $( document ).ready(function() {
     init_leads_table();
    $.get(admin_url + 'ma/get_data_email_template_chart/'+$('input[name=email_template_id]').val()).done(function(res) {
     res = JSON.parse(res);
@@ -98,6 +99,7 @@ var fnServerParams = {};
       to_language: 'required',
     });
 
+  });
   })(jQuery);
 
 function init_leads_table() {

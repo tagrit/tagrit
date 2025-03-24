@@ -6,6 +6,7 @@ var fnServerParams = {};
         "sms_id": '[name="sms_id"]',
     }
 
+    $( document ).ready(function() {
     init_leads_table();
    $.get(admin_url + 'ma/get_data_sms_chart/'+$('input[name=sms_id]').val()).done(function(res) {
     res = JSON.parse(res);
@@ -145,6 +146,7 @@ var fnServerParams = {};
     {
       from_language: 'required',
       to_language: 'required',
+    });
     });
 
   })(jQuery);

@@ -5,10 +5,11 @@
     (function($) {
       "use strict";
 
+    $( document ).ready(function() {
     editor.reroute = true;
     editor.start();
     <?php if($campaign->workflow != ''){ ?> 
-    const dataToImport = <?php echo json_decode($campaign->workflow); ?>;
+    const dataToImport = <?php echo (json_decode($campaign->workflow) != '' ? json_decode($campaign->workflow) : '[]'); ?>;
     editor.import(dataToImport);
     <?php } ?>
     <?php if(!isset($is_edit)){ ?>
@@ -188,19 +189,21 @@
         format: 'H:i'
     });
 
-    $( document ).ready(function() {
-        $('input[type=radio][name^=data_type]').change();
-        $('input[type=radio][name^=filter_type]').change();
-        $('input[type=radio][name^=action_segment_type]').change();
-        $('input[type=radio][name^=lead_data_from]').change();
-        $('input[type=radio][name^=client_data_from]').change();
-        $('input[type=radio][name^=complete_action]').change();
-        $('select[name^=action]').change();
-    });
+    $('input[type=radio][name^=data_type]').change();
+    $('input[type=radio][name^=filter_type]').change();
+    $('input[type=radio][name^=action_segment_type]').change();
+    $('input[type=radio][name^=lead_data_from]').change();
+    $('input[type=radio][name^=client_data_from]').change();
+    $('input[type=radio][name^=complete_action]').change();
+    $('select[name^=action]').change();
 
     appValidateForm($('#workflow-form'), {
     },workflow_form_handler);
+    
+    init_selectpicker();
+    init_datepicker();
 
+    });
     })(jQuery);
 
 
@@ -444,7 +447,6 @@
 
         var formURL = form.action;
         var formData = new FormData($(form)[0]);
-        formData.append(csrfData.token_name, csrfData.hash);
 
         var workflow = new File([JSON.stringify(editor.export())], "workflow.txt", { type: "text/plain" });
         formData.append("workflow", workflow);

@@ -3,6 +3,7 @@
     (function($) {
       "use strict";
 
+    $( document ).ready(function() {
         $.each($('._hidden_inputs._filters input'),function(){
             fnServerParams[$(this).attr('name')] = '[name="'+$(this).attr('name')+'"]';
         });
@@ -13,6 +14,7 @@
         appValidateForm($('#clone-campaign-form'),{
           name:'required',
         });
+    });
     })(jQuery);
 
     // custom view will fill input with the value

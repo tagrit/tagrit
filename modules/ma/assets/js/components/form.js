@@ -6,11 +6,13 @@ var fnServerParams;
       "category": '[name="category"]',
     };
 
+    $( document ).ready(function() {
     $('select[name="category"]').on('change', function() {
       init_form_table();
     });
     
     init_form_table();
+    });
 
 })(jQuery);
 

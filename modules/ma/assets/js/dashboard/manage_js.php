@@ -2,12 +2,14 @@
 var date_filter;
 (function($) {
 	"use strict";
+    $( document ).ready(function() {
     Highcharts.setOptions({
         lang: {
             thousandsSep: ','
         }
     });
     dashboard_custom_view('last_30_days',"<?php echo _l('last_30_days'); ?>",'last_30_days');
+    });
 })(jQuery);
 
 // Sets table filters dropdown to active

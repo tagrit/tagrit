@@ -5,10 +5,12 @@ var fnServerParams;
 		fnServerParams = {
       "category": '[name="category"]',
     };
+    $( document ).ready(function() {
     init_point_actions_table();
 
     $('select[name="category"]').on('change', function() {
       init_point_actions_table();
+    });
     });
 
 })(jQuery);

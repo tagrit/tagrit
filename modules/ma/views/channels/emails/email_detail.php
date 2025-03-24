@@ -15,12 +15,8 @@
                       <table class="table table-striped  no-margin">
                         <tbody>
                             <tr class="project-overview">
-                              <td class="bold" width="30%"><?php echo _l('subject'); ?></td>
-                              <td><span style="color: <?php echo html_entity_decode($email->color); ?>"><?php echo html_entity_decode($email->subject); ?></span></td>
-                           </tr>
-                            <tr class="project-overview">
                               <td class="bold" width="30%"><?php echo _l('internal_name'); ?></td>
-                              <td><span><?php echo html_entity_decode($email->name); ?></span></td>
+                              <td><span style="color: <?php echo html_entity_decode($email->color); ?>"><?php echo html_entity_decode($email->name); ?></span></td>
                            </tr>
                            <tr class="project-overview">
                               <td class="bold"><?php echo _l('category'); ?></td>
@@ -147,6 +143,7 @@
                                         <a class="btn btn-sm btn-success tw-font-semibold tw-tracking-tight tw-bg-white tw-text-success-700 mbot20 tw-rounded-full tw-px-3" href="javascript:void(0);" onclick="send_example(this); return false;" data-email-design-id="<?php echo html_entity_decode($design['id']); ?>"><?php echo _l('send_example'); ?></a>
                                         <a class="btn btn-sm btn-primary tw-font-semibold tw-tracking-tight tw-bg-white tw-text-primary-700 mbot20 tw-rounded-full mbot20" href="<?php echo admin_url('ma/email_design/'.$design['id']); ?>"><?php echo _l('design'); ?></a>
                                         <a class="btn btn-sm btn-danger tw-font-semibold tw-tracking-tight tw-bg-white tw-text-danger-600 mbot20  _delete" href="<?php echo admin_url('ma/delete_email_design/'.$design['id'].'/'.$email->id); ?>"><?php echo _l('delete'); ?></a>
+                                        <div class="mbot20"><span class="bold"><?php echo _l('subject'); ?></span>: <span><?php echo html_entity_decode($design['subject'] ?? ''); ?></span></div>
                                         <div id="EmailEditor"><?php echo ($design['data_html'] != null) ? json_decode($design['data_html']) : ''; ?></div>
                                       </div>
                                     </div>
@@ -265,7 +262,6 @@
                                array_push($table_data,$_t);
                               }
                              
-                              $table_data = hooks()->apply_filters('leads_table_columns', $table_data);
                               render_datatable($table_data,'leads-emails',
                               array('customizable-table'),
                               array(

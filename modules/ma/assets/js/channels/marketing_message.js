@@ -2,6 +2,7 @@
   "use strict";
 
 
+    $( document ).ready(function() {
   appValidateForm($('#marketing-message-form'),{
     name:'required',
     category:'required',
@@ -19,5 +20,6 @@
       $('#div_web_notification').addClass('hide');
       $('#div_email').addClass('hide');
     }
+  });
   });
 })(jQuery);

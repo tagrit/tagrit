@@ -2,6 +2,7 @@
 (function($) {
   "use strict";
 
+    $( document ).ready(function() {
     $.get(admin_url + 'ma/get_data_form_chart').done(function(res) {
     res = JSON.parse(res);
     Highcharts.chart('container_chart', {
@@ -73,6 +74,7 @@
   });
 
     init_form_log_table();
+  });
 })(jQuery);
 
 function init_form_log_table() {

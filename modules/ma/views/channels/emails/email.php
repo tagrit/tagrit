@@ -33,8 +33,6 @@
             </div>
             <div class="tab-content mtop15">
                <div role="tabpanel" class="tab-pane active" id="information">
-                     <?php $value = (isset($email) ? $email->subject : ''); ?>
-                     <?php echo render_input('subject','subject',$value); ?>
                      <?php $value = (isset($email) ? $email->name : ''); ?>
                      <?php echo render_input('name','internal_name',$value); ?>
                      <?php $value = (isset($email) ? $email->category : ''); ?>

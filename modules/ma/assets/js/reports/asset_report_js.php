@@ -1,6 +1,7 @@
 <script type="text/javascript">
 (function($) {
   "use strict";
+    $( document ).ready(function() {
 $.get(admin_url + 'ma/get_data_asset_chart').done(function(res) {
     res = JSON.parse(res);
     Highcharts.chart('container_download_chart', {
@@ -72,6 +73,7 @@ $.get(admin_url + 'ma/get_data_asset_chart').done(function(res) {
   });
 
     init_asset_download_table();
+  });
 })(jQuery);
 
 function init_asset_download_table() {
