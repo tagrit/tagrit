@@ -232,11 +232,11 @@ class MarketingAutomationLic{
 	 * @return array
 	 */
 	public function verify_license($time_based_check = false, $license = false, $client = false){
-				return array(
-					'status' => TRUE,
-					'message' => LB_TEXT_VERIFIED_RESPONSE
-				);
-			}
+		return array(
+			'status' => TRUE,
+			'message' => LB_TEXT_VERIFIED_RESPONSE
+		);
+}
 
 	/**
 	 * deactivate license 
