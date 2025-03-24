@@ -232,7 +232,6 @@ class MarketingAutomationLic{
 	 * @return array
 	 */
 	public function verify_license($time_based_check = false, $license = false, $client = false){
-		// if(function_exists("perfex_saas_is_tenant") && perfex_saas_is_tenant()){return ["status"=>true];}
 				return array(
 					'status' => TRUE,
 					'message' => LB_TEXT_VERIFIED_RESPONSE
