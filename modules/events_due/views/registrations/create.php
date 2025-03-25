@@ -35,7 +35,8 @@
                                                         data-live-search="true" name="event_id" id="events" required>
                                                     <?php if (!empty($events)): ?>
                                                         <?php foreach ($events as $index => $event): ?>
-                                                            <option value="<?= htmlspecialchars($event->id) ?>" <?= $index === 0 ? 'selected' : '' ?>>
+                                                            <option value="<?= htmlspecialchars($event->id) ?>"
+                                                                <?= set_value('event_id') == $event->id ? 'selected' : '' ?>>
                                                                 <?= strlen($event->name) > 90 ? htmlspecialchars(substr($event->name, 0, 27)) . '...' : htmlspecialchars($event->name) ?>
                                                             </option>
                                                         <?php endforeach; ?>
@@ -60,7 +61,7 @@
                                         <div class="form-group">
                                             <label for="organization" class="control-label">Organization *</label>
                                             <input type="text" id="organization" name="organization"
-                                                   class="form-control">
+                                                   class="form-control" value="<?= set_value('organization'); ?>">
                                             <?php echo form_error('organization', '<div class="error-message">', '</div>'); ?>
                                         </div>
                                     </div>
@@ -76,6 +77,7 @@
                                                     data-live-search="true" required>
                                                 <option value="">Select Location</option>
                                             </select>
+                                            <?php echo form_error('location_id', '<div class="error-message">', '</div>'); ?>
                                         </div>
                                     </div>
 
@@ -86,6 +88,7 @@
                                                     data-live-search="true" required>
                                                 <option value="">Select Venue</option>
                                             </select>
+                                            <?php echo form_error('venue_id', '<div class="error-message">', '</div>'); ?>
                                         </div>
                                     </div>
 
@@ -94,7 +97,8 @@
                                         <div class="form-group">
                                             <label for="start_date" class="control-label">Start Date*</label>
                                             <input type="date" id="start_date" name="start_date" class="form-control"
-                                                   required>
+                                                   required value="<?= set_value('start_date'); ?>">
+                                            <?php echo form_error('start_date', '<div class="error-message">', '</div>'); ?>
                                         </div>
                                     </div>
 
@@ -102,7 +106,9 @@
                                         <div class="form-group">
                                             <label for="end_date" class="control-label">End Date*</label>
                                             <input type="date" id="end_date" name="end_date" class="form-control"
+                                                   value="<?= set_value('end_date'); ?>"
                                                    required>
+                                            <?php echo form_error('end_date', '<div class="error-message">', '</div>'); ?>
                                         </div>
                                     </div>
 
@@ -111,16 +117,22 @@
                                             <label for="no_of_delegates" class="control-label">Number of
                                                 Delegates*</label>
                                             <input type="number" id="no_of_delegates" name="no_of_delegates"
-                                                   class="form-control" required>
+                                                   class="form-control"
+                                                   value="<?= set_value('no_of_delegates'); ?>"
+                                                   required>
+                                            <?php echo form_error('no_of_delegates', '<div class="error-message">', '</div>'); ?>
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="charges_per_delegates" class="control-label">Charges Per
+                                            <label for="charges_per_delegate" class="control-label">Charges Per
                                                 Delegates*</label>
-                                            <input type="number" id="charges_per_delegates" name="charges_per_delegates"
-                                                   class="form-control" required>
+                                            <input type="number" id="charges_per_delegate" name="charges_per_delegate"
+                                                   class="form-control"
+                                                   value="<?= set_value('charges_per_delegate'); ?>"
+                                                   required>
+                                            <?php echo form_error('charges_per_delegate', '<div class="error-message">', '</div>'); ?>
                                         </div>
                                     </div>
 
@@ -131,9 +143,14 @@
                                             <select id="setup" name="setup" class="form-control selectpicker"
                                                     data-live-search="true" required>
                                                 <option value="">Select Setup</option>
-                                                <option value="Physical">Physical</option>
-                                                <option value="Virtual">Virtual</option>
+                                                <option value="Physical" <?= set_value('setup') == 'Physical' ? 'selected' : '' ?>>
+                                                    Physical
+                                                </option>
+                                                <option value="Virtual" <?= set_value('setup') == 'Virtual' ? 'selected' : '' ?>>
+                                                    Virtual
+                                                </option>
                                             </select>
+                                            <?php echo form_error('setup', '<div class="error-message">', '</div>'); ?>
                                         </div>
                                     </div>
 
@@ -143,9 +160,14 @@
                                             <select id="type" name="type" class="form-control selectpicker"
                                                     data-live-search="true" required>
                                                 <option value="">Select Type</option>
-                                                <option value="Local">Local</option>
-                                                <option value="International">International</option>
+                                                <option value="Local" <?= set_value('type') == 'Local' ? 'selected' : '' ?>>
+                                                    Local
+                                                </option>
+                                                <option value="International" <?= set_value('type') == 'International' ? 'selected' : '' ?>>
+                                                    International
+                                                </option>
                                             </select>
+                                            <?php echo form_error('type', '<div class="error-message">', '</div>'); ?>
                                         </div>
                                     </div>
 
@@ -153,7 +175,10 @@
                                         <div class="form-group">
                                             <label for="division" class="control-label">Division</label>
                                             <input type="text" id="division" name="division" class="form-control"
-                                                   placeholder="Enter division" required>
+                                                   placeholder="Enter division" value="<?= set_value('division'); ?>"
+                                                   required>
+                                            <?php echo form_error('division', '<div class="error-message">', '</div>'); ?>
+
                                         </div>
                                     </div>
 
@@ -161,7 +186,9 @@
                                         <div class="form-group">
                                             <label for="revenue" class="control-label">Revenue</label>
                                             <input type="number" id="revenue" name="revenue" class="form-control"
-                                                   placeholder="Enter revenue" required>
+                                                   placeholder="Enter revenue" value="<?= set_value('revenue'); ?>"
+                                                   required>
+                                            <?php echo form_error('revenue', '<div class="error-message">', '</div>'); ?>
                                         </div>
                                     </div>
 

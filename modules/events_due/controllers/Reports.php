@@ -10,9 +10,19 @@ class Reports extends AdminController
 
     }
 
+    public function get_unique_organizations()
+    {
+        $this->db->distinct();
+        $this->db->select('organization');
+        $this->db->from(db_prefix() . '_events_details');
+        $query = $this->db->get();
+        return $query->result();
+    }
+
     public function main()
     {
         $data['registrations'] = $this->Registration_model->get();
+        $data['organizations'] = $this->get_unique_organizations();
         $this->load->view('reports/main', $data);
     }
 
