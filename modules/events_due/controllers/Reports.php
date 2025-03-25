@@ -33,9 +33,10 @@ class Reports extends AdminController
         $start_date = $this->input->post('start_date');
         $end_date = $this->input->post('end_date');
         $organization = $this->input->post('organization');
+        $query = $this->input->post('query');
 
         // Call get_filtered_data() with filter parameters
-        $registrations = $this->Registration_model->get_filtered_data($status, $start_date, $end_date, $organization);
+        $registrations = $this->Registration_model->get_filtered_data($status, $start_date, $end_date, $organization, $query);
 
         foreach ($registrations as $registration) {
             echo '<tr>
@@ -55,11 +56,6 @@ class Reports extends AdminController
             <td>' . $registration->organization . '</td>
             <td>' . $registration->start_date . '</td>
             <td>' . $registration->end_date . '</td>
-            <td>
-                <a style="color:white;" href="#" class="btn btn-info">
-                    <i class="fa fa-eye"></i> View
-                </a>
-            </td>
         </tr>';
         }
     }

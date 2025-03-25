@@ -100,14 +100,29 @@
                                     data-live-search="true"
                                     class="form-control selectpicker"
                                     data-none-selected-text="<?php echo _l('Dropdown Non Selected Text'); ?>">
-                                <option value="AFA_">AFA</option>
-                                <option value="Kenyatta University">Kenyatta University</option>
+                                <option value="" disabled selected>Select Organization</option>
+                                <?php if (!empty($organizations)): ?>
+                                    <?php foreach ($organizations as $org): ?>
+                                        <option value="<?= htmlspecialchars($org->organization) ?>">
+                                            <?= htmlspecialchars($org->organization) ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <option value="" disabled>No organizations found</option>
+                                <?php endif; ?>
                             </select>
                             <?php echo form_error('setup', '<div class="error-message">', '</div>'); ?>
-
                         </div>
                     </div>
-
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="query" class="control-label">Search</label>
+                            <div style="border-radius:7px; box-shadow: none;" class="input-group date">
+                                <input style="border-radius:7px; box-shadow: none;" type="text" class="form-control" id="query"
+                                       name="query">
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="clearfix mtop20"></div>

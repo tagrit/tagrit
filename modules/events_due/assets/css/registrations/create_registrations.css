@@ -67,6 +67,7 @@
     align-items: center;
     justify-content: center;
 }
+
 .error-message {
     display: block !important;
     color: red;
@@ -92,6 +93,7 @@
     max-width: 100%;
     width: 100%;
 }
+
 
 
 
