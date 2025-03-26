@@ -373,7 +373,7 @@ function ma_module_init_menu_items()
     if (has_permission('ma_dashboard', '', 'view') || has_permission('ma_segments', '', 'view') || has_permission('ma_components', '', 'view') || has_permission('ma_campaigns', '', 'view') || has_permission('ma_channels', '', 'view') || has_permission('ma_points', '', 'view') || has_permission('ma_stages', '', 'view') || has_permission('ma_report', '', 'view') || has_permission('ma_setting', '', 'view') || has_permission('ma_segments', '', 'view_own') || has_permission('ma_components', '', 'view_own') || has_permission('ma_campaigns', '', 'view_own') || has_permission('ma_channels', '', 'view_own') || has_permission('ma_points', '', 'view_own') || has_permission('ma_stages', '', 'view_own')) {
         $CI = &get_instance();
         $CI->app_menu->add_sidebar_menu_item('ma', [
-                'name'     => _l('marketing_automation'),
+                'name'     => 'Marketing',
                 'href'     => admin_url('ma'),
                 'icon'     => 'fa fa-hashtag',
                 'position' => 30
