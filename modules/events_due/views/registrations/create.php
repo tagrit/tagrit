@@ -60,7 +60,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="organization" class="control-label">Organization *</label>
-                                            <input type="text" id="organization" name="organization"
+                                            <input type="text" id="organization" required name="organization"
                                                    class="form-control" value="<?= set_value('organization'); ?>">
                                             <?php echo form_error('organization', '<div class="error-message">', '</div>'); ?>
                                         </div>
@@ -196,26 +196,76 @@
                                         <label class="custom-label">Delegates Details <span
                                                     style="font-size:11px; color:red;">(*The first delegate will be used as the primary contact)</span></label>
                                         <div id="delegates-container">
-                                            <div class="row align-items-center delegate-entry">
-                                                <div class="col-md-3">
-                                                    <input type="text" name="delegates[0][first_name]"
-                                                           class="form-control"
-                                                           placeholder="First Name" required>
+                                            <?php if (!empty($old_input['delegates'])): ?>
+                                                <?php foreach ($old_input['delegates'] as $key => $delegate): ?>
+                                                    <div class="row align-items-center delegate-entry <?= $key != 0 ? 'mtop4' : '' ?>">
+                                                        <div class="col-md-3">
+                                                            <input type="text"
+                                                                   name="delegates[<?php echo $key; ?>][first_name]"
+                                                                   class="form-control"
+                                                                   placeholder="First Name" required
+                                                                   value="<?php echo $delegate['first_name']; ?>">
+                                                            <small class="text-danger"><?php echo form_error("delegates[$key][first_name]"); ?></small>
+                                                        </div>
+                                                        <div style="margin-left:-20px;" class="col-md-3">
+                                                            <input type="text"
+                                                                   name="delegates[<?php echo $key; ?>][last_name]"
+                                                                   class="form-control"
+                                                                   placeholder="Last Name" required
+                                                                   value="<?php echo $delegate['last_name']; ?>">
+                                                            <small class="text-danger"><?php echo form_error("delegates[$key][last_name]"); ?></small>
+                                                        </div>
+                                                        <div style="margin-left:-20px;" class="col-md-3">
+                                                            <input type="email"
+                                                                   name="delegates[<?php echo $key; ?>][email]"
+                                                                   class="form-control"
+                                                                   placeholder="Email" required
+                                                                   value="<?php echo $delegate['email']; ?>">
+                                                            <small class="text-danger"><?php echo form_error("delegates[$key][email]"); ?></small>
+                                                        </div>
+                                                        <div style="margin-left:-20px;" class="col-md-3">
+                                                            <input type="text"
+                                                                   name="delegates[<?php echo $key; ?>][phone]"
+                                                                   class="form-control"
+                                                                   placeholder="Phone" required
+                                                                   value="<?php echo $delegate['phone']; ?>">
+                                                            <small class="text-danger"><?php echo form_error("delegates[$key][phone]"); ?></small>
+                                                        </div>
+                                                        <?php if ($key != 0): ?>
+                                                            <div class="mtop4 text-center">
+                                                                <button style="margin-left: -20px; border: 0px; color: red; background-color: transparent;"
+                                                                        type="button" class="remove-delegate">
+                                                                    <i class="fas fa-trash-alt"
+                                                                       style="font-size: 1.5rem;"></i>
+                                                                </button>
+                                                            </div>
+                                                        <?php endif; ?>
+                                                    </div>
+                                                <?php endforeach; ?>
+                                            <?php else: ?>
+                                                <div class="row align-items-center delegate-entry">
+                                                    <div class="col-md-3">
+                                                        <input type="text" name="delegates[0][first_name]"
+                                                               class="form-control"
+                                                               placeholder="First Name" required>
+                                                    </div>
+                                                    <div style="margin-left:-20px;" class="col-md-3">
+                                                        <input type="text" name="delegates[0][last_name]"
+                                                               class="form-control"
+                                                               placeholder="Last Name" required>
+                                                    </div>
+                                                    <div style="margin-left:-20px;" class="col-md-3">
+                                                        <input type="email" name="delegates[0][email]"
+                                                               class="form-control"
+                                                               placeholder="Email" required>
+                                                    </div>
+                                                    <div style="margin-left:-20px;" class="col-md-3">
+                                                        <input type="text" name="delegates[0][phone]"
+                                                               class="form-control"
+                                                               placeholder="Phone" required>
+                                                    </div>
                                                 </div>
-                                                <div style="margin-left:-20px;" class="col-md-3">
-                                                    <input type="text" name="delegates[0][last_name]"
-                                                           class="form-control"
-                                                           placeholder="Last Name" required>
-                                                </div>
-                                                <div style="margin-left:-20px;" class="col-md-3">
-                                                    <input type="email" name="delegates[0][email]" class="form-control"
-                                                           placeholder="Email" required>
-                                                </div>
-                                                <div style="margin-left:-20px;" class="col-md-3">
-                                                    <input type="text" name="delegates[0][phone]" class="form-control"
-                                                           placeholder="Phone" required>
-                                                </div>
-                                            </div>
+                                            <?php endif; ?>
                                         </div>
                                         <button id="add-delegate" type="button"
                                                 class="mtop10 btn btn-info d-flex align-items-center justify-content-center"

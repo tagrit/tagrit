@@ -34,9 +34,15 @@ class Registrations extends AdminController
         $this->form_validation->set_rules('division', 'Division', 'required');
         $this->form_validation->set_rules('revenue', 'Charges', 'required|numeric');
 
-        // Validate delegate details dynamically
         if (!empty($_POST['delegates'])) {
             foreach ($_POST['delegates'] as $key => $delegate) {
+                // Convert null values to empty strings
+                $_POST['delegates'][$key]['first_name'] = $delegate['first_name'] ?? '';
+                $_POST['delegates'][$key]['last_name'] = $delegate['last_name'] ?? '';
+                $_POST['delegates'][$key]['email'] = $delegate['email'] ?? '';
+                $_POST['delegates'][$key]['phone'] = $delegate['phone'] ?? '';
+
+                // Set validation rules
                 $this->form_validation->set_rules("delegates[$key][first_name]", 'First Name', 'trim|required');
                 $this->form_validation->set_rules("delegates[$key][last_name]", 'Last Name', 'trim|required');
                 $this->form_validation->set_rules("delegates[$key][email]", 'Email', 'trim|required|valid_email');
@@ -76,11 +82,13 @@ class Registrations extends AdminController
         if ($this->form_validation->run() == FALSE) {
 
             $data = [
-                'events' => $this->Event_model->get()
+                'events' => $this->Event_model->get(),
+                'old_input' => $_POST ?? []
             ];
 
             $this->load->view('registrations/create', $data);
         } else {
+
 
             // Start database transaction
             $this->db->trans_begin();
