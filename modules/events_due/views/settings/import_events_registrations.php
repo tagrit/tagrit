@@ -35,19 +35,19 @@
                         </thead>
                         <tbody>
                         <tr>
-                            <td style="border: 1px solid #ccc; padding: 8px;">Sample Data</td>
-                            <td style="border: 1px solid #ccc; padding: 8px;">Sample Data</td>
-                            <td style="border: 1px solid #ccc; padding: 8px;">Sample Data</td>
-                            <td style="border: 1px solid #ccc; padding: 8px;">Sample Data</td>
-                            <td style="border: 1px solid #ccc; padding: 8px;">Sample Data</td>
-                            <td style="border: 1px solid #ccc; padding: 8px;">Sample Data</td>
-                            <td style="border: 1px solid #ccc; padding: 8px;">Sample Data</td>
-                            <td style="border: 1px solid #ccc; padding: 8px;">Sample Data</td>
-                            <td style="border: 1px solid #ccc; padding: 8px;">Sample Data</td>
-                            <td style="border: 1px solid #ccc; padding: 8px;">Sample Data</td>
-                            <td style="border: 1px solid #ccc; padding: 8px;">Sample Data</td>
-                            <td style="border: 1px solid #ccc; padding: 8px;">Sample Data</td>
-                            <td style="border: 1px solid #ccc; padding: 8px;">Sample Data</td>
+                            <td style="border: 1px solid #ccc; padding: 8px;">Data Science</td>
+                            <td style="border: 1px solid #ccc; padding: 8px;">Physical</td>
+                            <td style="border: 1px solid #ccc; padding: 8px;">Local</td>
+                            <td style="border: 1px solid #ccc; padding: 8px;">ADS</td>
+                            <td style="border: 1px solid #ccc; padding: 8px;">2025-01-01</td>
+                            <td style="border: 1px solid #ccc; padding: 8px;">2025-01-03</td>
+                            <td style="border: 1px solid #ccc; padding: 8px;">Mombasa</td>
+                            <td style="border: 1px solid #ccc; padding: 8px;">Sarova Hotel</td>
+                            <td style="border: 1px solid #ccc; padding: 8px;">John Doe</td>
+                            <td style="border: 1px solid #ccc; padding: 8px;">01 Jan 1990</td>
+                            <td style="border: 1px solid #ccc; padding: 8px;">078567657</td>
+                            <td style="border: 1px solid #ccc; padding: 8px;">john@example.com</td>
+                            <td style="border: 1px solid #ccc; padding: 8px;">Tagrit</td>
                         </tr>
                         </tbody>
                     </table>
