@@ -11,6 +11,7 @@ $route['admin/events_due/events/index'] = 'events_due/events/index';
 $route['admin/events_due/events/store'] = 'events_due/events/store';
 $route['admin/events_due/events/edit/(:num)'] = 'events_due/events/edit/$event_id';
 $route['admin/events_due/events/update'] = 'events_due/events/update';
+$route['admin/events_due/events/view/(:num)'] = 'events_due/events/view/$event_id';
 
 //registrations
 $route['admin/events_due/registrations/create'] = 'events_due/registrations/create';

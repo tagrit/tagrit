@@ -64,7 +64,9 @@
                                     <td><?php echo $event->location; ?></td>
                                     <td><?php echo $event->venue; ?></td>
                                     <td>
-                                        <a style="color:white;" href="#" class="btn btn-info">
+                                        <a style="color:white;"
+                                           href="<?php echo admin_url('events_due/events/view/' . $event->event_id); ?>"
+                                           class="btn btn-info">
                                             <i class="fa fa-eye"></i> View
                                         </a>
                                     </td>

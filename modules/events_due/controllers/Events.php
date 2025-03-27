@@ -23,6 +23,12 @@ class Events extends AdminController
         $this->load->view('events/index', $data);
     }
 
+    public function view($event_id)
+    {
+        $data['event'] = $this->Event_model->event_details($event_id);
+        $this->load->view('events/view',$data);
+    }
+
 
     public function store()
     {
