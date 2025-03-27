@@ -33,5 +33,8 @@ $route['admin/events_due/settings/download_sample'] = 'events_due/settings/downl
 //reports
 $route['admin/events_due/reports/main'] = 'events_due/reports/main';
 $route['admin/events_due/reports/fetch_filtered_data'] = 'events_due/reports/fetch_filtered_data';
+$route['admin/events_due/reports/clear_filters'] = 'events_due/reports/clear_filters';
+$route['admin/events_due/reports/save_filters'] = 'events_due/reports/save_filters';
+$route['admin/events_due/reports/get_filters'] = 'events_due/reports/get_filters';
 $route['admin/events_due/reports/export_filtered_report'] = 'events_due/reports/export_filtered_report';
 

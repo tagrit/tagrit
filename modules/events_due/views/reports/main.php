@@ -55,13 +55,11 @@
                             <select id="status" name="status"
                                     data-live-search="true"
                                     class="form-control selectpicker"
-                                    data-none-selected-text="<?php echo _l('Dropdown Non Selected Text'); ?>">
+                                    data-none-selected-text="<?php echo _l('Select Status'); ?>">
                                 <option value="Pending">Pending</option>
                                 <option value="Confirmed">Confirmed</option>
                                 <option value="Canceled">Canceled</option>
                             </select>
-                            <?php echo form_error('setup', '<div class="error-message">', '</div>'); ?>
-
                         </div>
                     </div>
                     <div class="col-md-3">
@@ -106,7 +104,6 @@
                                     <option value="" disabled>No organizations found</option>
                                 <?php endif; ?>
                             </select>
-                            <?php echo form_error('setup', '<div class="error-message">', '</div>'); ?>
                         </div>
                     </div>
                     <div class="col-md-3">

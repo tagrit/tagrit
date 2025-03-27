@@ -10,6 +10,7 @@ class Reports extends AdminController
     public function __construct()
     {
         parent::__construct();
+        $this->load->library('session');
         $this->load->model('Registration_model');
 
     }
@@ -31,20 +32,61 @@ class Reports extends AdminController
     }
 
 
+    public function save_filters()
+    {
+        $filters = [
+            'status' => $this->input->post('status'),
+            'start_date' => $this->input->post('start_date'),
+            'end_date' => $this->input->post('end_date'),
+            'organization' => $this->input->post('organization'),
+            'query' => $this->input->post('query')
+        ];
+        $this->session->set_userdata('event_filters', $filters);
+        echo json_encode(['success' => true]);
+    }
+
+    public function get_filters()
+    {
+        $filters = $this->session->userdata('event_filters');
+        echo json_encode($filters ? $filters : []);
+    }
+
+    public function clear_filters()
+    {
+        $this->session->unset_userdata('event_filters');
+        echo json_encode(['success' => true]);
+    }
+
     public function get_filtered_data()
     {
-        $status = $this->input->post('status');
-        $start_date = $this->input->post('start_date');
-        $end_date = $this->input->post('end_date');
-        $organization = $this->input->post('organization');
-        $query = $this->input->post('query');
+        // Get session filters
+        $filters = $this->session->userdata('event_filters');
 
-        // Fetch filtered data from the model
+        // Always prioritize request data
+        $status = $this->input->post('status') ?? ($filters['status'] ?? null);
+        $start_date = $this->input->post('start_date') ?? ($filters['start_date'] ?? null);
+        $end_date = $this->input->post('end_date') ?? ($filters['end_date'] ?? null);
+        $organization = $this->input->post('organization') ?? ($filters['organization'] ?? null);
+        $query = $this->input->post('query') ?? ($filters['query'] ?? null);
+
+        // Update session with new filter values
+        $new_filters = [
+            'status' => $status,
+            'start_date' => $start_date,
+            'end_date' => $end_date,
+            'organization' => $organization,
+            'query' => $query
+        ];
+
+        $this->session->set_userdata('event_filters', $new_filters);
+
         return $this->Registration_model->get_filtered_data($status, $start_date, $end_date, $organization, $query);
     }
 
+
     public function fetch_filtered_data()
     {
+
         $registrations = $this->get_filtered_data();
 
         foreach ($registrations as $registration) {
