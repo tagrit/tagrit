@@ -1,6 +1,10 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 class Reports extends AdminController
 {
     public function __construct()
@@ -27,7 +31,7 @@ class Reports extends AdminController
     }
 
 
-    public function fetch_filtered_data()
+    public function get_filtered_data()
     {
         $status = $this->input->post('status');
         $start_date = $this->input->post('start_date');
@@ -35,8 +39,13 @@ class Reports extends AdminController
         $organization = $this->input->post('organization');
         $query = $this->input->post('query');
 
-        // Call get_filtered_data() with filter parameters
-        $registrations = $this->Registration_model->get_filtered_data($status, $start_date, $end_date, $organization, $query);
+        // Fetch filtered data from the model
+        return $this->Registration_model->get_filtered_data($status, $start_date, $end_date, $organization, $query);
+    }
+
+    public function fetch_filtered_data()
+    {
+        $registrations = $this->get_filtered_data();
 
         foreach ($registrations as $registration) {
             echo '<tr>
@@ -58,6 +67,65 @@ class Reports extends AdminController
             <td>' . $registration->end_date . '</td>
         </tr>';
         }
+    }
+
+    public function export_filtered_report()
+    {
+        $registrations = $this->get_filtered_data();
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // Set headers
+        $headers = [
+            'Event Name', 'Setup', 'Type', 'Division', 'Start Date', 'End Date', 'Location',
+            'Venue', 'Name of Delegate', 'Date & Month of Birth', 'Mobile No', 'Email Address', 'Organization'
+        ];
+
+        $col = 'A';
+        foreach ($headers as $header) {
+            $sheet->setCellValue($col . '1', $header);
+            $sheet->getStyle($col . '1')->getFont()->setBold(true); // Make header bold
+            $col++;
+        }
+
+        // Populate data
+        $row = 2;
+        foreach ($registrations as $registration) {
+            $col = 'A';
+            $data = [
+                $registration->event_name,
+                $registration->setup,
+                $registration->type,
+                $registration->division,
+                $registration->start_date,
+                $registration->end_date,
+                $registration->location,
+                $registration->venue,
+                $registration->client_first_name . ' ' . $registration->client_last_name,
+                'N/A',
+                $registration->client_phone,
+                $registration->client_email,
+                $registration->organization
+            ];
+
+            foreach ($data as $value) {
+                $sheet->setCellValue($col . $row, $value);
+                $col++;
+            }
+
+            $row++;
+        }
+
+        // Generate and download file
+        $filename = 'event_registration_report.xlsx';
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="' . $filename . '"');
+        header('Cache-Control: max-age=0');
+
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('php://output');
+        exit;
     }
 
 }

@@ -25,12 +25,7 @@
                                 } ?> <span class="caret"></span></a>
                             <ul class="dropdown-menu dropdown-menu-right">
                                 <li>
-                                    <a href="#" onclick="printDiv2(); return false;">
-                                        <?php echo _l('export_to_pdf'); ?>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" onclick="printExcel(); return false;">
+                                    <a href="<?php echo admin_url('events_due/reports/export_filtered_report'); ?>">
                                         <?php echo _l('export_to_excel'); ?>
                                     </a>
                                 </li>
@@ -118,7 +113,8 @@
                         <div class="form-group">
                             <label for="query" class="control-label">Search</label>
                             <div style="border-radius:7px; box-shadow: none;" class="input-group date">
-                                <input style="border-radius:7px; box-shadow: none;" type="text" class="form-control" id="query"
+                                <input style="border-radius:7px; box-shadow: none;" type="text" class="form-control"
+                                       id="query"
                                        name="query">
                             </div>
                         </div>

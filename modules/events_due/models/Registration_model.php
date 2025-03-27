@@ -120,11 +120,13 @@ class Registration_model extends App_Model
             $clients = unserialize($row['serialized_clients']);
             $match = false; // Track if this row matches the search query
 
-            // Convert fields to lowercase for case-insensitive search
-            $query_lower = strtolower($query);
-            $event_name = strtolower($row['event_name']);
-            $location = strtolower($row['location']);
-            $venue = strtolower($row['venue']);
+            // ✅ Ensure the query is a string
+            $query_lower = strtolower($query ?? '');
+
+            // ✅ Ensure event fields are not NULL before strtolower()
+            $event_name = strtolower($row['event_name'] ?? '');
+            $location = strtolower($row['location'] ?? '');
+            $venue = strtolower($row['venue'] ?? '');
 
             // Check if event name, location, or venue match
             if (!empty($query) && (
@@ -137,6 +139,7 @@ class Registration_model extends App_Model
             // Check if any client details match
             if (is_array($clients)) {
                 foreach ($clients as $client) {
+                    // ✅ Handle NULL values for client details
                     $first_name = strtolower($client['first_name'] ?? '');
                     $last_name = strtolower($client['last_name'] ?? '');
                     $email = strtolower($client['email'] ?? '');
@@ -162,6 +165,7 @@ class Registration_model extends App_Model
                 ]);
             }
         }
+
 
         return json_decode(json_encode($final_results));
     }
