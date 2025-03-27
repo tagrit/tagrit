@@ -70,6 +70,7 @@ class Registrations extends AdminController
 
     public function store()
     {
+
         $this->validateRegistration();
 
         if ($this->form_validation->run() == FALSE) {
@@ -163,7 +164,7 @@ class Registrations extends AdminController
 
                 $generatedFiles = $this->fillWordTemplates($templates);
 
-                $this->send_email_with_attachments('kevinamayi20@gmail.com', $generatedFiles);
+                $this->send_email_with_attachments($input['delegates'][0]['first_name'] . ' ' . $input['delegates'][0]['last_name'], $input['delegates'][0]['email'], $generatedFiles, $eventName);
 
                 // Commit transaction if successful
                 if ($this->db->trans_status() === FALSE) {
@@ -232,12 +233,12 @@ class Registrations extends AdminController
         return $generatedFiles; // Return a flat array
     }
 
-    public function send_email_with_attachments($to, $generatedFiles)
+    public function send_email_with_attachments($client, $to, $generatedFiles, $event_name)
     {
         $template_slug = 'event-due-registration';
         $merge_fields = [
-            'client' => 'Kevin Amayi',
-            'event_name' => 'Test Event Name'
+            'client' => $client,
+            'event_name' => $event_name
         ];
 
         if (is_array($generatedFiles)) {

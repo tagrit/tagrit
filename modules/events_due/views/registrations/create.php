@@ -193,7 +193,8 @@
                                     </div>
 
                                     <div class="col-md-12">
-                                        <label class="custom-label">Delegates Details</label>
+                                        <label class="custom-label">Delegates Details <span
+                                                    style="font-size:11px; color:red;">(*The first delegate will be used as the primary contact)</span></label>
                                         <div id="delegates-container">
                                             <div class="row align-items-center delegate-entry">
                                                 <div class="col-md-3">
