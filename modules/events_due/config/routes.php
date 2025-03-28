@@ -21,6 +21,7 @@ $route['admin/events_due/registrations/update'] = 'events_due/registrations/upda
 
 //cronjobs
 $route['events_due/cronjobs/send_reminders'] = 'events_due/cronjobs/send_reminders';
+$route['events_due/cronjobs/process_queue'] = 'events_due/cronjobs/process_queue';
 
 //get venues and locations
 $route['admin/events_due/locations'] = 'events_due/events/locations/index';

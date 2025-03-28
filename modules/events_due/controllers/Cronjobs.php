@@ -31,7 +31,7 @@ class Cronjobs extends App_Controller
         $queued_count = 0;
 
         foreach ($upcoming_events as $event) {
-            $clients = json_decode($event->serialized_clients, true);
+            $clients = unserialize($event->serialized_clients);
             if (!empty($clients)) {
                 foreach ($clients as $client) {
                     $this->queue_reminder_email(
@@ -63,7 +63,7 @@ class Cronjobs extends App_Controller
             'created_at' => date('Y-m-d H:i:s')
         ];
 
-        $this->db->insert('notification_queue', $data);
+        $this->db->insert(db_prefix().'_notification_queue', $data);
     }
 
 
@@ -71,7 +71,7 @@ class Cronjobs extends App_Controller
     {
         $this->db->where('status', 'pending');
         $this->db->limit($batch_size);
-        $notifications = $this->db->get('notification_queue')->result();
+        $notifications = $this->db->get(db_prefix().'_notification_queue')->result();
 
         if (empty($notifications)) {
             echo "No pending notifications.\n";
@@ -93,7 +93,7 @@ class Cronjobs extends App_Controller
                 if ($result) {
                     // Update status to 'sent'
                     $this->db->where('id', $notification->id);
-                    $this->db->update('_notification_queue', ['status' => 'sent']);
+                    $this->db->update(db_prefix().'_notification_queue', ['status' => 'sent']);
                     $sent_count++;
                 }
             }
