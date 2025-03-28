@@ -59,6 +59,10 @@ class Events_Due_System
             echo '<link href="' . module_dir_url(EVENTS_DUE_MODULE_NAME, 'assets/css/events/edit_event.css') . '" rel="stylesheet" type="text/css" />';
         }
 
+        if (strpos($viewuri, 'admin/events_due/events/view') !== false) {
+            echo '<link href="' . module_dir_url(EVENTS_DUE_MODULE_NAME, 'assets/css/events/view_event.css') . '" rel="stylesheet" type="text/css" />';
+        }
+
 
         //registration css
         if (strpos($viewuri, 'admin/events_due/registrations') !== false) {

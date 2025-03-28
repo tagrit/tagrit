@@ -23,6 +23,12 @@ class Events extends AdminController
         $this->load->view('events/index', $data);
     }
 
+    public function view($event_id)
+    {
+        $data['event'] = $this->Event_model->event_details($event_id);
+        $this->load->view('events/view',$data);
+    }
+
 
     public function store()
     {
@@ -105,23 +111,13 @@ class Events extends AdminController
             // Prepare data to be updated
             $data = [
                 'name' => $this->input->post('name'),
-//                'venue' => $this->input->post('venue'),
-//                'start_date' => $this->input->post('start_date'),
-//                'end_date' => $this->input->post('end_date'),
-//                'no_of_delegates' => $this->input->post('no_of_delegates'),
-//                'charges_per_delegate' => $this->input->post('charges_per_delegate'),
-//                'division' => $this->input->post('division'),
-//                'facilitator' => $this->input->post('facilitator'),
-//                'revenue' => $this->input->post('revenue'),
             ];
 
             // Attempt to update the event
             if ($this->Event_model->update($event['id'], $data)) {
-                // If update is successful
                 set_alert('success', 'Event updated successfully!');
                 redirect('events_due/events/index');
             } else {
-                // If update fails
                 set_alert('danger', 'Failed to update event.');
                 redirect('events/edit/' . $event['id']);
             }

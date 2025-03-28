@@ -207,17 +207,18 @@ class Settings extends AdminController
             'Venue', 'Name of Delegate', 'Date & Month of Birth', 'Mobile No', 'Email Address', 'Organization'
         ];
 
-        // Add headers to first row
+        // Apply bold styling to headers
         $col = 'A';
         foreach ($headers as $header) {
             $sheet->setCellValue($col . '1', $header);
+            $sheet->getStyle($col . '1')->getFont()->setBold(true); // Make header bold
             $col++;
         }
 
         // Add sample data
         $sampleData = [
-            'Sample Event', 'Conference', 'Workshop', 'HR', '2025-01-01', '2025-01-03',
-            'Nairobi', 'KICC', 'John Doe', '01 Jan 1990', '1234567890', 'john@example.com', 'XYZ Ltd'
+            'Data Science', 'Physical', 'Local', 'ADS', '2025-01-01', '2025-01-03',
+            'Mombasa', 'Sarova Hotel', 'John Doe', '01 Jan 1990', '1234567890', 'john@example.com', 'Tagrit'
         ];
 
         $col = 'A';
@@ -236,6 +237,7 @@ class Settings extends AdminController
         $writer->save('php://output');
         exit;
     }
+
 
 
 }

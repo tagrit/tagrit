@@ -43,6 +43,7 @@ class Event_model extends App_Model
         tblevents_due_events.division,
         tblevents_due_events.type,
         tblevents_due_events.revenue,
+        tblevents_due_events.trainers,
         tblevents_due_name.name AS event_name,
         tblevents_due_events.location,
         tblevents_due_events.venue,
@@ -55,11 +56,38 @@ class Event_model extends App_Model
         $this->db->join(db_prefix() . 'events_due_registrations AS tblevents_due_registrations', 'tblevents_due_events.id = tblevents_due_registrations.event_detail_id', 'inner');
 
         if ($event_id) {
-            $this->db->where('tblevents_due_events.id', $event_id);
+            $this->db->where('tblevents_due_events.event_id', $event_id);
         }
 
         return $this->db->get()->result();
 
+    }
+
+
+    public function upcoming_event_details($limit = 50, $offset = 0)
+    {
+        $seven_days_later = date('Y-m-d', strtotime('+7 days'));
+
+        $this->db->select('
+        tblevents_due_events.event_id,
+        tblevents_due_events.start_date,
+        tblevents_due_name.name AS event_name,
+        tblevents_due_events.venue,        
+        tblevents_due_events.location,
+        tblevents_due_registrations.clients AS serialized_clients
+    ');
+
+        $this->db->from(db_prefix() . '_events_details AS tblevents_due_events');
+        $this->db->join(db_prefix() . '_events AS tblevents_due_name', 'tblevents_due_events.event_id = tblevents_due_name.id', 'left');
+        $this->db->join(db_prefix() . 'events_due_registrations AS tblevents_due_registrations', 'tblevents_due_events.id = tblevents_due_registrations.event_detail_id', 'inner');
+
+        // Filter for events 7 days ahead
+        $this->db->where('DATE(tblevents_due_events.start_date)', $seven_days_later);
+
+        // Pagination to avoid memory overload
+        $this->db->limit($limit, $offset);
+
+        return $this->db->get()->result();
     }
 
 

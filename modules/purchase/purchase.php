@@ -1682,8 +1682,7 @@ function init_po_project_tabs($tabs){
 /**
  * { update email language for vendor }
  */
-function update_email_lang_for_vendor($language, $data){
-
+function update_email_lang_for_vendor($language, $data) {
     $purchase_slug_arr = [
         'purchase-request-to-contact',
         'debit-note-to-contact',
@@ -1695,12 +1694,18 @@ function update_email_lang_for_vendor($language, $data){
         'purchase-contract-to-contact',
     ];
 
-    if( in_array($data['template']->slug, $purchase_slug_arr)){
-        if($data['template']->slug == 'vendor-registration-confirmed'){
+    // Ensure $data['template'] exists before accessing it
+    if (!isset($data['template']) || !isset($data['template']->slug)) {
+        log_message('error', 'Missing template data in update_email_lang_for_vendor');
+        return $language;
+    }
+
+    if (in_array($data['template']->slug, $purchase_slug_arr)) {
+        if ($data['template']->slug == 'vendor-registration-confirmed') {
             return $language;
-        }else{
-            $vendor_lang = get_vendor_language_by_email($data['email']);
-            if($vendor_lang != ''){
+        } else {
+            $vendor_lang = get_vendor_language_by_email($data['email'] ?? '');
+            if (!empty($vendor_lang)) {
                 $language = $vendor_lang;
             }
         }

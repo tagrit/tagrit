@@ -17,7 +17,7 @@ $environments = [
 
 
 // Default to production
-$environment = 'production';
+$environment = 'local';
 
 foreach ($environments as $key => $env) {
     if (stripos($host, $key) !== false) {
