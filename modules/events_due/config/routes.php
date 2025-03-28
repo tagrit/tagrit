@@ -19,6 +19,9 @@ $route['admin/events_due/registrations/store'] = 'events_due/registrations/store
 $route['admin/events_due/registrations/edit/(:num)'] = 'events_due/registrations/edit/$registration_id';
 $route['admin/events_due/registrations/update'] = 'events_due/registrations/update';
 
+//cronjobs
+$route['events_due/cronjobs/send_reminders'] = 'events_due/cronjobs/send_reminders';
+
 //get venues and locations
 $route['admin/events_due/locations'] = 'events_due/events/locations/index';
 $route['admin/events_due/venues'] = 'events_due/events/venues/index';

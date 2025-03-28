@@ -4,7 +4,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 $CI = &get_instance();
 
-
 // Create table `{database_prefix}_events_due_locations`
 if (!$CI->db->table_exists(db_prefix() . 'events_due_locations')) {
     $CI->db->query('CREATE TABLE `' . db_prefix() . 'events_due_locations` (
@@ -32,7 +31,6 @@ if (!$CI->db->table_exists(db_prefix() . 'events_due_venues')) {
     ");
 }
 
-
 // Create table `{database_prefix}_events_due_registrations`
 if (!$CI->db->table_exists(db_prefix() . 'events_due_registrations')) {
     $CI->db->query('CREATE TABLE `' . db_prefix() . 'events_due_registrations` (
@@ -46,6 +44,22 @@ if (!$CI->db->table_exists(db_prefix() . 'events_due_registrations')) {
     ) ENGINE=InnoDB DEFAULT CHARSET=' . $CI->db->char_set . ';');
 }
 
+// Create table `{database_prefix}_notification_queue`
+if (!$CI->db->table_exists(db_prefix() . 'notification_queue')) {
+    $CI->db->query('CREATE TABLE `' . db_prefix() . '_notification_queue` (
+        `id` INT NOT NULL AUTO_INCREMENT,
+        `type` VARCHAR(50) NOT NULL,
+        `email` VARCHAR(255) NOT NULL,
+        `client_name` VARCHAR(255) NOT NULL,
+        `event_name` VARCHAR(255) NOT NULL,
+        `event_date` DATE NOT NULL,
+        `event_location` VARCHAR(255) NOT NULL,
+        `status` ENUM("pending", "sent") NOT NULL DEFAULT "pending",
+        `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=' . $CI->db->char_set . ';');
+}
 
 // Insert locations
 $locations = [
@@ -103,6 +117,23 @@ $email_templates_data = [
         'subject' => 'Event Registration',
         'message' => '<p>Hello client,<br><br>We wanted to inform you that your registration for event_name is successful, Kindly check the document below for further details.</p>
      <p>Kind Regards,<br><br></p>',
+        'fromname' => '{companyname} | CRM',
+        'plaintext' => 0,
+        'active' => 1,
+        'order' => 0
+    ],
+    [
+        'type' => 'notifications',
+        'slug' => 'event-reminder',
+        'language' => 'english',
+        'name' => 'Event Reminder (sent client)',
+        'subject' => 'Upcoming Event Reminder',
+        'message' => '<p>Hello client_name,<br><br>
+        This is a friendly reminder about your upcoming event: <strong>event_name</strong>.<br>
+        The event is scheduled for <strong>event_date</strong> at <strong>event_location</strong>.<br><br>
+        Please confirm your attendance and get back in case your want to require additional information.<br><br>
+        Looking forward to your participation!<br><br>
+        Kind Regards,<br>',
         'fromname' => '{companyname} | CRM',
         'plaintext' => 0,
         'active' => 1,
