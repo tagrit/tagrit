@@ -2,6 +2,7 @@
 (function($) {
   "use strict";
 
+    $( document ).ready(function() {
   $.get(admin_url + 'ma/get_data_asset_chart/'+$('input[name=asset_id]').val()).done(function(res) {
     res = JSON.parse(res);
     Highcharts.chart('container_download_chart', {
@@ -70,6 +71,7 @@
             data: res.data_asset_download
         }]
     });
+  });
   });
 
 })(jQuery);

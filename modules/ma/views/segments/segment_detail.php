@@ -146,7 +146,6 @@
                                array_push($table_data,$_t);
                               }
                              
-                              $table_data = hooks()->apply_filters('leads_table_columns', $table_data);
                               render_datatable($table_data,'leads-segment',
                               array('customizable-table'),
                               array(

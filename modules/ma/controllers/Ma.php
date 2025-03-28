@@ -75,10 +75,23 @@ class Ma extends AdminController
         $data['tab'][] = 'email_configuration';
         $data['tab'][] = 'email_sending_limit';
         $data['tab'][] = 'form_custom_css';
-        // $data['tab'][] = 'unlayer_custom_fonts';
+        $data['tab'][] = 'unlayer';
         
         if ($data['group'] == '') {
             $data['group'] = 'category';
+        }
+
+        if ($data['group'] == 'email_sending_limit') {
+            $data['email_limit_configs'] = $this->ma_model->get_email_limit_configs();
+            $data['email_sending_limit_stats'] = $this->ma_model->email_sending_limit_stats();
+            $data['campaign_list'] = [];
+            foreach ($data['email_limit_configs'] as $key => $config) {
+                $data['campaign_list'][$config['id']] = $this->ma_model->get_campaign_by_email_limit_config($config['id'], $config['is_default']);
+            }
+        }
+
+        if ($data['group'] == 'email_configuration') {
+            $data['smtp_configs'] = $this->ma_model->get_smtp_configs();
         }
 
         $data['title']        = _l($data['group']);
@@ -2028,6 +2041,8 @@ class Ma extends AdminController
         $data['customer_segments'] = $this->ma_model->get_object_by_campaign($id, 'customer_segment', 'object');
         $data['average_time_to_open'] = $this->ma_model->get_average_time_to_open_email($id);
         $data['campaign_test'] = $this->ma_model->get_campaign_test($id);
+        $data['smtp_configs'] = $this->ma_model->get_smtp_configs();
+        $data['email_limit_configs'] = $this->ma_model->get_email_limit_configs();
 
         $data['title'] = _l('campaign');
 
@@ -2331,7 +2346,8 @@ class Ma extends AdminController
         if (isset($_FILES['data_html'])) {
             $file = $_FILES['data_html'];
         
-            $data_html = file_get_contents($_FILES['data_html']['tmp_name']);
+            $_data_html = file_get_contents($_FILES['data_html']['tmp_name']);
+            $data_html = base64_decode($_data_html);
         }
 
         $data_design = '';
@@ -2362,6 +2378,7 @@ class Ma extends AdminController
     public function email_template_design($id){
         $data['email_template_design'] = $this->ma_model->get_email_template_design($id);
         $data['available_merge_fields'] = $this->app_merge_fields->all();
+        $data['project_id'] = get_option('ma_unlayer_project_id');
 
         $data['title'] = _l('email_template');
 
@@ -2499,7 +2516,7 @@ class Ma extends AdminController
                 'firstname as assigned_firstname',
                 db_prefix() . 'leads_status.name as status_name',
                 db_prefix() . 'leads_sources.name as source_name',
-                'ma_point',
+                '(select SUM(point) from '.db_prefix().'ma_point_action_logs where lead_id = '.db_prefix() . 'leads.id) as total_point',
             ]);
 
             $sIndexColumn = 'id';
@@ -2671,6 +2688,7 @@ class Ma extends AdminController
 
                 $row[] = $assignedOutput;
 
+                $outputStatus = '';
                 if ($aRow['status_name'] == null) {
                     if ($aRow['lost'] == 1) {
                         $outputStatus = '<span class="label label-danger inline-block">' . _l('lead_lost') . '</span>';
@@ -2705,7 +2723,7 @@ class Ma extends AdminController
 
                 $row[] = $aRow['source_name'];
 
-                $row[] = ma_lead_total_point($aRow['id']);
+                $row[] = $aRow['total_point'] ?? 0;
                
                 $row['DT_RowId'] = 'lead_' . $aRow['id'];
 
@@ -3160,14 +3178,14 @@ class Ma extends AdminController
             $sIndexColumn = 'id';
             $sTable       = db_prefix() . 'ma_email_logs';
             $join         = [
-                'JOIN ' . db_prefix() . 'ma_email_templates ON ' . db_prefix() . 'ma_email_templates.id = ' . db_prefix() . 'ma_email_logs.email_template_id',
+                'LEFT JOIN ' . db_prefix() . 'ma_email_templates ON ' . db_prefix() . 'ma_email_templates.id = ' . db_prefix() . 'ma_email_logs.email_template_id',
                 'LEFT JOIN ' . db_prefix() . 'leads ON ' . db_prefix() . 'leads.id = ' . db_prefix() . 'ma_email_logs.lead_id',
                 'LEFT JOIN ' . db_prefix() . 'clients ON ' . db_prefix() . 'clients.userid = ' . db_prefix() . 'ma_email_logs.client_id',
                 'LEFT JOIN ' . db_prefix() . 'contacts ON ' . db_prefix() . 'contacts.userid = ' . db_prefix() . 'clients.userid AND is_primary = 1',
             ];
 
-            $result = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, [db_prefix() . 'ma_email_templates.id as id', db_prefix() . 'clients.company as client_name', db_prefix() . 'contacts.email as client_email', db_prefix() . 'leads.id as lead_id',db_prefix() . 'ma_email_logs.email as email']);
-
+            $result = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, [db_prefix() . 'ma_email_templates.id as id', db_prefix() . 'clients.company as client_name', db_prefix() . 'contacts.email as client_email', db_prefix() . 'leads.id as lead_id',db_prefix() . 'ma_email_logs.email as email', 'failed_debugger']);
+            
             $output  = $result['output'];
             $rResult = $result['rResult'];
 
@@ -3196,7 +3214,12 @@ class Ma extends AdminController
 
                 $value = (($aRow['delivery'] == 1) ? _l('yes') : _l('no'));
                 $text_class = (($aRow['delivery'] == 1) ? 'text-success' : 'text-danger');
-                $row[] = '<span class="text '.$text_class.'">' . $value . '</span>';
+
+                $failed_debugger = '';
+                if($aRow['failed_debugger'] != '' && $aRow['delivery'] != 1){
+                    $failed_debugger = ' <i class="fa-regular fa-circle-question" data-toggle="tooltip" data-title="'.html_entity_decode($aRow['failed_debugger']).'" data-original-title="" title=""></i>';
+                }
+                $row[] = '<span class="text '.$text_class.'">' . $value . '</span>'.$failed_debugger;
 
                 $value = (($aRow['open'] == 1) ? _l('yes') : _l('no'));
                 $text_class = (($aRow['open'] == 1) ? 'text-success' : 'text-danger');
@@ -3352,7 +3375,8 @@ class Ma extends AdminController
     public function email_design($id){
         $data['email_design'] = $this->ma_model->get_email_design($id);
         $data['available_merge_fields'] = $this->app_merge_fields->all();
-
+        $data['project_id'] = get_option('ma_unlayer_project_id');
+        
         $data['title'] = _l('email');
 
         $data['is_edit'] = true;
@@ -3408,7 +3432,8 @@ class Ma extends AdminController
         if (isset($_FILES['data_html'])) {
             $file = $_FILES['data_html'];
         
-            $data_html = file_get_contents($_FILES['data_html']['tmp_name']);
+            $_data_html = file_get_contents($_FILES['data_html']['tmp_name']);
+            $data_html = base64_decode($_data_html);
         }
 
         $data_design = '';
@@ -3954,7 +3979,7 @@ class Ma extends AdminController
                 db_prefix().'clients.phonenumber as phonenumber',
                 db_prefix().'clients.active',
                 '(SELECT GROUP_CONCAT(name SEPARATOR ",") FROM '.db_prefix().'customer_groups JOIN '.db_prefix().'customers_groups ON '.db_prefix().'customer_groups.groupid = '.db_prefix().'customers_groups.id WHERE customer_id = '.db_prefix().'clients.userid ORDER by name ASC) as customerGroups',
-                db_prefix().'clients.datecreated as datecreated',
+                '(select SUM(point) from '.db_prefix().'ma_point_action_logs where client_id = '.db_prefix().'clients.userid) as total_point',
             ];
 
             $sIndexColumn = 'userid';
@@ -4070,7 +4095,7 @@ class Ma extends AdminController
 
                 $row[] = $groupsRow;
 
-                $row[] = ma_client_total_point($aRow['userid']);
+                $row[] = $aRow['total_point'] ?? 0;
 
                 $row['DT_RowClass'] = 'has-row-options';
 
@@ -4109,31 +4134,43 @@ class Ma extends AdminController
      * sent smtp test email
      * @return [type] [description]
      */
-    public function sent_smtp_test_email()
+    public function sent_smtp_test_email($id)
     {
         if ($this->input->post()) {
             $this->load->config('email');
 
-            $this->email->useragent  = trim(get_option('ma_mail_engine'));
-            $this->email->protocol  = trim(get_option('ma_email_protocol'));
-            $this->email->smtp_crypto  = trim(get_option('ma_smtp_encryption'));
-            $this->email->smtp_host  = trim(get_option('ma_smtp_host'));
+            $smtp_config = $this->ma_model->get_smtp_configs($id);
+            $config_option = json_decode($smtp_config->configs ?? '', true);
+            $ma_mail_engine = isset($config_option['ma_mail_engine']) ? $config_option['ma_mail_engine'] : '';
+            $ma_email_protocol = isset($config_option['ma_email_protocol']) ? $config_option['ma_email_protocol'] : '';
+            $ma_smtp_encryption = isset($config_option['ma_smtp_encryption']) ? $config_option['ma_smtp_encryption'] : '';
+            $ma_smtp_host = isset($config_option['ma_smtp_host']) ? $config_option['ma_smtp_host'] : '';
+            $ma_smtp_port = isset($config_option['ma_smtp_port']) ? $config_option['ma_smtp_port'] : '';
+            $ma_smtp_email = isset($config_option['ma_smtp_email']) ? $config_option['ma_smtp_email'] : '';
+            $ma_smtp_username = isset($config_option['ma_smtp_username']) ? $config_option['ma_smtp_username'] : '';
+            $ma_smtp_password = isset($config_option['ma_smtp_password']) ? $config_option['ma_smtp_password'] : '';
+            $ma_smtp_email_charset = isset($config_option['ma_smtp_email_charset']) ? $config_option['ma_smtp_email_charset'] : '';
+            $ma_bcc_emails = isset($config_option['ma_bcc_emails']) ? $config_option['ma_bcc_emails'] : '';
 
-            if (get_option('ma_smtp_username') == '') {
-                $this->email->smtp_user    = trim(get_option('ma_smtp_email'));
+            $this->email->useragent  = trim($ma_mail_engine);
+            $this->email->protocol  = trim($ma_email_protocol);
+            $this->email->smtp_crypto  = trim($ma_smtp_encryption);
+            $this->email->smtp_host  = trim($ma_smtp_host);
+            if ($ma_smtp_username == '') {
+                $this->email->smtp_user    = trim($ma_smtp_email);
             } else {
-                $this->email->smtp_user    = trim(get_option('ma_smtp_username'));
+                $this->email->smtp_user    = trim($ma_smtp_username);
             }
 
-            $charset = strtoupper(get_option('ma_smtp_email_charset'));
+            $charset = strtoupper($ma_smtp_email_charset);
             $charset = trim($charset);
             if ($charset == '' || strcasecmp($charset,'utf8') == 'utf8') {
                 $charset = 'utf-8';
             }
 
             $this->email->charset  = $charset;
-            $this->email->smtp_pass  = $this->encryption->decrypt(get_option('ma_smtp_password'));
-            $this->email->smtp_port  = trim(get_option('ma_smtp_port'));
+            $this->email->smtp_pass  = $ma_smtp_password;
+            $this->email->smtp_port  = trim($ma_smtp_port);
 
             // Simulate fake template to be parsed
             $template           = new StdClass();
@@ -4144,7 +4181,7 @@ class Ma extends AdminController
             $template = parse_email_template($template);
 
             $this->email->initialize();
-            if (get_option('ma_mail_engine') == 'phpmailer') {
+            if ($ma_mail_engine == 'phpmailer') {
                 $this->email->set_debug_output(function ($err) {
                     if (!isset($GLOBALS['debug'])) {
                         $GLOBALS['debug'] = '';
@@ -4160,18 +4197,16 @@ class Ma extends AdminController
             $this->email->set_newline(config_item('newline'));
             $this->email->set_crlf(config_item('crlf'));
 
-            $this->email->from(get_option('ma_smtp_email'), $template->fromname);
+            $this->email->from($ma_smtp_email, $template->fromname);
             $this->email->to($this->input->post('test_email'));
 
-            $systemBCC = get_option('ma_bcc_emails');
+            $systemBCC = $ma_bcc_emails;
 
             if ($systemBCC != '') {
                 $this->email->bcc($systemBCC);
             }
-
             $this->email->subject($template->subject);
             $this->email->message($template->message);
-
             if ($this->email->send(true)) {
                 set_alert('success', 'Seems like your SMTP settings is set correctly. Check your email now.');
             } else {
@@ -4211,7 +4246,7 @@ class Ma extends AdminController
      * save general setting
      * @return redirect
      */
-    public function save_gereral_setting(){
+    public function save_general_setting(){
         $data = $this->input->post();
         $success = $this->ma_model->save_general_setting($data);
         if($success){
@@ -4258,6 +4293,9 @@ class Ma extends AdminController
             ];
 
             $where = [];
+
+            array_push($where, 'AND ' . db_prefix() . 'ma_campaigns.published=1');
+
             $from_date = '';
             $to_date   = '';
 
@@ -4362,5 +4400,140 @@ class Ma extends AdminController
             set_alert('success', $message);
         }
         redirect(admin_url('ma/settings?group=unlayer_custom_fonts'));
+    }
+
+    /**
+     * add smtp_config
+     * @return redirect
+     */
+    public function add_smtp_config(){
+        $data = $this->input->post();
+        
+        $success = $this->ma_model->add_smtp_config($data);
+        if($success){
+            $message = _l('added_successfully', _l('smtp_config'));
+            set_alert('success', $message);
+        }
+
+        redirect(admin_url('ma/settings?group=email_configuration'));
+    }
+
+    /**
+     * save smtp config
+     * @return redirect
+     */
+    public function save_smtp_config(){
+        $data = $this->input->post();
+        $success = $this->ma_model->save_smtp_config($data);
+        if($success){
+            $message = _l('updated_successfully', _l('smtp_config'));
+            set_alert('success', $message);
+        }
+
+        redirect(admin_url('ma/settings?group=email_configuration'));
+    }
+
+    /**
+     * save smtp config
+     * @return redirect
+     */
+    public function save_campaign_configs($id){
+        $data = $this->input->post();
+        $success = $this->ma_model->save_campaign_configs($data, $id);
+        if($success){
+            $message = _l('updated_successfully', _l('campaign'));
+            set_alert('success', $message);
+        }
+
+        redirect(admin_url('ma/campaign_detail/'.$id));
+    }
+    public function set_smtp_config_default($id){
+        $success = $this->ma_model->set_smtp_config_default($id);
+        if($success){
+            $message = _l('updated_successfully', _l('smtp_config'));
+            set_alert('success', $message);
+        }
+
+        redirect(admin_url('ma/settings?group=email_configuration'));
+    }
+
+    /**
+     * add email_limit_config
+     * @return redirect
+     */
+    public function add_email_limit_config(){
+        $data = $this->input->post();
+        
+        $success = $this->ma_model->add_email_limit_config($data);
+        if($success){
+            $message = _l('added_successfully', _l('email_limit_config'));
+            set_alert('success', $message);
+        }
+
+        redirect(admin_url('ma/settings?group=email_sending_limit'));
+    }
+
+    /**
+     * save email_limit config
+     * @return redirect
+     */
+    public function save_email_limit_config(){
+        $data = $this->input->post();
+        $success = $this->ma_model->save_email_limit_config($data);
+        if($success){
+            $message = _l('updated_successfully', _l('email_limit_config'));
+            set_alert('success', $message);
+        }
+
+        redirect(admin_url('ma/settings?group=email_sending_limit'));
+    }
+
+    public function set_email_limit_config_default($id){
+        $success = $this->ma_model->set_email_limit_config_default($id);
+        if($success){
+            $message = _l('updated_successfully', _l('email_limit_config'));
+            set_alert('success', $message);
+        }
+
+        redirect(admin_url('ma/settings?group=email_sending_limit'));
+    }
+
+    public function delete_smtp_config($id){
+        $data = $this->input->post();
+        
+        $success = $this->ma_model->delete_smtp_config($id);
+        if($success){
+            $message = _l('deleted', _l('smtp_config'));
+            set_alert('success', $message);
+        }
+
+        redirect(admin_url('ma/settings?group=email_configuration'));
+    }
+
+    public function delete_email_limit_config($id){
+        $data = $this->input->post();
+        
+        $success = $this->ma_model->delete_email_limit_config($id);
+        if($success){
+            $message = _l('deleted', _l('email_limit_config'));
+            set_alert('success', $message);
+        }
+
+        redirect(admin_url('ma/settings?group=email_sending_limit'));
+    }
+    
+    /**
+     * save unlayer setting
+     * @return redirect
+     */
+    public function save_unlayer_setting(){
+        $data = $this->input->post();
+        $success = $this->ma_model->update_setting($data);
+        if($success){
+            $message = _l('updated_successfully', _l('setting'));
+            set_alert('success', $message);
+        }
+
+        redirect(admin_url('ma/settings?group=unlayer'));
     }
 }  

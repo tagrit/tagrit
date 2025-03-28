@@ -1,4 +1,4 @@
-<?php echo form_open(admin_url('ma/save_gereral_setting')); ?>
+<?php echo form_open(admin_url('ma/save_general_setting')); ?>
 <div class="form-group">
 	<label for="mail_engine"><?php echo _l('ma_lead_required_phone'); ?></label><br />
 	<div class="radio radio-inline radio-primary">

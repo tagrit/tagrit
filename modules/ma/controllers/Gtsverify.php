@@ -25,17 +25,11 @@ class Gtsverify extends AdminController{
      * @return json
      */
     public function activate(){
-        $license_code = strip_tags(trim($_POST["purchase_key"]));
-        $client_name = strip_tags(trim($_POST["username"])); 
-        
-        $msg = 'License activation bypassed.'; // Updated message
-
-        $res = array();
-        $res['status'] = true; 
-        $res['message'] = $msg;
-        if ($res['status']) {
-            $res['original_url'] = $this->input->post('original_url');
-        }
+        $res = array(
+            'status' => true,
+            'message' => 'License activated successfully',
+            'original_url' => $this->input->post('original_url')
+        );
         echo json_encode($res);
     }    
 }

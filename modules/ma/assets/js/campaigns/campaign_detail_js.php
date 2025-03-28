@@ -7,6 +7,7 @@ var fnServerParams;
         "campaign_id": '[name="campaign_id"]',
     };
 
+    $( document ).ready(function() {
     init_lead_table();
     init_client_table();
 
@@ -223,6 +224,7 @@ Highcharts.chart('container_point_action', {
     appValidateForm($('#test-campaign-form'), {
         name: 'required',
         email: 'required',
+    });
     });
 })(jQuery);
 

@@ -6,6 +6,7 @@ var is_edit = $('input[name="is_edit"]').val();
 (function($) {
   "use strict";
 
+    $( document ).ready(function() {
   if($('#dropzoneDragArea').length > 0){
       expenseDropzone = new Dropzone("#expense-form", appCreateDropzoneOptions({
         autoProcessQueue: false,
@@ -26,6 +27,7 @@ var is_edit = $('input[name="is_edit"]').val();
     name:'required',
     category:'required',
   },expenseSubmitHandler);
+      });
 })(jQuery);
 
     

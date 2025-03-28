@@ -2,6 +2,7 @@
 (function($) {
 		"use strict";
 
+    $( document ).ready(function() {
     $.get(admin_url + 'ma/get_data_campaign_detail_chart').done(function(res) {
         res = JSON.parse(res);
         Highcharts.chart('container_email', {
@@ -203,6 +204,7 @@ Highcharts.chart('container_point_action', {
             name: '<?php echo _l("point_action"); ?>',
             data: res.data_point_action
         }]
+    });
     });
     });
 })(jQuery);

@@ -38,5 +38,5 @@ class Gtsverify extends AdminController{
             $res['original_url'] = $this->input->post('original_url');
         }
         echo json_encode($res);
-    }    
+    }   
 }
