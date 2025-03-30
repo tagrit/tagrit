@@ -146,7 +146,7 @@ class Registrations extends AdminController
                         'date' => $startDate,
                         'period' => $period,
                         'venue' => "$venue $location",
-                        'cost_per_delegate' => 'KSHS ' . (1.16 * $costPerDelegate),
+                        'cost_per_delegate' => 'KSHS ' . (1.16 * $numDelegates * $costPerDelegate) / $numDelegates,
                         'organization' => $organization,
                         'event' => $eventName,
                         'delegates' => $delegatesList,
@@ -158,7 +158,7 @@ class Registrations extends AdminController
                         'invoice_number' => $this->generate_invoice_number(),
                         'total_fee' => $numDelegates * $costPerDelegate,
                         'cost_per_delegate' => $costPerDelegate,
-                        'vat_per_delegate' => 1.16 * $costPerDelegate,
+                        'vat_per_delegate' => (0.16 * $numDelegates * $costPerDelegate) / $numDelegates,
                         'organization' => $organization,
                         'total_chargeable' => 1.16 * $numDelegates * $costPerDelegate,
                         'delegates' => $delegatesList,
@@ -171,8 +171,9 @@ class Registrations extends AdminController
                 ];
 
                 $generatedFiles = $this->fillWordTemplates($templates);
-
-                $this->send_email_with_attachments($input['delegates'][0]['first_name'] . ' ' . $input['delegates'][0]['last_name'], $input['delegates'][0]['email'], $generatedFiles, $eventName);
+                $remaining_delegates = array_slice($input['delegates'], 1);
+                $cc_emails = array_column($remaining_delegates, 'email');
+                $this->send_email_with_attachments($input['delegates'][0]['first_name'] . ' ' . $input['delegates'][0]['last_name'], $input['delegates'][0]['email'], $generatedFiles, $eventName, $cc_emails);
 
                 // Commit transaction if successful
                 if ($this->db->trans_status() === FALSE) {
@@ -241,7 +242,7 @@ class Registrations extends AdminController
         return $generatedFiles; // Return a flat array
     }
 
-    public function send_email_with_attachments($client, $to, $generatedFiles, $event_name)
+    public function send_email_with_attachments($client, $to, $generatedFiles, $event_name, $cc_emails)
     {
         $template_slug = 'event-due-registration';
         $merge_fields = [
@@ -257,7 +258,7 @@ class Registrations extends AdminController
             $this->emails_model->add_attachment(FCPATH . 'uploads/events_due_files/training_invitation_letter_1742750826.docx');
         }
 
-        return $this->emails_model->send_email_template($template_slug, $to, $merge_fields);
+        return $this->emails_model->send_email_template($template_slug, $to, $merge_fields, '', $cc_emails);
     }
 
 }
