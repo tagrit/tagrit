@@ -2,18 +2,11 @@
 <?php init_head(); ?>
 <div id="wrapper">
     <div class="content">
-        <div class="section-header">
-            <h1>Events</h1>
-            <div class="section-header-breadcrumb">
-                <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-                <div class="breadcrumb-item">Event Registrations</div>
-            </div>
-        </div>
         <div class="panel_s">
             <div class="panel-body">
                 <div class="row">
                     <div class="col-md-12">
-                        <h4 class="no-margin" style="color: #34395e;font-weight: 600;">Event Registration Form</h4>
+                        <h4 class="no-margin" style="color: #34395e;font-weight: 600;">Event Registration</h4>
                         <hr class="hr-panel-heading"/>
                     </div>
 
