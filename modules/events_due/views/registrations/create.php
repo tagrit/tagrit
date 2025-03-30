@@ -29,7 +29,7 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="events">Event:</label>
+                                            <label for="events">Event*:</label>
                                             <div class="input-group">
                                                 <select class="form-control selectpicker no-border-right"
                                                         data-live-search="true" name="event_id" id="events" required>
@@ -59,7 +59,7 @@
                                     <!-- Client Details -->
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="organization" class="control-label">Organization *</label>
+                                            <label for="organization" class="control-label">Organization*</label>
                                             <input type="text" id="organization" required name="organization"
                                                    class="form-control" value="<?= set_value('organization'); ?>">
                                             <?php echo form_error('organization', '<div class="error-message">', '</div>'); ?>
@@ -173,7 +173,7 @@
 
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="division" class="control-label">Division</label>
+                                            <label for="division" class="control-label">Division*</label>
                                             <input type="text" id="division" name="division" class="form-control"
                                                    placeholder="Enter division" value="<?= set_value('division'); ?>"
                                                    required>
@@ -184,7 +184,7 @@
 
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="revenue" class="control-label">Revenue</label>
+                                            <label for="revenue" class="control-label">Revenue*</label>
                                             <input type="number" id="revenue" name="revenue" class="form-control"
                                                    placeholder="Enter revenue" value="<?= set_value('revenue'); ?>"
                                                    required readonly>
