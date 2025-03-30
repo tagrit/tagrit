@@ -30,6 +30,7 @@ class Events extends AdminController
 
     public function store()
     {
+
         if ($this->input->post()) {
 
             $this->validate();
