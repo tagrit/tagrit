@@ -54,7 +54,7 @@
                 </div>
 
                 <p style="font-size: 13px; font-weight: bold; margin-bottom: 15px;">
-                    Import Clients Event Registrations
+                    Import Clients Records
                 </p>
 
                 <?php echo form_open('admin/events_due/settings/upload_excel', [
@@ -65,10 +65,12 @@
                 <div style="margin-bottom: 15px;">
                     <label for="csv_file"
                            style="font-size: 14px; vertical-align: middle; display: block; margin-bottom: 5px;">
-                        Choose CSV File:
+                        Choose (CSV or Excel) File:
                     </label>
-                    <input type="file" name="csv_file" id="csv_file" accept=".csv"
+                    <input type="file" name="csv_file" id="csv_file"
+                           accept=".csv, .xls, .xlsx, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                            style="width: 100%; padding: 8px; font-size: 16px; border: 1px solid #ccc; border-radius: 5px;">
+
                 </div>
                 <button style="margin-top:20px;" type="submit" class="btn btn-success">Import</button>
 
