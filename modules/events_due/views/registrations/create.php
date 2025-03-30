@@ -187,7 +187,7 @@
                                             <label for="revenue" class="control-label">Revenue</label>
                                             <input type="number" id="revenue" name="revenue" class="form-control"
                                                    placeholder="Enter revenue" value="<?= set_value('revenue'); ?>"
-                                                   required>
+                                                   required readonly>
                                             <?php echo form_error('revenue', '<div class="error-message">', '</div>'); ?>
                                         </div>
                                     </div>
@@ -323,6 +323,16 @@
 <?php init_tail(); ?>
 <script>
     $(document).ready(function () {
+
+        document.getElementById('no_of_delegates').addEventListener('input', calculateRevenue);
+        document.getElementById('charges_per_delegate').addEventListener('input', calculateRevenue);
+
+        function calculateRevenue() {
+            const noOfDelegates = parseFloat(document.getElementById('no_of_delegates').value) || 0;
+            const chargesPerDelegate = parseFloat(document.getElementById('charges_per_delegate').value) || 0;
+            const revenue = noOfDelegates * chargesPerDelegate;
+            document.getElementById('revenue').value = revenue.toFixed(2);
+        }
 
         function fetchLocations() {
             $.ajax({
