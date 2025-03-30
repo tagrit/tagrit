@@ -63,10 +63,36 @@ class Event_model extends App_Model
 
     }
 
+    public function set_reminder_days($days)
+    {
+        // Check if a record exists
+        $query = $this->db->get(db_prefix() . 'email_reminder_period');
+        $exists = $query->row();
+
+        if ($exists) {
+            // Update the existing record
+            $this->db->update(db_prefix() . 'email_reminder_period', ['days' => $days], ['id' => $exists->id]);
+        } else {
+            // Insert a new record if none exists
+            $this->db->insert(db_prefix() . 'email_reminder_period', ['days' => $days]);
+        }
+
+        return $this->db->affected_rows() > 0;
+    }
+
+    public function get_reminder_days()
+    {
+        $query = $this->db->get(db_prefix() . 'email_reminder_period');
+        $row = $query->row();
+
+        return $row ? (int)$row->days : 7; // Default to 7 days if no record exists
+    }
+
 
     public function upcoming_event_details($limit = 50, $offset = 0)
     {
-        $seven_days_later = date('Y-m-d', strtotime('+7 days'));
+        $reminder_days = $this->get_reminder_days();
+        $reminder_date = date('Y-m-d', strtotime("+{$reminder_days} days"));
 
         $this->db->select('
         tblevents_due_events.event_id,
@@ -82,7 +108,7 @@ class Event_model extends App_Model
         $this->db->join(db_prefix() . 'events_due_registrations AS tblevents_due_registrations', 'tblevents_due_events.id = tblevents_due_registrations.event_detail_id', 'inner');
 
         // Filter for events 7 days ahead
-        $this->db->where('DATE(tblevents_due_events.start_date)', $seven_days_later);
+        $this->db->where('DATE(tblevents_due_events.start_date)', $reminder_date);
 
         // Pagination to avoid memory overload
         $this->db->limit($limit, $offset);

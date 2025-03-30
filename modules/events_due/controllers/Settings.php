@@ -16,6 +16,7 @@ class Settings extends AdminController
         $this->load->model('Event_details_model');
         $this->load->model('Registration_model');
         $this->load->model('Client_model');
+        $this->load->library('form_validation');
 
     }
 
@@ -23,10 +24,14 @@ class Settings extends AdminController
     {
         $group = $this->input->get('group', true) ?? 'import_events_registrations';
         $data['group'] = $group;
+        $data['reminder_days'] = $this->Event_model->get_reminder_days();
 
         switch ($group) {
             case 'import_events_registrations':
                 $data['group_content'] = $this->load->view('settings/import_events_registrations', $data, true);
+                break;
+            case 'set_reminder_period':
+                $data['group_content'] = $this->load->view('settings/set_reminder_period', $data, true);
                 break;
             default:
                 $data['group_content'] = $this->load->view('settings/import_events_registrations', [], true);
@@ -238,6 +243,24 @@ class Settings extends AdminController
         $writer = new Xlsx($spreadsheet);
         $writer->save('php://output');
         exit;
+    }
+
+    public function set_reminder_period()
+    {
+        if ($this->input->post()) {
+
+            $this->form_validation->set_rules('reminder_days', 'Reminder Days', 'required|integer|greater_than[0]|less_than_equal_to[30]');
+
+            if ($this->form_validation->run() == false) {
+                set_alert('danger', validation_errors());
+            } else {
+                $days = (int)$this->input->post('reminder_days');
+                $this->Event_model->set_reminder_days($days);
+                set_alert('success', 'Reminder days updated successfully.');
+            }
+        }
+
+        redirect(admin_url('events_due/settings/main?group=set_reminder_period'));
     }
 
 

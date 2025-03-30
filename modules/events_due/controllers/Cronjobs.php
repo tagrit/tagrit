@@ -21,10 +21,13 @@ class Cronjobs extends App_Controller
 
     public function send_reminders()
     {
+
         $upcoming_events = $this->Event_model->upcoming_event_details();
+        $reminder_days = $this->Event_model->get_reminder_days();
+
 
         if (empty($upcoming_events)) {
-            echo "No events found for the next 7 days.\n";
+            echo "No events found for the next $reminder_days days.\n";
             return;
         }
 
