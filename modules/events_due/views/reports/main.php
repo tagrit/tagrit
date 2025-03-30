@@ -44,19 +44,6 @@
                 <div class="row">
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label for="status"><?php echo _l('Status'); ?></label>
-                            <select id="status" name="status"
-                                    data-live-search="true"
-                                    class="form-control selectpicker"
-                                    data-none-selected-text="<?php echo _l('Select Status'); ?>">
-                                <option value="Pending">Pending</option>
-                                <option value="Confirmed">Confirmed</option>
-                                <option value="Canceled">Canceled</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
                             <label for="start-date" class="control-label">Start Date</label>
                             <div class="input-group date">
                                 <input type="text" class="form-control datepicker" id="start-date"
