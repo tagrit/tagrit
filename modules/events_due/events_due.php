@@ -185,7 +185,7 @@ class Events_Due_System
 
         $menu['children'][] = [
             'slug' => 'events_due_reports',
-            'name' => 'Reports',
+            'name' => 'Client Records',
             'href' => admin_url(EVENTS_DUE_MODULE_NAME . '/reports/main'),
             'icon' => 'fa fa-file-alt',
             'position' => 13,

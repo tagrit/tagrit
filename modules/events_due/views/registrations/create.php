@@ -2,18 +2,11 @@
 <?php init_head(); ?>
 <div id="wrapper">
     <div class="content">
-        <div class="section-header">
-            <h1>Events</h1>
-            <div class="section-header-breadcrumb">
-                <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-                <div class="breadcrumb-item">Event Registrations</div>
-            </div>
-        </div>
         <div class="panel_s">
             <div class="panel-body">
                 <div class="row">
                     <div class="col-md-12">
-                        <h4 class="no-margin" style="color: #34395e;font-weight: 600;">Event Registration Form</h4>
+                        <h4 class="no-margin" style="color: #34395e;font-weight: 600;">Event Registration</h4>
                         <hr class="hr-panel-heading"/>
                     </div>
 
@@ -29,7 +22,7 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="events">Event:</label>
+                                            <label for="events">Event*:</label>
                                             <div class="input-group">
                                                 <select class="form-control selectpicker no-border-right"
                                                         data-live-search="true" name="event_id" id="events" required>
@@ -59,7 +52,7 @@
                                     <!-- Client Details -->
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="organization" class="control-label">Organization *</label>
+                                            <label for="organization" class="control-label">Organization*</label>
                                             <input type="text" id="organization" required name="organization"
                                                    class="form-control" value="<?= set_value('organization'); ?>">
                                             <?php echo form_error('organization', '<div class="error-message">', '</div>'); ?>
@@ -173,7 +166,7 @@
 
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="division" class="control-label">Division</label>
+                                            <label for="division" class="control-label">Division*</label>
                                             <input type="text" id="division" name="division" class="form-control"
                                                    placeholder="Enter division" value="<?= set_value('division'); ?>"
                                                    required>
@@ -184,10 +177,10 @@
 
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="revenue" class="control-label">Revenue</label>
+                                            <label for="revenue" class="control-label">Revenue*</label>
                                             <input type="number" id="revenue" name="revenue" class="form-control"
                                                    placeholder="Enter revenue" value="<?= set_value('revenue'); ?>"
-                                                   required>
+                                                   required readonly>
                                             <?php echo form_error('revenue', '<div class="error-message">', '</div>'); ?>
                                         </div>
                                     </div>
@@ -323,6 +316,16 @@
 <?php init_tail(); ?>
 <script>
     $(document).ready(function () {
+
+        document.getElementById('no_of_delegates').addEventListener('input', calculateRevenue);
+        document.getElementById('charges_per_delegate').addEventListener('input', calculateRevenue);
+
+        function calculateRevenue() {
+            const noOfDelegates = parseFloat(document.getElementById('no_of_delegates').value) || 0;
+            const chargesPerDelegate = parseFloat(document.getElementById('charges_per_delegate').value) || 0;
+            const revenue = noOfDelegates * chargesPerDelegate;
+            document.getElementById('revenue').value = revenue.toFixed(2);
+        }
 
         function fetchLocations() {
             $.ajax({

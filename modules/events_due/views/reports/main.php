@@ -2,22 +2,15 @@
 <?php init_head(); ?>
 <div id="wrapper">
     <div class="content">
-        <div class="section-header">
-            <h1>Reports</h1>
-            <div class="section-header-breadcrumb">
-                <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-                <div class="breadcrumb-item">Reports</div>
-            </div>
-        </div>
         <div class="panel_s">
             <div class="panel-body">
                 <!-- Date Filter -->
                 <div class="row">
                     <div class="col-md-10">
-                        <h4 class="no-margin"></h4>
+                        <h4 class="no-margin" style="color: #34395e;font-weight: 600;">Client Records</h4>
                     </div>
                     <div class="col-md-2">
-                        <div style="margin-bottom:10px;" class="btn-group  pull-right">
+                        <div style="margin-top:-10px; margin-bottom:10px;" class="btn-group  pull-right">
                             <a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
                                aria-haspopup="true" aria-expanded="false"><i
                                         class="fa fa-print"></i><?php if (is_mobile()) {
@@ -49,19 +42,6 @@
 
                 <!-- Filter Form -->
                 <div class="row">
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label for="status"><?php echo _l('Status'); ?></label>
-                            <select id="status" name="status"
-                                    data-live-search="true"
-                                    class="form-control selectpicker"
-                                    data-none-selected-text="<?php echo _l('Select Status'); ?>">
-                                <option value="Pending">Pending</option>
-                                <option value="Confirmed">Confirmed</option>
-                                <option value="Canceled">Canceled</option>
-                            </select>
-                        </div>
-                    </div>
                     <div class="col-md-3">
                         <div class="form-group">
                             <label for="start-date" class="control-label">Start Date</label>

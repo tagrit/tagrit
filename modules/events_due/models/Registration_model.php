@@ -104,70 +104,78 @@ class Registration_model extends App_Model
         if (!empty($end_date)) {
             $this->db->where('tblevents_due_events.end_date <=', $end_date);
         }
+
         if (!empty($organization)) {
             $this->db->where('tblevents_due_events.organization', $organization);
         }
 
-        // ❌ DO NOT filter by event_name, location, venue in SQL
-        // We will do this in PHP to ensure client searches work!
 
         $results = $this->db->get()->result_array();
-
-        // Process results & apply search filtering
         $final_results = [];
+        $query_lower = strtolower($query ?? '');
 
         foreach ($results as $row) {
             $clients = unserialize($row['serialized_clients']);
-            $match = false; // Track if this row matches the search query
+            $event_match = false;
+            $client_match = false;
 
-            // ✅ Ensure the query is a string
-            $query_lower = strtolower($query ?? '');
-
-            // ✅ Ensure event fields are not NULL before strtolower()
+            // ✅ Check if event matches the query
             $event_name = strtolower($row['event_name'] ?? '');
             $location = strtolower($row['location'] ?? '');
             $venue = strtolower($row['venue'] ?? '');
 
-            // Check if event name, location, or venue match
-            if (!empty($query) && (
-                    strpos($event_name, $query_lower) !== false ||
-                    strpos($location, $query_lower) !== false ||
-                    strpos($venue, $query_lower) !== false)) {
-                $match = true;
+            if (empty($query_lower) ||
+                strpos($event_name, $query_lower) !== false ||
+                strpos($location, $query_lower) !== false ||
+                strpos($venue, $query_lower) !== false) {
+                $event_match = true;
             }
 
-            // Check if any client details match
-            if (is_array($clients)) {
-                foreach ($clients as $client) {
-                    // ✅ Handle NULL values for client details
-                    $first_name = strtolower($client['first_name'] ?? '');
-                    $last_name = strtolower($client['last_name'] ?? '');
-                    $email = strtolower($client['email'] ?? '');
-                    $phone = strtolower($client['phone'] ?? '');
+            // ✅ Check if any client matches the query
+            $matched_clients = [];
+            foreach ($clients as $client) {
+                $first_name = strtolower($client['first_name'] ?? '');
+                $last_name = strtolower($client['last_name'] ?? '');
+                $email = strtolower($client['email'] ?? '');
+                $phone = strtolower($client['phone'] ?? '');
 
-                    if (!empty($query) && (
-                            strpos($first_name, $query_lower) !== false ||
-                            strpos($last_name, $query_lower) !== false ||
-                            strpos($email, $query_lower) !== false ||
-                            strpos($phone, $query_lower) !== false)) {
-                        $match = true;
-                    }
+                if (empty($query_lower) ||
+                    strpos($first_name, $query_lower) !== false ||
+                    strpos($last_name, $query_lower) !== false ||
+                    strpos($email, $query_lower) !== false ||
+                    strpos($phone, $query_lower) !== false) {
+                    $client_match = true;
+                    $matched_clients[] = [
+                        'client_first_name' => $client['first_name'] ?? '',
+                        'client_last_name' => $client['last_name'] ?? '',
+                        'client_email' => $client['email'] ?? '',
+                        'client_phone' => $client['phone'] ?? ''
+                    ];
                 }
             }
 
-            // ✅ Add to final results if it matches OR if there's no search query
-            if ($match || empty($query)) {
-                $final_results[] = array_merge($row, [
-                    'client_first_name' => $client['first_name'] ?? '',
-                    'client_last_name' => $client['last_name'] ?? '',
-                    'client_email' => $client['email'] ?? '',
-                    'client_phone' => $client['phone'] ?? ''
-                ]);
+            // ✅ Include the event if it matches OR if any client matches
+            if ($event_match || $client_match) {
+                if (!empty($matched_clients)) {
+                    foreach ($matched_clients as $client_data) {
+                        $final_results[] = array_merge($row, $client_data);
+                    }
+                } else {
+                    // If no specific client matched but the event matched, return all clients
+                    foreach ($clients as $client) {
+                        $final_results[] = array_merge($row, [
+                            'client_first_name' => $client['first_name'] ?? '',
+                            'client_last_name' => $client['last_name'] ?? '',
+                            'client_email' => $client['email'] ?? '',
+                            'client_phone' => $client['phone'] ?? ''
+                        ]);
+                    }
+                }
             }
         }
 
-
         return json_decode(json_encode($final_results));
+
     }
 
 

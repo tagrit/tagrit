@@ -16,7 +16,6 @@ class Events extends AdminController
         $this->form_validation->set_rules('event_name', 'Event Name', 'required');
     }
 
-
     public function index()
     {
         $data['events'] = $this->Event_model->event_details();
@@ -28,7 +27,6 @@ class Events extends AdminController
         $data['event'] = $this->Event_model->event_details($event_id);
         $this->load->view('events/view',$data);
     }
-
 
     public function store()
     {
@@ -127,6 +125,5 @@ class Events extends AdminController
         $this->load->view('events/edit', $data);
 
     }
-
 
 }
