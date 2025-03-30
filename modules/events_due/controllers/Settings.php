@@ -41,6 +41,7 @@ class Settings extends AdminController
 
     public function upload_excel()
     {
+
         if (!isset($_FILES['csv_file']['name']) || empty($_FILES['csv_file']['name'])) {
             set_alert('danger', 'Please select a file to upload.');
             redirect(admin_url('events_due/settings'));
@@ -80,8 +81,8 @@ class Settings extends AdminController
                         'start_date' => date('Y-m-d', strtotime($row[4] ?? '')),
                         'end_date' => date('Y-m-d', strtotime($row[5] ?? '')),
                         'location' => $row[6],
-                        'venue' => $row[6],
-                        'organization' => $row[11] ?? '',
+                        'venue' => $row[7],
+                        'organization' => $row[12] ?? '',
                         'revenue' => '0',
                         'facilitator' => 'capabuil',
                         'no_of_delegates' => '1',
@@ -92,13 +93,13 @@ class Settings extends AdminController
                     $existingEvent = $this->db->where($eventData)->get(db_prefix() . '_events_details')->row();
                     $event_detail_id = $existingEvent ? $existingEvent->id : $this->Event_details_model->add($eventData);
 
-                    $nameParts = explode(' ', $row[7] ?? '', 2);
+                    $nameParts = explode(' ', $row[8] ?? '', 2);
 
                     $customer_data = [
                         'first_name' => $nameParts[0] ?? '',
                         'last_name' => $nameParts[1] ?? '',
-                        'email' => $row[10] ?? '',
-                        'phone' => $row[9] ?? '',
+                        'email' => $row[11] ?? '',
+                        'phone' => $row[10] ?? '',
                     ];
 
                     if (!isset($events_clients[$event_detail_id])) {
@@ -113,6 +114,7 @@ class Settings extends AdminController
                 $worksheet = $spreadsheet->getActiveSheet();
 
                 foreach ($worksheet->getRowIterator(2) as $row) {
+
                     $cells = [];
                     foreach ($row->getCellIterator() as $cell) {
                         $cells[] = trim($cell->getValue());
@@ -137,8 +139,8 @@ class Settings extends AdminController
                         'start_date' => date('Y-m-d', strtotime($cells[4] ?? '')),
                         'end_date' => date('Y-m-d', strtotime($cells[5] ?? '')),
                         'location' => $cells[6],
-                        'venue' => $cells[6],
-                        'organization' => $cells[11] ?? '',
+                        'venue' => $cells[7],
+                        'organization' => $cells[12] ?? '',
                         'revenue' => '0',
                         'facilitator' => 'capabuil',
                         'no_of_delegates' => '1',
@@ -149,13 +151,13 @@ class Settings extends AdminController
                     $existingEvent = $this->db->where($eventData)->get(db_prefix() . '_events_details')->row();
                     $event_detail_id = $existingEvent ? $existingEvent->id : $this->Event_details_model->add($eventData);
 
-                    $nameParts = explode(' ', $cells[7] ?? '', 2);
+                    $nameParts = explode(' ', $cells[8] ?? '', 2);
 
                     $customer_data = [
                         'first_name' => $nameParts[0] ?? '',
                         'last_name' => $nameParts[1] ?? '',
-                        'email' => $cells[10] ?? '',
-                        'phone' => $cells[9] ?? '',
+                        'email' => $cells[11] ?? '',
+                        'phone' => $cells[10] ?? '',
                     ];
 
                     if (!isset($events_clients[$event_detail_id])) {
@@ -237,7 +239,6 @@ class Settings extends AdminController
         $writer->save('php://output');
         exit;
     }
-
 
 
 }
