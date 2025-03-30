@@ -111,10 +111,7 @@ class Registration_model extends App_Model
 
 
         $results = $this->db->get()->result_array();
-
-        // Process results & apply search filtering
         $final_results = [];
-
         $query_lower = strtolower($query ?? '');
 
         foreach ($results as $row) {
