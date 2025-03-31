@@ -2,18 +2,11 @@
 <?php init_head(); ?>
 <div id="wrapper">
     <div class="content">
-        <div class="section-header">
-            <h1>Events</h1>
-            <div class="section-header-breadcrumb">
-                <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-                <div class="breadcrumb-item">Event Registrations</div>
-            </div>
-        </div>
         <div class="panel_s">
             <div class="panel-body">
                 <div class="row">
                     <div class="col-md-12">
-                        <h4 class="no-margin" style="color: #34395e;font-weight: 600;">Event Registration Form</h4>
+                        <h4 class="no-margin" style="color: #34395e;font-weight: 600;">Event Registration</h4>
                         <hr class="hr-panel-heading"/>
                     </div>
 
@@ -29,13 +22,14 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="events">Event:</label>
+                                            <label for="events">Event*:</label>
                                             <div class="input-group">
                                                 <select class="form-control selectpicker no-border-right"
                                                         data-live-search="true" name="event_id" id="events" required>
                                                     <?php if (!empty($events)): ?>
                                                         <?php foreach ($events as $index => $event): ?>
-                                                            <option value="<?= htmlspecialchars($event->id) ?>" <?= $index === 0 ? 'selected' : '' ?>>
+                                                            <option value="<?= htmlspecialchars($event->id) ?>"
+                                                                <?= set_value('event_id') == $event->id ? 'selected' : '' ?>>
                                                                 <?= strlen($event->name) > 90 ? htmlspecialchars(substr($event->name, 0, 27)) . '...' : htmlspecialchars($event->name) ?>
                                                             </option>
                                                         <?php endforeach; ?>
@@ -51,37 +45,43 @@
                                                     </button>
                                                 </div>
                                             </div>
+                                            <?php echo form_error('event_id', '<div class="error-message">', '</div>'); ?>
                                         </div>
                                     </div>
 
                                     <!-- Client Details -->
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="organization" class="control-label">Organization *</label>
-                                            <input type="text" id="organization" name="organization"
-                                                   class="form-control"
-                                                   required>
+                                            <label for="organization" class="control-label">Organization*</label>
+                                            <input type="text" id="organization" required name="organization"
+                                                   class="form-control" value="<?= set_value('organization'); ?>">
+                                            <?php echo form_error('organization', '<div class="error-message">', '</div>'); ?>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="row">
-
-
                                     <!-- Client Details -->
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="location" class="control-label">Location*</label>
-                                            <input type="text" id="location" name="location" class="form-control"
-                                                   required>
+                                            <label for="location_id" class="control-label">Location*</label>
+                                            <select id="location_id" name="location_id"
+                                                    class="form-control selectpicker"
+                                                    data-live-search="true" required>
+                                                <option value="">Select Location</option>
+                                            </select>
+                                            <?php echo form_error('location_id', '<div class="error-message">', '</div>'); ?>
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="venue" class="control-label">Venue*</label>
-                                            <input type="venue" id="email" name="venue" class="form-control"
-                                                   required>
+                                            <label for="venue_id" class="control-label">Venue*</label>
+                                            <select id="venue_id" name="venue_id" class="form-control selectpicker"
+                                                    data-live-search="true" required>
+                                                <option value="">Select Venue</option>
+                                            </select>
+                                            <?php echo form_error('venue_id', '<div class="error-message">', '</div>'); ?>
                                         </div>
                                     </div>
 
@@ -90,7 +90,8 @@
                                         <div class="form-group">
                                             <label for="start_date" class="control-label">Start Date*</label>
                                             <input type="date" id="start_date" name="start_date" class="form-control"
-                                                   required>
+                                                   required value="<?= set_value('start_date'); ?>">
+                                            <?php echo form_error('start_date', '<div class="error-message">', '</div>'); ?>
                                         </div>
                                     </div>
 
@@ -98,7 +99,9 @@
                                         <div class="form-group">
                                             <label for="end_date" class="control-label">End Date*</label>
                                             <input type="date" id="end_date" name="end_date" class="form-control"
+                                                   value="<?= set_value('end_date'); ?>"
                                                    required>
+                                            <?php echo form_error('end_date', '<div class="error-message">', '</div>'); ?>
                                         </div>
                                     </div>
 
@@ -106,17 +109,23 @@
                                         <div class="form-group">
                                             <label for="no_of_delegates" class="control-label">Number of
                                                 Delegates*</label>
-                                            <input type="text" id="no_of_delegates" name="no_of_delegates"
-                                                   class="form-control" required>
+                                            <input type="number" id="no_of_delegates" name="no_of_delegates"
+                                                   class="form-control"
+                                                   value="<?= set_value('no_of_delegates'); ?>"
+                                                   required>
+                                            <?php echo form_error('no_of_delegates', '<div class="error-message">', '</div>'); ?>
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="charges_per_delegates" class="control-label">Charges Per
+                                            <label for="charges_per_delegate" class="control-label">Charges Per
                                                 Delegates*</label>
-                                            <input type="text" id="charges_per_delegates" name="charges_per_delegates"
-                                                   class="form-control" required>
+                                            <input type="number" id="charges_per_delegate" name="charges_per_delegate"
+                                                   class="form-control"
+                                                   value="<?= set_value('charges_per_delegate'); ?>"
+                                                   required>
+                                            <?php echo form_error('charges_per_delegate', '<div class="error-message">', '</div>'); ?>
                                         </div>
                                     </div>
 
@@ -127,9 +136,14 @@
                                             <select id="setup" name="setup" class="form-control selectpicker"
                                                     data-live-search="true" required>
                                                 <option value="">Select Setup</option>
-                                                <option value="Physical">Physical</option>
-                                                <option value="Virtual">Virtual</option>
+                                                <option value="Physical" <?= set_value('setup') == 'Physical' ? 'selected' : '' ?>>
+                                                    Physical
+                                                </option>
+                                                <option value="Virtual" <?= set_value('setup') == 'Virtual' ? 'selected' : '' ?>>
+                                                    Virtual
+                                                </option>
                                             </select>
+                                            <?php echo form_error('setup', '<div class="error-message">', '</div>'); ?>
                                         </div>
                                     </div>
 
@@ -139,51 +153,112 @@
                                             <select id="type" name="type" class="form-control selectpicker"
                                                     data-live-search="true" required>
                                                 <option value="">Select Type</option>
-                                                <option value="Local">Local</option>
-                                                <option value="International">International</option>
+                                                <option value="Local" <?= set_value('type') == 'Local' ? 'selected' : '' ?>>
+                                                    Local
+                                                </option>
+                                                <option value="International" <?= set_value('type') == 'International' ? 'selected' : '' ?>>
+                                                    International
+                                                </option>
                                             </select>
+                                            <?php echo form_error('type', '<div class="error-message">', '</div>'); ?>
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="division" class="control-label">Charges</label>
-                                            <input type="number" id="division" name="division" class="form-control"
-                                                   placeholder="Enter division" required>
+                                            <label for="division" class="control-label">Division*</label>
+                                            <input type="text" id="division" name="division" class="form-control"
+                                                   placeholder="Enter division" value="<?= set_value('division'); ?>"
+                                                   required>
+                                            <?php echo form_error('division', '<div class="error-message">', '</div>'); ?>
+
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="revenue" class="control-label">Charges</label>
+                                            <label for="revenue" class="control-label">Revenue*</label>
                                             <input type="number" id="revenue" name="revenue" class="form-control"
-                                                   placeholder="Enter revenue" required>
+                                                   placeholder="Enter revenue" value="<?= set_value('revenue'); ?>"
+                                                   required readonly>
+                                            <?php echo form_error('revenue', '<div class="error-message">', '</div>'); ?>
                                         </div>
                                     </div>
 
                                     <div class="col-md-12">
-                                        <label class="custom-label">Delegates Details</label>
+                                        <label class="custom-label">Delegates Details <span
+                                                    style="font-size:11px; color:red;">(*The first delegate will be used as the primary contact)</span></label>
                                         <div id="delegates-container">
-                                            <div class="row align-items-center delegate-entry">
-                                                <div class="col-md-3">
-                                                    <input type="text" name="delegates[0][first_name]"
-                                                           class="form-control"
-                                                           placeholder="First Name" required>
+                                            <?php if (!empty($old_input['delegates'])): ?>
+                                                <?php foreach ($old_input['delegates'] as $key => $delegate): ?>
+                                                    <div class="row align-items-center delegate-entry <?= $key != 0 ? 'mtop4' : '' ?>">
+                                                        <div class="col-md-3">
+                                                            <input type="text"
+                                                                   name="delegates[<?php echo $key; ?>][first_name]"
+                                                                   class="form-control"
+                                                                   placeholder="First Name" required
+                                                                   value="<?php echo $delegate['first_name']; ?>">
+                                                            <small class="text-danger"><?php echo form_error("delegates[$key][first_name]"); ?></small>
+                                                        </div>
+                                                        <div style="margin-left:-20px;" class="col-md-3">
+                                                            <input type="text"
+                                                                   name="delegates[<?php echo $key; ?>][last_name]"
+                                                                   class="form-control"
+                                                                   placeholder="Last Name" required
+                                                                   value="<?php echo $delegate['last_name']; ?>">
+                                                            <small class="text-danger"><?php echo form_error("delegates[$key][last_name]"); ?></small>
+                                                        </div>
+                                                        <div style="margin-left:-20px;" class="col-md-3">
+                                                            <input type="email"
+                                                                   name="delegates[<?php echo $key; ?>][email]"
+                                                                   class="form-control"
+                                                                   placeholder="Email" required
+                                                                   value="<?php echo $delegate['email']; ?>">
+                                                            <small class="text-danger"><?php echo form_error("delegates[$key][email]"); ?></small>
+                                                        </div>
+                                                        <div style="margin-left:-20px;" class="col-md-3">
+                                                            <input type="text"
+                                                                   name="delegates[<?php echo $key; ?>][phone]"
+                                                                   class="form-control"
+                                                                   placeholder="Phone" required
+                                                                   value="<?php echo $delegate['phone']; ?>">
+                                                            <small class="text-danger"><?php echo form_error("delegates[$key][phone]"); ?></small>
+                                                        </div>
+                                                        <?php if ($key != 0): ?>
+                                                            <div class="mtop4 text-center">
+                                                                <button style="margin-left: -20px; border: 0px; color: red; background-color: transparent;"
+                                                                        type="button" class="remove-delegate">
+                                                                    <i class="fas fa-trash-alt"
+                                                                       style="font-size: 1.5rem;"></i>
+                                                                </button>
+                                                            </div>
+                                                        <?php endif; ?>
+                                                    </div>
+                                                <?php endforeach; ?>
+                                            <?php else: ?>
+                                                <div class="row align-items-center delegate-entry">
+                                                    <div class="col-md-3">
+                                                        <input type="text" name="delegates[0][first_name]"
+                                                               class="form-control"
+                                                               placeholder="First Name" required>
+                                                    </div>
+                                                    <div style="margin-left:-20px;" class="col-md-3">
+                                                        <input type="text" name="delegates[0][last_name]"
+                                                               class="form-control"
+                                                               placeholder="Last Name" required>
+                                                    </div>
+                                                    <div style="margin-left:-20px;" class="col-md-3">
+                                                        <input type="email" name="delegates[0][email]"
+                                                               class="form-control"
+                                                               placeholder="Email" required>
+                                                    </div>
+                                                    <div style="margin-left:-20px;" class="col-md-3">
+                                                        <input type="text" name="delegates[0][phone]"
+                                                               class="form-control"
+                                                               placeholder="Phone" required>
+                                                    </div>
                                                 </div>
-                                                <div style="margin-left:-20px;" class="col-md-3">
-                                                    <input type="text" name="delegates[0][last_name]"
-                                                           class="form-control"
-                                                           placeholder="Last Name" required>
-                                                </div>
-                                                <div style="margin-left:-20px;" class="col-md-3">
-                                                    <input type="email" name="delegates[0][email]" class="form-control"
-                                                           placeholder="Email" required>
-                                                </div>
-                                                <div style="margin-left:-20px;" class="col-md-3">
-                                                    <input type="text" name="delegates[0][phone]" class="form-control"
-                                                           placeholder="Phone" required>
-                                                </div>
-                                            </div>
+                                            <?php endif; ?>
                                         </div>
                                         <button id="add-delegate" type="button"
                                                 class="mtop10 btn btn-info d-flex align-items-center justify-content-center"
@@ -242,43 +317,46 @@
 <script>
     $(document).ready(function () {
 
-        // When event is selected, fetch locations
-        $('#event_name_id').change(function () {
-            const eventNameId = $(this).val();
+        document.getElementById('no_of_delegates').addEventListener('input', calculateRevenue);
+        document.getElementById('charges_per_delegate').addEventListener('input', calculateRevenue);
 
-            if (eventNameId) {
-                $.ajax({
-                    url: '<?= base_url('admin/events_due/locations') ?>',
-                    type: 'POST',
-                    data: {event_name_id: eventNameId},
-                    dataType: 'json',
-                    success: function (response) {
-                        console.log('Response:', response);
+        function calculateRevenue() {
+            const noOfDelegates = parseFloat(document.getElementById('no_of_delegates').value) || 0;
+            const chargesPerDelegate = parseFloat(document.getElementById('charges_per_delegate').value) || 0;
+            const revenue = noOfDelegates * chargesPerDelegate;
+            document.getElementById('revenue').value = revenue.toFixed(2);
+        }
 
-                        $('#location_id').empty().append('<option value="">Select Location</option>');
+        function fetchLocations() {
+            $.ajax({
+                url: '<?= base_url('admin/events_due/locations') ?>',
+                type: 'POST',
+                dataType: 'json',
+                success: function (response) {
+                    console.log('Response:', response);
 
-                        if (response.success) {
-                            $.each(response.data, function (key, value) {
-                                $('#location_id').append('<option value="' + value.id + '">' + value.name + '</option>');
-                            });
-                        } else {
-                            console.error('Error:', response.error);
-                            alert('Error: ' + response.error);
-                        }
+                    $('#location_id').empty().append('<option value="">Select Location</option>');
 
-                        $('#location_id').selectpicker('refresh');
-                    },
-                    error: function (xhr, status, error) {
-                        console.error('AJAX Error:', status, error, xhr);
-                        alert('Failed to fetch locations. Please try again.');
+                    if (response.success) {
+                        $.each(response.data, function (key, value) {
+                            $('#location_id').append('<option value="' + value.id + '">' + value.name + '</option>');
+                        });
+                    } else {
+                        console.error('Error:', response.error);
+                        alert('Error: ' + response.error);
                     }
-                });
-            } else {
-                $('#location_id').empty().append('<option value="">Select Location</option>');
-                $('#location_id').selectpicker('refresh');
-            }
-        });
 
+                    $('#location_id').selectpicker('refresh');
+                },
+                error: function (xhr, status, error) {
+                    console.error('AJAX Error:', status, error, xhr);
+                    alert('Failed to fetch locations. Please try again.');
+                }
+            });
+
+        }
+
+        fetchLocations();
 
         // When location is selected, fetch venues
         $('#location_id').change(function () {
@@ -316,60 +394,5 @@
             }
         });
 
-        // when venue and location is set choose setup
-        $('#venue_id').change(function () {
-
-            const eventNameId = $('#event_name_id').val();
-            const locationId = $('#location_id').val();
-            const venueId = $(this).val();
-
-            if (venueId) {
-                $.ajax({
-                    url: '<?= base_url('admin/events_due/setups') ?>',
-                    type: 'POST',
-                    data: {
-                        event_name_id: eventNameId,
-                        location_id: locationId,
-                        venue_id: venueId,
-                    },
-                    dataType: 'json',
-                    success: function (response) {
-                        $('#setup').empty().append('<option value="">Select Setup</option>');
-                        $.each(response.data, function (key, value) {
-                            $('#setup').append('<option value="' + value.setup + '">' + value.setup + '</option>');
-                        });
-                        $('#setup').selectpicker('refresh');
-                    }
-                });
-            }
-        });
-
-        // when venue and location is set choose setup
-        $('#venue_id').change(function () {
-
-            const eventNameId = $('#event_name_id').val();
-            const locationId = $('#location_id').val();
-            const venueId = $(this).val();
-
-            if (venueId) {
-                $.ajax({
-                    url: '<?= base_url('admin/events_due/durations') ?>',
-                    type: 'POST',
-                    data: {
-                        event_name_id: eventNameId,
-                        location_id: locationId,
-                        venue_id: venueId,
-                    },
-                    dataType: 'json',
-                    success: function (response) {
-                        $('#duration').empty().append('<option value="">Select Setup</option>');
-                        $.each(response.data, function (key, value) {
-                            $('#duration').append('<option value="' + value + '">' + value + '</option>');
-                        });
-                        $('#duration').selectpicker('refresh');
-                    }
-                });
-            }
-        });
     });
 </script>

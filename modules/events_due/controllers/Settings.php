@@ -16,6 +16,7 @@ class Settings extends AdminController
         $this->load->model('Event_details_model');
         $this->load->model('Registration_model');
         $this->load->model('Client_model');
+        $this->load->library('form_validation');
 
     }
 
@@ -23,10 +24,14 @@ class Settings extends AdminController
     {
         $group = $this->input->get('group', true) ?? 'import_events_registrations';
         $data['group'] = $group;
+        $data['reminder_days'] = $this->Event_model->get_reminder_days();
 
         switch ($group) {
             case 'import_events_registrations':
                 $data['group_content'] = $this->load->view('settings/import_events_registrations', $data, true);
+                break;
+            case 'set_reminder_period':
+                $data['group_content'] = $this->load->view('settings/set_reminder_period', $data, true);
                 break;
             default:
                 $data['group_content'] = $this->load->view('settings/import_events_registrations', [], true);
@@ -41,6 +46,7 @@ class Settings extends AdminController
 
     public function upload_excel()
     {
+
         if (!isset($_FILES['csv_file']['name']) || empty($_FILES['csv_file']['name'])) {
             set_alert('danger', 'Please select a file to upload.');
             redirect(admin_url('events_due/settings'));
@@ -80,8 +86,8 @@ class Settings extends AdminController
                         'start_date' => date('Y-m-d', strtotime($row[4] ?? '')),
                         'end_date' => date('Y-m-d', strtotime($row[5] ?? '')),
                         'location' => $row[6],
-                        'venue' => $row[6],
-                        'organization' => $row[11] ?? '',
+                        'venue' => $row[7],
+                        'organization' => $row[12] ?? '',
                         'revenue' => '0',
                         'facilitator' => 'capabuil',
                         'no_of_delegates' => '1',
@@ -92,13 +98,13 @@ class Settings extends AdminController
                     $existingEvent = $this->db->where($eventData)->get(db_prefix() . '_events_details')->row();
                     $event_detail_id = $existingEvent ? $existingEvent->id : $this->Event_details_model->add($eventData);
 
-                    $nameParts = explode(' ', $row[7] ?? '', 2);
+                    $nameParts = explode(' ', $row[8] ?? '', 2);
 
                     $customer_data = [
                         'first_name' => $nameParts[0] ?? '',
                         'last_name' => $nameParts[1] ?? '',
-                        'email' => $row[10] ?? '',
-                        'phone' => $row[9] ?? '',
+                        'email' => $row[11] ?? '',
+                        'phone' => $row[10] ?? '',
                     ];
 
                     if (!isset($events_clients[$event_detail_id])) {
@@ -113,6 +119,7 @@ class Settings extends AdminController
                 $worksheet = $spreadsheet->getActiveSheet();
 
                 foreach ($worksheet->getRowIterator(2) as $row) {
+
                     $cells = [];
                     foreach ($row->getCellIterator() as $cell) {
                         $cells[] = trim($cell->getValue());
@@ -137,8 +144,8 @@ class Settings extends AdminController
                         'start_date' => date('Y-m-d', strtotime($cells[4] ?? '')),
                         'end_date' => date('Y-m-d', strtotime($cells[5] ?? '')),
                         'location' => $cells[6],
-                        'venue' => $cells[6],
-                        'organization' => $cells[11] ?? '',
+                        'venue' => $cells[7],
+                        'organization' => $cells[12] ?? '',
                         'revenue' => '0',
                         'facilitator' => 'capabuil',
                         'no_of_delegates' => '1',
@@ -149,13 +156,13 @@ class Settings extends AdminController
                     $existingEvent = $this->db->where($eventData)->get(db_prefix() . '_events_details')->row();
                     $event_detail_id = $existingEvent ? $existingEvent->id : $this->Event_details_model->add($eventData);
 
-                    $nameParts = explode(' ', $cells[7] ?? '', 2);
+                    $nameParts = explode(' ', $cells[8] ?? '', 2);
 
                     $customer_data = [
                         'first_name' => $nameParts[0] ?? '',
                         'last_name' => $nameParts[1] ?? '',
-                        'email' => $cells[10] ?? '',
-                        'phone' => $cells[9] ?? '',
+                        'email' => $cells[11] ?? '',
+                        'phone' => $cells[10] ?? '',
                     ];
 
                     if (!isset($events_clients[$event_detail_id])) {
@@ -207,17 +214,18 @@ class Settings extends AdminController
             'Venue', 'Name of Delegate', 'Date & Month of Birth', 'Mobile No', 'Email Address', 'Organization'
         ];
 
-        // Add headers to first row
+        // Apply bold styling to headers
         $col = 'A';
         foreach ($headers as $header) {
             $sheet->setCellValue($col . '1', $header);
+            $sheet->getStyle($col . '1')->getFont()->setBold(true); // Make header bold
             $col++;
         }
 
         // Add sample data
         $sampleData = [
-            'Sample Event', 'Conference', 'Workshop', 'HR', '2025-01-01', '2025-01-03',
-            'Nairobi', 'KICC', 'John Doe', '01 Jan 1990', '1234567890', 'john@example.com', 'XYZ Ltd'
+            'Data Science', 'Physical', 'Local', 'ADS', '2025-01-01', '2025-01-03',
+            'Mombasa', 'Sarova Hotel', 'John Doe', '01 Jan 1990', '1234567890', 'john@example.com', 'Tagrit'
         ];
 
         $col = 'A';
@@ -235,6 +243,24 @@ class Settings extends AdminController
         $writer = new Xlsx($spreadsheet);
         $writer->save('php://output');
         exit;
+    }
+
+    public function set_reminder_period()
+    {
+        if ($this->input->post()) {
+
+            $this->form_validation->set_rules('reminder_days', 'Reminder Days', 'required|integer|greater_than[0]|less_than_equal_to[30]');
+
+            if ($this->form_validation->run() == false) {
+                set_alert('danger', validation_errors());
+            } else {
+                $days = (int)$this->input->post('reminder_days');
+                $this->Event_model->set_reminder_days($days);
+                set_alert('success', 'Reminder days updated successfully.');
+            }
+        }
+
+        redirect(admin_url('events_due/settings/main?group=set_reminder_period'));
     }
 
 

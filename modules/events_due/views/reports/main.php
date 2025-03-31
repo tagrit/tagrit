@@ -2,22 +2,15 @@
 <?php init_head(); ?>
 <div id="wrapper">
     <div class="content">
-        <div class="section-header">
-            <h1>Reports</h1>
-            <div class="section-header-breadcrumb">
-                <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-                <div class="breadcrumb-item">Reports</div>
-            </div>
-        </div>
         <div class="panel_s">
             <div class="panel-body">
                 <!-- Date Filter -->
                 <div class="row">
                     <div class="col-md-10">
-                        <h4 class="no-margin"></h4>
+                        <h4 class="no-margin" style="color: #34395e;font-weight: 600;">Client Records</h4>
                     </div>
                     <div class="col-md-2">
-                        <div style="margin-bottom:10px;" class="btn-group  pull-right">
+                        <div style="margin-top:-10px; margin-bottom:10px;" class="btn-group  pull-right">
                             <a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
                                aria-haspopup="true" aria-expanded="false"><i
                                         class="fa fa-print"></i><?php if (is_mobile()) {
@@ -25,12 +18,7 @@
                                 } ?> <span class="caret"></span></a>
                             <ul class="dropdown-menu dropdown-menu-right">
                                 <li>
-                                    <a href="#" onclick="printDiv2(); return false;">
-                                        <?php echo _l('export_to_pdf'); ?>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" onclick="printExcel(); return false;">
+                                    <a href="<?php echo admin_url('events_due/reports/export_filtered_report'); ?>">
                                         <?php echo _l('export_to_excel'); ?>
                                     </a>
                                 </li>
@@ -54,21 +42,6 @@
 
                 <!-- Filter Form -->
                 <div class="row">
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label for="status"><?php echo _l('Status'); ?></label>
-                            <select id="status" name="status"
-                                    data-live-search="true"
-                                    class="form-control selectpicker"
-                                    data-none-selected-text="<?php echo _l('Dropdown Non Selected Text'); ?>">
-                                <option value="Pending">Pending</option>
-                                <option value="Confirmed">Confirmed</option>
-                                <option value="Canceled">Canceled</option>
-                            </select>
-                            <?php echo form_error('setup', '<div class="error-message">', '</div>'); ?>
-
-                        </div>
-                    </div>
                     <div class="col-md-3">
                         <div class="form-group">
                             <label for="start-date" class="control-label">Start Date</label>
@@ -100,14 +73,29 @@
                                     data-live-search="true"
                                     class="form-control selectpicker"
                                     data-none-selected-text="<?php echo _l('Dropdown Non Selected Text'); ?>">
-                                <option value="AFA_">AFA</option>
-                                <option value="Kenyatta University">Kenyatta University</option>
+                                <option value="" disabled selected>Select Organization</option>
+                                <?php if (!empty($organizations)): ?>
+                                    <?php foreach ($organizations as $org): ?>
+                                        <option value="<?= htmlspecialchars($org->organization) ?>">
+                                            <?= htmlspecialchars($org->organization) ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <option value="" disabled>No organizations found</option>
+                                <?php endif; ?>
                             </select>
-                            <?php echo form_error('setup', '<div class="error-message">', '</div>'); ?>
-
                         </div>
                     </div>
-
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="query" class="control-label">Search</label>
+                            <div style="border-radius:7px; box-shadow: none;" class="input-group date">
+                                <input style="border-radius:7px; box-shadow: none;" type="text" class="form-control"
+                                       id="query"
+                                       name="query">
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="clearfix mtop20"></div>

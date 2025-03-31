@@ -472,16 +472,21 @@ class Emails_model extends App_Model
         if (is_array($cc) || !empty($cc)) {
             $this->email->cc($cc);
         }
-
-        if (count($attachments) > 0) {
+        if (!empty($attachments) && is_array($attachments)) {
             foreach ($attachments as $attach) {
-                if (!isset($attach['read'])) {
-                    $this->email->attach($attach['attachment'], 'attachment', $attach['filename'], $attach['type']);
+                if (is_array($attach) && isset($attach['attachment'])) {
+                    if (!isset($attach['read'])) {
+                        $this->email->attach($attach['attachment'], 'attachment', $attach['filename'], $attach['type']);
+                    } else {
+                        $this->email->attach($attach['attachment'], '', $attach['filename']);
+                    }
                 } else {
-                    $this->email->attach($attach['attachment'], '', $attach['filename']);
+                    // If $attach is a string, assume it's a file path
+                    $this->email->attach($attach);
                 }
             }
         }
+
 
         $this->clear_attachments();
         $this->set_staff_id(null);

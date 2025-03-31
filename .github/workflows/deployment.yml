@@ -82,7 +82,24 @@ jobs:
             echo "🚀 Deploying master branch to DigitalOcean"
 
             # Navigate to the correct directory
-            cd /var/www/html/tagrit || { echo "❌ Deployment directory not found!"; exit 1; }
+            cd /var/www/html || { echo "❌ Deployment directory not found!"; exit 1; }
+
+            if ls tagrit_backup_*.zip 1> /dev/null 2>&1; then
+              mv tagrit_backup_*.zip old_tagrit.zip
+              echo "🔄 Renamed previous backup to old_tagrit.zip"
+            fi
+
+            # Create a new backup of the tagrit folder
+            BACKUP_NAME="tagrit_backup_$(date +'%Y%m%d_%H%M%S').zip"
+            zip -r $BACKUP_NAME tagrit
+            echo "✅ Backup created: $BACKUP_NAME"
+
+            # Remove the old backup after creating the new one
+            rm -f old_tagrit.zip tagrit.zip
+            echo "🗑️ Removed old backup file"
+
+            # Navigate into the project folder
+            cd tagrit || { echo "❌ tagrit directory not found!"; exit 1; }
 
             # Configure Git and GET Changes with a CI/CD user identity
             git config --global user.email "kevinamayi20@gmail.com"
@@ -96,7 +113,7 @@ jobs:
 
             # Install dependencies
             echo "📦 Running composer install..."
-            composer install --no-dev --optimize-autoloader
+            composer install --ignore-platform-req=ext-fileinfo
 
             echo "✅ Deployment to DigitalOcean completed successfully!"
           EOF

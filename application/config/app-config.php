@@ -17,7 +17,7 @@ $environments = [
 
 
 // Default to production
-$environment = 'production';
+$environment = 'local';
 
 foreach ($environments as $key => $env) {
     if (stripos($host, $key) !== false) {
@@ -32,7 +32,7 @@ $db_config = [
         'BASE_URL'  => 'http://localhost/tagrit/',
         'USERNAME'  => 'root',
         'PASSWORD'  => '',
-        'DB_NAME'   => 'tagrit'
+        'DB_NAME'   => 'tagrit_main'
     ],
     'dev' => [
         'BASE_URL'  => 'https://dev.tagrit.com/',
