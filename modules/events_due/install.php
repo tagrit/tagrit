@@ -45,7 +45,7 @@ if (!$CI->db->table_exists(db_prefix() . 'events_due_registrations')) {
 }
 
 // Create table `{database_prefix}_notification_queue`
-if (!$CI->db->table_exists(db_prefix() . 'notification_queue')) {
+if (!$CI->db->table_exists(db_prefix() . '_notification_queue')) {
     $CI->db->query('CREATE TABLE `' . db_prefix() . '_notification_queue` (
         `id` INT NOT NULL AUTO_INCREMENT,
         `type` VARCHAR(50) NOT NULL,
@@ -57,6 +57,15 @@ if (!$CI->db->table_exists(db_prefix() . 'notification_queue')) {
         `status` ENUM("pending", "sent") NOT NULL DEFAULT "pending",
         `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=' . $CI->db->char_set . ';');
+}
+
+// Create table `{database_prefix}email_reminder_period`
+if (!$CI->db->table_exists(db_prefix() . 'email_reminder_period')) {
+    $CI->db->query('CREATE TABLE `' . db_prefix() . 'email_reminder_period` (
+        `id` INT NOT NULL AUTO_INCREMENT,
+        `days` INT NOT NULL,
         PRIMARY KEY (`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=' . $CI->db->char_set . ';');
 }

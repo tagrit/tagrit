@@ -14,6 +14,8 @@ $tables_to_drop = [
     'events_due_registrations',
     'events_due_venues',
     'events_due_locations',
+    '_notification_queue',
+    'email_reminder_period'
 ];
 
 foreach ($tables_to_drop as $table) {
