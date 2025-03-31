@@ -70,6 +70,20 @@ if (!$CI->db->table_exists(db_prefix() . 'email_reminder_period')) {
     ) ENGINE=InnoDB DEFAULT CHARSET=' . $CI->db->char_set . ';');
 }
 
+// Create table `event_attendance_sheets`
+if (!$CI->db->table_exists(db_prefix() . 'event_attendance_sheets')) {
+    $CI->db->query('CREATE TABLE `' . db_prefix() . 'event_attendance_sheets` (
+        `id` INT NOT NULL AUTO_INCREMENT,
+        `event_id` INT NOT NULL,
+        `location` VARCHAR(255) NOT NULL,
+        `venue` VARCHAR(255) NOT NULL,
+        `attendance_url` TEXT NOT NULL,
+        `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=' . $CI->db->char_set . ';');
+}
+
+
 // Insert locations
 $locations = [
     'Diani', 'Mombasa', 'Machakos', 'Nakuru', 'Naivasha',

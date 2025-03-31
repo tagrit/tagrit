@@ -69,6 +69,15 @@
                                            class="btn btn-info">
                                             <i class="fa fa-eye"></i> View
                                         </a>
+                                        <button style="color:white;"
+                                                data-toggle="modal"
+                                                data-target="#attendanceSheetModal"
+                                                data-event-id="<?php echo $event->event_id; ?>"
+                                                data-location="<?php echo $event->location; ?>"
+                                                data-venue="<?php echo $event->venue; ?>"
+                                                class="btn btn-info open-attendance-modal">
+                                            <i class="fa fa-file"></i> Attendance sheet
+                                        </button>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
@@ -84,4 +93,50 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="attendanceSheetModal" tabindex="-1" role="dialog"
+     aria-labelledby="attendanceSheetModalLabel"
+     aria-hidden="true">
+    <?php echo form_open('admin/events_due/events/upload_attendance_sheet', [
+        'id' => 'create-new-event-form',
+        'enctype' => 'multipart/form-data'
+    ]); ?>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header d-flex justify-content-between align-items-center">
+                <button type="button" class="close d-flex align-items-center" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Hidden Inputs for Event Data -->
+                <input type="hidden" name="event_id" id="event_id">
+                <input type="hidden" name="location" id="location">
+                <input type="hidden" name="venue" id="venue">
+
+                <div class="form-group">
+                    <label for="attendance_sheet">Attendance Sheet</label>
+                    <input type="file" name="attendance_sheet" id="attendance_sheet"
+                           style="width: 100%; padding: 8px; font-size: 16px; border: 1px solid #ccc; border-radius: 5px;" required>
+                </div>
+            </div>
+            <div style="margin-top:-20px;" class="modal-footer">
+                <button type="submit" class="btn btn-primary">Upload</button>
+            </div>
+        </div>
+    </div>
+    <?php echo form_close(); ?>
+</div>
 <?php init_tail(); ?>
+<script>
+    $(document).ready(function () {
+        $('.open-attendance-modal').on('click', function () {
+            let eventId = $(this).data('event-id');
+            let location = $(this).data('location');
+            let venue = $(this).data('venue');
+
+            $('#event_id').val(eventId);
+            $('#location').val(location);
+            $('#venue').val(venue);
+        });
+    });
+</script>

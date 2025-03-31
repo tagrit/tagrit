@@ -7,6 +7,7 @@ class Events extends AdminController
     {
         parent::__construct();
         $this->load->model('Event_model');
+        $this->load->model('Attendance_model');
         $this->load->library('form_validation');
 
     }
@@ -25,7 +26,7 @@ class Events extends AdminController
     public function view($event_id)
     {
         $data['event'] = $this->Event_model->event_details($event_id);
-        $this->load->view('events/view',$data);
+        $this->load->view('events/view', $data);
     }
 
     public function store()
@@ -125,6 +126,50 @@ class Events extends AdminController
         $data['event'] = $event;
         $this->load->view('events/edit', $data);
 
+    }
+
+    public function upload_attendance_sheet()
+    {
+        $event_id = $this->input->post('event_id');
+        $location = $this->input->post('location');
+        $venue = $this->input->post('venue');
+
+        $upload_path = FCPATH . 'modules/imprest/assets/event_attendance_sheets/';
+
+        if (!is_dir($upload_path)) {
+            mkdir($upload_path, 0755, true);
+        }
+
+        if (!empty($_FILES['attendance_sheet']['name'])) {
+            $file_name = time() . '_' . $_FILES['attendance_sheet']['name'];
+            $file_path = $upload_path . $file_name;
+
+            if (move_uploaded_file($_FILES['attendance_sheet']['tmp_name'], $file_path)) {
+                $attendance_sheet_url = base_url('modules/imprest/assets/event_attendance_sheets/' . $file_name);
+
+                $data = [
+                    'event_id' => $event_id,
+                    'location' => $location,
+                    'venue' => $venue,
+                    'attendance_url' => $attendance_sheet_url
+                ];
+
+                // Insert into database
+                if ($this->Attendance_model->create($data)) {
+                    set_alert('success', 'Attendance sheet uploaded successfully!');
+                    redirect('admin/events_due/events/upload_attendance_sheet');
+                } else {
+                    set_alert('danger', 'Database error: Failed to save attendance record.');
+                    redirect('admin/events_due/events/upload_attendance_sheet');
+                }
+            } else {
+                set_alert('danger', 'File upload failed. Please try again.');
+                redirect('admin/events_due/events/upload_attendance_sheet');
+            }
+        } else {
+            set_alert('warning', 'Please select a file to upload.');
+            redirect('admin/events_due/events/upload_attendance_sheet');
+        }
     }
 
 }
