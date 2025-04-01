@@ -141,7 +141,6 @@ class Event_model extends App_Model
 
         // Step 3: Return the result
         return [
-            'id' => $event_data->id,
             'event_id' => $event_data->event_id,
             'start_date' => $event_data->start_date,
             'end_date' => $event_data->end_date,
