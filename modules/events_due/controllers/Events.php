@@ -7,6 +7,7 @@ class Events extends AdminController
     {
         parent::__construct();
         $this->load->model('Event_model');
+        $this->load->model('Attendance_model');
         $this->load->library('form_validation');
 
     }
@@ -18,15 +19,54 @@ class Events extends AdminController
 
     public function index()
     {
-        $data['events'] = $this->Event_model->event_details();
+        $data['events'] = $this->Event_model->events();
         $this->load->view('events/index', $data);
     }
 
-    public function view($event_id)
+    public function view()
     {
-        $data['event'] = $this->Event_model->event_details($event_id);
-        $this->load->view('events/view',$data);
+        $this->load->library('session');
+
+        // Get input values from POST or fallback to session data if not available
+        $event_id = $this->input->post('event_id') ?? $this->session->userdata('event_id');
+        $location = $this->input->post('location') ?? $this->session->userdata('location');
+        $venue = $this->input->post('venue') ?? $this->session->userdata('venue');
+        $start_date = $this->input->post('start_date') ?? $this->session->userdata('start_date');
+        $end_date = $this->input->post('end_date') ?? $this->session->userdata('end_date');
+
+        // Store data to session if any of the fields have been posted
+        if ($this->input->post()) {
+            // Store the input values in the session if they are provided
+            $this->session->set_userdata([
+                'event_id' => $event_id,
+                'location' => $location,
+                'venue' => $venue,
+                'start_date' => $start_date,
+                'end_date' => $end_date,
+            ]);
+        }
+
+        // Fetch event data based on the stored session data
+        if ($event_id && $location && $venue && $start_date && $end_date) {
+            $event_data = $this->Event_model->event_details($event_id, $location, $venue, $start_date, $end_date);
+
+            // Store event data in session if not already available
+            if (!empty($event_data)) {
+                $this->session->set_userdata('event_data', $event_data);
+            }
+        }
+
+        // Retrieve event data from session if available
+        $data['event_data'] = $this->session->userdata('event_data');
+
+        if (empty($data['event_data'])) {
+            show_error('No event data available.', 404);
+        }
+
+        // Load the view with the event data
+        $this->load->view('events/view', $data);
     }
+
 
     public function store()
     {
@@ -125,6 +165,67 @@ class Events extends AdminController
         $data['event'] = $event;
         $this->load->view('events/edit', $data);
 
+    }
+
+    public function upload_attendance_sheet()
+    {
+        // Fetch form data
+        $event_id = $this->input->post('event_id');
+        $location = $this->input->post('location');
+        $venue = $this->input->post('venue');
+
+        // Check if the file exists in the request
+        if (!isset($_FILES['attendance_sheet']) || $_FILES['attendance_sheet']['error'] !== UPLOAD_ERR_OK) {
+            throw new Exception('No file uploaded or file upload error occurred.');
+        }
+
+        $file_data = $_FILES['attendance_sheet'];
+
+        // Define upload directory
+        $upload_path = FCPATH . 'modules/events_due/assets/event_attendance_sheets/';
+
+        // Ensure upload directory exists
+        if (!is_dir($upload_path)) {
+            mkdir($upload_path, 0755, true);
+        }
+
+        // Generate a unique file name
+        $file_name = time() . '_' . $file_data['name'];
+        $file_path = $upload_path . $file_name;
+
+        // Move uploaded file to the destination folder
+        if (!move_uploaded_file($file_data['tmp_name'], $file_path)) {
+            throw new Exception('Failed to move the uploaded file. Error code: ' . $file_data['error']);
+        }
+
+        // Build file URL
+        $attendance_sheet_url = base_url('modules/events_due/assets/event_attendance_sheets/' . $file_name);
+
+        // Prepare data for insertion
+        $data = [
+            'event_id' => $event_id,
+            'location' => $location,
+            'venue' => $venue,
+            'attendance_url' => $attendance_sheet_url,
+        ];
+
+        // Insert into database inside a transaction
+        $this->db->trans_begin();
+        try {
+            if (!$this->Attendance_model->create($data)) {
+                throw new Exception('Failed to save attendance record to the database.');
+            }
+
+            $this->db->trans_commit();
+            set_alert('success', 'Attendance sheet uploaded successfully!');
+            redirect('admin/events_due/events/index');
+
+        } catch (Exception $e) {
+            $this->db->trans_rollback();
+            log_message('error', 'File Upload Error: ' . $e->getMessage());
+            set_alert('danger', 'Error: ' . $e->getMessage());
+            redirect('admin/events_due/events/index');
+        }
     }
 
 }
