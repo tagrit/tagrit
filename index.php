@@ -67,9 +67,9 @@ $host = $_SERVER['HTTP_HOST'] ?? '';
 if (strpos($host, 'dev') !== false ||
     strpos($host, 'staging') !== false ||
     strpos($host, 'autoupdate') !== false) {
-    define('ENVIRONMENT', 'development');
+    define('ENVIRONMENT', 'production');
 } else {
-    define('ENVIRONMENT', 'development');
+    define('ENVIRONMENT', 'production');
 }
 
 /*
