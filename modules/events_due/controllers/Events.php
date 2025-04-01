@@ -19,15 +19,54 @@ class Events extends AdminController
 
     public function index()
     {
-        $data['events'] = $this->Event_model->event_details();
+        $data['events'] = $this->Event_model->events();
         $this->load->view('events/index', $data);
     }
 
-    public function view($event_id)
+    public function view()
     {
-        $data['event'] = $this->Event_model->event_details($event_id);
+        $this->load->library('session');
+
+        // Get input values from POST or fallback to session data if not available
+        $event_id = $this->input->post('event_id') ?? $this->session->userdata('event_id');
+        $location = $this->input->post('location') ?? $this->session->userdata('location');
+        $venue = $this->input->post('venue') ?? $this->session->userdata('venue');
+        $start_date = $this->input->post('start_date') ?? $this->session->userdata('start_date');
+        $end_date = $this->input->post('end_date') ?? $this->session->userdata('end_date');
+
+        // Store data to session if any of the fields have been posted
+        if ($this->input->post()) {
+            // Store the input values in the session if they are provided
+            $this->session->set_userdata([
+                'event_id' => $event_id,
+                'location' => $location,
+                'venue' => $venue,
+                'start_date' => $start_date,
+                'end_date' => $end_date,
+            ]);
+        }
+
+        // Fetch event data based on the stored session data
+        if ($event_id && $location && $venue && $start_date && $end_date) {
+            $event_data = $this->Event_model->event_details($event_id, $location, $venue, $start_date, $end_date);
+
+            // Store event data in session if not already available
+            if (!empty($event_data)) {
+                $this->session->set_userdata('event_data', $event_data);
+            }
+        }
+
+        // Retrieve event data from session if available
+        $data['event_data'] = $this->session->userdata('event_data');
+
+        if (empty($data['event_data'])) {
+            show_error('No event data available.', 404);
+        }
+
+        // Load the view with the event data
         $this->load->view('events/view', $data);
     }
+
 
     public function store()
     {

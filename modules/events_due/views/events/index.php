@@ -64,11 +64,26 @@
                                     <td><?php echo $event->location; ?></td>
                                     <td><?php echo $event->venue; ?></td>
                                     <td>
-                                        <a style="color:white;"
-                                           href="<?php echo admin_url('events_due/events/view/' . $event->event_id); ?>"
-                                           class="btn btn-info">
+
+                                        <?php echo form_open('admin/events_due/events/view', [
+                                            'id' => 'eventForm_' . $event->event_id,
+                                            'method' => 'POST'
+                                        ]); ?>
+
+                                        <input type="hidden" name="event_id" value="<?php echo $event->event_id; ?>">
+                                        <input type="hidden" name="location" value="<?php echo $event->location; ?>">
+                                        <input type="hidden" name="venue" value="<?php echo $event->venue; ?>">
+                                        <input type="hidden" name="start_date"
+                                               value="<?php echo $event->start_date; ?>">
+                                        <input type="hidden" name="end_date" value="<?php echo $event->end_date; ?>">
+
+                                        <button style="margin-bottom:5px; color:white;" class="btn btn-info"
+                                                type="submit">
                                             <i class="fa fa-eye"></i> View
-                                        </a>
+                                        </button>
+
+                                        <?php echo form_close(); ?>
+
                                         <button style="color:white;"
                                                 data-toggle="modal"
                                                 data-target="#attendanceSheetModal"
@@ -115,8 +130,9 @@
 
                 <div class="form-group">
                     <label for="attendance_sheet">Attendance Sheet</label>
-                    <input type="file"  name="attendance_sheet" id="attendance_sheet"
-                           style="width: 100%; padding: 8px; font-size: 16px; border: 1px solid #ccc; border-radius: 5px;" required>
+                    <input type="file" name="attendance_sheet" id="attendance_sheet"
+                           style="width: 100%; padding: 8px; font-size: 16px; border: 1px solid #ccc; border-radius: 5px;"
+                           required>
                 </div>
             </div>
             <div style="margin-top:-20px;" class="modal-footer">
