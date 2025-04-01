@@ -36,19 +36,18 @@ class Event_model extends App_Model
     public function events()
     {
         $this->db->select('
-        tblevents_due_events.event_id,
-        tblevents_due_events.start_date,
-        tblevents_due_events.end_date,
-        tblevents_due_events.setup,
-        tblevents_due_events.division,
-        tblevents_due_events.type,
-        tblevents_due_events.revenue,
-        tblevents_due_events.trainers,
-        tblevents_due_name.name AS event_name,
-        tblevents_due_events.location,
-        tblevents_due_events.venue,
-        tblevents_due_events.organization
-    ');
+    tblevents_due_events.event_id,
+    tblevents_due_events.start_date,
+    tblevents_due_events.end_date,
+    MAX(tblevents_due_events.setup) AS setup,
+    MAX(tblevents_due_events.division) AS division,
+    MAX(tblevents_due_events.type) AS type,
+    MAX(tblevents_due_events.revenue) AS revenue,
+    GROUP_CONCAT(DISTINCT tblevents_due_events.trainers) AS trainers,
+    tblevents_due_name.name AS event_name,
+    tblevents_due_events.location,
+    tblevents_due_events.venue,
+');
 
         $this->db->from(db_prefix() . '_events_details AS tblevents_due_events');
         $this->db->join(db_prefix() . '_events AS tblevents_due_name', 'tblevents_due_events.event_id = tblevents_due_name.id', 'left');
@@ -73,15 +72,16 @@ class Event_model extends App_Model
         tblevents_due_events.id,
         tblevents_due_events.start_date,
         tblevents_due_events.end_date,
-        tblevents_due_events.setup,
-        tblevents_due_events.division,
-        tblevents_due_events.type,
+        MAX(tblevents_due_events.setup) AS setup,
+        MAX(tblevents_due_events.division) AS division,
+        MAX(tblevents_due_events.type) AS type,
+        MAX(tblevents_due_events.revenue) AS revenue,
         SUM(tblevents_due_events.revenue) AS total_revenue,
-        tblevents_due_events.trainers,
-        tblevents_due_name.name AS event_name,
+        GROUP_CONCAT(DISTINCT tblevents_due_events.trainers) AS trainers,
+        MAX(tblevents_due_name.name) AS event_name,
         tblevents_due_events.location,
         tblevents_due_events.venue,
-        tblevents_due_events.division
+        MAX(tblevents_due_events.division) AS division,
     ');
 
         $this->db->from(db_prefix() . '_events_details AS tblevents_due_events');
