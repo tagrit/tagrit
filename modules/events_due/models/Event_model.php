@@ -69,7 +69,6 @@ class Event_model extends App_Model
         // Step 1: Get the event details and sum revenue
         $this->db->select('
         tblevents_due_events.event_id,
-        tblevents_due_events.id,
         tblevents_due_events.start_date,
         tblevents_due_events.end_date,
         MAX(tblevents_due_events.setup) AS setup,
