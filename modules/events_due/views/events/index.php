@@ -97,7 +97,7 @@
      aria-labelledby="attendanceSheetModalLabel"
      aria-hidden="true">
     <?php echo form_open('admin/events_due/events/upload_attendance_sheet', [
-        'id' => 'create-new-event-form',
+        'id' => 'upload-attendance-sheet',
         'enctype' => 'multipart/form-data'
     ]); ?>
     <div class="modal-dialog" role="document">
@@ -115,7 +115,7 @@
 
                 <div class="form-group">
                     <label for="attendance_sheet">Attendance Sheet</label>
-                    <input type="file" name="attendance_sheet" id="attendance_sheet"
+                    <input type="file"  name="attendance_sheet" id="attendance_sheet"
                            style="width: 100%; padding: 8px; font-size: 16px; border: 1px solid #ccc; border-radius: 5px;" required>
                 </div>
             </div>

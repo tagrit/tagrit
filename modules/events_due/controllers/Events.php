@@ -130,45 +130,62 @@ class Events extends AdminController
 
     public function upload_attendance_sheet()
     {
+        // Fetch form data
         $event_id = $this->input->post('event_id');
         $location = $this->input->post('location');
         $venue = $this->input->post('venue');
 
-        $upload_path = FCPATH . 'modules/imprest/assets/event_attendance_sheets/';
+        // Check if the file exists in the request
+        if (!isset($_FILES['attendance_sheet']) || $_FILES['attendance_sheet']['error'] !== UPLOAD_ERR_OK) {
+            throw new Exception('No file uploaded or file upload error occurred.');
+        }
 
+        $file_data = $_FILES['attendance_sheet'];
+
+        // Define upload directory
+        $upload_path = FCPATH . 'modules/events_due/assets/event_attendance_sheets/';
+
+        // Ensure upload directory exists
         if (!is_dir($upload_path)) {
             mkdir($upload_path, 0755, true);
         }
 
-        if (!empty($_FILES['attendance_sheet']['name'])) {
-            $file_name = time() . '_' . $_FILES['attendance_sheet']['name'];
-            $file_path = $upload_path . $file_name;
+        // Generate a unique file name
+        $file_name = time() . '_' . $file_data['name'];
+        $file_path = $upload_path . $file_name;
 
-            if (move_uploaded_file($_FILES['attendance_sheet']['tmp_name'], $file_path)) {
-                $attendance_sheet_url = base_url('modules/imprest/assets/event_attendance_sheets/' . $file_name);
+        // Move uploaded file to the destination folder
+        if (!move_uploaded_file($file_data['tmp_name'], $file_path)) {
+            throw new Exception('Failed to move the uploaded file. Error code: ' . $file_data['error']);
+        }
 
-                $data = [
-                    'event_id' => $event_id,
-                    'location' => $location,
-                    'venue' => $venue,
-                    'attendance_url' => $attendance_sheet_url
-                ];
+        // Build file URL
+        $attendance_sheet_url = base_url('modules/events_due/assets/event_attendance_sheets/' . $file_name);
 
-                // Insert into database
-                if ($this->Attendance_model->create($data)) {
-                    set_alert('success', 'Attendance sheet uploaded successfully!');
-                    redirect('admin/events_due/events/upload_attendance_sheet');
-                } else {
-                    set_alert('danger', 'Database error: Failed to save attendance record.');
-                    redirect('admin/events_due/events/upload_attendance_sheet');
-                }
-            } else {
-                set_alert('danger', 'File upload failed. Please try again.');
-                redirect('admin/events_due/events/upload_attendance_sheet');
+        // Prepare data for insertion
+        $data = [
+            'event_id' => $event_id,
+            'location' => $location,
+            'venue' => $venue,
+            'attendance_url' => $attendance_sheet_url,
+        ];
+
+        // Insert into database inside a transaction
+        $this->db->trans_begin();
+        try {
+            if (!$this->Attendance_model->create($data)) {
+                throw new Exception('Failed to save attendance record to the database.');
             }
-        } else {
-            set_alert('warning', 'Please select a file to upload.');
-            redirect('admin/events_due/events/upload_attendance_sheet');
+
+            $this->db->trans_commit();
+            set_alert('success', 'Attendance sheet uploaded successfully!');
+            redirect('admin/events_due/events/index');
+
+        } catch (Exception $e) {
+            $this->db->trans_rollback();
+            log_message('error', 'File Upload Error: ' . $e->getMessage());
+            set_alert('danger', 'Error: ' . $e->getMessage());
+            redirect('admin/events_due/events/index');
         }
     }
 
