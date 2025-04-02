@@ -85,50 +85,54 @@
                                         </div>
                                     </div>
 
+                                    <div style="padding-left:12px; padding-right:12px;" class="row">
 
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="start_date" class="control-label">Start Date*</label>
-                                            <input type="date" id="start_date" name="start_date" class="form-control"
-                                                   required value="<?= set_value('start_date'); ?>">
-                                            <?php echo form_error('start_date', '<div class="error-message">', '</div>'); ?>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="start_date" class="control-label">Start Date*</label>
+                                                <input type="date" id="start_date" name="start_date"
+                                                       class="form-control"
+                                                       required value="<?= set_value('start_date'); ?>">
+                                                <?php echo form_error('start_date', '<div class="error-message">', '</div>'); ?>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="end_date" class="control-label">End Date*</label>
+                                                <input type="date" id="end_date" name="end_date" class="form-control"
+                                                       value="<?= set_value('end_date'); ?>"
+                                                       required>
+                                                <?php echo form_error('end_date', '<div class="error-message">', '</div>'); ?>
+                                            </div>
                                         </div>
                                     </div>
 
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="end_date" class="control-label">End Date*</label>
-                                            <input type="date" id="end_date" name="end_date" class="form-control"
-                                                   value="<?= set_value('end_date'); ?>"
-                                                   required>
-                                            <?php echo form_error('end_date', '<div class="error-message">', '</div>'); ?>
+                                    <div style="padding-left:12px; padding-right:12px;" class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="no_of_delegates" class="control-label">Number of
+                                                    Delegates*</label>
+                                                <input type="number" id="no_of_delegates" name="no_of_delegates"
+                                                       class="form-control"
+                                                       value="<?= set_value('no_of_delegates'); ?>"
+                                                       required>
+                                                <?php echo form_error('no_of_delegates', '<div class="error-message">', '</div>'); ?>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="charges_per_delegate" class="control-label">Charges Per
+                                                    Delegates*</label>
+                                                <input type="number" id="charges_per_delegate"
+                                                       name="charges_per_delegate"
+                                                       class="form-control"
+                                                       value="<?= set_value('charges_per_delegate'); ?>"
+                                                       required>
+                                                <?php echo form_error('charges_per_delegate', '<div class="error-message">', '</div>'); ?>
+                                            </div>
                                         </div>
                                     </div>
-
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="no_of_delegates" class="control-label">Number of
-                                                Delegates*</label>
-                                            <input type="number" id="no_of_delegates" name="no_of_delegates"
-                                                   class="form-control"
-                                                   value="<?= set_value('no_of_delegates'); ?>"
-                                                   required>
-                                            <?php echo form_error('no_of_delegates', '<div class="error-message">', '</div>'); ?>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="charges_per_delegate" class="control-label">Charges Per
-                                                Delegates*</label>
-                                            <input type="number" id="charges_per_delegate" name="charges_per_delegate"
-                                                   class="form-control"
-                                                   value="<?= set_value('charges_per_delegate'); ?>"
-                                                   required>
-                                            <?php echo form_error('charges_per_delegate', '<div class="error-message">', '</div>'); ?>
-                                        </div>
-                                    </div>
-
 
                                     <div class="col-md-6">
                                         <div class="form-group">
