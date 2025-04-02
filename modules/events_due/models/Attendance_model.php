@@ -31,4 +31,5 @@ class Attendance_model extends App_Model
     }
 
 
+
 }
