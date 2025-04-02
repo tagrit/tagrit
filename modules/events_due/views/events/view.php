@@ -17,7 +17,7 @@
                         style="max-width:70%; font-size: 17px; font-weight: bold; color: white; text-transform: uppercase;
                         margin: 0; padding: 12px 20px; border-radius: 8px;
                         box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);">
-                        <?= htmlspecialchars($event_data['event_name']); ?>
+                        <?= htmlspecialchars(strtoupper($event_data['event_name'])); ?>
                     </h2>
 
                     <?php if (!empty($event_data['attendance_sheet_url'])): ?>
@@ -34,29 +34,34 @@
                 <div class="event-info">
                     <div class="event-column">
                         <p><strong>Start Date:</strong> <span
-                                    id="start-date"><?= htmlspecialchars($event_data['start_date']); ?></span></p>
+                                    id="start-date"><?= htmlspecialchars(strtoupper($event_data['start_date'])); ?></span>
+                        </p>
                         <p><strong>End Date:</strong> <span
-                                    id="end-date"><?= htmlspecialchars($event_data['end_date']); ?></span></p>
+                                    id="end-date"><?= htmlspecialchars(strtoupper($event_data['end_date'])); ?></span>
+                        </p>
                         <p><strong>Setup:</strong> <span
-                                    id="setup"><?= $event_data['setup'] ?? ''; ?></span></p>
+                                    id="setup"><?= strtoupper($event_data['setup'] ?? ''); ?></span></p>
                         <p><strong>Division:</strong> <span
-                                    id="division"><?= htmlspecialchars($event_data['division']); ?></span></p>
-                        <p><strong>Type:</strong> <span id="type"><?= $event_data['type'] ?? ''; ?></span>
+                                    id="division"><?= htmlspecialchars(strtoupper($event_data['division'])); ?></span>
+                        </p>
+                        <p><strong>Type:</strong> <span id="type"><?= strtoupper($event_data['type'] ?? ''); ?></span>
                         </p>
                     </div>
 
                     <div class="event-column">
                         <p><strong>Revenue:</strong> <span
-                                    id="revenue"><?= htmlspecialchars($event_data['total_revenue']); ?></span></p>
+                                    id="revenue"><?= htmlspecialchars(strtoupper($event_data['total_revenue'])); ?></span>
+                        </p>
                         <p><strong>Location:</strong> <span
-                                    id="location"><?= htmlspecialchars($event_data['location']); ?></span></p>
+                                    id="location"><?= htmlspecialchars(strtoupper($event_data['location'])); ?></span>
+                        </p>
                         <p><strong>Venue:</strong> <span
-                                    id="venue"><?= htmlspecialchars($event_data['venue']); ?></span></p>
+                                    id="venue"><?= htmlspecialchars(strtoupper($event_data['venue'])); ?></span></p>
                         <p><strong>Trainers:</strong> <span id="trainers">
                             <?php
                             $trainers = unserialize($event_data['trainers']);
                             if (is_array($trainers) && !empty($trainers)) {
-                                echo implode(', ', array_map('htmlspecialchars', $trainers));
+                                echo strtoupper(implode(', ', array_map('htmlspecialchars', $trainers)));
                             } else {
                                 echo 'No trainers available';
                             }
