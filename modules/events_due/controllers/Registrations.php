@@ -20,12 +20,13 @@ class Registrations extends AdminController
 
     }
 
+
     public function validateRegistration()
     {
         // Set validation rules
         $this->form_validation->set_rules('location_id', 'Location', 'required');
         $this->form_validation->set_rules('venue_id', 'Venue', 'required');
-        $this->form_validation->set_rules('start_date', 'Start Date', 'required');
+        $this->form_validation->set_rules('start_date', 'Start Date', 'required|callback_validate_dates');
         $this->form_validation->set_rules('end_date', 'End Date', 'required');
         $this->form_validation->set_rules('organization', 'Organization', 'required');
         $this->form_validation->set_rules('no_of_delegates', 'Number of Delegates', 'required|numeric');
@@ -51,6 +52,18 @@ class Registrations extends AdminController
         }
 
     }
+
+    public function validate_dates($start_date)
+    {
+        $end_date = $this->input->post('end_date');
+
+        if (!empty($end_date) && strtotime($start_date) > strtotime($end_date)) {
+            $this->form_validation->set_message('validate_dates', 'Start Date cannot be later than End Date.');
+            return false;
+        }
+        return true;
+    }
+
 
     public function create()
     {
