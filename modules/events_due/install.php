@@ -83,6 +83,18 @@ if (!$CI->db->table_exists(db_prefix() . 'event_attendance_sheets')) {
     ) ENGINE=InnoDB DEFAULT CHARSET=' . $CI->db->char_set . ';');
 }
 
+// Check if `start_date` column exists
+$columns = $CI->db->list_fields(db_prefix() . 'event_attendance_sheets');
+if (!in_array('start_date', $columns)) {
+    $CI->db->query('ALTER TABLE `' . db_prefix() . 'event_attendance_sheets` ADD COLUMN `start_date` DATE NULL;');
+}
+
+// Check if `end_date` column exists
+if (!in_array('end_date', $columns)) {
+    $CI->db->query('ALTER TABLE `' . db_prefix() . 'event_attendance_sheets` ADD COLUMN `end_date` DATE NULL;');
+}
+
+$CI->db->query("DELETE FROM " . db_prefix() . "events_due_locations");
 
 // Insert locations
 $locations = [
@@ -92,8 +104,16 @@ $locations = [
 ];
 
 foreach ($locations as $location) {
-    $CI->db->insert(db_prefix() . 'events_due_locations', ['name' => $location]);
+    // Check if the location already exists
+    $CI->db->where('name', $location);
+    $query = $CI->db->get(db_prefix() . 'events_due_locations');
+
+    // If the location does not exist, insert it
+    if ($query->num_rows() == 0) {
+        $CI->db->insert(db_prefix() . 'events_due_locations', ['name' => $location]);
+    }
 }
+
 
 // Fetch location IDs for mapping
 $location_ids = [];
@@ -101,6 +121,9 @@ $location_results = $CI->db->get(db_prefix() . 'events_due_locations')->result()
 foreach ($location_results as $location) {
     $location_ids[$location->name] = $location->id;
 }
+
+$CI->db->query("DELETE FROM " . db_prefix() . "events_due_venues");
+
 
 // Venues with their corresponding locations
 $venues = [

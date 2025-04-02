@@ -139,6 +139,9 @@ class Event_model extends App_Model
             }
         }
 
+        //get event attendance sheet url
+
+
         // Step 3: Return the result
         return [
             'event_id' => $event_data->event_id,
@@ -152,8 +155,28 @@ class Event_model extends App_Model
             'event_name' => $event_data->event_name,
             'location' => $event_data->location,
             'venue' => $event_data->venue,
+            'attendance_sheet_url' => $this->get_attendance_sheet_url($event_id, $location, $venue, $start_date, $end_date),
             'clients' => $clients
         ];
+    }
+
+
+    public function get_attendance_sheet_url($event_id, $location, $venue, $start_date, $end_date)
+    {
+        $this->db->select('attendance_url');
+        $this->db->where('event_id', $event_id);
+        $this->db->where('location', $location);
+        $this->db->where('venue', $venue);
+        $this->db->where('start_date', $start_date);
+        $this->db->where('end_date', $end_date);
+        $query = $this->db->get(db_prefix() . 'event_attendance_sheets');
+
+        if ($query->num_rows() > 0) {
+            $event_attendance_sheet_url = $query->row();
+            return $event_attendance_sheet_url->attendance_url;
+        }
+
+        return null;
     }
 
 

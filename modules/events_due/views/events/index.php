@@ -90,6 +90,8 @@
                                                 data-event-id="<?php echo $event->event_id; ?>"
                                                 data-location="<?php echo $event->location; ?>"
                                                 data-venue="<?php echo $event->venue; ?>"
+                                                data-start-date="<?php echo $event->start_date; ?>"
+                                                data-end-date="<?php echo $event->end_date; ?>"
                                                 class="btn btn-info open-attendance-modal">
                                             <i class="fa fa-file"></i> Attendance sheet
                                         </button>
@@ -127,6 +129,8 @@
                 <input type="hidden" name="event_id" id="event_id">
                 <input type="hidden" name="location" id="location">
                 <input type="hidden" name="venue" id="venue">
+                <input type="hidden" name="startDate" id="startDate">
+                <input type="hidden" name="endDate" id="endDate">
 
                 <div class="form-group">
                     <label for="attendance_sheet">Attendance Sheet</label>
@@ -149,10 +153,14 @@
             let eventId = $(this).data('event-id');
             let location = $(this).data('location');
             let venue = $(this).data('venue');
+            let startDate = $(this).data('start-date');
+            let endDate = $(this).data('end-date');
 
             $('#event_id').val(eventId);
             $('#location').val(location);
             $('#venue').val(venue);
+            $('#startDate').val(startDate);
+            $('#endDate').val(endDate);
         });
     });
 </script>

@@ -25,6 +25,7 @@ class Events extends AdminController
 
     public function view()
     {
+
         $this->load->library('session');
 
         // Get input values from POST or fallback to session data if not available
@@ -58,6 +59,7 @@ class Events extends AdminController
 
         // Retrieve event data from session if available
         $data['event_data'] = $this->session->userdata('event_data');
+
 
         if (empty($data['event_data'])) {
             show_error('No event data available.', 404);
@@ -173,6 +175,8 @@ class Events extends AdminController
         $event_id = $this->input->post('event_id');
         $location = $this->input->post('location');
         $venue = $this->input->post('venue');
+        $startDate = $this->input->post('startDate');
+        $endDate = $this->input->post('endDate');
 
         // Check if the file exists in the request
         if (!isset($_FILES['attendance_sheet']) || $_FILES['attendance_sheet']['error'] !== UPLOAD_ERR_OK) {
@@ -206,6 +210,8 @@ class Events extends AdminController
             'event_id' => $event_id,
             'location' => $location,
             'venue' => $venue,
+            'start_date' => $startDate,
+            'end_date' => $endDate,
             'attendance_url' => $attendance_sheet_url,
         ];
 
