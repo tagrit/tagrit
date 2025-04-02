@@ -1,15 +1,35 @@
 <?php init_head(); ?>
 <div id="wrapper">
     <div class="content">
-        <div style="background-color:transparent;" class="panel_s">
+        <div style="background-color:transparent; padding-left:10px; padding-top:20px;" class="panel_s">
+            <a href="<?= admin_url('events_due/events/index'); ?>"
+               style="margin-top:10px; background: white; color: #007bff; padding: 10px 15px; font-size: 14px;
+                        font-weight: bold; border-radius: 5px; text-decoration: none;
+                        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);">
+                <i class="fa fa-arrow-left" aria-hidden="true"></i>
+                Back
+            </a>
+
             <div style="background-color:transparent;" class="panel-body">
-                <h2 class="event-title text-center" id="event-name"
-                    style="font-size: 17px; font-weight: bold; color: white; text-transform: uppercase;
-                          background: linear-gradient(45deg, #007bff, #0056b3);
-                          padding: 12px 20px; border-radius: 8px; display: inline-block;
-                          box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);">
-                    <?= htmlspecialchars($event_data['event_name']); ?>
-                </h2>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background: linear-gradient(45deg, #007bff, #0056b3); border-radius: 8px;">
+                    <h2 class="event-title" id="event-name"
+                        style="max-width:70%; font-size: 17px; font-weight: bold; color: white; text-transform: uppercase;
+                        margin: 0; padding: 12px 20px; border-radius: 8px;
+                        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);">
+                        <?= htmlspecialchars($event_data['event_name']); ?>
+                    </h2>
+
+                    <?php if (!empty($event_data['attendance_sheet_url'])): ?>
+                        <a href="<?= htmlspecialchars($event_data['attendance_sheet_url']); ?>" target="_blank"
+                           style="background: white; color: #007bff; padding: 10px 15px; font-size: 14px;
+                        font-weight: bold; border-radius: 5px; text-decoration: none;
+                        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);">
+                            Attendance Sheet
+                        </a>
+                    <?php endif; ?>
+                </div>
+
 
                 <div class="event-info">
                     <div class="event-column">
@@ -18,10 +38,10 @@
                         <p><strong>End Date:</strong> <span
                                     id="end-date"><?= htmlspecialchars($event_data['end_date']); ?></span></p>
                         <p><strong>Setup:</strong> <span
-                                    id="setup"><?= htmlspecialchars($event_data['setup']); ?></span></p>
+                                    id="setup"><?= $event_data['setup'] ?? ''; ?></span></p>
                         <p><strong>Division:</strong> <span
                                     id="division"><?= htmlspecialchars($event_data['division']); ?></span></p>
-                        <p><strong>Type:</strong> <span id="type"><?= htmlspecialchars($event_data['type']); ?></span>
+                        <p><strong>Type:</strong> <span id="type"><?= $event_data['type'] ?? ''; ?></span>
                         </p>
                     </div>
 
