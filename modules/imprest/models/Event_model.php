@@ -48,7 +48,7 @@ class Event_model extends App_Model
         tblevents_due_events.location,
         tblevents_due_events.venue,
         MAX(tblevents_due_events.division) AS division,
-        tblevent_unique_codes.event_unique_code  
+        MAX(tblevent_unique_codes.event_unique_code) AS event_unique_code
     ');
 
         $this->db->from(db_prefix() . '_events_details AS tblevents_due_events');
