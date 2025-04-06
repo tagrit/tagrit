@@ -16,8 +16,7 @@ class Registrations extends AdminController
         $this->load->model('emails_model');
         $this->load->model('Event_location_model');
         $this->load->model('Event_venue_model');
-
-
+        $this->load->model('Attendance_model');
     }
 
 
@@ -89,7 +88,6 @@ class Registrations extends AdminController
 
     public function store()
     {
-
         $this->validateRegistration();
 
         if ($this->form_validation->run() == FALSE) {
@@ -145,7 +143,17 @@ class Registrations extends AdminController
                     'type' => $input['type'] ?? '',
                 ];
 
+
                 $event_detail_id = $this->Event_details_model->add($eventData);
+
+                $attendanceData = [
+                    'event_id' => $eventData['event_id'],
+                    'venue' => $eventData['venue'],
+                    'location' => $eventData['location'],
+                    'start_date' => $eventData['start_date'],
+                    'end_date' => $eventData['end_date'],
+                ];
+                $this->Attendance_model->create($attendanceData);
 
                 // Register event
                 $this->db->insert(db_prefix() . 'events_due_registrations', [
@@ -183,10 +191,29 @@ class Registrations extends AdminController
                     ],
                 ];
 
+                $startDate = strtotime($input['start_date'] ?? '');
+                $endDate = strtotime($input['end_date'] ?? '');
+
+                if ($startDate && $endDate && date('F Y', $startDate) === date('F Y', $endDate)) {
+                    $formattedDate = date('j', $startDate) . '–' . date('j', $endDate) . ' ' . strtoupper(date('F Y', $endDate));
+                } else {
+                    $formattedDate = date('j M Y', $startDate) . ' – ' . date('j M Y', $endDate);
+                }
+
                 $generatedFiles = $this->fillWordTemplates($templates);
                 $remaining_delegates = array_slice($input['delegates'], 1);
                 $cc_emails = array_column($remaining_delegates, 'email');
-                $this->send_email_with_attachments($input['delegates'][0]['first_name'] . ' ' . $input['delegates'][0]['last_name'], $input['delegates'][0]['email'], $generatedFiles, $eventName, $cc_emails);
+                // $cc_emails[] = 'customerservice@capabuil.com';
+
+                $this->send_email_with_attachments(
+                    $input['delegates'][0]['first_name'] . ' ' . $input['delegates'][0]['last_name'],
+                    $input['delegates'][0]['email'],
+                    $generatedFiles,
+                    $eventName,
+                    $cc_emails,
+                    $formattedDate,
+                    $venue . ',' . $location
+                );
 
                 // Commit transaction if successful
                 if ($this->db->trans_status() === FALSE) {
@@ -255,12 +282,14 @@ class Registrations extends AdminController
         return $generatedFiles; // Return a flat array
     }
 
-    public function send_email_with_attachments($client, $to, $generatedFiles, $event_name, $cc_emails)
+    public function send_email_with_attachments($client, $to, $generatedFiles, $event_name, $cc_emails, $date, $location)
     {
         $template_slug = 'event-due-registration';
         $merge_fields = [
-            'client' => $client,
-            'event_name' => $event_name
+            'client_name' => $client,
+            'event_name' => $event_name,
+            'date' => $date,
+            'location' => $location
         ];
 
         if (is_array($generatedFiles)) {
