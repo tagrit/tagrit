@@ -4,6 +4,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 
 class Settings extends AdminController
 {
@@ -78,13 +79,29 @@ class Settings extends AdminController
 
                     $eventId = $this->Event_model->getOrCreateEventId($event_data);
 
+                    $start_date = $row[4] ?? '';
+                    $end_date = $row[5] ?? '';
+
+                    // Convert Excel numeric date to readable format
+                    if (is_numeric($start_date)) {
+                        $start_date = Date::excelToDateTimeObject($start_date)->format('Y-m-d');
+                    } else {
+                        $start_date = date('Y-m-d', strtotime($start_date));
+                    }
+
+                    if (is_numeric($end_date)) {
+                        $end_date = Date::excelToDateTimeObject($end_date)->format('Y-m-d');
+                    } else {
+                        $end_date = date('Y-m-d', strtotime($end_date));
+                    }
+
                     $eventData = [
                         'event_id' => $eventId,
                         'setup' => $row[1] ?? '',
                         'type' => $row[2] ?? '',
                         'division' => $row[3] ?? '',
-                        'start_date' => date('Y-m-d', strtotime($row[4] ?? '')),
-                        'end_date' => date('Y-m-d', strtotime($row[5] ?? '')),
+                        'start_date' => $start_date ?? '',
+                        'end_date' => $end_date ?? '',
                         'location' => $row[6],
                         'venue' => $row[7],
                         'organization' => $row[12] ?? '',
@@ -136,13 +153,29 @@ class Settings extends AdminController
 
                     $eventId = $this->Event_model->getOrCreateEventId($event_data);
 
+                    $start_date = $cells[4] ?? '';
+                    $end_date = $cells[5] ?? '';
+
+                    // Convert Excel numeric date to readable format
+                    if (is_numeric($start_date)) {
+                        $start_date = Date::excelToDateTimeObject($start_date)->format('Y-m-d');
+                    } else {
+                        $start_date = date('Y-m-d', strtotime($start_date));
+                    }
+
+                    if (is_numeric($end_date)) {
+                        $end_date = Date::excelToDateTimeObject($end_date)->format('Y-m-d');
+                    } else {
+                        $end_date = date('Y-m-d', strtotime($end_date));
+                    }
+
                     $eventData = [
                         'event_id' => $eventId,
                         'setup' => $cells[1] ?? '',
                         'type' => $cells[2] ?? '',
                         'division' => $cells[3] ?? '',
-                        'start_date' => date('Y-m-d', strtotime($cells[4] ?? '')),
-                        'end_date' => date('Y-m-d', strtotime($cells[5] ?? '')),
+                        'start_date' => $start_date ?? '',
+                        'end_date' => $end_date ?? '',
                         'location' => $cells[6],
                         'venue' => $cells[7],
                         'organization' => $cells[12] ?? '',
@@ -152,6 +185,7 @@ class Settings extends AdminController
                         'charges_per_delegate' => '1',
                         'trainers' => serialize(['capabuil']),
                     ];
+
 
                     $existingEvent = $this->db->where($eventData)->get(db_prefix() . '_events_details')->row();
                     $event_detail_id = $existingEvent ? $existingEvent->id : $this->Event_details_model->add($eventData);
