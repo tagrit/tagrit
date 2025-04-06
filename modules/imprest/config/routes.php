@@ -41,3 +41,5 @@ $route['admin/imprest/settings/set_max_unreconciled_amount'] = 'imprest/settings
 $route['admin/imprest/settings/set_email_notification_statuses'] = 'imprest/settings/set_email_notification_statuses';
 $route['admin/imprest/settings/set_event_mandatory_fields'] = 'imprest/settings/set_event_mandatory_fields';
 
+//events
+$route['admin/imprest/fund_requests/event_details'] = 'imprest/fund_requests/event_details';

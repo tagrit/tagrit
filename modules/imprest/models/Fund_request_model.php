@@ -20,7 +20,6 @@ class Fund_request_model extends App_Model
         e.name as event_name,
         e.id as event_id,
         ed.venue,
-        ed.organization,
         ed.start_date,
         ed.end_date,
         ed.facilitator,
@@ -88,7 +87,7 @@ class Fund_request_model extends App_Model
     }
 
 
-    public function get_fund_request_details($id = null,$check_max_reconciliation_amount=false)
+    public function get_fund_request_details($id = null, $check_max_reconciliation_amount = false)
     {
         $this->db->select('
     fr.id as fund_request_id,
@@ -97,7 +96,7 @@ class Fund_request_model extends App_Model
     e.id as event_id,
     e.name as event_name,
     ed.venue,
-    ed.organization,
+    ed.location,
     ed.start_date,
     ed.end_date,
     ed.no_of_delegates,
@@ -158,6 +157,19 @@ class Fund_request_model extends App_Model
         if ($query->num_rows() > 0) {
             $data = $query->result_array();
 
+            // Get the matching revenue sum
+            $this->db->select_sum('revenue');
+            $this->db->from(db_prefix() . '_events_details');
+            $this->db->where([
+                'event_id' => $data[0]['event_id'],
+                'venue' => $data[0]['venue'],
+                'location' => $data[0]['location'],
+                'start_date' => $data[0]['start_date'],
+                'end_date' => $data[0]['end_date']
+            ]);
+            $revenueQuery = $this->db->get();
+            $totalRevenue = $revenueQuery->row()->revenue ?? 0;
+
             // Group data by categories and calculate the total amount requested
             $groupedData = [];
             $totalAmountRequested = 0;
@@ -197,14 +209,13 @@ class Fund_request_model extends App_Model
             $eventDetails = [
                 'event_name' => $data[0]['event_name'],
                 'venue' => $data[0]['venue'],
-                'organization' => $data[0]['organization'],
                 'start_date' => $data[0]['start_date'],
                 'end_date' => $data[0]['end_date'],
                 'delegates' => $data[0]['no_of_delegates'],
                 'facilitator' => $data[0]['facilitator'],
                 'trainers' => $data[0]['trainers'],
                 'status' => $data[0]['fund_request_status'],
-                'revenue' => $data[0]['revenue']
+                'revenue' => $totalRevenue
             ];
 
             $conferencing_details = [
