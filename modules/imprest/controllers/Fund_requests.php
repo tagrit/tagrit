@@ -141,7 +141,7 @@ class Fund_requests extends AdminController
         }
 
         $data['facilitator'] = $this->Fund_request_model->get_staff_name(get_staff_user_id());
-        $data['events'] = $this->Event_model->get();
+        $data['events_codes'] = $this->Event_model->events_codes(null);
         $data['categories'] = $this->Expense_category_model->get_categories(null, false);
         $data['subcategories'] = $this->get_categories_with_subcategories(false);
         $this->load->view('fund_requests/create', $data);
@@ -262,6 +262,8 @@ class Fund_requests extends AdminController
     public function store()
     {
 
+        $event = $this->Event_model->events_codes($this->input->post('event_code'));
+
         $this->db->trans_begin(); // Begin the transaction
 
         try {
@@ -272,10 +274,7 @@ class Fund_requests extends AdminController
 
             $subcategories = $this->input->post('subcategories');
             $amounts = $this->input->post('amounts');
-            $serializedClientData = serialize(['clients' => $this->input->post('delegates')]);
-
-
-            $fund_request_id = $this->Fund_request_model->add($this->input->post('event_id'), $subcategories, $amounts);
+            $fund_request_id = $this->Fund_request_model->add($event[0]->event_id, $subcategories, $amounts);
 
             $this->Fund_request_model->update($fund_request_id, [
                 'reference_no' => $this->generateFundRequestReference($fund_request_id)
@@ -342,36 +341,23 @@ class Fund_requests extends AdminController
                 $this->db->insert(db_prefix() . '_speaker_details', $speaker_data);
             }
 
+            $this->db->where([
+                'location' => $event[0]->location,
+                'venue' => $event[0]->venue,
+                'event_id' => $event[0]->event_id,
+                'start_date' => $event[0]->start_date,
+                'end_date' => $event[0]->end_date,
+            ]);
 
-            $data = [
-                'venue' => $this->input->post('venue') ?? '',
-                'event_id' => $this->input->post('event_id') ?? '',
-                'organization' => $this->input->post('organization') ?? '',
-                'start_date' => $this->input->post('start_date') ?? '',
-                'end_date' => $this->input->post('end_date') ?? '',
-                'no_of_delegates' => $this->input->post('no_of_delegates') ?? '',
-                'charges_per_delegate' => $this->input->post('charges_per_delegate') ?? '',
-                'division' => $this->input->post('division') ?? '',
-                'trainers' => serialize($this->input->post('trainers')) ?? '',
-                'facilitator' => $this->input->post('facilitator') ?? '',
-                'revenue' => $this->input->post('revenue') ?? '',
-                'setup' => $this->input->post('setup') ?? '',
-                'type' => $this->input->post('type') ?? '',
-            ];
+            $this->db->order_by('id', 'ASC');
+            $this->db->limit(1);
+            $event_detail = $this->db->get('_events_details')->row();
 
-            $event_detail_id = $this->Event_details_model->add($data);
-
-            //register event
-            $insert_data = [
-                'event_detail_id' => $event_detail_id,
-                'clients' => serialize($this->input->post('delegates')),
-            ];
-
-            $this->db->insert(db_prefix() . 'events_due_registrations', $insert_data);
 
             $this->Fund_request_model->update($fund_request_id, [
-                'event_detail_id' => $event_detail_id
+                'event_detail_id' => $event_detail->id
             ]);
+
 
             if ($this->db->trans_status() === FALSE) {
                 throw new Exception('Transaction failed.');
@@ -715,6 +701,47 @@ class Fund_requests extends AdminController
             set_alert('danger', $e->getMessage());
             redirect(admin_url('imprest/fund_requests/index'));
         }
+    }
+
+    public function event_details()
+    {
+        $event_code = $this->input->post('event_code');
+
+        if (!$event_code) {
+            echo json_encode(['status' => false, 'message' => 'Missing event code']);
+            return;
+        }
+
+        $event = $this->Event_model->events_codes($event_code);
+
+        if (!$event) {
+            echo json_encode(['status' => false, 'message' => 'Invalid event code']);
+            return;
+        }
+
+
+        $details = $this->Event_model->event_details(
+            $event[0]->event_id,
+            $event[0]->location,
+            $event[0]->venue,
+            $event[0]->start_date,
+            $event[0]->end_date
+        );
+
+        if (!$details) {
+            echo json_encode(['status' => false, 'message' => 'Event not found']);
+            return;
+        }
+
+        $trainers = @unserialize($details['trainers']);
+
+        $details['trainers'] = $trainers;
+
+        echo json_encode([
+            'success' => true,
+            'event' => $details
+        ]);
+
     }
 
 

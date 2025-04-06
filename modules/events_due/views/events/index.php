@@ -42,10 +42,9 @@
                             <thead>
                             <tr>
                                 <th><?php echo _l('Event'); ?></th>
-                                <th><?php echo _l('Start Date'); ?></th>
-                                <th><?php echo _l('End Date'); ?></th>
+                                <th><?php echo _l('Date'); ?></th>
                                 <th><?php echo _l('Location'); ?></th>
-                                <th><?php echo _l('Venue'); ?></th>
+                                <th><?php echo _l('Unique Code'); ?></th>
                                 <th><?php echo _l('Action'); ?></th>
                             </tr>
                             </thead>
@@ -59,12 +58,26 @@
                                             </p>
                                         </div>
                                     </td>
-                                    <td><?php echo $event->start_date; ?></td>
-                                    <td><?php echo $event->end_date; ?></td>
-                                    <td><?php echo $event->location; ?></td>
-                                    <td><?php echo $event->venue; ?></td>
+                                    <td style="white-space: nowrap;">
+                                        <p class="text-secondary mb-0">
+                                            <?php
+                                            $start_date = date('jS M Y', strtotime($event->start_date));
+                                            $end_date = date('jS M Y', strtotime($event->end_date));
+                                            echo $start_date . ' - ' . $end_date;
+                                            ?>
+                                        </p>
+                                    </td>
+                                    <td >
+                                        <?php
+                                        echo $event->location . ' - ' . $event->venue;
+                                        ?>
+                                    </td>
+                                    <td >
+                                        <?php
+                                        echo $event->event_unique_code;
+                                        ?>
+                                    </td>
                                     <td>
-
                                         <?php echo form_open('admin/events_due/events/view', [
                                             'id' => 'eventForm_' . $event->event_id,
                                             'method' => 'POST'

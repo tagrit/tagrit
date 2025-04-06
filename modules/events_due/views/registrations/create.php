@@ -2,6 +2,10 @@
 <?php init_head(); ?>
 <div id="wrapper">
     <div class="content">
+
+         <span id="spanLoader" style="display:none; position: fixed; top: 50%; left: 50%; z-index: 9999;"
+               class="loader"></span>
+
         <div class="panel_s">
             <div class="panel-body">
                 <div class="row">
