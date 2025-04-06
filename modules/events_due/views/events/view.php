@@ -67,6 +67,10 @@
                             }
                             ?>
                         </span></p>
+                        <p><strong>UNIQUE CODE:</strong> <span id="trainers">
+                            <?= htmlspecialchars(strtoupper($event_data['event_unique_code'])); ?>
+                        </span>
+                        </p>
                     </div>
                 </div>
 

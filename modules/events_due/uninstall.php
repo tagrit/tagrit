@@ -11,6 +11,8 @@ $CI->db->query('SET FOREIGN_KEY_CHECKS = 0;');
 
 // Drop tables if they exist
 $tables_to_drop = [
+    'event_unique_codes',
+    'event_attendance_sheets',
     'events_due_registrations',
     'events_due_venues',
     'events_due_locations',

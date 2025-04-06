@@ -16,8 +16,7 @@ class Registrations extends AdminController
         $this->load->model('emails_model');
         $this->load->model('Event_location_model');
         $this->load->model('Event_venue_model');
-
-
+        $this->load->model('Attendance_model');
     }
 
 
@@ -146,6 +145,9 @@ class Registrations extends AdminController
                 ];
 
                 $event_detail_id = $this->Event_details_model->add($eventData);
+
+                //event_code
+                $this->Attendance_model->create($eventData);
 
                 // Register event
                 $this->db->insert(db_prefix() . 'events_due_registrations', [

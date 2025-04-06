@@ -199,3 +199,85 @@ foreach ($email_templates_data as $template) {
         $CI->db->insert(db_prefix() . 'emailtemplates', $template);
     }
 }
+
+// Create table `event_unique_codes`
+if (!$CI->db->table_exists(db_prefix() . 'event_unique_codes')) {
+    $CI->db->query('CREATE TABLE `' . db_prefix() . 'event_unique_codes` (
+        `id` INT NOT NULL AUTO_INCREMENT,
+        `event_id` INT NOT NULL,
+        `event_unique_code` VARCHAR(100) NOT NULL,
+        `location` VARCHAR(255) NOT NULL,
+        `venue` VARCHAR(255) NOT NULL,
+        `start_date` DATE NOT NULL,
+        `end_date` DATE NOT NULL,
+        `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=' . $CI->db->char_set . ';');
+}
+
+// Get the event details
+$event_details = $CI->db->get(db_prefix() . '_events_details')->result();
+foreach ($event_details as $event) {
+
+    if (empty($event->location)) {
+        $event->location = $event->venue;
+    }
+
+    // Prepare the data to insert or update
+    $data = [
+        'event_id' => $event->event_id,
+        'location' => $event->location,
+        'venue' => $event->venue,
+        'start_date' => $event->start_date,
+        'end_date' => $event->end_date,
+    ];
+
+    // Check if the event already exists
+    $CI->db->where('event_id', $event->event_id);
+    $CI->db->where('location', $event->location);
+    $CI->db->where('venue', $event->venue);
+    $CI->db->where('start_date', $event->start_date);
+    $CI->db->where('end_date', $event->end_date);
+    $query = $CI->db->get(db_prefix() . 'event_unique_codes');
+
+    if ($query->num_rows() > 0) {
+        // If the event exists, update it
+        $CI->db->where('event_id', $event->event_id);
+        $CI->db->where('location', $event->location);
+        $CI->db->where('venue', $event->venue);
+        $CI->db->where('start_date', $event->start_date);
+        $CI->db->where('end_date', $event->end_date);
+        $CI->db->update(db_prefix() . 'event_unique_codes', $data);
+    } else {
+        // If the event does not exist, insert it
+        $data['event_unique_code'] = generateEventUniqueCode($event->event_id, $event->venue, $event->location, $event->start_date);
+        $CI->db->insert(db_prefix() . 'event_unique_codes', $data);
+    }
+}
+
+
+// Method to generate unique event code
+function generateEventUniqueCode($event_id, $venue, $location, $start_date)
+{
+    // Retrieve the event details
+    $CI = &get_instance(); // Get the CI instance
+    $event = $CI->db->get_where(db_prefix() . '_events', ['id' => $event_id])->row();
+
+    if (!$event) {
+        return null;
+    }
+
+    // Ensure all values are non-null and default to empty strings if necessary
+    $eventName = isset($event->name) ? $event->name : '';
+    $venue = isset($venue) ? $venue : '';
+    $location = isset($location) ? $location : '';
+
+    // Clean and format inputs
+    $eventPart = strtoupper(substr(preg_replace('/[^A-Za-z]/', '', $eventName), 0, 4));
+    $venuePart = strtoupper(substr(preg_replace('/[^A-Za-z]/', '', $venue), 0, 3));
+    $locationPart = strtoupper(substr(preg_replace('/[^A-Za-z]/', '', $location), 0, 3));
+    $startDatePart = date('dmy', strtotime($start_date));
+
+    // Combine to create the code
+    return "{$eventPart}-{$venuePart}-{$locationPart}-{$startDatePart}";
+}
