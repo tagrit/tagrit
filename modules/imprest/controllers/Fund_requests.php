@@ -707,6 +707,8 @@ class Fund_requests extends AdminController
     {
         $event_code = $this->input->post('event_code');
 
+        dd($event_code);
+
         if (!$event_code) {
             echo json_encode(['status' => false, 'message' => 'Missing event code']);
             return;
