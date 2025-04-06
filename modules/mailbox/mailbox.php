@@ -84,12 +84,13 @@ function mailbox_module_init_menu_items()
 function mailbox_add_settings_tab()
 {
     $CI = &get_instance();
-    $CI->app_tabs->add_settings_tab('mailbox-settings', [
-       'name'     => ''._l('mailbox_setting').'',
-       'view'     => 'mailbox/mailbox_settings',
-       'position' => 36,
-   ]);
+    $CI->app->add_settings_section('mailbox-settings', [
+        'name'     => _l('mailbox_setting'),
+        'view'     => 'mailbox/mailbox_settings',
+        'position' => 36,
+    ]);
 }
+
 
 /**
  * mailbox migration tables to replace old links description.
