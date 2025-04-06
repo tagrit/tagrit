@@ -64,7 +64,8 @@ require_once __DIR__ . '/vendor/autoload.php';
 $host = $_SERVER['HTTP_HOST'] ?? '';
 
 // Set environment based on hostname
-if (strpos($host, 'dev') !== false ||
+if (strpos($host, 'localhost') !== false ||
+    strpos($host, 'dev') !== false ||
     strpos($host, 'staging') !== false ||
     strpos($host, 'autoupdate') !== false) {
     define('ENVIRONMENT', 'production');

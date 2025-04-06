@@ -66,6 +66,10 @@ function _apply_menu_items_options($items, $options)
 
 function _apply_menu_items_position($items, $options)
 {
+    if (!is_array($items)) {
+        $items = [];
+    }
+
     if (!is_array($options)) {
         $CI = &get_instance();
         // Has applied options

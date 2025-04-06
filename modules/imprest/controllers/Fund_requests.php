@@ -705,43 +705,56 @@ class Fund_requests extends AdminController
 
     public function event_details()
     {
-        $event_code = $this->input->post('event_code');
+        try {
+            error_reporting(E_ALL);
+            ini_set('display_errors', 1);
 
-        if (!$event_code) {
-            echo json_encode(['status' => false, 'message' => 'Missing event code']);
-            return;
+            $event_code = $this->input->post('event_code');
+
+            if (!$event_code) {
+                throw new Exception('Missing event code');
+            }
+
+            $event = $this->Event_model->events_codes($event_code);
+
+            if (!$event) {
+                throw new Exception('Invalid event code');
+            }
+
+            $details = $this->Event_model->event_details(
+                $event[0]->event_id,
+                $event[0]->location,
+                $event[0]->venue,
+                $event[0]->start_date,
+                $event[0]->end_date
+            );
+
+            if (!$details) {
+                throw new Exception('Event not found');
+            }
+
+            // Remove the @ to allow errors to show if unserialization fails
+            $trainers = unserialize($details['trainers']);
+
+            $details['trainers'] = $trainers;
+
+            echo json_encode([
+                'success' => true,
+                'event' => $details
+            ]);
+        } catch (Throwable $e) {
+
+            // Log and show the raw error
+            log_message('error', 'event_details error: ' . $e->getMessage());
+
+            // Send raw error response (for dev only)
+            http_response_code(500);
+            echo '<pre style="color:red">';
+            echo "Error: " . $e->getMessage() . "\n";
+            echo $e->getFile() . ':' . $e->getLine() . "\n";
+            echo $e->getTraceAsString();
+            echo '</pre>';
         }
-
-        $event = $this->Event_model->events_codes($event_code);
-
-        if (!$event) {
-            echo json_encode(['status' => false, 'message' => 'Invalid event code']);
-            return;
-        }
-
-
-        $details = $this->Event_model->event_details(
-            $event[0]->event_id,
-            $event[0]->location,
-            $event[0]->venue,
-            $event[0]->start_date,
-            $event[0]->end_date
-        );
-
-        if (!$details) {
-            echo json_encode(['status' => false, 'message' => 'Event not found']);
-            return;
-        }
-
-        $trainers = @unserialize($details['trainers']);
-
-        $details['trainers'] = $trainers;
-
-        echo json_encode([
-            'success' => true,
-            'event' => $details
-        ]);
-
     }
 
 
