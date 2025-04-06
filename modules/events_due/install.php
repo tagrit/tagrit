@@ -161,8 +161,47 @@ $email_templates_data = [
         'language' => 'english',
         'name' => 'Event Registration (sent client)',
         'subject' => 'Event Registration',
-        'message' => '<p>Hello client,<br><br>We wanted to inform you that your registration for event_name is successful, Kindly check the document below for further details.</p>
-     <p>Kind Regards,<br><br></p>',
+        'message' => '
+<html>
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=Generator content="Microsoft Word 15 (filtered)">
+<style>
+@font-face { font-family:"Cambria Math"; }
+@font-face { font-family:Calibri; }
+@font-face { font-family:Aptos; }
+@font-face { font-family:"Century Gothic"; }
+p.MsoNormal, li.MsoNormal, div.MsoNormal {
+    margin:0in;
+    font-size:11.0pt;
+    font-family:"Calibri",sans-serif;
+}
+a:link, span.MsoHyperlink {
+    color:#0563C1;
+    text-decoration:underline;
+}
+p {
+    margin-right:0in;
+    margin-left:0in;
+    font-size:12.0pt;
+    font-family:"Aptos",sans-serif;
+}
+</style>
+</head>
+<body lang=EN-US link="#0563C1" vlink="#954F72" style="word-wrap:break-word">
+<div>
+<p style="margin:0in;text-align:justify"><b><span style="font-size:10.0pt;font-family:\'Century Gothic\',sans-serif;color:#2E75B6">Dear client_name,</span></b></p>
+<p><b><i><u><span style="font-size:10.0pt;font-family:\'Century Gothic\',sans-serif;color:#2E75B6;background:white">THIS EVENT </span></u></i></b><a href="https://www.capabuil.com/wp-content/uploads/2023/06/CAPABUIL-LTD-JUL-DEC-2023-NITA-Certified-CPD-Calendar-New-version.pdf"><b><i><span style="font-size:10.0pt;font-family:\'Century Gothic\',sans-serif;color:#2E75B6;background:white"><span style="color:windowtext">WILL</span></span></i></b></a><b><i><u><span style="font-size:10.0pt;font-family:\'Century Gothic\',sans-serif;color:#2E75B6;background:white"> NOT BE CANCELLED OR POSTPONED</span></u></i></b></p>
+<p style="margin-right:26.05pt"><em><span style="font-size:10.0pt;font-family:\'Century Gothic\',sans-serif;color:#222222;background:white;font-style:normal">We acknowledge your dedication to expand your professional horizons in the journey of career growth and development; thank you for choosing us.</span></em></p>
+<p style="margin-right:26.05pt"><em><b><span style="font-size:10.0pt;font-family:\'Century Gothic\',sans-serif;color:#2E75B6;background:white;font-style:normal">TRAINING:</span></b></em> <em><span style="font-size:10.0pt;font-family:\'Century Gothic\',sans-serif;color:#222222;background:white;font-style:normal">event_name</span></em></p>
+<p style="margin-right:18.95pt"><em><b><span style="font-size:10.0pt;font-family:\'Century Gothic\',sans-serif;color:#2E75B6;background:white;font-style:normal">DATES: </span></b></em> <em><b><span style="font-size:10.0pt;font-family:\'Century Gothic\',sans-serif;color:black;background:white;font-style:normal">date</span></b></em></p>
+<p style="margin-right:18.95pt"><em><b><span style="font-size:10.0pt;font-family:\'Century Gothic\',sans-serif;color:#2E75B6;background:white;font-style:normal">VENUE: </span></b></em> <em><b><span style="font-size:10.0pt;font-family:\'Century Gothic\',sans-serif;color:black;background:white;font-style:normal">location</span></b></em></p>
+<p><em><span style="font-size:10.0pt;font-family:\'Century Gothic\',sans-serif;color:#222222;background:white;font-style:normal">We have attached: the <b>Course Content, Invitation Letter</b> &amp; <b>Proforma Invoice</b> to help you/your colleagues in getting the necessary approvals for the above-mentioned training.</span></em></p>
+<p style="margin-right:18.95pt"><a href="https://www.capabuil.com/download-cpd-calenders/?external=1"><b><span style="color:windowtext">DOWNLOAD CPD TRAINING CALENDARS</span></b></a> <em><span style="font-size:10.0pt;font-family:\'Century Gothic\',sans-serif;color:#222222;background:white;font-style:normal">to access the full listing of our competency <b>NITA &amp; ODPC APPROVED</b> programs </span></em> <em><b><span style="font-size:10.0pt;font-family:\'Century Gothic\',sans-serif;color:#2E75B6;background:white;font-style:normal">designed to meet your researched needs, rather than standard packages.</span></b></em></p>
+<p style="text-align:justify"><em><span style="font-size:10.0pt;font-family:\'Century Gothic\',sans-serif;color:#222222;background:white;font-style:normal">Don\'t hesitate to contact us anytime for more information/support in your learning/development journey.</span></em></p>
+</div>
+</body>
+</html>',
         'fromname' => '{companyname} | CRM',
         'plaintext' => 0,
         'active' => 1,
@@ -174,31 +213,57 @@ $email_templates_data = [
         'language' => 'english',
         'name' => 'Event Reminder (sent client)',
         'subject' => 'Upcoming Event Reminder',
-        'message' => '<p>Hello client_name,<br><br>
-        This is a friendly reminder about your upcoming event: <strong>event_name</strong>.<br>
-        The event is scheduled for <strong>event_date</strong> at <strong>event_location</strong>.<br><br>
-        Please confirm your attendance and get back in case your want to require additional information.<br><br>
-        Looking forward to your participation!<br><br>
-        Kind Regards,<br>',
+        'message' => '
+    <html> 
+    <head>
+    <meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+    <style>
+    p { font-family:"Century Gothic", sans-serif; font-size:10pt; line-height:1.5; }
+    </style>
+    </head>
+    <body>
+    <p><b>Dear client_name,</b></p>
+    <p>We remain grateful for your trust in our affordable quality services.</p>
+
+    <p><b><u style="color:#0070C0;">ATTENDANCE CONFIRMATION</u></b></p>
+
+    <p>Kindly confirm the Payment and Attendance Status for the training starting next week from <b>date</b> at <b>venue, location</b>.</p>
+
+    <p><b>Event Name:</b> event_name</p>
+
+    <p><b>Expected Attendees:</b><br>
+    client_list
+    </p>
+
+    <p><b><u style="color:#0070C0;">PAYMENT STATUS</u></b></p>
+
+    <p>As part of the business capacity recovery measures, the management has approved a policy to require clients to pay for services and seminars upfront for the upcoming months to enable stabilization of business sustainability and funding performance indicators.</p>
+
+    <p>Upon approval of the training, we will also require <b>LSO/Commitment Letter</b> from your organization for record purposes.</p>
+
+    <p>Kindly share the <b>Payment evidence</b> with our finance team via mail <a href="mailto:customerservice@capabuil.com">customerservice@capabuil.com</a> to enable us firm up the resource facilitation by our training host as well as other service providers.</p>
+
+    <p>Kind regards,</p>
+    </body>
+    </html>
+    ',
         'fromname' => '{companyname} | CRM',
         'plaintext' => 0,
         'active' => 1,
         'order' => 0
     ]
-
 ];
 
 // Loop through each email template
 foreach ($email_templates_data as $template) {
-    $existing_template = $CI->db->get_where(db_prefix() . 'emailtemplates', [
+    $CI->db->where([
         'slug' => $template['slug'],
         'language' => $template['language']
-    ])->row();
+    ])->delete(db_prefix() . 'emailtemplates');
 
-    if (!$existing_template) {
-        $CI->db->insert(db_prefix() . 'emailtemplates', $template);
-    }
+    $CI->db->insert(db_prefix() . 'emailtemplates', $template);
 }
+
 
 // Create table `event_unique_codes`
 if (!$CI->db->table_exists(db_prefix() . 'event_unique_codes')) {
