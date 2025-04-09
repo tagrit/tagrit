@@ -55,6 +55,21 @@ class Cronjobs extends App_Controller
 
     private function queue_reminder_email($to, $client, $event_name, $event_date, $event_location)
     {
+        // Check if reminder already exists
+        $this->db->where('email', $to);
+        $this->db->where('event_name', $event_name);
+        $this->db->where('client_name', $client);
+        $this->db->where('event_date', $event_date);
+        $this->db->where('status', 'pending');
+        $this->db->where('type', 'event_reminder');
+        $existing_reminder = $this->db->get(db_prefix() . '_notification_queue')->row();
+
+        //don't insert reminder in case there is already another one.
+        if ($existing_reminder) {
+            return;
+        }
+
+        // If no existing reminder, add new reminder
         $data = [
             'type' => 'event_reminder',
             'email' => $to,
@@ -66,7 +81,7 @@ class Cronjobs extends App_Controller
             'created_at' => date('Y-m-d H:i:s')
         ];
 
-        $this->db->insert(db_prefix().'_notification_queue', $data);
+        $this->db->insert(db_prefix() . '_notification_queue', $data);
     }
 
 
@@ -74,7 +89,7 @@ class Cronjobs extends App_Controller
     {
         $this->db->where('status', 'pending');
         $this->db->limit($batch_size);
-        $notifications = $this->db->get(db_prefix().'_notification_queue')->result();
+        $notifications = $this->db->get(db_prefix() . '_notification_queue')->result();
 
         if (empty($notifications)) {
             echo "No pending notifications.\n";
@@ -96,7 +111,7 @@ class Cronjobs extends App_Controller
                 if ($result) {
                     // Update status to 'sent'
                     $this->db->where('id', $notification->id);
-                    $this->db->update(db_prefix().'_notification_queue', ['status' => 'sent']);
+                    $this->db->update(db_prefix() . '_notification_queue', ['status' => 'sent']);
                     $sent_count++;
                 }
             }
