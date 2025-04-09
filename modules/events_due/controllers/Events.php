@@ -234,4 +234,95 @@ class Events extends AdminController
         }
     }
 
+    //update event_delegate confirmation
+    public function event_confirmation()
+    {
+
+        // Step 1: Get delegate data from the post request
+        $delegateData = $this->input->post();
+
+        // Step 2: Get event details using the event_unique_code
+        $eventDetails = $this->db->get_where(db_prefix() . 'event_unique_codes', [
+            'event_unique_code' => $delegateData['event_unique_code']
+        ])->row();
+
+        // Check if event details exist
+        if ($eventDetails) {
+
+            $event_id = $eventDetails->event_id;
+            $start_date = $eventDetails->start_date;
+            $end_date = $eventDetails->end_date;
+            $location = $eventDetails->location;
+            $venue = $eventDetails->venue;
+
+            // Step 3: Get event detail ID from events_details table using the event_id, start_date, end_date, location, venue, and organization
+            $eventDetail = $this->db->get_where(db_prefix() . '_events_details', [
+                'event_id' => $event_id,
+                'start_date' => $start_date,
+                'end_date' => $end_date,
+                'location' => $location,
+                'venue' => $venue,
+                'organization' => $delegateData['delegate_organization']
+            ])->row();
+
+            // Check if event detail exists
+            if ($eventDetail) {
+                $event_detail_id = $eventDetail->id;
+
+                // Step 4: Retrieve serialized clients from event_registration table using event_detail_id
+                $registration = $this->db->get_where(db_prefix() . 'events_due_registrations', [
+                    'event_detail_id' => $event_detail_id
+                ])->row();
+
+                if ($registration && $registration->clients) {
+                    $clients = unserialize($registration->clients);
+
+                    // Step 5: Find the specific client based on email and phone
+                    foreach ($clients as &$client) {
+                        if ($client['email'] == $delegateData['delegate_email'] && $client['phone'] == $delegateData['delegate_phone']) {
+
+                            // Check if attendance_confirmed exists, if not initialize it to 0 (Not Confirmed)
+                            if (!isset($client['attendance_confirmed'])) {
+                                $client['attendance_confirmed'] = 0; // Not Confirmed
+                            }
+
+                            // Toggle the attendance status (confirm or cancel)
+                            $client['attendance_confirmed'] = !$client['attendance_confirmed'];
+
+                            // Step 7: Serialize the clients array back
+                            $updatedClients = serialize($clients);
+
+                            // Step 8: Update the event_registration table with the new clients data
+                            $this->db->update(db_prefix() . 'events_due_registrations', [
+                                'clients' => $updatedClients
+                            ], [
+                                'event_detail_id' => $event_detail_id
+                            ]);
+
+                            set_alert('success', 'Attendance confirmation updated successfully!');
+
+                            // Redirect back to the previous page
+                            $previous_url = $this->agent->referrer();
+                            redirect($previous_url);
+
+                            break;
+                        }
+                    }
+
+
+                    // If the client was not found in the array
+                    $this->session->set_flashdata('error', 'Client not found.');
+                    redirect('admin/events_due/events');
+
+                } else {
+                    set_alert('danger', 'Error: ' . "No clients found for this event registration.");
+                }
+            } else {
+                set_alert('danger', 'Error: ' . "Event detail not found for the organization and event.");
+            }
+        } else {
+            set_alert('danger', 'Error: ' . "Event not found for the given unique code.");
+        }
+    }
+
 }
