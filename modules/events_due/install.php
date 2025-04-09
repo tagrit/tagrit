@@ -51,6 +51,7 @@ if (!$CI->db->table_exists(db_prefix() . '_notification_queue')) {
         `type` VARCHAR(50) NOT NULL,
         `email` VARCHAR(255) NOT NULL,
         `client_name` VARCHAR(255) NOT NULL,
+        `client_list` TEXT NOT NULL,
         `event_name` VARCHAR(255) NOT NULL,
         `event_date` DATE NOT NULL,
         `event_location` VARCHAR(255) NOT NULL,
@@ -227,7 +228,7 @@ p {
 
     <p><b><u style="color:#0070C0;">ATTENDANCE CONFIRMATION</u></b></p>
 
-    <p>Kindly confirm the Payment and Attendance Status for the training starting next week from <b>date</b> at <b>venue, location</b>.</p>
+    <p>Kindly confirm the Payment and Attendance Status for the training starting next week from <b>date</b> at <b>location</b>.</p>
 
     <p><b>Event Name:</b> event_name</p>
 
