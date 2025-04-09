@@ -89,6 +89,8 @@
                             <th><?= _l('Email'); ?></th>
                             <th><?= _l('Phone Number'); ?></th>
                             <th><?= _l('Organization'); ?></th>
+                            <th><?= _l('Attendance'); ?></th>
+                            <th><?= _l('Action'); ?></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -104,6 +106,41 @@
                                 <td><?= htmlspecialchars($delegate['email']); ?></td>
                                 <td><?= htmlspecialchars($delegate['phone']); ?></td>
                                 <td><?= htmlspecialchars($delegate['organization']); ?></td>
+                                <td>
+                                    <?php
+                                    $attendanceStatus = isset($delegate['attendance_confirmed']) && $delegate['attendance_confirmed'] == 1 ? 'Confirmed' : 'Not Confirmed';
+                                    echo $attendanceStatus;
+                                    ?>
+                                </td>
+                                <td>
+                                    <?php echo form_open('admin/events_due/events/event_confirmation', [
+                                        'id' => 'event_confirmation_form',
+                                        'method' => 'POST'
+                                    ]); ?>
+                                    <input type="hidden" name="delegate_first_name"
+                                           value="<?= htmlspecialchars($delegate['first_name']); ?>">
+                                    <input type="hidden" name="delegate_last_name"
+                                           value="<?= htmlspecialchars($delegate['last_name']); ?>">
+                                    <input type="hidden" name="delegate_email"
+                                           value="<?= htmlspecialchars($delegate['email']); ?>">
+                                    <input type="hidden" name="delegate_phone"
+                                           value="<?= htmlspecialchars($delegate['phone']); ?>">
+                                    <input type="hidden" name="delegate_organization"
+                                           value="<?= htmlspecialchars($delegate['organization']); ?>">
+                                    <input type="hidden" name="event_unique_code"
+                                           value="<?= htmlspecialchars($event_data['event_unique_code']); ?>">
+
+                                    <button class="btn <?php echo ($attendanceStatus == 'Confirmed') ? 'btn-warning' : 'btn-info'; ?>"
+                                            type="submit">
+                                        <?php if ($attendanceStatus == 'Not Confirmed'): ?>
+                                            <i class="fa fa-check"></i> Confirm Attendance
+                                        <?php else: ?>
+                                            <i class="fa fa-times"></i> Cancel Confirmation
+                                        <?php endif; ?>
+                                    </button>
+
+                                    <?php echo form_close(); ?>
+                                </td>
                             </tr>
                         <?php endforeach; ?>
                         </tbody>
