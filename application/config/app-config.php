@@ -2,109 +2,49 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
-// Get the current hostname
+// Get current host
 $host = $_SERVER['HTTP_HOST'] ?? '';
 
-// Define environment mappings
+// Whitelisted hosts and their environment mappings
 $environments = [
-    'localhost'   => 'local',
-    '127.0.0.1'   => 'local',
-    'dev'         => 'dev',
-    'autoupdate'  => 'autoupdate',
-    'staging'     => 'staging',
-    'app'         => 'production'
+    'localhost'               => 'local',
+    '127.0.0.1'               => 'local',
+    'https://dev.tagrit.com'          => 'development',
+    'https://autoupdate.tagrit.com'   => 'auto-update',
+    'https://staging.tagrit.com'      => 'staging',
+    'https://app.tagrit.com'          => 'production'
 ];
 
+// Default to production if host is unrecognized
+$environment = $environments[$host] ?? 'production';
 
-// Default to production
-$environment = 'local';
-
-foreach ($environments as $key => $env) {
-    if (stripos($host, $key) !== false) {
-        $environment = $env;
-        break;
-    }
+// Load corresponding env file
+$env_file_path = __DIR__ . "/.env.$environment.php";
+if (file_exists($env_file_path)) {
+    require_once $env_file_path;
+} else {
+    die("Missing environment config file: .env.$environment.php");
 }
 
-// Define database credentials
-$db_config = [
-    'local' => [
-        'BASE_URL'  => 'http://localhost/tagrit/',
-        'USERNAME'  => 'root',
-        'PASSWORD'  => '',
-        'DB_NAME'   => 'tagrit_main'
-    ],
-    'dev' => [
-        'BASE_URL'  => 'https://dev.tagrit.com/',
-        'USERNAME'  => 'tagrit_dev',
-        'PASSWORD'  => '?=HeYVENjdEi',
-        'DB_NAME'   => 'tagrit_dev'
-    ],
-    'autoupdate' => [
-        'BASE_URL'  => 'https://autoupdate.tagrit.com/',
-        'USERNAME'  => 'tagrit_tagrit',
-        'PASSWORD'  => 'Y)GxB~MGB8-T',
-        'DB_NAME'   => 'tagrit_auto_update'
-    ],
-    'staging' => [
-        'BASE_URL'  => 'https://staging.tagrit.com/',
-        'USERNAME'  => 'tagrit_staging',
-        'PASSWORD'  => 'CnlKs6btjof&',
-        'DB_NAME'   => 'tagrit_staging'
-    ],
-    'production' => [
-        'BASE_URL'  => 'https://app.tagrit.com/',
-        'USERNAME'  => 'tagrit_auth',
-        'PASSWORD'  => 'Mynewpass123#%',
-        'DB_NAME'   => 'tagrit_live'
-    ]
-];
+// Define constants using getenv()
+define('APP_BASE_URL_DEFAULT', getenv('APP_BASE_URL'));
+define('APP_DB_USERNAME_DEFAULT', getenv('APP_DB_USERNAME'));
+define('APP_DB_PASSWORD_DEFAULT', getenv('APP_DB_PASSWORD'));
+define('APP_DB_NAME_DEFAULT', getenv('APP_DB_NAME'));
+define('APP_DB_HOSTNAME_DEFAULT', getenv('APP_DB_HOSTNAME') ?: 'localhost');
+define('APP_ENC_KEY', getenv('APP_ENC_KEY'));
 
-// Ensure a valid environment is selected; if not, default to production
-if (!isset($db_config[$environment])) {
-    $environment = 'production';
-}
-
-// Define constants
-define('APP_BASE_URL_DEFAULT', $db_config[$environment]['BASE_URL']);
-define('APP_DB_USERNAME_DEFAULT', $db_config[$environment]['USERNAME']);
-define('APP_DB_PASSWORD_DEFAULT', $db_config[$environment]['PASSWORD']);
-define('APP_DB_NAME_DEFAULT', $db_config[$environment]['DB_NAME']);
-define('APP_DB_HOSTNAME_DEFAULT', 'localhost');
-define('APP_ENC_KEY', '85bec75a1a6136881a01c08b1fdc31d8');
-
-/**
- * @since  2.3.0
- * Database charset
- */
+// Charset and collation
 define('APP_DB_CHARSET', 'utf8mb4');
-
-/**
- * @since  2.3.0
- * Database collation
- */
 define('APP_DB_COLLATION', 'utf8mb4_unicode_ci');
 
-/**
- *
- * Session handler driver
- * By default the database driver will be used.
- *
- * For files session use this config:
- * define('SESS_DRIVER', 'files');
- * define('SESS_SAVE_PATH', NULL);
- * In case you are having problem with the SESS_SAVE_PATH consult with your hosting provider to set "session.save_path" value to php.ini
- *
- */
+// Session handling
 define('SESS_DRIVER', 'database');
 define('SESS_SAVE_PATH', 'sessions');
 define('APP_SESSION_COOKIE_SAME_SITE_DEFAULT', 'Lax');
 
-/**
- * Enables CSRF Protection
- */
-define('APP_CSRF_PROTECTION', true);//perfex-saas:start:app-config.php
-//dont remove/change above line
+// CSRF protection
+define('APP_CSRF_PROTECTION', true);
+
+// Perfex SaaS config (unchanged)
 require_once(FCPATH . 'modules/perfex_saas/config/app-config.php');
-//dont remove/change below line
-//perfex-saas:end:app-config.php
