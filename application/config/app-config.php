@@ -9,10 +9,10 @@ $host = $_SERVER['HTTP_HOST'] ?? '';
 $environments = [
     'localhost'               => 'local',
     '127.0.0.1'               => 'local',
-    'https://dev.tagrit.com'          => 'development',
-    'https://autoupdate.tagrit.com'   => 'auto-update',
-    'https://staging.tagrit.com'      => 'staging',
-    'https://app.tagrit.com'          => 'production'
+    'dev.tagrit.com'          => 'development',
+    'autoupdate.tagrit.com'   => 'auto-update',
+    'staging.tagrit.com'      => 'staging',
+    'app.tagrit.com'          => 'production'
 ];
 
 // Default to production if host is unrecognized
