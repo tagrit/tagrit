@@ -58,13 +58,13 @@ CREATE DATABASE tagrit;
 mysql -u your_username -p tagrit < install.sql
 ```
 
-### 4️⃣ Access Tagrit ERP
+### 5️⃣ Access Tagrit ERP
 
-Open your browser and visit:
+Open your browser and go to:
 
-```
-http://localhost/tagrit
-```
+👉 [http://localhost/tagrit](http://localhost/tagrit)
+
+
 
 ## 🔑 Default Admin Credentials
 
