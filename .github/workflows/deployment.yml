@@ -53,11 +53,11 @@ jobs:
 
             echo "🚀 Deploying branch '$BRANCH_NAME' to $DEPLOY_DIR"
 
-            # Create env file
-            printf "%s\n" "$ENV_SECRET" > ~/$DEPLOY_DIR/application/config/.env.$BRANCH_NAME.php
-
             # Navigate to deployment directory
             cd ~/$DEPLOY_DIR || { echo "❌ Deployment directory not found!"; exit 1; }
+          
+            # Create env file
+            printf "%s\n" "$ENV_SECRET" > /application/config/.env.$BRANCH_NAME.php
 
             # Configure Git
             git config --global user.email "kevinamayi20@gmail.com"
