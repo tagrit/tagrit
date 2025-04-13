@@ -1,4 +1,4 @@
-name: 🚀 Deploy to CPANEL  & DigitalOcean
+name: 🚀 Deploy to CPANEL & DigitalOcean
 
 on:
   push:
@@ -41,79 +41,73 @@ jobs:
       - name: Deploy to CPANEL (Staging/Development/Auto-Update)
         if: github.ref != 'refs/heads/master'
         run: |
-          ssh -i ~/.ssh/cpanel_key -o StrictHostKeyChecking=no ${{ secrets.CPANEL_SSH_USER }}@${{ secrets.CPANEL_SSH_HOST }} << 'EOF'
-            BRANCH_NAME="${{ github.ref_name }}"
-
-            case "$BRANCH_NAME" in
-              "staging") DEPLOY_DIR="staging.tagrit.com" ;;
-              "development") DEPLOY_DIR="dev.tagrit.com" ;;
-              "auto-update") DEPLOY_DIR="autoupdate.tagrit.com" ;;
-              *) echo "❌ Branch not recognized. Exiting..."; exit 1 ;;
-            esac
-
+          BRANCH_NAME="${{ github.ref_name }}"
+          case "$BRANCH_NAME" in
+            "staging") DEPLOY_DIR="staging.tagrit.com"; ENV_SECRET="${{ secrets.ENV_STAGING }}" ;;
+            "development") DEPLOY_DIR="dev.tagrit.com"; ENV_SECRET="${{ secrets.ENV_DEV }}" ;;
+            "auto-update") DEPLOY_DIR="autoupdate.tagrit.com"; ENV_SECRET="${{ secrets.ENV_AUTO_UPDATE }}" ;;
+            *) echo "❌ Branch not recognized. Exiting..."; exit 1 ;;
+          esac
+          
+          echo "$ENV_SECRET" | ssh -i ~/.ssh/cpanel_key -o StrictHostKeyChecking=no ${{ secrets.CPANEL_SSH_USER }}@${{ secrets.CPANEL_SSH_HOST }} "cat > ~/$DEPLOY_DIR/application/config/.env.$BRANCH_NAME.php"
+          
+          ssh -i ~/.ssh/cpanel_key -o StrictHostKeyChecking=no ${{ secrets.CPANEL_SSH_USER }}@${{ secrets.CPANEL_SSH_HOST }} << EOF
             echo "🚀 Deploying branch '$BRANCH_NAME' to $DEPLOY_DIR"
-
             cd ~/$DEPLOY_DIR || { echo "❌ Deployment directory not found!"; exit 1; }
-
-            # Configure Git and GET Changes with a CI/CD user identity
+          
             git config --global user.email "kevinamayi20@gmail.com"
             git config --global user.name "KEVINAMAYI"
             git remote set-url origin https://${{ secrets.USER_TOKEN }}@github.com/tagrit/tagrit.git
             git add .
-            git commit -m "Auto-commit before reset on $(date +'%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
+            git commit -m "Auto-commit before reset on \$(date +'%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
             git fetch --all
             git reset --hard origin/$BRANCH_NAME
             git pull origin $BRANCH_NAME --rebase --force
-
-            # Install dependencies,Ensure the correct PHP version is used
+          
             PHP_BIN="/opt/cpanel/ea-php82/root/usr/bin/php"
-
-            # Install dependencies using PHP 8.2
             echo "📦 Running composer install with PHP 8.2..."
-            $PHP_BIN ~/bin/composer install --ignore-platform-req=ext-fileinfo
-
+            \$PHP_BIN ~/bin/composer install --ignore-platform-req=ext-fileinfo
+          
             echo "✅ Deployment to $DEPLOY_DIR completed successfully!"
           EOF
 
       - name: Deploy to DigitalOcean (Master Branch)
         if: github.ref == 'refs/heads/master'
         run: |
-          ssh -i ~/.ssh/digitalocean_key -o StrictHostKeyChecking=no ${{ secrets.DIGITALOCEAN_SSH_USER }}@${{ secrets.DIGITALOCEAN_SSH_HOST }} << 'EOF'
+          ENV_SECRET="${{ secrets.ENV_PRODUCTION }}"
+          
+          echo "$ENV_SECRET" | ssh -i ~/.ssh/digitalocean_key -o StrictHostKeyChecking=no ${{ secrets.DIGITALOCEAN_SSH_USER }}@${{ secrets.DIGITALOCEAN_SSH_HOST }} "cat > ~/tagrit/application/config/.env.production.php"
+          
+          ssh -i ~/.ssh/digitalocean_key -o StrictHostKeyChecking=no ${{ secrets.DIGITALOCEAN_SSH_USER }}@${{ secrets.DIGITALOCEAN_SSH_HOST }} << EOF
             echo "🚀 Deploying master branch to DigitalOcean"
-
-            # Navigate to the correct directory
+          
             cd /var/www/html || { echo "❌ Deployment directory not found!"; exit 1; }
-
+          
             if ls tagrit_backup_*.zip 1> /dev/null 2>&1; then
               mv tagrit_backup_*.zip old_tagrit.zip
               echo "🔄 Renamed previous backup to old_tagrit.zip"
             fi
-
-            # Create a new backup of the tagrit folder
-            BACKUP_NAME="tagrit_backup_$(date +'%Y%m%d_%H%M%S').zip"
-            zip -r $BACKUP_NAME tagrit
-            echo "✅ Backup created: $BACKUP_NAME"
-
-            # Remove the old backup after creating the new one
+          
+            BACKUP_NAME="tagrit_backup_\$(date +'%Y%m%d_%H%M%S').zip"
+            zip -r \$BACKUP_NAME tagrit
+            echo "✅ Backup created: \$BACKUP_NAME"
+          
             rm -f old_tagrit.zip tagrit.zip
             echo "🗑️ Removed old backup file"
-
-            # Navigate into the project folder
+          
             cd tagrit || { echo "❌ tagrit directory not found!"; exit 1; }
-
-            # Configure Git and GET Changes with a CI/CD user identity
+          
             git config --global user.email "kevinamayi20@gmail.com"
             git config --global user.name "KEVINAMAYI"
             git remote set-url origin https://${{ secrets.USER_TOKEN }}@github.com/tagrit/tagrit.git
             git add .
-            git commit -m "Auto-commit before reset on $(date +'%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
+            git commit -m "Auto-commit before reset on \$(date +'%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
             git fetch --all
             git reset --hard origin/master
             git pull origin master --rebase --force
-
-            # Install dependencies
+          
             echo "📦 Running composer install..."
             composer install --ignore-platform-req=ext-fileinfo
-
+          
             echo "✅ Deployment to DigitalOcean completed successfully!"
           EOF
