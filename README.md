@@ -15,45 +15,65 @@ git clone https://github.com/tagrit/tagrit.git
 cd tagrit
 ```
 
-### 2️⃣ Set Up the Database
-1. Log in to MySQL and create a new database:
+### 2️⃣ Install PHP Dependencies
+Make sure you have Composer installed, then run:
+```bash
+composer install 
+```
+
+### 3️⃣ Set Up Environment Configuration
+Tagrit ERP uses a PHP-based .env.local.php file to manage database credentials and application configuration.
+
+🔧 Steps:
+1. Locate the env.local-sample.php file in the application/config
+   folder.
+
+2. Rename it to .env.local.php:
+
+```bash
+mv application/config/env.local-sample.php .env.local.php
+```
+3. Open the .env.local.php file and update the values accordingly:
+
+```bash
+<?php
+putenv('APP_BASE_URL=http://localhost/tagrit'); // or your production URL
+putenv('APP_DB_USERNAME=root');                 // your DB username
+putenv('APP_DB_PASSWORD=your-password');        // your DB password
+putenv('APP_DB_NAME=tagrit');                   // your DB name
+putenv('APP_DB_HOSTNAME=localhost');            // usually localhost
+putenv('APP_ENC_KEY=85bec75a1a6136881a01c08b1fdc31d8'); // encryption key
+```
+
+### 4️⃣  Set Up the Database
+1. Log in to MySQL or MariaDB and create the database:
+
 ```bash
 CREATE DATABASE tagrit;
 ```
-2. Import the provided SQL file:
+
+2. Import the database schema provided in the install.sql file:
+
 ```bash
 mysql -u your_username -p tagrit < install.sql
 ```
-### 3️⃣ Configure your database credentials inside the app-config.php File inside application/config folder
 
-```php
-// Define database credentials e.g.
-$db_config = [
-    'local' => [
-        'BASE_URL'  => 'http://localhost/tagrit',
-        'USERNAME'  => 'root',
-        'PASSWORD'  => '',
-        'DB_NAME'   => 'tagrit'
-    ],
-];
-```
+### 5️⃣ Access Tagrit ERP
 
-### 4️⃣ Access Tagrit ERP
+Open your browser and go to:
 
-Open your browser and visit:
+👉 [http://localhost/tagrit](http://localhost/tagrit)
 
-```
-http://localhost/tagrit
-```
+
 
 ## 🔑 Default Admin Credentials
 
 Use the following credentials to log in as an administrator:
 
-| **Field**   | **Value**              |
-|------------|----------------------|
-| **Email**  | `admin@admin.com`  |
-| **Password** | `Crazy534`         |
+| **Field**   | **Value**         |
+|------------|-------------------|
+| **Email**  | `admin@admin.com` |
+| **Password** | `password`        |
 
 
 ## 📜 Conventions
@@ -64,9 +84,6 @@ Use the following credentials to log in as an administrator:
 | `bf-` | Bug Fixes      | `bf-event-listing` |
 | `hf-` | Hot Fixes      | `hf-currency-dropdown` |
 | `ch-` | Chores      | `ch-order-cleanup` |
-
-
-
 
 
 ## 🙌 Contribution
