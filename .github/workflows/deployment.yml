@@ -76,7 +76,7 @@ jobs:
         run: |
           ENV_SECRET="${{ secrets.ENV_PRODUCTION }}"
           
-          echo "$ENV_SECRET" | ssh -i ~/.ssh/digitalocean_key -o StrictHostKeyChecking=no ${{ secrets.DIGITALOCEAN_SSH_USER }}@${{ secrets.DIGITALOCEAN_SSH_HOST }} "cat > ~/tagrit/application/config/.env.production.php"
+          echo "$ENV_SECRET" | ssh -i ~/.ssh/digitalocean_key -o StrictHostKeyChecking=no ${{ secrets.DIGITALOCEAN_SSH_USER }}@${{ secrets.DIGITALOCEAN_SSH_HOST }} "cat > ~/var/www/html/tagrit/application/config/.env.production.php"
           
           ssh -i ~/.ssh/digitalocean_key -o StrictHostKeyChecking=no ${{ secrets.DIGITALOCEAN_SSH_USER }}@${{ secrets.DIGITALOCEAN_SSH_HOST }} << EOF
             echo "🚀 Deploying master branch to DigitalOcean"
