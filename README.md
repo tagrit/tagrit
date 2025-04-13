@@ -70,10 +70,10 @@ http://localhost/tagrit
 
 Use the following credentials to log in as an administrator:
 
-| **Field**   | **Value**              |
-|------------|----------------------|
-| **Email**  | `admin@admin.com`  |
-| **Password** | `Crazy534`         |
+| **Field**   | **Value**         |
+|------------|-------------------|
+| **Email**  | `admin@admin.com` |
+| **Password** | `password`        |
 
 
 ## 📜 Conventions
