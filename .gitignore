@@ -5,3 +5,4 @@ install.sql
 README.md
 uploads
 /vendor
+/application/config/.env.*.php
