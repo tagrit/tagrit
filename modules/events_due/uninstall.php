@@ -11,13 +11,13 @@ $CI->db->query('SET FOREIGN_KEY_CHECKS = 0;');
 
 // Drop tables if they exist
 $tables_to_drop = [
-    'events_due_invoices',
+    'event_unique_codes',
+    'event_attendance_sheets',
     'events_due_registrations',
     'events_due_venues',
     'events_due_locations',
-    'events_due_events',
-    'events_due_clients',
-    'events_due_name',
+    '_notification_queue',
+    'email_reminder_period'
 ];
 
 foreach ($tables_to_drop as $table) {

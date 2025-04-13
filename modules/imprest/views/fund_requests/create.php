@@ -161,26 +161,6 @@
         white-space: nowrap; /* Prevent label from wrapping */
     }
 
-    .category-section select {
-        flex: 1; /* Allow the dropdown to grow and take up remaining space */
-        padding: 10px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        background-color: #f9f9f9;
-        font-size: 16px;
-        color: #333;
-        appearance: none;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='%23666' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
-        background-repeat: no-repeat;
-        background-position: right 10px center;
-        background-size: 16px 16px;
-    }
-
-    .category-section select:focus {
-        outline: none;
-        border-color: #007bff;
-        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-    }
 
     .fund-request-heading {
         font-size: 24px; /* Larger font size for better emphasis */
@@ -414,6 +394,42 @@
         font-weight: bold;
     }
 
+    .modal-header {
+        padding: 10px 15px; /* Reduce top/bottom padding */
+    }
+
+    .modal-title {
+        margin: 0;
+        font-size: 1.25rem; /* Adjust size if needed */
+    }
+
+    .modal-body {
+        padding: 15px;
+    }
+
+    .modal-footer {
+        margin-right: -3px;
+        text-align: right;
+    }
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 20px; /* Reduce padding */
+        position: relative;
+    }
+
+    .modal-title {
+        flex-grow: 1;
+        margin: 0;
+        font-size: 1.25rem;
+    }
+
+    .close {
+        position: absolute;
+        right: 15px; /* Keep close button aligned to the right */
+    }
+
 
 </style>
 
@@ -440,40 +456,45 @@
             ]); ?>
 
             <div class="category-section">
-
-                <label for="events">Event:</label>
-
-                <select name="event_id" id="events" required>
-                    <option value="" disabled selected>Select an event</option>
-                    <?php foreach ($events as $event): ?>
-                        <option value="<?= htmlspecialchars($event->id) ?>">
-                            <?= strlen($event->name) > 90 ? htmlspecialchars(substr($event->name, 0, 27)) . '...' : htmlspecialchars($event->name) ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
+                <div class="form-group">
+                    <label for="event_code">Event Code:</label>
+                    <select class="form-control selectpicker" data-live-search="true"
+                            name="event_code" id="events" required style="display: none;">
+                        <?php if (!empty($events_codes)): ?>
+                            <?php foreach ($events_codes as $index => $event): ?>
+                                <option value="<?= htmlspecialchars($event->event_unique_code) ?>">
+                                    <?= htmlspecialchars($event->event_unique_code); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <option value="" disabled selected>No events available</option>
+                        <?php endif; ?>
+                    </select>
+                </div>
             </div>
 
             <?php if (!empty($mandatory_fields)): ?>
                 <hr style="border-color:grey;">
                 <div class="custom-container">
                     <div class="custom-row">
+                        <!--                        --><?php //if (in_array('location', $mandatory_fields ?? [])): ?>
+                        <div class="custom-col">
+                            <label for="location" class="custom-label">Location</label>
+                            <input type="text" id="location" name="location" class="custom-input"
+                                   placeholder="Enter Location"
+                                   required readonly>
+                        </div>
+                        <!--                        --><?php //endif; ?>
+
                         <?php if (in_array('venue', $mandatory_fields ?? [])): ?>
                             <div class="custom-col">
                                 <label for="venue" class="custom-label">Venue</label>
                                 <input type="text" id="venue" name="venue" class="custom-input"
                                        placeholder="Enter Venue"
-                                       required>
+                                       required readonly>
                             </div>
                         <?php endif; ?>
 
-                        <?php if (in_array('organization', $mandatory_fields ?? [])): ?>
-                            <div class="custom-col">
-                                <label for="organization" class="custom-label">Organization</label>
-                                <input type="text" id="organization" name="organization" class="custom-input"
-                                       placeholder="Enter Organization"
-                                       required>
-                            </div>
-                        <?php endif; ?>
                     </div>
 
                     <?php if (in_array('dates', $mandatory_fields ?? [])): ?>
@@ -481,43 +502,24 @@
                             <div class="custom-col">
                                 <label for="start_date" class="custom-label">Start Date</label>
                                 <input type="date" id="start_date" name="start_date" class="custom-input"
-                                       required>
+                                       required readonly>
                             </div>
                             <div class="custom-col">
                                 <label for="end_date" class="custom-label">End Date</label>
                                 <input type="date" id="end_date" name="end_date" class="custom-input"
-                                       required>
+                                       required readonly>
                             </div>
                         </div>
                     <?php endif; ?>
 
                     <div class="custom-row">
-                        <?php if (in_array('delegates_details', $mandatory_fields ?? [])): ?>
-                            <div class="custom-col">
-                                <label for="no_of_delegates" class="custom-label">Number of Delegates</label>
-                                <input type="number" id="no_of_delegates" name="no_of_delegates" class="custom-input"
-                                       placeholder="Enter number" required>
-                            </div>
-                            <div class="custom-col">
-                                <label for="charges_per_delegate" class="custom-label">Charges Per Delegate</label>
-                                <input type="number" id="charges_per_delegate" name="charges_per_delegate"
-                                       class="custom-input"
-                                       placeholder="Enter number" required>
-                            </div>
-                        <?php endif; ?>
-
-
                         <?php if (in_array('trainers', $mandatory_fields ?? [])): ?>
                             <div class="custom-col">
                                 <label for="trainer" class="custom-label">Trainers</label>
                                 <div id="trainer-container">
                                     <input type="text" id="trainer1" name="trainers[]" class="custom-input"
-                                           placeholder="Enter Trainer" required>
+                                           placeholder="Enter Trainer" required readonly>
                                 </div>
-                                <button style="margin-top:10px;" type="button" id="add-trainer" class="custom-button">
-                                    Add
-                                    Trainer
-                                </button>
                             </div>
                         <?php endif; ?>
 
@@ -529,13 +531,67 @@
                             </div>
                         <?php endif; ?>
 
+                        <?php if (in_array('setup', $mandatory_fields ?? [])): ?>
+                            <div class="custom-col">
+                                <label for="setup" class="control-label">Setup</label>
+                                <select id="setup" name="setup" class="form-control selectpicker"
+                                        data-live-search="true" required disabled>
+                                    <option value="">Select Setup</option>
+                                    <option value="Physical">Physical</option>
+                                    <option value="Virtual">Virtual</option>
+                                </select>
+                            </div>
+                        <?php endif; ?>
+
+                        <?php if (in_array('type', $mandatory_fields ?? [])): ?>
+                            <div class="custom-col">
+                                <label for="type" class="control-label">Type</label>
+                                <select id="type" name="type" class="form-control selectpicker"
+                                        data-live-search="true" required disabled>
+                                    <option value="">Select Type</option>
+                                    <option value="Local">Local</option>
+                                    <option value="International">International</option>
+                                </select>
+                            </div>
+                        <?php endif; ?>
+
                         <?php if (in_array('revenue', $mandatory_fields ?? [])): ?>
                             <div class="custom-col">
                                 <label for="revenue" class="custom-label">Revenue</label>
                                 <input type="number" id="revenue" name="revenue" class="custom-input"
-                                       placeholder="Enter revenue" required>
+                                       placeholder="Enter revenue" required readonly>
                             </div>
                         <?php endif; ?>
+
+                    </div>
+                    <div class="custom-row">
+                        <div style="margin-left:-10px;" class="col-lg-12">
+                            <p style="margin-top: 15px; font-size: 14px; font-weight: bold;
+                           color: white; margin-bottom:15px;  background: linear-gradient(45deg, #007bff, #0056b3);
+                         padding: 10px 15px; border-radius: 6px; display: inline-block;
+                         box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.1); text-transform: uppercase;">
+                                <i class="fa fa-users" aria-hidden="true"></i> Delegates
+                            </p>
+                            <table class="table dt-table" id="delegates-table">
+                                <thead>
+                                <tr>
+                                    <th><?= _l('Name'); ?></th>
+                                    <th><?= _l('Email'); ?></th>
+                                    <th><?= _l('Phone Number'); ?></th>
+                                    <th><?= _l('Organization'); ?></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             <?php endif; ?>
@@ -543,7 +599,8 @@
             <hr style="border-color:grey;">
             <div class="category-section">
                 <label for="categories">Expense Category:</label>
-                <select id="categories" onchange="addCategory()">
+                <select class="form-control selectpicker" data-live-search="true" id="categories"
+                        onchange="addCategory()">
                     <option value="" disabled selected>Select a category</option>
                     <?php foreach ($categories as $category): ?>
                         <option value="<?= htmlspecialchars($category->id) ?>"
@@ -591,52 +648,41 @@
             <?php echo form_close(); ?>
 
         </div>
-
     </div>
     <?php endif; ?>
-
-
 </div>
 </div>
+
+<div class="modal fade" id="newEventModal" tabindex="-1" role="dialog" aria-labelledby="newEventModalLabel"
+     aria-hidden="true">
+    <?php echo form_open('admin/events_due/events/store', [
+        'id' => 'create-new-event-form',
+        'enctype' => 'multipart/form-data'
+    ]); ?>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header d-flex justify-content-between px-3">
+                <h6 class="modal-title mb-0" id="newEventModalLabel">Add New Event</h6>
+                <p type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span>&times;</span>
+                </p>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="eventName">Event Name</label>
+                    <input type="text" class="form-control" id="eventName" name="event_name" required>
+                </div>
+            </div>
+            <div style="margin-top:-20px;" class="modal-footer">
+                <button type="submit" class="btn btn-primary">Save Event</button>
+            </div>
+        </div>
+    </div>
+    <?php echo form_close(); ?>
+</div>
+
 <?php init_tail(); ?>
 <script>
-
-    document.getElementById('add-trainer').addEventListener('click', function () {
-        const container = document.getElementById('trainer-container');
-        const currentInputs = container.getElementsByTagName('input');
-
-        // Limit the number of inputs to 5
-        if (currentInputs.length < 5) {
-            const inputWrapper = document.createElement('div');
-            inputWrapper.classList.add('input-wrapper');
-
-            const newInput = document.createElement('input');
-            newInput.type = 'text';
-            newInput.name = 'trainers[]';
-            newInput.className = 'custom-input';
-            newInput.className = 'trainer-input';
-            newInput.placeholder = 'Enter trainer';
-            container.appendChild(newInput);
-
-            const cancelBtn = document.createElement('button');
-            cancelBtn.type = 'button';
-            cancelBtn.className = 'cancel-trainer-btn';
-            cancelBtn.innerHTML = "<i class='fa fa-trash'></i>";
-
-            // Add input and cancel button to the wrapper
-            inputWrapper.appendChild(newInput);
-            inputWrapper.appendChild(cancelBtn);
-
-            // Add the new wrapper to the container
-            container.appendChild(inputWrapper);
-
-            // Add event listener to remove the input when cancel is clicked
-            cancelBtn.addEventListener('click', function () {
-                inputWrapper.remove();
-            });
-        }
-    });
-
 
     const form = document.getElementById("store-fund-request-form");
     const submitButton = form.querySelector('button[type="submit"]');
@@ -946,21 +992,99 @@
     }
 
 
-    document.getElementById('no_of_delegates').addEventListener('input', calculateRevenue);
-    document.getElementById('charges_per_delegate').addEventListener('input', calculateRevenue);
-
     function calculateRevenue() {
-        const noOfDelegates = parseFloat(document.getElementById('no_of_delegates').value) || 0;
-        const chargesPerDelegate = parseFloat(document.getElementById('charges_per_delegate').value) || 0;
-        const revenue = noOfDelegates * chargesPerDelegate;
 
-        document.getElementById('revenue').value = revenue.toFixed(2); // Set revenue with 2 decimal points
-        document.getElementById('total-revenue').textContent = revenue.toFixed(2); // Set revenue with 2 decimal points
+        const revenueInput = document.getElementById('revenue').value;
+        const revenue = parseFloat(revenueInput) || 0;
+
+        document.getElementById('total-revenue').textContent = revenue.toFixed(2);
 
         const totalAmount = parseFloat(document.getElementById('total-amount').textContent) || 0;
         const netProfit = revenue - totalAmount;
-        document.getElementById('net-profit').textContent = netProfit.toFixed(2);
 
+        document.getElementById('net-profit').textContent = netProfit.toFixed(2);
     }
+
+
+    $('#events').change(function () {
+        const eventCode = $(this).val();
+
+        if (eventCode) {
+            $.ajax({
+                url: '<?php echo admin_url("imprest/fund_requests/event_details"); ?>',
+                method: 'POST',
+                data: {event_code: eventCode},
+                success: function (response) {
+
+                    if (typeof response === 'string') {
+                        response = JSON.parse(response);
+                    }
+
+                    if (response.success) {
+
+                        $('#location').val(response.event.location);
+                        $('#venue').val(response.event.venue);
+                        $('#start_date').val(response.event.start_date);
+                        $('#end_date').val(response.event.end_date);
+                        $('#setup').val(response.event.setup).selectpicker('refresh');
+                        $('#type').val(response.event.type).selectpicker('refresh');
+                        $('#revenue').val(response.event.total_revenue);
+                        calculateRevenue();
+                        const trainerContainer = $('#trainer-container');
+                        trainerContainer.empty();
+
+                        response.event.trainers.forEach((name, index) => {
+                            console.log(name);
+                            const input = `
+                              <input type="text" id="trainer${index + 1}" name="trainers[]"
+                              class="custom-input" placeholder="Enter Trainer"
+                              value="${name}" required readonly> `;
+                            trainerContainer.append(input);
+                        });
+
+                        const tbody = $('#delegates-table tbody');
+                        const noDelegatesMsg = $('p:contains("No Delegates")'); // adjust this selector if needed
+
+                        tbody.empty(); // Clear old delegate rows
+
+                        if (Array.isArray(response.event.clients) && response.event.clients.length > 0) {
+                            noDelegatesMsg.hide(); // Hide the "No Delegates" message
+
+                            response.event.clients.forEach(client => {
+                                const fullName = `${client.first_name} ${client.last_name}`;
+                                const row = `
+                               <tr>
+                                    <td>
+                                        <div class="d-flex flex-column justify-content-center">
+                                            <p style="font-weight: bold; font-size: 14px;">${fullName}</p>
+                                         </div>
+                                    </td>
+                                    <td>${client.email}</td>
+                                    <td>${client.phone}</td>
+                                    <td>${client.organization}</td>
+                                    </tr>`;
+                                tbody.append(row);
+                            });
+                        } else {
+                            tbody.html(`
+                           <tr>
+                            <td colspan="4" class="text-center font-italic text-muted">No Delegates</td>
+                          </tr>
+                         `);
+                            noDelegatesMsg.hide();
+                        }
+
+
+                    } else {
+                        alert('Failed to load event details');
+                    }
+                },
+                error: function () {
+                    alert('An error occurred while fetching event details.');
+                }
+            });
+        }
+    });
+
 
 </script>

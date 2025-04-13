@@ -1,4 +1,23 @@
 /*example css*/
-.content{
-    color:red;
+.far-right {
+    display: block;
+    margin-left: auto;
+    margin-right: 20px;
+}
+
+.dt-buttons.btn-group .btn {
+    padding-bottom: 6.5px !important;
+    padding-top: 6.5px !important;
+    visibility: hidden;
+}
+
+
+div.dataTables_wrapper div.dataTables_filter input {
+    margin-left: .5em;
+    display: none;
+    width: auto;
+}
+
+.dataTables_filter .input-group-addon, .dataTables_filter input, .dataTables_length select, div.dataTables_wrapper .dt-buttons .btn-default {
+    display: none;
 }

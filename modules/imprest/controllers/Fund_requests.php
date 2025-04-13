@@ -41,7 +41,7 @@ class Fund_requests extends AdminController
                 $data['max_unreconciled_amount'] = $unSerializedData['max_unreconciled_amount'];
             }
 
-            $fund_request_details = $this->Fund_request_model->get_fund_request_details(null,true);
+            $fund_request_details = $this->Fund_request_model->get_fund_request_details(null, true);
 
             if (!empty($fund_request_details)) {
                 $data['totalAmountRequested'] = $fund_request_details['total_amount_requested'] - $this->Fund_request_model->get_pending_approval_amount();
@@ -109,6 +109,7 @@ class Fund_requests extends AdminController
 
     public function create()
     {
+
         $data = [];
 
         $query = $this->db->select('fund_reconciliation')
@@ -132,7 +133,7 @@ class Fund_requests extends AdminController
             $data['mandatory_fields'] = unserialize($serializedData);
         }
 
-        $fund_request_details = $this->Fund_request_model->get_fund_request_details(null,true);
+        $fund_request_details = $this->Fund_request_model->get_fund_request_details(null, true);
 
         if (!empty($fund_request_details)) {
             $data['totalAmountRequested'] = $fund_request_details['total_amount_requested'] - $this->Fund_request_model->get_pending_approval_amount();
@@ -140,7 +141,7 @@ class Fund_requests extends AdminController
         }
 
         $data['facilitator'] = $this->Fund_request_model->get_staff_name(get_staff_user_id());
-        $data['events'] = $this->Event_model->get();
+        $data['events_codes'] = $this->Event_model->events_codes(null);
         $data['categories'] = $this->Expense_category_model->get_categories(null, false);
         $data['subcategories'] = $this->get_categories_with_subcategories(false);
         $this->load->view('fund_requests/create', $data);
@@ -261,6 +262,8 @@ class Fund_requests extends AdminController
     public function store()
     {
 
+        $event = $this->Event_model->events_codes($this->input->post('event_code'));
+
         $this->db->trans_begin(); // Begin the transaction
 
         try {
@@ -271,8 +274,7 @@ class Fund_requests extends AdminController
 
             $subcategories = $this->input->post('subcategories');
             $amounts = $this->input->post('amounts');
-
-            $fund_request_id = $this->Fund_request_model->add($this->input->post('event_id'), $subcategories, $amounts);
+            $fund_request_id = $this->Fund_request_model->add($event[0]->event_id, $subcategories, $amounts);
 
             $this->Fund_request_model->update($fund_request_id, [
                 'reference_no' => $this->generateFundRequestReference($fund_request_id)
@@ -339,25 +341,23 @@ class Fund_requests extends AdminController
                 $this->db->insert(db_prefix() . '_speaker_details', $speaker_data);
             }
 
+            $this->db->where([
+                'location' => $event[0]->location,
+                'venue' => $event[0]->venue,
+                'event_id' => $event[0]->event_id,
+                'start_date' => $event[0]->start_date,
+                'end_date' => $event[0]->end_date,
+            ]);
 
-            $data = [
-                'venue' => $this->input->post('venue') ?? '',
-                'organization' => $this->input->post('organization') ?? '',
-                'start_date' => $this->input->post('start_date') ?? '',
-                'end_date' => $this->input->post('end_date') ?? '',
-                'no_of_delegates' => $this->input->post('no_of_delegates') ?? '',
-                'charges_per_delegate' => $this->input->post('charges_per_delegate') ?? '',
-                'division' => $this->input->post('division') ?? '',
-                'trainers' => serialize($this->input->post('trainers')) ?? '',
-                'facilitator' => $this->input->post('facilitator') ?? '',
-                'revenue' => $this->input->post('revenue') ?? '',
-            ];
+            $this->db->order_by('id', 'ASC');
+            $this->db->limit(1);
+            $event_detail = $this->db->get('_events_details')->row();
 
-            $event_detail_id = $this->Event_details_model->add($data);
 
             $this->Fund_request_model->update($fund_request_id, [
-                'event_detail_id' => $event_detail_id
+                'event_detail_id' => $event_detail->id
             ]);
+
 
             if ($this->db->trans_status() === FALSE) {
                 throw new Exception('Transaction failed.');
@@ -700,6 +700,60 @@ class Fund_requests extends AdminController
             // Set error alert and redirect
             set_alert('danger', $e->getMessage());
             redirect(admin_url('imprest/fund_requests/index'));
+        }
+    }
+
+    public function event_details()
+    {
+        try {
+            error_reporting(E_ALL);
+            ini_set('display_errors', 1);
+
+            $event_code = $this->input->post('event_code');
+
+            if (!$event_code) {
+                throw new Exception('Missing event code');
+            }
+
+            $event = $this->Event_model->events_codes($event_code);
+
+            if (!$event) {
+                throw new Exception('Invalid event code');
+            }
+
+            $details = $this->Event_model->event_details(
+                $event[0]->event_id,
+                $event[0]->location,
+                $event[0]->venue,
+                $event[0]->start_date,
+                $event[0]->end_date
+            );
+
+            if (!$details) {
+                throw new Exception('Event not found');
+            }
+
+            // Remove the @ to allow errors to show if unserialization fails
+            $trainers = unserialize($details['trainers']);
+
+            $details['trainers'] = $trainers;
+
+            echo json_encode([
+                'success' => true,
+                'event' => $details
+            ]);
+        } catch (Throwable $e) {
+
+            // Log and show the raw error
+            log_message('error', 'event_details error: ' . $e->getMessage());
+
+            // Send raw error response (for dev only)
+            http_response_code(500);
+            echo '<pre style="color:red">';
+            echo "Error: " . $e->getMessage() . "\n";
+            echo $e->getFile() . ':' . $e->getLine() . "\n";
+            echo $e->getTraceAsString();
+            echo '</pre>';
         }
     }
 
