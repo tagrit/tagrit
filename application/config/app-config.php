@@ -42,6 +42,11 @@ define('APP_DB_NAME', defined('APP_DB_NAME_DEFAULT') ? APP_DB_NAME_DEFAULT : 'de
 define('APP_DB_HOSTNAME', defined('APP_DB_HOSTNAME_DEFAULT') ? APP_DB_HOSTNAME_DEFAULT : 'localhost');
 define('APP_ENC_KEY', defined('APP_ENC_KEY_DEFAULT') ? APP_ENC_KEY_DEFAULT : 'default_encryption_key');
 
+// Define APP_MODULES_PATH constant
+if (!defined('APP_MODULES_PATH')) {
+    define('APP_MODULES_PATH', FCPATH . 'modules/'); // Update this path based on where your modules are located
+}
+
 // Charset and collation
 define('APP_DB_CHARSET', 'utf8mb4');
 define('APP_DB_COLLATION', 'utf8mb4_unicode_ci');
