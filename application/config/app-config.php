@@ -26,13 +26,21 @@ if (file_exists($env_file_path)) {
     die("Missing environment config file: .env.$environment.php");
 }
 
-// Define constants using getenv()
+// Define constants using getenv() with '_DEFAULT' suffix
 define('APP_BASE_URL_DEFAULT', getenv('APP_BASE_URL'));
 define('APP_DB_USERNAME_DEFAULT', getenv('APP_DB_USERNAME'));
 define('APP_DB_PASSWORD_DEFAULT', getenv('APP_DB_PASSWORD'));
 define('APP_DB_NAME_DEFAULT', getenv('APP_DB_NAME'));
 define('APP_DB_HOSTNAME_DEFAULT', getenv('APP_DB_HOSTNAME') ?: 'localhost');
-define('APP_ENC_KEY', getenv('APP_ENC_KEY'));
+define('APP_ENC_KEY_DEFAULT', getenv('APP_ENC_KEY'));
+
+// Now define the actual constants, they can either be overridden or kept as defaults
+define('APP_BASE_URL', defined('APP_BASE_URL_DEFAULT') ? APP_BASE_URL_DEFAULT : 'https://default-url.com');
+define('APP_DB_USERNAME', defined('APP_DB_USERNAME_DEFAULT') ? APP_DB_USERNAME_DEFAULT : 'default_user');
+define('APP_DB_PASSWORD', defined('APP_DB_PASSWORD_DEFAULT') ? APP_DB_PASSWORD_DEFAULT : 'default_password');
+define('APP_DB_NAME', defined('APP_DB_NAME_DEFAULT') ? APP_DB_NAME_DEFAULT : 'default_db_name');
+define('APP_DB_HOSTNAME', defined('APP_DB_HOSTNAME_DEFAULT') ? APP_DB_HOSTNAME_DEFAULT : 'localhost');
+define('APP_ENC_KEY', defined('APP_ENC_KEY_DEFAULT') ? APP_ENC_KEY_DEFAULT : 'default_encryption_key');
 
 // Charset and collation
 define('APP_DB_CHARSET', 'utf8mb4');
