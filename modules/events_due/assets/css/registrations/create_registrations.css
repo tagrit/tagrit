@@ -1,0 +1,132 @@
+.no-border-right {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-right: none !important;
+}
+
+/* Remove left border of button */
+.no-border-left {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-left: none !important;
+}
+
+.input-group-append .btn {
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+.input-group,
+.input-group-append,
+.input-group .form-control {
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+.modal-header {
+    padding: 10px 15px; /* Reduce top/bottom padding */
+}
+
+.modal-title {
+    margin: 0;
+    font-size: 1.25rem; /* Adjust size if needed */
+}
+
+.modal-body {
+    padding: 15px;
+}
+
+.modal-footer {
+    margin-right: -3px;
+    text-align: right;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 20px; /* Reduce padding */
+    position: relative;
+}
+
+.modal-title {
+    flex-grow: 1;
+    margin: 0;
+    font-size: 1.25rem;
+}
+
+.close {
+    position: absolute;
+    right: 15px; /* Keep close button aligned to the right */
+}
+
+.input-group .btn {
+    height: auto;
+    min-height: 38px; /* Ensures it matches Bootstrap's default input height */
+    padding: 6px 15px; /* Keeps the button well-sized */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.error-message {
+    display: block !important;
+    color: red;
+}
+
+#events + .btn.dropdown-toggle {
+    max-width: 100%; /* Ensures it stays within col-md-6 */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap; /* Prevents wrapping */
+    display: block;
+}
+
+.bootstrap-select .btn {
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+}
+
+.bootstrap-select {
+    max-width: 100%;
+    width: 100%;
+}
+
+.loader {
+    width: 48px;
+    height: 48px;
+    border: 3px solid #FFF;
+    border-radius: 50%;
+    display: inline-block;
+    position: relative;
+    box-sizing: border-box;
+    animation: rotation 1s linear infinite;
+}
+
+.loader::after {
+    content: '';
+    box-sizing: border-box;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    border-bottom-color: #FF3D00;
+}
+
+@keyframes rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+
+

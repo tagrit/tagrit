@@ -34,7 +34,6 @@ define('APP_DB_NAME_DEFAULT', getenv('APP_DB_NAME'));
 define('APP_DB_HOSTNAME_DEFAULT', getenv('APP_DB_HOSTNAME') ?: 'localhost');
 define('APP_ENC_KEY', getenv('APP_ENC_KEY'));
 
-
 // Charset and collation
 define('APP_DB_CHARSET', 'utf8mb4');
 define('APP_DB_COLLATION', 'utf8mb4_unicode_ci');
@@ -52,3 +51,4 @@ require_once(FCPATH . 'modules/perfex_saas/config/app-config.php');
 
 define('APP_DB_USERNAME', getenv('APP_DB_USERNAME'));
 define('APP_DB_PASSWORD', getenv('APP_DB_PASSWORD'));
+

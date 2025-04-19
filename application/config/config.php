@@ -39,6 +39,7 @@ if (!function_exists('db_prefix')) {
         return defined('APP_DB_PREFIX') ? APP_DB_PREFIX : 'tbl';
     }
 }
+
 /*
 |--------------------------------------------------------------------------
 | Base Site URL
@@ -218,11 +219,11 @@ $config['permitted_uri_chars'] = (defined('APP_PERMITTED_URI_CHARS') ? APP_PERMI
 | use segment based URLs.
 |
 */
-$config['allow_get_array']      = true;
+$config['allow_get_array'] = true;
 $config['enable_query_strings'] = false;
-$config['controller_trigger']   = 'c';
-$config['function_trigger']     = 'm';
-$config['directory_trigger']    = 'd';
+$config['controller_trigger'] = 'c';
+$config['function_trigger'] = 'm';
+$config['directory_trigger'] = 'd';
 
 /*
 |--------------------------------------------------------------------------
@@ -416,12 +417,12 @@ $config['encryption_key'] = APP_ENC_KEY;
 |           -   Clearly communicate you intentionally want the cookie sent in a third-party context.
 |
 */
-$config['sess_driver']             = SESS_DRIVER;
-$config['sess_cookie_name']        = (defined('APP_SESSION_COOKIE_NAME') ? APP_SESSION_COOKIE_NAME : 'sp_session');
-$config['sess_expiration']         = (defined('APP_SESSION_EXPIRATION') ? APP_SESSION_EXPIRATION : 28800);
-$config['sess_save_path']          = SESS_SAVE_PATH;
-$config['sess_match_ip']           = (defined('APP_SESSION_MATCH_IP') ? APP_SESSION_MATCH_IP : false);
-$config['sess_time_to_update']     = (defined('APP_SESSION_TIME_TO_UPDATE') ? APP_SESSION_TIME_TO_UPDATE : 300);
+$config['sess_driver'] = SESS_DRIVER;
+$config['sess_cookie_name'] = (defined('APP_SESSION_COOKIE_NAME') ? APP_SESSION_COOKIE_NAME : 'sp_session');
+$config['sess_expiration'] = (defined('APP_SESSION_EXPIRATION') ? APP_SESSION_EXPIRATION : 28800);
+$config['sess_save_path'] = SESS_SAVE_PATH;
+$config['sess_match_ip'] = (defined('APP_SESSION_MATCH_IP') ? APP_SESSION_MATCH_IP : false);
+$config['sess_time_to_update'] = (defined('APP_SESSION_TIME_TO_UPDATE') ? APP_SESSION_TIME_TO_UPDATE : 300);
 $config['sess_regenerate_destroy'] = (defined('APP_SESSION_REGENERATE_DESTROY') ? APP_SESSION_REGENERATE_DESTROY : false);
 // Work only on php 7.3 or later
 $config['sess_cookie_samesite'] = (defined('APP_SESSION_COOKIE_SAME_SITE') ? APP_SESSION_COOKIE_SAME_SITE : '');
@@ -441,10 +442,10 @@ $config['sess_cookie_samesite'] = (defined('APP_SESSION_COOKIE_SAME_SITE') ? APP
 |       'cookie_httponly') will also affect sessions.
 |
 */
-$config['cookie_prefix']   = (defined('APP_COOKIE_PREFIX') ? APP_COOKIE_PREFIX : '');
-$config['cookie_domain']   = (defined('APP_COOKIE_DOMAIN') ? APP_COOKIE_DOMAIN : '');
-$config['cookie_path']     = (defined('APP_COOKIE_PATH') ? APP_COOKIE_PATH : '/');
-$config['cookie_secure']   = (defined('APP_COOKIE_SECURE') ? APP_COOKIE_SECURE : false);
+$config['cookie_prefix'] = (defined('APP_COOKIE_PREFIX') ? APP_COOKIE_PREFIX : '');
+$config['cookie_domain'] = (defined('APP_COOKIE_DOMAIN') ? APP_COOKIE_DOMAIN : '');
+$config['cookie_path'] = (defined('APP_COOKIE_PATH') ? APP_COOKIE_PATH : '/');
+$config['cookie_secure'] = (defined('APP_COOKIE_SECURE') ? APP_COOKIE_SECURE : false);
 $config['cookie_httponly'] = (defined('APP_COOKIE_HTTPONLY') ? APP_COOKIE_HTTPONLY : false);
 
 /*
@@ -489,12 +490,12 @@ $config['global_xss_filtering'] = false;
 | 'csrf_regenerate' = Regenerate token on every submission
 | 'csrf_exclude_uris' = Array of URIs which ignore CSRF checks
 */
-$config['csrf_protection']   = defined('APP_CSRF_PROTECTION') ? APP_CSRF_PROTECTION : false;
-$config['csrf_token_name']   = defined('APP_CSRF_TOKEN_NAME') ? APP_CSRF_TOKEN_NAME : 'csrf_token_name';
-$config['csrf_cookie_name']  = defined('APP_CSRF_COOKIE_NAME') ? APP_CSRF_COOKIE_NAME : 'csrf_cookie_name';
-$config['csrf_expire']       = defined('APP_CSRF_EXPIRE') ? APP_CSRF_EXPIRE : 3660;
-$config['csrf_regenerate']   = false;
-$config['csrf_exclude_uris'] = ['forms/wtl/[0-9a-z]+', 'forms/ticket', 'forms/quote/[0-9a-z]+', 'admin/tasks/timer_tracking', 'api\/.+', 'razorpay/success\/.+','courier/tracking/shipment_info'];
+$config['csrf_protection'] = defined('APP_CSRF_PROTECTION') ? APP_CSRF_PROTECTION : false;
+$config['csrf_token_name'] = defined('APP_CSRF_TOKEN_NAME') ? APP_CSRF_TOKEN_NAME : 'csrf_token_name';
+$config['csrf_cookie_name'] = defined('APP_CSRF_COOKIE_NAME') ? APP_CSRF_COOKIE_NAME : 'csrf_cookie_name';
+$config['csrf_expire'] = defined('APP_CSRF_EXPIRE') ? APP_CSRF_EXPIRE : 3660;
+$config['csrf_regenerate'] = false;
+$config['csrf_exclude_uris'] = ['forms/wtl/[0-9a-z]+', 'forms/ticket', 'forms/quote/[0-9a-z]+', 'admin/tasks/timer_tracking', 'api\/.+', 'razorpay/success\/.+', 'courier/tracking/shipment_info', 'events_due/cronjobs/send_reminders', 'events_due/cronjobs/process_queue'];
 
 if (isset($app_csrf_exclude_uris)) {
     $config['csrf_exclude_uris'] = array_merge($config['csrf_exclude_uris'], $app_csrf_exclude_uris);

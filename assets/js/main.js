@@ -190,7 +190,7 @@ $(function () {
     }
   });
 
-  /** Create New Invoice **/
+  /** -Create New Invoice **/
   add_hotkey("Shift+I", function () {
     window.location.href = admin_url + "invoices/invoice";
   });

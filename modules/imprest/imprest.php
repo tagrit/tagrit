@@ -10,7 +10,14 @@ Author: Kevin Amayi
 Requires at least: 2.3.*
 */
 
+
+require_once 'helpers/migration_helper.php';
+
 const IMPREST_MODULE_NAME = 'imprest';
+
+// Run migrations when the module is loaded
+run_module_migrations();
+
 
 class Imprest_Management_System
 {
@@ -76,17 +83,6 @@ class Imprest_Management_System
             'icon' => 'fa fa-home',
             'position' => 10,
         ];
-
-        // Build menu dynamically based on permissions
-        if (staff_can('view_all_events', 'imprest-events')) {
-            $menu['children'][] = [
-                'slug' => 'events',
-                'name' => 'Events',
-                'href' => admin_url(IMPREST_MODULE_NAME . '/events'),
-                'icon' => 'fa fa-calendar',
-                'position' => 11,
-            ];
-        }
 
         if (staff_can('manages_expense_categories', 'imprest-expense-categories')) {
             $menu['children'][] = [

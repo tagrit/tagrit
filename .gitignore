@@ -6,5 +6,4 @@ README.md
 uploads
 /vendor
 /application/config/.env.*.php
-/application/config/.env.*.php
 !/application/config/.env.local-sample.php
