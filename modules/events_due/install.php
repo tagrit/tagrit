@@ -292,6 +292,7 @@ foreach ($event_details as $event) {
     // Prepare the data to insert or update
     $data = [
         'event_id' => $event->event_id,
+        'event_unique_code' => generateEventUniqueCode($event->event_id, $event->venue, $event->location, $event->start_date),
         'location' => $event->location,
         'venue' => $event->venue,
         'start_date' => $event->start_date,
