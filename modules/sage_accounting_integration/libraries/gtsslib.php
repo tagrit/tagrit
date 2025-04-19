@@ -1,27 +1,88 @@
 <?php if(count(get_included_files()) == 1) exit("No direct script access allowed");
 
-defined('LB_API_DEBUG') or define("LB_API_DEBUG", false);
-defined('LB_SHOW_UPDATE_PROGRESS') or define("LB_SHOW_UPDATE_PROGRESS", true);
+if (!defined("LB_API_DEBUG")) {
+    define("LB_API_DEBUG", false);
+}
 
-defined('LB_TEXT_CONNECTION_FAILED') or define("LB_TEXT_CONNECTION_FAILED", 'Server is unavailable at the moment, please try again.');
-defined('LB_TEXT_INVALID_RESPONSE') or define("LB_TEXT_INVALID_RESPONSE", 'Server returned an invalid response, please contact support.');
-defined('LB_TEXT_VERIFIED_RESPONSE') or define("LB_TEXT_VERIFIED_RESPONSE", 'Verified! Thanks for purchasing.');
-defined('LB_TEXT_PREPARING_MAIN_DOWNLOAD') or define("LB_TEXT_PREPARING_MAIN_DOWNLOAD", 'Preparing to download main update...');
-defined('LB_TEXT_MAIN_UPDATE_SIZE') or define("LB_TEXT_MAIN_UPDATE_SIZE", 'Main Update size:');
-defined('LB_TEXT_DONT_REFRESH') or define("LB_TEXT_DONT_REFRESH", '(Please do not refresh the page).');
-defined('LB_TEXT_DOWNLOADING_MAIN') or define("LB_TEXT_DOWNLOADING_MAIN", 'Downloading main update...');
-defined('LB_TEXT_UPDATE_PERIOD_EXPIRED') or define("LB_TEXT_UPDATE_PERIOD_EXPIRED", 'Your update period has ended or your license is invalid, please contact support.');
-defined('LB_TEXT_UPDATE_PATH_ERROR') or define("LB_TEXT_UPDATE_PATH_ERROR", 'Folder does not have write permission or the update file path could not be resolved, please contact support.');
-defined('LB_TEXT_MAIN_UPDATE_DONE') or define("LB_TEXT_MAIN_UPDATE_DONE", 'Main update files downloaded and extracted.');
-defined('LB_TEXT_UPDATE_EXTRACTION_ERROR') or define("LB_TEXT_UPDATE_EXTRACTION_ERROR", 'Update zip extraction failed.');
-defined('LB_TEXT_PREPARING_SQL_DOWNLOAD') or define("LB_TEXT_PREPARING_SQL_DOWNLOAD", 'Preparing to download SQL update...');
-defined('LB_TEXT_SQL_UPDATE_SIZE') or define("LB_TEXT_SQL_UPDATE_SIZE", 'SQL Update size:');
-defined('LB_TEXT_DOWNLOADING_SQL') or define("LB_TEXT_DOWNLOADING_SQL", 'Downloading SQL update...');
-defined('LB_TEXT_SQL_UPDATE_DONE') or define("LB_TEXT_SQL_UPDATE_DONE", 'SQL update files downloaded.');
-defined('LB_TEXT_UPDATE_WITH_SQL_IMPORT_FAILED') or define("LB_TEXT_UPDATE_WITH_SQL_IMPORT_FAILED", 'Application was successfully updated but automatic SQL importing failed, please import the downloaded SQL file in your database manually.');
-defined('LB_TEXT_UPDATE_WITH_SQL_IMPORT_DONE') or define("LB_TEXT_UPDATE_WITH_SQL_IMPORT_DONE", 'Application was successfully updated and SQL file was automatically imported.');
-defined('LB_TEXT_UPDATE_WITH_SQL_DONE') or define("LB_TEXT_UPDATE_WITH_SQL_DONE", 'Application was successfully updated, please import the downloaded SQL file in your database manually.');
-defined('LB_TEXT_UPDATE_WITHOUT_SQL_DONE') or define("LB_TEXT_UPDATE_WITHOUT_SQL_DONE", 'Application was successfully updated, there were no SQL updates.');
+if (!defined("LB_SHOW_UPDATE_PROGRESS")) {
+    define("LB_SHOW_UPDATE_PROGRESS", true);
+}
+
+if (!defined("LB_TEXT_CONNECTION_FAILED")) {
+    define("LB_TEXT_CONNECTION_FAILED", 'Server is unavailable at the moment, please try again.');
+}
+
+if (!defined("LB_TEXT_INVALID_RESPONSE")) {
+    define("LB_TEXT_INVALID_RESPONSE", 'Server returned an invalid response, please contact support.');
+}
+
+if (!defined("LB_TEXT_VERIFIED_RESPONSE")) {
+    define("LB_TEXT_VERIFIED_RESPONSE", 'Verified! Thanks for purchasing.');
+}
+
+if (!defined("LB_TEXT_PREPARING_MAIN_DOWNLOAD")) {
+    define("LB_TEXT_PREPARING_MAIN_DOWNLOAD", 'Preparing to download main update...');
+}
+
+if (!defined("LB_TEXT_MAIN_UPDATE_SIZE")) {
+    define("LB_TEXT_MAIN_UPDATE_SIZE", 'Main Update size:');
+}
+
+if (!defined("LB_TEXT_DONT_REFRESH")) {
+    define("LB_TEXT_DONT_REFRESH", '(Please do not refresh the page).');
+}
+
+if (!defined("LB_TEXT_DOWNLOADING_MAIN")) {
+    define("LB_TEXT_DOWNLOADING_MAIN", 'Downloading main update...');
+}
+
+if (!defined("LB_TEXT_UPDATE_PERIOD_EXPIRED")) {
+    define("LB_TEXT_UPDATE_PERIOD_EXPIRED", 'Your update period has ended or your license is invalid, please contact support.');
+}
+
+if (!defined("LB_TEXT_UPDATE_PATH_ERROR")) {
+    define("LB_TEXT_UPDATE_PATH_ERROR", 'Folder does not have write permission or the update file path could not be resolved, please contact support.');
+}
+
+if (!defined("LB_TEXT_MAIN_UPDATE_DONE")) {
+    define("LB_TEXT_MAIN_UPDATE_DONE", 'Main update files downloaded and extracted.');
+}
+
+if (!defined("LB_TEXT_UPDATE_EXTRACTION_ERROR")) {
+    define("LB_TEXT_UPDATE_EXTRACTION_ERROR", 'Update zip extraction failed.');
+}
+
+if (!defined("LB_TEXT_PREPARING_SQL_DOWNLOAD")) {
+    define("LB_TEXT_PREPARING_SQL_DOWNLOAD", 'Preparing to download SQL update...');
+}
+
+if (!defined("LB_TEXT_SQL_UPDATE_SIZE")) {
+    define("LB_TEXT_SQL_UPDATE_SIZE", 'SQL Update size:');
+}
+
+if (!defined("LB_TEXT_DOWNLOADING_SQL")) {
+    define("LB_TEXT_DOWNLOADING_SQL", 'Downloading SQL update...');
+}
+
+if (!defined("LB_TEXT_SQL_UPDATE_DONE")) {
+    define("LB_TEXT_SQL_UPDATE_DONE", 'SQL update files downloaded.');
+}
+
+if (!defined("LB_TEXT_UPDATE_WITH_SQL_IMPORT_FAILED")) {
+    define("LB_TEXT_UPDATE_WITH_SQL_IMPORT_FAILED", 'Application was successfully updated but automatic SQL importing failed, please import the downloaded SQL file in your database manually.');
+}
+
+if (!defined("LB_TEXT_UPDATE_WITH_SQL_IMPORT_DONE")) {
+    define("LB_TEXT_UPDATE_WITH_SQL_IMPORT_DONE", 'Application was successfully updated and SQL file was automatically imported.');
+}
+
+if (!defined("LB_TEXT_UPDATE_WITH_SQL_DONE")) {
+    define("LB_TEXT_UPDATE_WITH_SQL_DONE", 'Application was successfully updated, please import the downloaded SQL file in your database manually.');
+}
+
+if (!defined("LB_TEXT_UPDATE_WITHOUT_SQL_DONE")) {
+    define("LB_TEXT_UPDATE_WITHOUT_SQL_DONE", 'Application was successfully updated, there were no SQL updates.');
+}
 
 if(!LB_API_DEBUG){
 	@ini_set('display_errors', 0);

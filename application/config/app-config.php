@@ -48,8 +48,3 @@ define('APP_CSRF_PROTECTION', true);
 
 // Perfex SaaS config (unchanged)
 require_once(FCPATH . 'modules/perfex_saas/config/app-config.php');
-
-define('APP_DB_USERNAME', getenv('APP_DB_USERNAME'));
-define('APP_DB_PASSWORD', getenv('APP_DB_PASSWORD'));
-
-//deactivate module before going live
