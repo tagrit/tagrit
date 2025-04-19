@@ -70,7 +70,7 @@ function _apply_menu_items_position($items, $options)
         $items = [];
     }
 
-    if (!is_array($options)) {
+    if (is_array($options)) {
         $CI = &get_instance();
         // Has applied options
         $newItems = [];
@@ -97,22 +97,23 @@ function _apply_menu_items_position($items, $options)
 
         // Let's check if item is missed from $items to $newItems
 
-        foreach ($items as $key => $item) {
-            if (!in_array($key, $newItemsAddedKeys)) {
-                $newItems[$key] = $item;
-            }
-
-            if (isset($item['collapse'])) {
-                foreach ($item['children'] as $childKey => $child) {
-                    if (!in_array($child['slug'], $newItemsAddedKeys)) {
-                        $newItems[$key]['children'][] = $child;
-                    }
+        if (is_array($items)) {
+            foreach ($items as $key => $item) {
+                if (!in_array($key, $newItemsAddedKeys)) {
+                    $newItems[$key] = $item;
                 }
 
-                $newItems[$key]['children'] = Arr::uniqueByKey($newItems[$key]['children'], 'slug');
+                if (isset($item['collapse'])) {
+                    foreach ($item['children'] as $childKey => $child) {
+                        if (!in_array($child['slug'], $newItemsAddedKeys)) {
+                            $newItems[$key]['children'][] = $child;
+                        }
+                    }
+
+                    $newItems[$key]['children'] = Arr::uniqueByKey($newItems[$key]['children'], 'slug');
+                }
             }
         }
-
         $items = $newItems;
     }
 
