@@ -73,13 +73,13 @@ function _apply_menu_items_position($items, $options)
     if (!is_array($options)) {
         $CI = &get_instance();
         // Has applied options
-        $newItems          = [];
+        $newItems = [];
         $newItemsAddedKeys = [];
 
         foreach ($options as $key => $item) {
             // Check if the item is found because can be removed
             if ($newItem = $CI->app_menu->filter_item($items, $item->id)) {
-                $newItems[$key]      = $newItem;
+                $newItems[$key] = $newItem;
                 $newItemsAddedKeys[] = $key;
 
                 $newItems[$key]['children'] = [];
@@ -88,7 +88,7 @@ function _apply_menu_items_position($items, $options)
                     foreach ($item->children as $child) {
                         if (property_exists($child, 'id') && $newChildItem = $CI->app_menu->filter_item($items, $child->id)) {
                             $newItems[$key]['children'][] = $newChildItem;
-                            $newItemsAddedKeys[]          = $newChildItem['slug'];
+                            $newItemsAddedKeys[] = $newChildItem['slug'];
                         }
                     }
                 }
@@ -96,6 +96,7 @@ function _apply_menu_items_position($items, $options)
         }
 
         // Let's check if item is missed from $items to $newItems
+
         foreach ($items as $key => $item) {
             if (!in_array($key, $newItemsAddedKeys)) {
                 $newItems[$key] = $item;
@@ -116,18 +117,19 @@ function _apply_menu_items_position($items, $options)
     }
 
     // Finally apply the positions
-    foreach ($items as $key => $item) {
-        if (isset($options->{$item['slug']})) {
-            $items[$key]['position'] = (int) $options->{$item['slug']}->position;
+    if (is_object($options)) { // Add this check
+        foreach ($items as $key => $item) {
+            if (isset($options->{$item['slug']})) {
+                $items[$key]['position'] = (int)$options->{$item['slug']}->position;
 
-            foreach ($item['children'] as $childKey => $child) {
-                if (isset($options->{$item['slug']}->children->{$child['slug']})) {
-                    $items[$key]['children'][$childKey]['position'] = (int) $options->{$item['slug']}->children->{$child['slug']}->position;
+                foreach ($item['children'] as $childKey => $child) {
+                    if (isset($options->{$item['slug']}->children->{$child['slug']})) {
+                        $items[$key]['children'][$childKey]['position'] = (int)$options->{$item['slug']}->children->{$child['slug']}->position;
+                    }
                 }
             }
         }
     }
-
     return $items;
 }
 
