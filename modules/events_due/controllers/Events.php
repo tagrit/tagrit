@@ -47,6 +47,9 @@ class Events extends AdminController
             ]);
         }
 
+        // Attempt to fetch event data
+        $event_data = null;
+
         // Fetch event data based on the stored session data
         if ($event_id && $location && $venue && $start_date && $end_date) {
             $event_data = $this->Event_model->event_details($event_id, $location, $venue, $start_date, $end_date);
@@ -57,9 +60,8 @@ class Events extends AdminController
             }
         }
 
-        // Retrieve event data from session if available
-        $data['event_data'] = $this->session->userdata('event_data');
-
+        // Use newly fetched data OR fallback to session
+        $data['event_data'] = $event_data ?: $this->session->userdata('event_data');
 
         if (empty($data['event_data'])) {
             show_error('No event data available.', 404);
