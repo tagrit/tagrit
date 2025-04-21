@@ -56,6 +56,7 @@ class Cronjobs extends App_Controller
 
     private function queue_reminder_email($to, $client, $client_list, $event_name, $event_date, $event_location)
     {
+
         $table = db_prefix() . '_notification_queue';
 
         // Find matching rows
@@ -76,10 +77,14 @@ class Cronjobs extends App_Controller
             }
         }
 
+
         // Add current client list
         if (is_array($client_list)) {
             $merged_clients = array_merge($merged_clients, $client_list);
+        }else{
+            $merged_clients = array_merge($merged_clients, unserialize($client_list));
         }
+
 
         // Optional: Remove duplicates by email or full name
         $merged_clients = array_unique($merged_clients, SORT_REGULAR);
@@ -98,7 +103,7 @@ class Cronjobs extends App_Controller
         $this->db->where('event_name', $event_name);
         $this->db->where('client_name', $client);
         $this->db->where('event_date', $event_date);
-        $this->db->where('status', 'pending');
+        $this->db->where('event_location', $event_location);
         $this->db->where('type', 'event_reminder');
         $existing_reminder = $this->db->get($table)->row();
 
