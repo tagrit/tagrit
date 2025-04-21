@@ -41,13 +41,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 this.closest(".delegate-entry").remove();
             });
         });
-
-
     }
-
-    // Listen for form submission
-    document.getElementById('approve-fund-request-form').addEventListener('submit', function () {
-        document.getElementById('spanLoader').style.display = 'block';
-    });
 
 });

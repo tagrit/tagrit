@@ -33,7 +33,7 @@ class Events_Due_System
         // Corrected hooks to use [$this, 'method_name'] instead of a plain function name
         hooks()->add_action('app_admin_head', [$this, 'events_due_head_components']);
         hooks()->add_action('app_admin_footer', [$this, 'events_due_footer_components']);
-        
+
         // Global css
         // hooks()->add_action('app_admin_head', 'global_styles');
     }
@@ -145,8 +145,6 @@ class Events_Due_System
 
     public function init_menu_items_and_create_permissions()
     {
-        $this->create_permissions();
-
         $CI = &get_instance();
 
         // Define the base menu
@@ -229,7 +227,6 @@ class Events_Due_System
         }
     }
 
-    private function create_permissions() {}
 }
 
 // Instantiate the module class to initialize it
