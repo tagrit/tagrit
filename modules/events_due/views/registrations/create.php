@@ -3,8 +3,20 @@
 <div id="wrapper">
     <div class="content">
 
-         <span id="spanLoader" style="display:none; position: fixed; top: 50%; left: 50%; z-index: 9999;"
-               class="loader"></span>
+        <div class="circle-loader-container" id="circleLoader" style="display:none;">
+            <div class="circle">
+                <div class="dot dot1"></div>
+                <div class="dot dot2"></div>
+                <div class="dot dot3"></div>
+                <div class="dot dot4"></div>
+                <div class="dot dot5"></div>
+                <div class="dot dot6"></div>
+                <div class="dot dot7"></div>
+                <div class="dot dot8"></div>
+            </div>
+        </div>
+
+
 
         <div class="panel_s">
             <div class="panel-body">
@@ -283,7 +295,7 @@
 
                     <!-- Submit Button -->
                     <div class="col-md-12 mtop15">
-                        <button type="submit" class="btn btn-primary btn-block">Submit Registration</button>
+                        <button id="submitRegistrationBtn" type="submit" class="btn btn-primary btn-block">Submit Registration</button>
                     </div>
                     <?php echo form_close(); ?>
                 </div>
@@ -387,6 +399,7 @@
                         } else {
                             console.error('Error:', response.error);
                             alert('Error: ' + response.error);
+                            document.getElementById('circleLoader').style.display = 'none';
                         }
 
                         $('#venue_id').selectpicker('refresh');
@@ -394,12 +407,23 @@
                     error: function (xhr, status, error) {
                         console.error('AJAX Error:', status, error, xhr);
                         alert('Failed to fetch locations. Please try again.');
+                        document.getElementById('circleLoader').style.display = 'none';
                     }
                 });
             } else {
                 $('#venue_id').empty().append('<option value="">Select Location</option>');
                 $('#venue_id').selectpicker('refresh');
             }
+        });
+
+
+        // Listen for form submission
+        document.getElementById('register-for-event-form').addEventListener('submit', function (event) {
+            document.getElementById('circleLoader').style.display = 'block';
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'  // Smooth scrolling effect
+            });
         });
 
     });

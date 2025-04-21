@@ -179,6 +179,7 @@ class Registrations extends AdminController
                         'invoice_number' => $this->generate_invoice_number(),
                         'total_fee' => $numDelegates * $costPerDelegate,
                         'cost_per_delegate' => $costPerDelegate,
+                        'num_of_delegates' => $numDelegates,
                         'vat_per_delegate' => (0.16 * $numDelegates * $costPerDelegate) / $numDelegates,
                         'organization' => $organization,
                         'total_chargeable' => 1.16 * $numDelegates * $costPerDelegate,
@@ -186,9 +187,9 @@ class Registrations extends AdminController
                         'event' => $eventName,
                         'total_tax' => 0.16 * $numDelegates * $costPerDelegate,
                     ],
-                    'course_content.docx' => [
-                        'event' => $eventName,
-                    ],
+//                    'course_content.docx' => [
+//                        'event' => $eventName,
+//                    ],
                 ];
 
                 $startDate = strtotime($input['start_date'] ?? '');
@@ -203,7 +204,14 @@ class Registrations extends AdminController
                 $generatedFiles = $this->fillWordTemplates($templates);
                 $remaining_delegates = array_slice($input['delegates'], 1);
                 $cc_emails = array_column($remaining_delegates, 'email');
-                // $cc_emails[] = 'customerservice@capabuil.com';
+
+                $host = $_SERVER['HTTP_HOST'];
+
+                if (strpos($host, 'app') !== false) {
+                    $cc_emails[] = 'kevinmusungu455@gmail.com';
+                } elseif (strpos($host, 'capabuil') !== false) {
+                    $cc_emails[] = 'customerservice@capabuil.com';
+                }
 
                 $this->send_email_with_attachments(
                     $input['delegates'][0]['first_name'] . ' ' . $input['delegates'][0]['last_name'],
