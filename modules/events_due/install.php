@@ -161,7 +161,7 @@ $email_templates_data = [
         'slug' => 'event-due-registration',
         'language' => 'english',
         'name' => 'Event Registration (sent client)',
-        'subject' => 'Event Registration',
+        'subject' => 'event_name, date, location',
         'message' => '
 <html>
 <head>

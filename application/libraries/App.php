@@ -100,11 +100,16 @@ class App
         $sections = $this->settingsSections;
 
         foreach ($sections as $key => $section) {
-            $sections[$key]['children'] = app_sort_by_position($section['children']);
+            if (isset($section['children']) && is_array($section['children'])) {
+                $sections[$key]['children'] = app_sort_by_position($section['children']);
+            } else {
+                $sections[$key]['children'] = []; // Optional: prevent issues later
+            }
         }
 
         return $sections;
     }
+
 
     public function add_settings_section($id, $data)
     {
