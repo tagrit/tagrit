@@ -61,7 +61,6 @@ jobs:
             git add .
             git commit -m "Auto-commit before reset on \$(date +'%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
             git fetch --all
-            git reset --hard origin/$BRANCH_NAME
             git pull origin $BRANCH_NAME --rebase --force
           
             PHP_BIN="/opt/cpanel/ea-php82/root/usr/bin/php"
@@ -103,7 +102,6 @@ jobs:
             git add .
             git commit -m "Auto-commit before reset on \$(date +'%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
             git fetch --all
-            git reset --hard origin/master
             git pull origin master --rebase --force
           
             echo "📦 Running composer install..."
