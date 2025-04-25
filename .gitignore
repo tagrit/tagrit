@@ -7,3 +7,22 @@ uploads
 /vendor
 /application/config/.env.*.php
 !/application/config/.env.local-sample.php
+
+#ignore file upload
+#1. imprest module
+modules/imprest/assets/*
+!modules/imprest/assets/css/
+!modules/imprest/assets/js/
+
+#2. Events module
+modules/events_due/assets/*
+!modules/events_due/assets/css/
+!modules/events_due/assets/js/
+!modules/events_due/assets/templates/
+
+#2. Courier module
+modules/courier/assets/*
+!modules/courier/assets/*.css
+!modules/courier/assets/*.json
+!modules/courier/assets/*.js
+

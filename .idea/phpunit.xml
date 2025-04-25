@@ -3,6 +3,7 @@
   <component name="PHPUnit">
     <option name="directories">
       <list>
+        <option value="$PROJECT_DIR$/modules/file_sharing/vendor/kunalvarma05/dropbox-php-sdk/tests" />
         <option value="$PROJECT_DIR$/modules/courier/libraries/php-barcode-generator-main/tests" />
       </list>
     </option>
