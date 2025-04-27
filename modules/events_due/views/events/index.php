@@ -67,15 +67,16 @@
                                             ?>
                                         </p>
                                     </td>
-                                    <td >
+                                    <td>
                                         <?php
                                         echo $event->location . ' - ' . $event->venue;
                                         ?>
                                     </td>
-                                    <td >
-                                        <?php
-                                        echo $event->event_unique_code;
-                                        ?>
+                                    <td class="copy-cell">
+                                        <span class="copy-text"><?php echo $event->event_unique_code; ?></span>
+                                        <button class="copy-btn" onclick="copyToClipboard(this)" title="Copy">
+                                            <i class="fa fa-copy"></i>
+                                        </button>
                                     </td>
                                     <td>
                                         <?php echo form_open('admin/events_due/events/view', [
@@ -161,6 +162,18 @@
 </div>
 <?php init_tail(); ?>
 <script>
+
+    function copyToClipboard(btn) {
+        const text = btn.closest('.copy-cell').querySelector('.copy-text').textContent.trim();
+        navigator.clipboard.writeText(text).then(() => {
+            const original = btn.innerHTML;
+            btn.innerHTML = '<i class="fa fa-check" style="color:green;"></i>';
+            setTimeout(() => {
+                btn.innerHTML = original;
+            }, 1500);
+        });
+    }
+
     $(document).ready(function () {
         $('.open-attendance-modal').on('click', function () {
             let eventId = $(this).data('event-id');
@@ -175,5 +188,6 @@
             $('#startDate').val(startDate);
             $('#endDate').val(endDate);
         });
+
     });
 </script>
