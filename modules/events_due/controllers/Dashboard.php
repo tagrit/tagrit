@@ -21,5 +21,4 @@ class Dashboard extends AdminController
         $this->load->view('dashboard', $data);
     }
 
-
 }
