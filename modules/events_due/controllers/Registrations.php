@@ -1,7 +1,9 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
+use PhpOffice\PhpWord\IOFactory;
 use PhpOffice\PhpWord\TemplateProcessor;
+use PhpOffice\PhpWord\Settings;
 
 class Registrations extends AdminController
 {
@@ -257,7 +259,6 @@ class Registrations extends AdminController
         return $invoice_number;
     }
 
-
     private function fillWordTemplates($templates)
     {
         $generatedFiles = []; // Should be a flat array
@@ -270,25 +271,71 @@ class Registrations extends AdminController
         }
 
         foreach ($templates as $templateFile => $data) {
-            $templatePath = $templateFolder . $templateFile;
-            $fileName = pathinfo($templateFile, PATHINFO_FILENAME) . '_' . time() . '.docx';
-            $outputFile = $outputFolder . $fileName;
+            try {
+                $templatePath = $templateFolder . $templateFile;
+                $fileName = pathinfo($templateFile, PATHINFO_FILENAME) . '_' . time() . '.docx';
+                $outputFile = $outputFolder . $fileName;
 
-            // Load template and replace placeholders dynamically
-            $templateProcessor = new TemplateProcessor($templatePath);
+                // Load template and replace placeholders dynamically
+                if (!file_exists($templatePath)) {
+                    throw new Exception("Template file does not exist: $templatePath");
+                }
 
-            foreach ($data as $key => $value) {
-                $templateProcessor->setValue($key, $value);
+                $templateProcessor = new TemplateProcessor($templatePath);
+
+                foreach ($data as $key => $value) {
+                    $templateProcessor->setValue($key, $value);
+                }
+
+                $templateProcessor->saveAs($outputFile);
+
+                // Convert DOCX to PDF using LibreOffice command-line
+                $pdfFileName = pathinfo($fileName, PATHINFO_FILENAME) . '.pdf';
+                $pdfOutputFile = $outputFolder . $pdfFileName;
+
+                $this->convertDocxToPdf($outputFile, $pdfOutputFile);
+
+                // Append the PDF file to the generated files array
+                $generatedFiles[] = $pdfOutputFile;
+
+            } catch (Exception $e) {
+                // Catch any exceptions and log the error message
+                dd("Error processing template $templateFile: " . $e->getMessage());
+
+                // You can also return or store error details if necessary
+                // For example, you might want to track failed files and continue processing others
+                $generatedFiles[] = "Error processing $templateFile: " . $e->getMessage();
             }
-
-            $templateProcessor->saveAs($outputFile);
-
-            // Append each file directly to the array (fixes nested array issue)
-            $generatedFiles[] = $outputFile;
         }
 
-        return $generatedFiles; // Return a flat array
+        return $generatedFiles; // Return a flat array of PDF paths (including errors if any)
     }
+
+    private function convertDocxToPdf($docxFile, $pdfOutputFile)
+    {
+        // Path to LibreOffice binary (make sure this is correctly set)
+        $libreOfficePath = '/usr/bin/libreoffice';  // Adjust the path if necessary
+
+        // Ensure the LibreOffice binary is available
+        if (!file_exists($libreOfficePath)) {
+            throw new Exception('LibreOffice binary not found at ' . $libreOfficePath);
+        }
+
+        // Command to run LibreOffice in headless mode for DOCX to PDF conversion
+        $command = escapeshellcmd("sudo $libreOfficePath --headless --convert-to pdf --outdir " . escapeshellarg(dirname($pdfOutputFile)) . " " . escapeshellarg($docxFile));
+
+        // Capture the output and error messages
+        $output = shell_exec($command . ' 2>&1');  // Capture both stdout and stderr
+
+        // Check if the PDF file was created successfully
+        if (!file_exists($pdfOutputFile)) {
+            throw new Exception('PDF conversion failed for ' . $docxFile . '. Output: ' . $output);
+        }
+
+        // Optionally, log the output for debugging
+        error_log("LibreOffice output for $docxFile: $output");
+    }
+
 
     public function send_email_with_attachments($client, $to, $generatedFiles, $event_name, $cc_emails, $date, $location)
     {
