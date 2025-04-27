@@ -276,7 +276,6 @@ class Registrations extends AdminController
                 $fileName = pathinfo($templateFile, PATHINFO_FILENAME) . '_' . time() . '.docx';
                 $outputFile = $outputFolder . $fileName;
 
-                // Load template and replace placeholders dynamically
                 if (!file_exists($templatePath)) {
                     throw new Exception("Template file does not exist: $templatePath");
                 }
@@ -289,21 +288,14 @@ class Registrations extends AdminController
 
                 $templateProcessor->saveAs($outputFile);
 
-                // Convert DOCX to PDF using LibreOffice command-line
                 $pdfFileName = pathinfo($fileName, PATHINFO_FILENAME) . '.pdf';
                 $pdfOutputFile = $outputFolder . $pdfFileName;
 
                 $this->convertDocxToPdf($outputFile, $pdfOutputFile);
-
-                // Append the PDF file to the generated files array
                 $generatedFiles[] = $pdfOutputFile;
 
             } catch (Exception $e) {
-                // Catch any exceptions and log the error message
-                dd("Error processing template $templateFile: " . $e->getMessage());
-
-                // You can also return or store error details if necessary
-                // For example, you might want to track failed files and continue processing others
+                error_log("Error processing template $templateFile: " . $e->getMessage());
                 $generatedFiles[] = "Error processing $templateFile: " . $e->getMessage();
             }
         }
