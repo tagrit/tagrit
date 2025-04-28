@@ -67,10 +67,16 @@
                             }
                             ?>
                         </span></p>
-                        <p><strong>UNIQUE CODE:</strong> <span id="trainers">
-                            <?= htmlspecialchars(strtoupper($event_data['event_unique_code'])); ?>
-                        </span>
+                        <p><strong>UNIQUE CODE:</strong>
+                            <span id="unique_code">
+                              <?= htmlspecialchars(strtoupper($event_data['event_unique_code'])); ?>
+                             </span>
+                            <button style="margin-left:3px;" class="copy-btn" onclick="copyUniqueCodeToClipboard()"
+                                    title="Copy">
+                                <i class="fa fa-copy"></i>
+                            </button>
                         </p>
+
                     </div>
                 </div>
 
@@ -153,3 +159,18 @@
     </div>
 </div>
 <?php init_tail(); ?>
+<script>
+    function copyUniqueCodeToClipboard() {
+        const text = document.getElementById('unique_code').textContent.trim(); // Get the unique code text
+        navigator.clipboard.writeText(text).then(() => {
+            const copyButton = document.querySelector('.copy-btn');
+            const originalIcon = copyButton.innerHTML;
+            copyButton.innerHTML = '<i class="fa fa-check" style="color:green;"></i>'; // Change icon to checkmark
+            setTimeout(() => {
+                copyButton.innerHTML = originalIcon; // Restore original icon after 1.5 seconds
+            }, 1500);
+        }).catch(err => {
+            console.error('Copy failed', err);
+        });
+    }
+</script>

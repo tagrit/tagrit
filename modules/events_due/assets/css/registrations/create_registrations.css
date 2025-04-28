@@ -93,12 +93,26 @@
     max-width: 100%;
     width: 100%;
 }
+
 .circle-loader-container {
     position: fixed;
-    top: 50%;
-    left: 50%;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
     z-index: 9999;
-    transform: translate(-43%, -50%); /* Moved right by approx 7% of the screen width */
+    background: rgba(255, 255, 255, 0.7); /* overlay */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(4px); /* nice blur effect */
+}
+
+
+.blur {
+    filter: blur(4px);
+    pointer-events: none;
+    user-select: none;
 }
 
 .circle {
@@ -109,8 +123,8 @@
 }
 
 .dot {
-    width: 12px;
-    height: 12px;
+    width: 7px;
+    height: 7px;
     background-color: #FF3D00;
     border-radius: 50%;
     position: absolute;
@@ -129,23 +143,78 @@
 }
 
 /* Position dots in a circular path */
-.dot1 { top: 0%; left: 50%; transform: translate(-50%, 0); animation-delay: 0s; }
-.dot2 { top: 18%; left: 82%; transform: translate(-50%, -50%); animation-delay: 0.125s; }
-.dot3 { top: 50%; left: 100%; transform: translate(-50%, -50%); animation-delay: 0.25s; }
-.dot4 { top: 82%; left: 82%; transform: translate(-50%, -50%); animation-delay: 0.375s; }
-.dot5 { top: 100%; left: 50%; transform: translate(-50%, -100%); animation-delay: 0.5s; }
-.dot6 { top: 82%; left: 18%; transform: translate(-50%, -50%); animation-delay: 0.625s; }
-.dot7 { top: 50%; left: 0%; transform: translate(-50%, -50%); animation-delay: 0.75s; }
-.dot8 { top: 18%; left: 18%; transform: translate(-50%, -50%); animation-delay: 0.875s; }
+.dot1 {
+    top: 0%;
+    left: 50%;
+    transform: translate(-50%, 0);
+    animation-delay: 0s;
+}
+
+.dot2 {
+    top: 18%;
+    left: 82%;
+    transform: translate(-50%, -50%);
+    animation-delay: 0.125s;
+}
+
+.dot3 {
+    top: 50%;
+    left: 100%;
+    transform: translate(-50%, -50%);
+    animation-delay: 0.25s;
+}
+
+.dot4 {
+    top: 82%;
+    left: 82%;
+    transform: translate(-50%, -50%);
+    animation-delay: 0.375s;
+}
+
+.dot5 {
+    top: 100%;
+    left: 50%;
+    transform: translate(-50%, -100%);
+    animation-delay: 0.5s;
+}
+
+.dot6 {
+    top: 82%;
+    left: 18%;
+    transform: translate(-50%, -50%);
+    animation-delay: 0.625s;
+}
+
+.dot7 {
+    top: 50%;
+    left: 0%;
+    transform: translate(-50%, -50%);
+    animation-delay: 0.75s;
+}
+
+.dot8 {
+    top: 18%;
+    left: 18%;
+    transform: translate(-50%, -50%);
+    animation-delay: 0.875s;
+}
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 @keyframes bounce {
-    0% { transform: scale(1); }
-    100% { transform: scale(1.6); }
+    0% {
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(1.6);
+    }
 }
 
 
