@@ -68,7 +68,7 @@ if (strpos($host, 'localhost') !== false ||
     strpos($host, 'dev') !== false ||
     strpos($host, 'staging') !== false ||
     strpos($host, 'autoupdate') !== false) {
-    define('ENVIRONMENT', 'production');
+    define('ENVIRONMENT', 'development');
 } else {
     define('ENVIRONMENT', 'production');
 }

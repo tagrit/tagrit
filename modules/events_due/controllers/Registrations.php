@@ -148,6 +148,9 @@ class Registrations extends AdminController
 
                 $event_detail_id = $this->Event_details_model->add($eventData);
 
+                $this->create_unique_code($this->Event_details_model->get_event_detail($event_detail_id)[0]);
+
+
                 $attendanceData = [
                     'event_id' => $eventData['event_id'],
                     'venue' => $eventData['venue'],
@@ -247,6 +250,109 @@ class Registrations extends AdminController
             }
         }
 
+    }
+
+
+    public function create_unique_code_manually()
+    {
+        $event_details = $this->db->get(db_prefix() . '_events_details')->result();
+        foreach ($event_details as $event) {
+
+            if (empty($event->location)) {
+                $event->location = $event->venue;
+            }
+
+            $data = [
+                'event_id' => $event->event_id,
+                'event_unique_code' => $this->generateEventUniqueCode($event->event_id, $event->venue, $event->location, $event->start_date),
+                'location' => $event->location,
+                'venue' => $event->venue,
+                'start_date' => $event->start_date,
+                'end_date' => $event->end_date,
+            ];
+
+            $this->db->where('event_id', $event->event_id);
+            $this->db->where('location', $event->location);
+            $this->db->where('venue', $event->venue);
+            $this->db->where('start_date', $event->start_date);
+            $this->db->where('end_date', $event->end_date);
+            $query = $this->db->get(db_prefix() . 'event_unique_codes');
+
+            if ($query->num_rows() > 0) {
+                $this->db->where('event_id', $event->event_id);
+                $this->db->where('location', $event->location);
+                $this->db->where('venue', $event->venue);
+                $this->db->where('start_date', $event->start_date);
+                $this->db->where('end_date', $event->end_date);
+                $this->db->update(db_prefix() . 'event_unique_codes', $data);
+            } else {
+                $data['event_unique_code'] = $this->generateEventUniqueCode($event->event_id, $event->venue, $event->location, $event->start_date);
+                $this->db->insert(db_prefix() . 'event_unique_codes', $data);
+            }
+        }
+
+    }
+
+
+    public function create_unique_code($event)
+    {
+
+        if (empty($event->location)) {
+            $event->location = $event->venue;
+        }
+
+        $data = [
+            'event_id' => $event->event_id,
+            'event_unique_code' => $this->generateEventUniqueCode($event->event_id, $event->venue, $event->location, $event->start_date),
+            'location' => $event->location,
+            'venue' => $event->venue,
+            'start_date' => $event->start_date,
+            'end_date' => $event->end_date,
+        ];
+
+        // Check if the event already exists
+        $this->db->where('event_id', $event->event_id);
+        $this->db->where('location', $event->location);
+        $this->db->where('venue', $event->venue);
+        $this->db->where('start_date', $event->start_date);
+        $this->db->where('end_date', $event->end_date);
+        $query = $this->db->get(db_prefix() . 'event_unique_codes');
+
+        if ($query->num_rows() > 0) {
+            $this->db->where('event_id', $event->event_id);
+            $this->db->where('location', $event->location);
+            $this->db->where('venue', $event->venue);
+            $this->db->where('start_date', $event->start_date);
+            $this->db->where('end_date', $event->end_date);
+            $this->db->update(db_prefix() . 'event_unique_codes', $data);
+        } else {
+            $data['event_unique_code'] = $this->generateEventUniqueCode($event->event_id, $event->venue, $event->location, $event->start_date);
+            $this->db->insert(db_prefix() . 'event_unique_codes', $data);
+        }
+    }
+
+
+    function generateEventUniqueCode($event_id, $venue, $location, $start_date)
+    {
+        $event = $this->db->get_where(db_prefix() . '_events', ['id' => $event_id])->row();
+
+        if (!$event) {
+            return null;
+        }
+
+        // Ensure all values are non-null and default to empty strings if necessary
+        $eventName = isset($event->name) ? $event->name : '';
+        $venue = isset($venue) ? $venue : '';
+        $location = isset($location) ? $location : '';
+
+        // Clean and format inputs
+        $eventPart = strtoupper(substr(preg_replace('/[^A-Za-z]/', '', $eventName), 0, 4));
+        $venuePart = strtoupper(substr(preg_replace('/[^A-Za-z]/', '', $venue), 0, 3));
+        $locationPart = strtoupper(substr(preg_replace('/[^A-Za-z]/', '', $location), 0, 3));
+        $startDatePart = date('dmy', strtotime($start_date));
+
+        // Combine to create the code
+        return "{$eventPart}-{$venuePart}-{$locationPart}-{$startDatePart}";
     }
 
     private function generate_invoice_number()
