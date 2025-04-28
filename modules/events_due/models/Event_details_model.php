@@ -13,6 +13,15 @@ class Event_details_model extends App_Model
 
     }
 
+    public function get_event_detail($id = null)
+    {
+        if ($id) {
+            $this->db->where('id', $id);
+            return $this->db->get($this->table)->result();
+        }
+        return $this->db->get($this->table)->result();
+    }
+
     public function get($id = null)
     {
         if ($id) {

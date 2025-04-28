@@ -20,6 +20,7 @@ $route['admin/events_due/registrations/create'] = 'events_due/registrations/crea
 $route['admin/events_due/registrations/store'] = 'events_due/registrations/store';
 $route['admin/events_due/registrations/edit/(:num)'] = 'events_due/registrations/edit/$registration_id';
 $route['admin/events_due/registrations/update'] = 'events_due/registrations/update';
+$route['admin/events_due/registrations/create_unique_code_manually'] = 'events_due/registrations/create_unique_code_manually';
 
 //cronjobs
 $route['events_due/cronjobs/send_reminders'] = 'events_due/cronjobs/send_reminders';
