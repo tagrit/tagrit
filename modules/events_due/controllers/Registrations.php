@@ -172,7 +172,7 @@ class Registrations extends AdminController
                         'date' => $startDate,
                         'period' => $period,
                         'venue' => "$venue $location",
-                        'cost_per_delegate' => 'KSHS ' . (1.16 * $numDelegates * $costPerDelegate) / $numDelegates,
+                        'cost_per_delegate' => 'KSHS ' . number_format((1.16 * $numDelegates * $costPerDelegate) / $numDelegates),
                         'organization' => $organization,
                         'event' => $eventName,
                         'delegates' => $delegatesList,
