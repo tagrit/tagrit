@@ -1,7 +1,9 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
+use PhpOffice\PhpWord\IOFactory;
 use PhpOffice\PhpWord\TemplateProcessor;
+use PhpOffice\PhpWord\Settings;
 
 class Registrations extends AdminController
 {
@@ -146,6 +148,9 @@ class Registrations extends AdminController
 
                 $event_detail_id = $this->Event_details_model->add($eventData);
 
+                $this->create_unique_code($this->Event_details_model->get_event_detail($event_detail_id)[0]);
+
+
                 $attendanceData = [
                     'event_id' => $eventData['event_id'],
                     'venue' => $eventData['venue'],
@@ -167,7 +172,7 @@ class Registrations extends AdminController
                         'date' => $startDate,
                         'period' => $period,
                         'venue' => "$venue $location",
-                        'cost_per_delegate' => 'KSHS ' . (1.16 * $numDelegates * $costPerDelegate) / $numDelegates,
+                        'cost_per_delegate' => 'KSHS ' . number_format((1.16 * $numDelegates * $costPerDelegate) / $numDelegates),
                         'organization' => $organization,
                         'event' => $eventName,
                         'delegates' => $delegatesList,
@@ -247,6 +252,109 @@ class Registrations extends AdminController
 
     }
 
+
+    public function create_unique_code_manually()
+    {
+        $event_details = $this->db->get(db_prefix() . '_events_details')->result();
+        foreach ($event_details as $event) {
+
+            if (empty($event->location)) {
+                $event->location = $event->venue;
+            }
+
+            $data = [
+                'event_id' => $event->event_id,
+                'event_unique_code' => $this->generateEventUniqueCode($event->event_id, $event->venue, $event->location, $event->start_date),
+                'location' => $event->location,
+                'venue' => $event->venue,
+                'start_date' => $event->start_date,
+                'end_date' => $event->end_date,
+            ];
+
+            $this->db->where('event_id', $event->event_id);
+            $this->db->where('location', $event->location);
+            $this->db->where('venue', $event->venue);
+            $this->db->where('start_date', $event->start_date);
+            $this->db->where('end_date', $event->end_date);
+            $query = $this->db->get(db_prefix() . 'event_unique_codes');
+
+            if ($query->num_rows() > 0) {
+                $this->db->where('event_id', $event->event_id);
+                $this->db->where('location', $event->location);
+                $this->db->where('venue', $event->venue);
+                $this->db->where('start_date', $event->start_date);
+                $this->db->where('end_date', $event->end_date);
+                $this->db->update(db_prefix() . 'event_unique_codes', $data);
+            } else {
+                $data['event_unique_code'] = $this->generateEventUniqueCode($event->event_id, $event->venue, $event->location, $event->start_date);
+                $this->db->insert(db_prefix() . 'event_unique_codes', $data);
+            }
+        }
+
+    }
+
+
+    public function create_unique_code($event)
+    {
+
+        if (empty($event->location)) {
+            $event->location = $event->venue;
+        }
+
+        $data = [
+            'event_id' => $event->event_id,
+            'event_unique_code' => $this->generateEventUniqueCode($event->event_id, $event->venue, $event->location, $event->start_date),
+            'location' => $event->location,
+            'venue' => $event->venue,
+            'start_date' => $event->start_date,
+            'end_date' => $event->end_date,
+        ];
+
+        // Check if the event already exists
+        $this->db->where('event_id', $event->event_id);
+        $this->db->where('location', $event->location);
+        $this->db->where('venue', $event->venue);
+        $this->db->where('start_date', $event->start_date);
+        $this->db->where('end_date', $event->end_date);
+        $query = $this->db->get(db_prefix() . 'event_unique_codes');
+
+        if ($query->num_rows() > 0) {
+            $this->db->where('event_id', $event->event_id);
+            $this->db->where('location', $event->location);
+            $this->db->where('venue', $event->venue);
+            $this->db->where('start_date', $event->start_date);
+            $this->db->where('end_date', $event->end_date);
+            $this->db->update(db_prefix() . 'event_unique_codes', $data);
+        } else {
+            $data['event_unique_code'] = $this->generateEventUniqueCode($event->event_id, $event->venue, $event->location, $event->start_date);
+            $this->db->insert(db_prefix() . 'event_unique_codes', $data);
+        }
+    }
+
+
+    function generateEventUniqueCode($event_id, $venue, $location, $start_date)
+    {
+        $event = $this->db->get_where(db_prefix() . '_events', ['id' => $event_id])->row();
+
+        if (!$event) {
+            return null;
+        }
+
+        // Ensure all values are non-null and default to empty strings if necessary
+        $eventName = isset($event->name) ? $event->name : '';
+        $venue = isset($venue) ? $venue : '';
+        $location = isset($location) ? $location : '';
+
+        // Clean and format inputs
+        $eventPart = strtoupper(substr(preg_replace('/[^A-Za-z]/', '', $eventName), 0, 4));
+        $venuePart = strtoupper(substr(preg_replace('/[^A-Za-z]/', '', $venue), 0, 3));
+        $locationPart = strtoupper(substr(preg_replace('/[^A-Za-z]/', '', $location), 0, 3));
+        $startDatePart = date('dmy', strtotime($start_date));
+
+        // Combine to create the code
+        return "{$eventPart}-{$venuePart}-{$locationPart}-{$startDatePart}";
+    }
+
     private function generate_invoice_number()
     {
         $date_part = date('ymd'); // YYMMDD format (e.g., 250128 for 2025-01-28)
@@ -256,7 +364,6 @@ class Registrations extends AdminController
 
         return $invoice_number;
     }
-
 
     private function fillWordTemplates($templates)
     {
@@ -270,25 +377,63 @@ class Registrations extends AdminController
         }
 
         foreach ($templates as $templateFile => $data) {
-            $templatePath = $templateFolder . $templateFile;
-            $fileName = pathinfo($templateFile, PATHINFO_FILENAME) . '_' . time() . '.docx';
-            $outputFile = $outputFolder . $fileName;
+            try {
+                $templatePath = $templateFolder . $templateFile;
+                $fileName = pathinfo($templateFile, PATHINFO_FILENAME) . '_' . time() . '.docx';
+                $outputFile = $outputFolder . $fileName;
 
-            // Load template and replace placeholders dynamically
-            $templateProcessor = new TemplateProcessor($templatePath);
+                if (!file_exists($templatePath)) {
+                    throw new Exception("Template file does not exist: $templatePath");
+                }
 
-            foreach ($data as $key => $value) {
-                $templateProcessor->setValue($key, $value);
+                $templateProcessor = new TemplateProcessor($templatePath);
+
+                foreach ($data as $key => $value) {
+                    $templateProcessor->setValue($key, $value);
+                }
+
+                $templateProcessor->saveAs($outputFile);
+
+                $pdfFileName = pathinfo($fileName, PATHINFO_FILENAME) . '.pdf';
+                $pdfOutputFile = $outputFolder . $pdfFileName;
+
+                $this->convertDocxToPdf($outputFile, $pdfOutputFile);
+                $generatedFiles[] = $pdfOutputFile;
+
+            } catch (Exception $e) {
+                error_log("Error processing template $templateFile: " . $e->getMessage());
+                $generatedFiles[] = "Error processing $templateFile: " . $e->getMessage();
             }
-
-            $templateProcessor->saveAs($outputFile);
-
-            // Append each file directly to the array (fixes nested array issue)
-            $generatedFiles[] = $outputFile;
         }
 
-        return $generatedFiles; // Return a flat array
+        return $generatedFiles; // Return a flat array of PDF paths (including errors if any)
     }
+
+    private function convertDocxToPdf($docxFile, $pdfOutputFile)
+    {
+        // Path to LibreOffice binary (make sure this is correctly set)
+        $libreOfficePath = '/usr/bin/libreoffice';  // Adjust the path if necessary
+
+        // Ensure the LibreOffice binary is available
+        if (!file_exists($libreOfficePath)) {
+            throw new Exception('LibreOffice binary not found at ' . $libreOfficePath);
+        }
+
+        // Command to run LibreOffice in headless mode for DOCX to PDF conversion
+        $command = escapeshellcmd("sudo $libreOfficePath --headless --convert-to pdf --outdir " . escapeshellarg(dirname($pdfOutputFile)) . " " . escapeshellarg($docxFile));
+
+        // Capture the output and error messages
+        $output = shell_exec($command . ' 2>&1');  // Capture both stdout and stderr
+
+        // Check if the PDF file was created successfully
+        if (!file_exists($pdfOutputFile)) {
+            throw new Exception('PDF conversion failed for ' . $docxFile . '. Output: ' . $output);
+        }
+
+        // Optionally, log the output for debugging
+        error_log("LibreOffice output for $docxFile: $output");
+    }
+
 
     public function send_email_with_attachments($client, $to, $generatedFiles, $event_name, $cc_emails, $date, $location)
     {
