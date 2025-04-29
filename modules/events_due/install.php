@@ -212,7 +212,7 @@ p {
 </div>
 </body>
 </html>',
-        'fromname' => '{companyname} | CRM',
+        'fromname' => '{companyname}',
         'plaintext' => 0,
         'active' => 1,
         'order' => 0
@@ -257,7 +257,7 @@ p {
     </body>
     </html>
     ',
-        'fromname' => '{companyname} | CRM',
+        'fromname' => '{companyname}',
         'plaintext' => 0,
         'active' => 1,
         'order' => 0
