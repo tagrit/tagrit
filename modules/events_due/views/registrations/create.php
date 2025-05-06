@@ -199,7 +199,7 @@
                                                         DSAC
                                                     </option>
                                                     <option value="FESGI" <?= set_value('FESGI') == 'FESGI' ? 'selected' : '' ?>>
-                                                        DSAC
+                                                        FESGI
                                                     </option>
                                                 </select>
                                                 <?php echo form_error('division', '<div class="error-message">', '</div>'); ?>
