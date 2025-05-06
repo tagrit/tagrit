@@ -2,8 +2,10 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Migration_Add_columns_to_events_details  {
-    public function up() {
+class Migration_Add_columns_to_events_details
+{
+    public function up()
+    {
         $CI =& get_instance();
         $CI->load->database();
         $table = db_prefix() . '_events_details';
@@ -14,7 +16,9 @@ class Migration_Add_columns_to_events_details  {
             'setup' => 'VARCHAR(255) NULL',
             'type' => 'VARCHAR(255) NULL',
             'event_id' => 'INT NOT NULL',
-            'location' => 'TEXT NULL'
+            'location' => 'TEXT NULL',
+            'reminder_sent_at' => 'DATETIME NULL',
+            'registration_statuses_sent_at' => 'DATETIME NULL'
         ];
 
         // Add missing columns

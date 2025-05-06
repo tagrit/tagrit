@@ -44,11 +44,14 @@ class Registrations extends AdminController
                 $_POST['delegates'][$key]['email'] = $delegate['email'] ?? '';
                 $_POST['delegates'][$key]['phone'] = $delegate['phone'] ?? '';
 
-                // Set validation rules
+                // Set validation rules for only the first delegate
                 $this->form_validation->set_rules("delegates[$key][first_name]", 'First Name', 'trim|required');
                 $this->form_validation->set_rules("delegates[$key][last_name]", 'Last Name', 'trim|required');
                 $this->form_validation->set_rules("delegates[$key][email]", 'Email', 'trim|required|valid_email');
                 $this->form_validation->set_rules("delegates[$key][phone]", 'Phone', 'trim|required');
+
+                // Break after the first delegate
+                break;
             }
         }
 

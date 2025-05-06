@@ -189,12 +189,20 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="division" class="control-label">Division*</label>
-                                                <input type="text" id="division" name="division" class="form-control"
-                                                       placeholder="Enter division"
-                                                       value="<?= set_value('division'); ?>"
-                                                       required>
+                                                <select id="division" name="division" class="form-control selectpicker"
+                                                        data-live-search="true" required>
+                                                    <option value="">Select Division</option>
+                                                    <option value="ABA" <?= set_value('ABA') == 'ABA' ? 'selected' : '' ?>>
+                                                        ABA
+                                                    </option>
+                                                    <option value="DSAC" <?= set_value('DSAC') == 'DSAC' ? 'selected' : '' ?>>
+                                                        DSAC
+                                                    </option>
+                                                    <option value="FESGI" <?= set_value('FESGI') == 'FESGI' ? 'selected' : '' ?>>
+                                                        DSAC
+                                                    </option>
+                                                </select>
                                                 <?php echo form_error('division', '<div class="error-message">', '</div>'); ?>
-
                                             </div>
                                         </div>
 
@@ -219,7 +227,7 @@
                                                                 <input type="text"
                                                                        name="delegates[<?php echo $key; ?>][first_name]"
                                                                        class="form-control"
-                                                                       placeholder="First Name" required
+                                                                       placeholder="First Name"
                                                                        value="<?php echo $delegate['first_name']; ?>">
                                                                 <small class="text-danger"><?php echo form_error("delegates[$key][first_name]"); ?></small>
                                                             </div>
@@ -227,7 +235,7 @@
                                                                 <input type="text"
                                                                        name="delegates[<?php echo $key; ?>][last_name]"
                                                                        class="form-control"
-                                                                       placeholder="Last Name" required
+                                                                       placeholder="Last Name"
                                                                        value="<?php echo $delegate['last_name']; ?>">
                                                                 <small class="text-danger"><?php echo form_error("delegates[$key][last_name]"); ?></small>
                                                             </div>
@@ -235,7 +243,7 @@
                                                                 <input type="email"
                                                                        name="delegates[<?php echo $key; ?>][email]"
                                                                        class="form-control"
-                                                                       placeholder="Email" required
+                                                                       placeholder="Email"
                                                                        value="<?php echo $delegate['email']; ?>">
                                                                 <small class="text-danger"><?php echo form_error("delegates[$key][email]"); ?></small>
                                                             </div>
@@ -243,7 +251,7 @@
                                                                 <input type="text"
                                                                        name="delegates[<?php echo $key; ?>][phone]"
                                                                        class="form-control"
-                                                                       placeholder="Phone" required
+                                                                       placeholder="Phone"
                                                                        value="<?php echo $delegate['phone']; ?>">
                                                                 <small class="text-danger"><?php echo form_error("delegates[$key][phone]"); ?></small>
                                                             </div>
@@ -263,22 +271,22 @@
                                                         <div class="col-md-3">
                                                             <input type="text" name="delegates[0][first_name]"
                                                                    class="form-control"
-                                                                   placeholder="First Name" required>
+                                                                   placeholder="First Name">
                                                         </div>
                                                         <div style="margin-left:-20px;" class="col-md-3">
                                                             <input type="text" name="delegates[0][last_name]"
                                                                    class="form-control"
-                                                                   placeholder="Last Name" required>
+                                                                   placeholder="Last Name">
                                                         </div>
                                                         <div style="margin-left:-20px;" class="col-md-3">
                                                             <input type="email" name="delegates[0][email]"
                                                                    class="form-control"
-                                                                   placeholder="Email" required>
+                                                                   placeholder="Email">
                                                         </div>
                                                         <div style="margin-left:-20px;" class="col-md-3">
                                                             <input type="text" name="delegates[0][phone]"
                                                                    class="form-control"
-                                                                   placeholder="Phone" required>
+                                                                   placeholder="Phone">
                                                         </div>
                                                     </div>
                                                 <?php endif; ?>

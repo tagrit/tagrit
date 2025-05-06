@@ -107,7 +107,7 @@
                                                 data-start-date="<?php echo $event->start_date; ?>"
                                                 data-end-date="<?php echo $event->end_date; ?>"
                                                 class="btn btn-info open-attendance-modal">
-                                            <i class="fa fa-file"></i> Attendance sheet
+                                            <i class="fa fa-paperclip"></i> Attendance sheet
                                         </button>
                                     </td>
                                 </tr>

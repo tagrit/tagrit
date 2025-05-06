@@ -36,19 +36,21 @@ class Event_model extends App_Model
     public function events()
     {
         $this->db->select('
-        tblevents_due_events.event_id,
-        tblevents_due_events.start_date,
-        tblevents_due_events.end_date,
-        MAX(tblevents_due_events.setup) AS setup,
-        MAX(tblevents_due_events.division) AS division,
-        MAX(tblevents_due_events.type) AS type,
-        MAX(tblevents_due_events.revenue) AS revenue,
-        GROUP_CONCAT(DISTINCT tblevents_due_events.trainers) AS trainers,
-        tblevents_due_name.name AS event_name,
-        tblevents_due_events.location,
-        tblevents_due_events.venue,
-        MAX(tblevent_unique_codes.event_unique_code) AS event_unique_code
-    ');
+         tblevents_due_events.event_id,
+         tblevents_due_name.name AS event_name,
+         tblevents_due_events.location,
+         tblevents_due_events.venue,
+         MAX(tblevents_due_events.start_date) AS start_date,
+         MAX(tblevents_due_events.end_date) AS end_date,
+         MAX(tblevents_due_events.reminder_sent_at) AS reminder_sent_at,
+         MAX(tblevents_due_events.registration_statuses_sent_at) AS registration_statuses_sent_at,
+         MAX(tblevents_due_events.setup) AS setup,
+         MAX(tblevents_due_events.division) AS division,
+         MAX(tblevents_due_events.type) AS type,
+         MAX(tblevents_due_events.revenue) AS revenue,
+         GROUP_CONCAT(DISTINCT tblevents_due_events.trainers) AS trainers,
+         MAX(tblevent_unique_codes.event_unique_code) AS event_unique_code
+        ');
 
         $this->db->from(db_prefix() . '_events_details AS tblevents_due_events');
         $this->db->join(db_prefix() . '_events AS tblevents_due_name', 'tblevents_due_events.event_id = tblevents_due_name.id', 'left');
@@ -291,5 +293,6 @@ class Event_model extends App_Model
 
         return false; // Return false if insertion failed
     }
+
 
 }
