@@ -10,16 +10,16 @@ document.addEventListener("DOMContentLoaded", function () {
             delegateEntry.classList.add("row", "align-items-center", "delegate-entry");
             delegateEntry.innerHTML = `
                 <div class="mtop4 col-md-3">
-                    <input type="text" name="delegates[${delegateIndex}][first_name]" class="form-control" placeholder="First Name" required>
+                    <input type="text" name="delegates[${delegateIndex}][first_name]" class="form-control" placeholder="First Name">
                 </div>
                 <div style="margin-left:-20px;" class="mtop4 col-md-3">
-                    <input type="text" name="delegates[${delegateIndex}][last_name]" class="form-control" placeholder="Last Name" required>
+                    <input type="text" name="delegates[${delegateIndex}][last_name]" class="form-control" placeholder="Last Name">
                 </div>
                 <div style="margin-left:-20px;" class="mtop4 col-md-3">
-                    <input type="email" name="delegates[${delegateIndex}][email]" class="form-control" placeholder="Email" required>
+                    <input type="email" name="delegates[${delegateIndex}][email]" class="form-control" placeholder="Email">
                 </div>
                 <div style="margin-left:-20px;" class="mtop4 col-md-3">
-                    <input type="text" name="delegates[${delegateIndex}][phone]" class="form-control" placeholder="Phone" required>
+                    <input type="text" name="delegates[${delegateIndex}][phone]" class="form-control" placeholder="Phone">
                 </div>
                 <div class="mtop4 text-center">
                   <button style="margin-left: -20px; border: 0px; color: red; background-color: transparent;" type="button" class="remove-delegate">

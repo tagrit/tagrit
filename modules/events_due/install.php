@@ -100,8 +100,9 @@ $CI->db->query("DELETE FROM " . db_prefix() . "events_due_locations");
 // Insert locations
 $locations = [
     'Diani', 'Mombasa', 'Machakos', 'Nakuru', 'Naivasha',
-    'Kisumu', 'Thika', 'Eldoret', 'Dubai', 'Arusha',
-    'Malaysia', 'Singapore'
+    'Kisumu', 'Thika', 'Eldoret', 'Dubai',
+    'Singapore', 'Nairobi', 'Turkey', 'Dubai', 'Uganda',
+    'Tanzania', 'Rwanda'
 ];
 
 foreach ($locations as $location) {
@@ -128,19 +129,73 @@ $CI->db->query("DELETE FROM " . db_prefix() . "events_due_venues");
 
 // Venues with their corresponding locations
 $venues = [
-    ['name' => 'Sarova Hotel', 'location' => 'Mombasa'],
-    ['name' => 'Voyager Hotel', 'location' => 'Mombasa'],
+
+    //mombasa venues
+    ['name' => 'Sarova WhiteSands Hotel', 'location' => 'Mombasa'],
+    ['name' => 'Voyager Beach Resort Hotel', 'location' => 'Mombasa'],
+    ['name' => 'Bamburi Beach Hotel', 'location' => 'Mombasa'],
+    ['name' => 'Travellers Beach Hotel', 'location' => 'Mombasa'],
+
+    //Nairobi venues
+    ['name' => 'Nairobi Safari Club', 'location' => 'Nairobi'],
+    ['name' => 'Clarion Hotel', 'location' => 'Nairobi'],
+    ['name' => 'HillPark Hotel', 'location' => 'Nairobi'],
+
+    //Diani venues
     ['name' => 'Baobab Hotel', 'location' => 'Diani'],
+
+    //Machakos venues
     ['name' => 'Seo Hotel', 'location' => 'Machakos'],
+    ['name' => 'Maanzoni Hotel', 'location' => 'Machakos'],
     ['name' => 'Maanzoni Lodge', 'location' => 'Machakos'],
+
+    //Naivasha venues
     ['name' => 'Blooming Suites Hotel', 'location' => 'Naivasha'],
-    ['name' => 'Eseriani Hotel', 'location' => 'Naivasha'],
+    ['name' => 'Eseriani Hotel/Resort', 'location' => 'Naivasha'],
+    ['name' => 'Lake Naivasha Resort', 'location' => 'Naivasha'],
+
+    //Nakuru venues
     ['name' => 'Sarova Woodlands Hotel', 'location' => 'Nakuru'],
     ['name' => 'Ole Ken Hotel', 'location' => 'Nakuru'],
-    ['name' => 'Sarova Imperial', 'location' => 'Kisumu'],
+    ['name' => 'Merica Hotel', 'location' => 'Nakuru'],
+
+    //Kisumu venues
+    ['name' => 'Imperial Sarova Hotel', 'location' => 'Kisumu'],
+    ['name' => 'Imperial Express Hotel', 'location' => 'Kisumu'],
+
+    //Thika venues
     ['name' => 'The Luke Hotel', 'location' => 'Thika'],
-    ['name' => 'Mt. Meru Hotel', 'location' => 'Arusha'],
+    ['name' => 'Thika Green Golf Hotel', 'location' => 'Thika'],
+
+    //Eldoret venues
+    ['name' => 'Boma Inn Hotel', 'location' => 'Eldoret'],
+    ['name' => 'Eka Hotel', 'location' => 'Eldoret'],
+
+    //Singapore venues
     ['name' => 'Ibis Bencoolen', 'location' => 'Singapore'],
+
+    //Turkey venues
+    ['name' => 'Novotel İstanbul Bosphorus', 'location' => 'Turkey'],
+    ['name' => 'Radisson Blue, Turkey', 'location' => 'Turkey'],
+    ['name' => 'Radisson Sisli', 'location' => 'Turkey'],
+
+    //Dubai venues
+    ['name' => 'Grand Excelsior Hotel', 'location' => 'Dubai'],
+    ['name' => 'Avani Hotel', 'location' => 'Dubai'],
+    ['name' => 'Hilton Garden Inn Al Muraqabat', 'location' => 'Dubai'],
+    ['name' => 'Land Mark Hotel', 'location' => 'Dubai'],
+
+    //Uganda Hotel
+    ['name' => 'Hotel African', 'location' => 'Uganda'],
+    ['name' => 'Golden Tullip', 'location' => 'Uganda'],
+
+    //Tanzania
+    ['name' => 'Mt Meru Arusha', 'location' => 'Tanzania'],
+
+    //Rwanda
+    ['name' => 'Onomo Hotel', 'location' => 'Rwanda'],
+    ['name' => 'Park Inn by Radison Blue', 'location' => 'Rwanda'],
+
 ];
 
 // Insert venues with the correct location_id
@@ -257,6 +312,33 @@ p {
     </body>
     </html>
     ',
+        'fromname' => '{companyname}',
+        'plaintext' => 0,
+        'active' => 1,
+        'order' => 0
+    ],
+    [
+        'type' => 'notifications',
+        'slug' => 'event-status-notification',
+        'language' => 'english',
+        'name' => 'Event Status Update (sent to staff)',
+        'subject' => 'Client Event Status List',
+        'message' => '
+<html> 
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<style>
+p { font-family:"Century Gothic", sans-serif; font-size:10pt; line-height:1.5; }
+</style>
+</head>
+<body>
+
+<p>event_status_content</p>
+
+<p>Regards,<br>{companyname}</p>
+</body>
+</html>
+',
         'fromname' => '{companyname}',
         'plaintext' => 0,
         'active' => 1,

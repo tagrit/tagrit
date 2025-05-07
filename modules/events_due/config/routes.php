@@ -25,6 +25,7 @@ $route['admin/events_due/registrations/create_unique_code_manually'] = 'events_d
 //cronjobs
 $route['events_due/cronjobs/send_reminders'] = 'events_due/cronjobs/send_reminders';
 $route['events_due/cronjobs/process_queue'] = 'events_due/cronjobs/process_queue';
+$route['events_due/cronjobs/send_attendance_list'] = 'events_due/cronjobs/send_attendance_list';
 
 //get venues and locations
 $route['admin/events_due/locations'] = 'events_due/events/locations/index';
