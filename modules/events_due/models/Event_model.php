@@ -295,4 +295,20 @@ class Event_model extends App_Model
     }
 
 
+    public function update_event_by_details($identifiers, $updateData)
+    {
+        if (empty($identifiers) || empty($updateData)) {
+            return false;
+        }
+
+        $this->db->where('event_id', $identifiers['event_id']);
+        $this->db->where('location', $identifiers['location']);
+        $this->db->where('venue', $identifiers['venue']);
+        $this->db->where('start_date', $identifiers['start_date']);
+        $this->db->where('end_date', $identifiers['end_date']);
+
+        return $this->db->update(db_prefix().'_events_details', $updateData);
+    }
+
+
 }
