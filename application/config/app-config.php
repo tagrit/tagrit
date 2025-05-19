@@ -12,7 +12,7 @@ $environments = [
     'dev.tagrit.com'          => 'development',
     'autoupdate.tagrit.com'   => 'auto-update',
     'staging.tagrit.com'      => 'staging',
-    'app.tagrit.com'          => 'production'
+    'erp.tagrit.com'          => 'production'
 ];
 
 // Default to production if host is unrecognized
