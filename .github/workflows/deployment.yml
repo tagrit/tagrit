@@ -1,4 +1,4 @@
-name: 🚀 Deploy to CPANEL & DigitalOcean
+name: 🚀 Deploy to CPANEL & HETZNER
 
 on:
   push:
@@ -24,7 +24,7 @@ jobs:
           echo "${{ secrets.CPANEL_SSH_PRIVATE_KEY }}" > ~/.ssh/cpanel_key
           chmod 600 ~/.ssh/cpanel_key
 
-          # 🔑 Add DigitalOcean Private Key
+          # 🔑 Add HETZNER Private Key
            echo "${{ secrets.HETZNER_SSH_PRIVATE_KEY }}" > ~/.ssh/hetzner_key
            chmod 600 ~/.ssh/hetzner_key
 
@@ -71,7 +71,7 @@ jobs:
             echo "✅ Deployment to $DEPLOY_DIR completed successfully!"
           EOF
 
-      - name: Deploy to DigitalOcean (Master Branch)
+      - name: Deploy to HETZNER (Master Branch)
         if: github.ref == 'refs/heads/master'
         run: |
           ENV_SECRET="${{ secrets.ENV_PRODUCTION }}"
