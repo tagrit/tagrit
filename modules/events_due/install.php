@@ -100,7 +100,7 @@ $CI->db->query("DELETE FROM " . db_prefix() . "events_due_locations");
 // Insert locations
 $locations = [
     'Diani', 'Mombasa', 'Machakos', 'Nakuru', 'Naivasha',
-    'Kisumu', 'Thika', 'Eldoret', 'Dubai',
+    'Kisumu', 'Thika', 'Eldoret', 'Dubai','Nanyuki',
     'Singapore', 'Nairobi', 'Turkey', 'Dubai', 'Uganda',
     'Tanzania', 'Rwanda'
 ];
@@ -143,6 +143,10 @@ $venues = [
 
     //Diani venues
     ['name' => 'Baobab Hotel', 'location' => 'Diani'],
+    ['name' => 'Leopard Beach Resort', 'location' => 'Diani'],
+
+    //Nanyuki venues
+    ['name' => 'Nanyuki', 'location' => 'Nanyuki'],
 
     //Machakos venues
     ['name' => 'Seo Hotel', 'location' => 'Machakos'],
