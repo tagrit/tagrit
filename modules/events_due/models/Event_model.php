@@ -36,6 +36,7 @@ class Event_model extends App_Model
     public function events()
     {
         $this->db->select('
+         tblevents_due_events.id,
          tblevents_due_events.event_id,
          tblevents_due_name.name AS event_name,
          tblevents_due_events.location,
@@ -71,6 +72,8 @@ class Event_model extends App_Model
             'tblevents_due_events.start_date',
             'tblevents_due_events.end_date'
         ]);
+
+        $this->db->order_by('tblevents_due_events.id', 'DESC');
 
         return $this->db->get()->result();
     }

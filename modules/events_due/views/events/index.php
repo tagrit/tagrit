@@ -482,5 +482,9 @@
             }
         });
 
+        $('#events-table').DataTable({
+            ordering: false
+        });
+
     });
 </script>
