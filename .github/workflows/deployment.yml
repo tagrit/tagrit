@@ -1,4 +1,4 @@
-name: 🚀 Deploy to CPANEL & DigitalOcean
+name: 🚀 Deploy to CPANEL & HETZNER
 
 on:
   push:
@@ -24,19 +24,19 @@ jobs:
           echo "${{ secrets.CPANEL_SSH_PRIVATE_KEY }}" > ~/.ssh/cpanel_key
           chmod 600 ~/.ssh/cpanel_key
 
-          # 🔑 Add DigitalOcean Private Key
-          echo "${{ secrets.DIGITALOCEAN_SSH_PRIVATE_KEY }}" > ~/.ssh/digitalocean_key
-          chmod 600 ~/.ssh/digitalocean_key
+          # 🔑 Add HETZNER Private Key
+           echo "${{ secrets.HETZNER_SSH_PRIVATE_KEY }}" > ~/.ssh/hetzner_key
+           chmod 600 ~/.ssh/hetzner_key
 
           # 🖥️ Add known hosts
           ssh-keyscan -H ${{ secrets.CPANEL_SSH_HOST }} >> ~/.ssh/known_hosts
-          ssh-keyscan -H ${{ secrets.DIGITALOCEAN_SSH_HOST }} >> ~/.ssh/known_hosts
+          ssh-keyscan -H ${{ secrets.HETZNER_SSH_HOST }} >> ~/.ssh/known_hosts
 
       - name: Test SSH Connection
         run: |
           echo "🔍 Testing SSH Connection..."
           ssh -i ~/.ssh/cpanel_key -o StrictHostKeyChecking=no ${{ secrets.CPANEL_SSH_USER }}@${{ secrets.CPANEL_SSH_HOST }} "echo '✅ CPANEL SSH connection successful'"
-          ssh -i ~/.ssh/digitalocean_key -o StrictHostKeyChecking=no ${{ secrets.DIGITALOCEAN_SSH_USER }}@${{ secrets.DIGITALOCEAN_SSH_HOST }} "echo '✅ DigitalOcean SSH connection successful'"
+          ssh -i ~/.ssh/hetzner_key -o StrictHostKeyChecking=no ${{ secrets.HETZNER_SSH_USER }}@${{ secrets.HETZNER_SSH_HOST }} "echo '✅ HETZNER SSH connection successful'"
 
       - name: Deploy to CPANEL (Staging/Development/Auto-Update)
         if: github.ref != 'refs/heads/master'
@@ -71,15 +71,15 @@ jobs:
             echo "✅ Deployment to $DEPLOY_DIR completed successfully!"
           EOF
 
-      - name: Deploy to DigitalOcean (Master Branch)
+      - name: Deploy to HETZNER (Master Branch)
         if: github.ref == 'refs/heads/master'
         run: |
           ENV_SECRET="${{ secrets.ENV_PRODUCTION }}"
           
-          echo "$ENV_SECRET" | ssh -i ~/.ssh/digitalocean_key -o StrictHostKeyChecking=no ${{ secrets.DIGITALOCEAN_SSH_USER }}@${{ secrets.DIGITALOCEAN_SSH_HOST }} "cat > /var/www/html/tagrit/application/config/.env.production.php"
+          echo "$ENV_SECRET" | ssh -i ~/.ssh/hetzner_key -o StrictHostKeyChecking=no ${{ secrets.HETZNER_SSH_USER }}@${{ secrets.HETZNER_SSH_HOST }} "cat > /var/www/html/tagrit/application/config/.env.production.php"
           
-          ssh -i ~/.ssh/digitalocean_key -o StrictHostKeyChecking=no ${{ secrets.DIGITALOCEAN_SSH_USER }}@${{ secrets.DIGITALOCEAN_SSH_HOST }} << EOF
-            echo "🚀 Deploying master branch to DigitalOcean"
+          ssh -i ~/.ssh/hetzner_key -o StrictHostKeyChecking=no ${{ secrets.HETZNER_SSH_USER }}@${{ secrets.HETZNER_SSH_HOST }} << EOF
+            echo "🚀 Deploying master branch to HETZNER"
           
             cd /var/www/html || { echo "❌ Deployment directory not found!"; exit 1; }
           
@@ -106,8 +106,13 @@ jobs:
             git reset --hard origin/master
             git pull origin master --rebase --force
           
-            echo "📦 Running composer install..."
-            composer install --ignore-platform-req=ext-fileinfo
+            # ----- Composer as root, warning suppressed -----
+            export COMPOSER_ALLOW_SUPERUSER=1
+            # optional but tidy:
+            # export COMPOSER_HOME=/var/www/html/.composer
+
+            echo "📦 Running composer install (root)…"
+            composer install --no-interaction --prefer-dist --ignore-platform-req=ext-fileinfo
           
-            echo "✅ Deployment to DigitalOcean completed successfully!"
+            echo "✅ Deployment to HETZNER completed successfully!"
           EOF

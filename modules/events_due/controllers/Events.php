@@ -119,11 +119,80 @@ class Events extends AdminController
         return true;
     }
 
-    public function edit($event_id)
+
+    public function get_location_and_venue_names($location_id, $venue_id)
     {
-        $data['event'] = $this->Event_model->get($event_id);
-        $this->load->view('events/edit', $data);
+        $result = [];
+
+        // Get Location Name
+        $location = $this->db->get_where(db_prefix() . 'events_due_locations', ['id' => $location_id])->row();
+        if ($location) {
+            $result['location_name'] = $location->name;
+        } else {
+            $result['location_name'] = null;
+        }
+
+        // Get Venue Name
+        $venue = $this->db->get_where(db_prefix() . 'events_due_venues', ['id' => $venue_id])->row();
+        if ($venue) {
+            $result['venue_name'] = $venue->name;
+        } else {
+            $result['venue_name'] = null;
+        }
+
+        return $result;
     }
+
+
+    public function edit()
+    {
+        $this->load->model('Event_model');
+
+        $identifiers = [
+            'event_id' => $this->input->post('event_id'),
+            'location' => $this->input->post('location'),
+            'venue' => $this->input->post('venue'),
+            'start_date' => $this->input->post('startDate'),
+            'end_date' => $this->input->post('endDate'),
+        ];
+
+
+        $location_venue = $this->get_location_and_venue_names($this->input->post('edit_location_id'), $this->input->post('edit_venue_id'));
+
+        $updateData = [
+            'event_id' => $this->input->post('edit_event_id'),
+            'location' => $location_venue['location_name'],
+            'venue' => $location_venue['venue_name'],
+            'start_date' => $this->input->post('edit_start_date'),
+            'end_date' => $this->input->post('edit_end_date'),
+        ];
+
+
+        try {
+            $this->db->trans_begin();
+
+            $updated = $this->Event_model->update_event_by_details($identifiers, $updateData);
+
+            if (!$updated || $this->db->trans_status() === false) {
+                $this->db->trans_rollback();
+                log_message('error', 'Failed to update event with: ' . json_encode($identifiers));
+                set_alert('danger', 'Failed to update event.');
+            } else {
+
+                $this->update_event_unique_code($identifiers, $updateData);
+
+                $this->db->trans_commit();
+                set_alert('success', 'Event updated successfully!');
+            }
+        } catch (Exception $e) {
+            $this->db->trans_rollback();
+            log_message('error', 'Exception during event update: ' . $e->getMessage());
+            set_alert('danger', 'An error occurred while updating the event.' . $e->getMessage());
+        }
+
+        redirect('admin/events_due/events/index');
+    }
+
 
     public function update()
     {
@@ -325,6 +394,64 @@ class Events extends AdminController
         } else {
             set_alert('danger', 'Error: ' . "Event not found for the given unique code.");
         }
+    }
+
+
+    public function update_event_unique_code($data, $updateData)
+    {
+
+        $updateData = [
+            'event_id' => $updateData['event_id'],
+            'event_unique_code' => $this->generateEventUniqueCode($updateData['event_id'], $updateData['venue'], $updateData['location'], $updateData['start_date']),
+            'location' => $updateData['location'],
+            'venue' => $updateData['venue'],
+            'start_date' => $updateData['start_date'],
+            'end_date' => $updateData['end_date'],
+        ];
+
+        // Check if the event already exists
+        $this->db->where('event_id', $data['event_id']);
+        $this->db->where('location', $data['location']);
+        $this->db->where('venue', $data['venue']);
+        $this->db->where('start_date', $data['start_date']);
+        $this->db->where('end_date', $data['end_date']);
+        $query = $this->db->get(db_prefix() . 'event_unique_codes');
+
+        if ($query->num_rows() > 0) {
+            $this->db->where('event_id', $data['event_id']);
+            $this->db->where('location', $data['location']);
+            $this->db->where('venue', $data['venue']);
+            $this->db->where('start_date', $data['start_date']);
+            $this->db->where('end_date', $data['end_date']);
+            $this->db->update(db_prefix() . 'event_unique_codes', $updateData);
+        } else {
+            $updateData['event_unique_code'] = $this->generateEventUniqueCode($updateData['event_id'], $updateData['venue'], $updateData['location'], $updateData['start_date']);
+            $this->db->insert(db_prefix() . 'event_unique_codes', $updateData);
+        }
+    }
+
+
+    function generateEventUniqueCode($event_id, $venue, $location, $start_date)
+    {
+        $event = $this->db->get_where(db_prefix() . '_events', ['id' => $event_id])->row();
+
+        if (!$event) {
+            return null;
+        }
+
+        // Ensure all values are non-null and default to empty strings if necessary
+        $eventName = isset($event->name) ? $event->name : '';
+        $venue = isset($venue) ? $venue : '';
+        $location = isset($location) ? $location : '';
+
+        // Clean and format inputs
+        $eventPart = strtoupper(substr(preg_replace('/[^A-Za-z]/', '', $eventName), 0, 4));
+        $venuePart = strtoupper(substr(preg_replace('/[^A-Za-z]/', '', $venue), 0, 3));
+        $locationPart = strtoupper(substr(preg_replace('/[^A-Za-z]/', '', $location), 0, 3));
+        $startDatePart = date('dmy', strtotime($start_date));
+
+        // Combine to create the code
+        return "{$eventPart}-{$venuePart}-{$locationPart}-{$startDatePart}";
     }
 
 }
