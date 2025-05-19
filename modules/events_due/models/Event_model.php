@@ -36,6 +36,7 @@ class Event_model extends App_Model
     public function events()
     {
         $this->db->select('
+         tblevents_due_events.id,
          tblevents_due_events.event_id,
          tblevents_due_name.name AS event_name,
          tblevents_due_events.location,
@@ -71,6 +72,8 @@ class Event_model extends App_Model
             'tblevents_due_events.start_date',
             'tblevents_due_events.end_date'
         ]);
+
+        $this->db->order_by('tblevents_due_events.id', 'DESC');
 
         return $this->db->get()->result();
     }
@@ -292,6 +295,22 @@ class Event_model extends App_Model
         }
 
         return false; // Return false if insertion failed
+    }
+
+
+    public function update_event_by_details($identifiers, $updateData)
+    {
+        if (empty($identifiers) || empty($updateData)) {
+            return false;
+        }
+
+        $this->db->where('event_id', $identifiers['event_id']);
+        $this->db->where('location', $identifiers['location']);
+        $this->db->where('venue', $identifiers['venue']);
+        $this->db->where('start_date', $identifiers['start_date']);
+        $this->db->where('end_date', $identifiers['end_date']);
+
+        return $this->db->update(db_prefix().'_events_details', $updateData);
     }
 
 
