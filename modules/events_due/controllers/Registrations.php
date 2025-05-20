@@ -222,7 +222,7 @@ class Registrations extends AdminController
                 }
 
                 $this->send_email_with_attachments(
-                    $input['delegates'][0]['first_name'] . ' ' . $input['delegates'][0]['last_name'],
+                    $input['delegates'][0]['first_name'],
                     $input['delegates'][0]['email'],
                     $generatedFiles,
                     $eventName,
