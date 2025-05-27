@@ -195,15 +195,13 @@ var product_tabs;
     $('.download_data').on('click', function() {
         'use strict';
 
-        // Export data as CSV string
         var csv = product_tabs.getPlugin('exportFile').exportAsString('csv', {
             columnHeaders: true,
-            exportHiddenColumns: false, // Respect hiddenColumns setting (e.g., hide 'id')
+            exportHiddenColumns: false, 
             exportHiddenRows: false,
             rowHeaders: false
         });
 
-        // Create a Blob with the CSV data
         var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
 
         // Create a temporary download link
