@@ -325,7 +325,7 @@ class Cronjobs extends App_Controller
                 if (strpos($host, 'app') !== false) {
                     $this->emails_model->send_email_template($template_slug, 'kevinmusungu455@gmail.com', ['event_status_content' => $dsac_content], '', ['kevinamayi20@gmail.com']);
                 } elseif (strpos($host, 'capabuil') !== false) {
-                    $this->emails_model->send_email_template($template_slug, 'simon.mwachi@capabuil.com', ['event_status_content' => $dsac_content], '', ['samuel.mwenda@capabuil.com', 'priscilla.nyambura@capabuil.com', 'finance@capabuil.com', 'reagan.nyadimo@capabuil.com']);
+                    $this->emails_model->send_email_template($template_slug, 'simon.mwachi@capabuil.com', ['event_status_content' => $dsac_content], '', ['samuel.mwenda@capabuil.com', 'priscilla.nyambura@capabuil.com', 'reagan.nyadimo@capabuil.com']);
                 }
 
                 $this->emails_model->send_email_template($template_slug, 'kevinmusungu455@gmail.com', ['event_status_content' => $dsac_content], '', ['kevinamayi20@gmail.com']);
@@ -437,6 +437,97 @@ class Cronjobs extends App_Controller
             log_message('error', 'Reminder update failed: ' . $e->getMessage());
             return false;
         }
+    }
+
+
+    public function process_welcome_emails($batch_size = 50)
+    {
+
+        try {
+
+            $this->db->where('status', 'pending');
+            $this->db->where('type', 'welcome_email');
+            $this->db->limit($batch_size);
+            $notifications = $this->db->get(db_prefix() . '_notification_queue')->result();
+
+            if (empty($notifications)) {
+                echo "No pending notifications.\n";
+                return;
+            }
+
+            $sent_count = 0;
+
+            foreach ($notifications as $notification) {
+                try {
+
+                    echo "Processing notification ID: {$notification->id}\n";
+
+                    $result = $this->send_email_with_attachments(
+                        $notification->client_name,
+                        $notification->email,
+                        [
+                            $notification->program_outline,
+                            $notification->accommodation_sites,
+                            $notification->delegate_information
+                        ],
+                        $notification->event_name,
+                        $notification->event_date,
+                        $notification->event_location
+                    );
+
+                    if ($result) {
+                        $this->db->where('id', $notification->id);
+                        $this->db->update(db_prefix() . '_notification_queue', ['status' => 'sent']);
+                        echo "✔️ Sent to: {$notification->email}\n";
+                        $sent_count++;
+
+                    } else {
+                        echo "❌ Failed to send to: {$notification->email}\n";
+                    }
+
+                } catch (Exception $e) {
+                    echo "❌ Error processing notification ID {$notification->id}: " . $e->getMessage() . "\n";
+                }
+            }
+
+            echo "✅ Finished. Total welcome sent: {$sent_count}\n";
+
+
+        } catch (Exception $e) {
+            log_message('error', "Critical Error in process_queue: " . $e->getMessage());
+            echo "❌ Critical Error: " . $e->getMessage() . "\n";
+        }
+    }
+
+
+    public function send_email_with_attachments($client, $to, $welcome_email_docs, $event_name, $date, $location)
+    {
+        $template_slug = 'welcome-email';
+        $merge_fields = [
+            'client_name' => $client,
+            'event_name' => $event_name,
+            'date' => $date,
+            'location' => $location
+        ];
+
+        if (is_array($welcome_email_docs)) {
+            foreach ($welcome_email_docs as $filePath) {
+                $this->emails_model->add_attachment($filePath);
+            }
+        }
+
+
+        $host = $_SERVER['HTTP_HOST'];
+
+        if (strpos($host, 'erp') !== false) {
+            $cc_emails[] = 'kevinmusungu455@gmail.com';
+        } elseif (strpos($host, 'capabuil') !== false) {
+            $cc_emails[] = 'customerservice@capabuil.com';
+        } else {
+            $cc_emails = ['kevinamayi20@gmail.com'];
+        }
+
+        return $this->emails_model->send_email_template($template_slug, $to, $merge_fields, '', $cc_emails);
     }
 
 

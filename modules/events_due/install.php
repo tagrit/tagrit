@@ -100,7 +100,7 @@ $CI->db->query("DELETE FROM " . db_prefix() . "events_due_locations");
 // Insert locations
 $locations = [
     'Diani', 'Mombasa', 'Machakos', 'Nakuru', 'Naivasha',
-    'Kisumu', 'Thika', 'Eldoret', 'Dubai','Nanyuki',
+    'Kisumu', 'Thika', 'Eldoret', 'Dubai', 'Nanyuki',
     'Singapore', 'Nairobi', 'Turkey', 'Dubai', 'Uganda',
     'Tanzania', 'Rwanda'
 ];
@@ -347,7 +347,68 @@ p { font-family:"Century Gothic", sans-serif; font-size:10pt; line-height:1.5; }
         'plaintext' => 0,
         'active' => 1,
         'order' => 0
-    ]
+    ],
+    [
+        'type' => 'notifications',
+        'slug' => 'welcome-email',
+        'language' => 'english',
+        'name' => 'Event Welcome Email (sent client)',
+        'subject' => 'event_name, date, location',
+        'message' => '
+<html>
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=Generator content="Microsoft Word 15 (filtered)">
+<style>
+@font-face { font-family:"Cambria Math"; }
+@font-face { font-family:Calibri; }
+@font-face { font-family:Aptos; }
+@font-face { font-family:"Century Gothic"; }
+p.MsoNormal, li.MsoNormal, div.MsoNormal {
+    margin:0in;
+    font-size:11.0pt;
+    font-family:"Calibri",sans-serif;
+}
+a:link, span.MsoHyperlink {
+    color:#0563C1;
+    text-decoration:underline;
+}
+p {
+    margin-right:0in;
+    margin-left:0in;
+    font-size:12.0pt;
+    font-family:"Aptos",sans-serif;
+}
+</style>
+</head>
+<body lang=EN-US link="#0563C1" vlink="#954F72" style="word-wrap:break-word">
+<div>
+<p style="margin:0in;text-align:justify"><b><span style="font-size:10.0pt;font-family:\'Century Gothic\',sans-serif;color:#2E75B6">Dear client_name,</span></b></p>
+
+<p style="margin-right:26.05pt"><em><span style="font-size:10.0pt;font-family:\'Century Gothic\',sans-serif;color:#222222;background:white;font-style:normal">Thank you for choosing <b>The WORLD\'S BEST CPD PROVIDER</b>.</span></em></p>
+
+<p style="margin-right:26.05pt"><span style="font-size:10.0pt;font-family:\'Century Gothic\',sans-serif;color:#222222;background:white;">We\'re excited to have your colleagues join us for the <b>event_name</b>, scheduled from <b>date</b>, to <b>location</b>.</span></p>
+
+<p style="margin-right:26.05pt"><span style="font-size:10.0pt;font-family:\'Century Gothic\',sans-serif;color:#222222;background:white;">We have attached the <b>Program Outline, Seminar Details</b>, and <b>Information on Accommodations and Amenities</b> to help them plan their week.</span></p>
+
+<p style="margin-right:26.05pt"><span style="font-size:10.0pt;font-family:\'Century Gothic\',sans-serif;color:#222222;background:white;">Expect:</span></p>
+<ul>
+<li><span style="font-size:10.0pt;font-family:\'Century Gothic\',sans-serif;color:#222222;background:white;">Relevant and Up-to-Date Industry Insights</span></li>
+<li><span style="font-size:10.0pt;font-family:\'Century Gothic\',sans-serif;color:#222222;background:white;">Enhanced Skills and Competencies</span></li>
+<li><span style="font-size:10.0pt;font-family:\'Century Gothic\',sans-serif;color:#222222;background:white;">Recognition and Accreditation</span></li>
+</ul>
+
+<p style="margin-right:26.05pt"><span style="font-size:10.0pt;font-family:\'Century Gothic\',sans-serif;color:#222222;background:white;">For further inquiries, reach out to the Event Facilitator directly: <b>Priscilla Nyambura</b> <b>+254 712 843395</b></span></p>
+
+<p style="margin:0in"><span style="font-size:10.0pt;font-family:\'Century Gothic\',sans-serif;color:#2E75B6;">Kind regards,</span></p>
+</div>
+</body>
+</html>',
+        'fromname' => '{companyname}',
+        'plaintext' => 0,
+        'active' => 1,
+        'order' => 0
+    ],
 ];
 
 // Loop through each email template
@@ -443,3 +504,18 @@ function generateEventUniqueCode($event_id, $venue, $location, $start_date)
     // Combine to create the code
     return "{$eventPart}-{$venuePart}-{$locationPart}-{$startDatePart}";
 }
+
+$table = db_prefix() . '_notification_queue';
+
+if (!$CI->db->field_exists('program_outline', $table)) {
+    $CI->db->query("ALTER TABLE `$table` ADD COLUMN program_outline TEXT NULL");
+}
+
+if (!$CI->db->field_exists('accommodation_sites', $table)) {
+    $CI->db->query("ALTER TABLE `$table` ADD COLUMN `accommodation_sites` TEXT NULL");
+}
+
+if (!$CI->db->field_exists('delegate_information', $table)) {
+    $CI->db->query("ALTER TABLE `$table` ADD COLUMN delegate_information TEXT NULL");
+}
+

@@ -14,6 +14,7 @@ $route['admin/events_due/events/update'] = 'events_due/events/update';
 $route['admin/events_due/events/view'] = 'events_due/events/view';
 $route['admin/events_due/events/event_confirmation'] = 'events_due/events/event_confirmation';
 $route['admin/events_due/events/upload_attendance_sheet'] = 'events_due/events/upload_attendance_sheet';
+$route['admin/events_due/events/send_welcome_email'] = 'events_due/events/send_welcome_email';
 
 //registrations
 $route['admin/events_due/registrations/create'] = 'events_due/registrations/create';
@@ -25,6 +26,7 @@ $route['admin/events_due/registrations/create_unique_code_manually'] = 'events_d
 //cronjobs
 $route['events_due/cronjobs/send_reminders'] = 'events_due/cronjobs/send_reminders';
 $route['events_due/cronjobs/process_queue'] = 'events_due/cronjobs/process_queue';
+$route['events_due/cronjobs/process_welcome_emails'] = 'events_due/cronjobs/process_welcome_emails';
 $route['events_due/cronjobs/send_attendance_list'] = 'events_due/cronjobs/send_attendance_list';
 
 //get venues and locations
