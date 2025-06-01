@@ -454,4 +454,193 @@ class Events extends AdminController
         return "{$eventPart}-{$venuePart}-{$locationPart}-{$startDatePart}";
     }
 
+
+    function upload_welcome_email_files()
+    {
+        $base_upload_path = FCPATH . 'modules/events_due/assets/welcome_email_documents/';
+
+        if (!is_dir($base_upload_path)) {
+            mkdir($base_upload_path, 0755, true);
+        }
+
+        $uploaded_file_urls = [];
+
+        $file_input_names = [
+            'program_outline',
+            'accommodation_sites',
+            'delegate_information'
+        ];
+
+        foreach ($file_input_names as $input_name) {
+
+            if (!isset($_FILES[$input_name])) {
+                continue;
+            }
+
+            $file_data = $_FILES[$input_name];
+
+            if ($file_data['error'] === UPLOAD_ERR_OK) {
+                $file_name = time() . '_' . $file_data['name'];
+                $file_path = $base_upload_path . $file_name;
+
+                if (move_uploaded_file($file_data['tmp_name'], $file_path)) {
+                    $file_url = base_url('modules/events_due/assets/welcome_email_documents/' . $file_name);
+                    $uploaded_file_urls[$input_name] = $file_url;
+                } else {
+                    throw new Exception('Failed to move uploaded file for ' . $input_name . '. Error code: ' . $file_data['error']);
+                }
+            } elseif ($file_data['error'] !== UPLOAD_ERR_NO_FILE) {
+                $error_message = 'Upload error for ' . $input_name . ': ';
+
+                switch ($file_data['error']) {
+                    case UPLOAD_ERR_INI_SIZE:
+                        $error_message .= 'The uploaded file exceeds the upload_max_filesize directive in php.ini.';
+                        break;
+                    case UPLOAD_ERR_FORM_SIZE:
+                        $error_message .= 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.';
+                        break;
+                    case UPLOAD_ERR_PARTIAL:
+                        $error_message .= 'The uploaded file was only partially uploaded.';
+                        break;
+                    case UPLOAD_ERR_NO_TMP_DIR:
+                        $error_message .= 'Missing a temporary folder.';
+                        break;
+                    case UPLOAD_ERR_CANT_WRITE:
+                        $error_message .= 'Failed to write file to disk.';
+                        break;
+                    case UPLOAD_ERR_EXTENSION:
+                        $error_message .= 'A PHP extension stopped the file upload.';
+                        break;
+                    default:
+                        $error_message .= 'Unknown upload error.';
+                        break;
+                }
+                throw new Exception($error_message);
+            }
+        }
+
+        return $uploaded_file_urls;
+    }
+
+    function send_welcome_email()
+    {
+
+        $this->db->trans_begin();
+        try {
+
+            $uploaded_file_urls = $this->upload_welcome_email_files();
+            $table = db_prefix() . '_notification_queue';
+            $event_id = $this->input->post('event_id');
+            $event_name = $this->input->post('eventName');
+            $event_location = $this->input->post('event_location');
+            $event_venue = $this->input->post('event_venue');
+            $startDate = $this->input->post('startDate');
+            $endDate = $this->input->post('endDate');
+            $clients_data = $this->input->post('clients')[0];
+
+            $clients_data = json_decode($clients_data, true);
+
+            $serialized_clients = serialize($clients_data);
+
+            foreach ($clients_data as $client) {
+
+                //store confirmed clients
+                if (isset($client['attendance_confirmed']) && $client['attendance_confirmed']) {
+
+                    //check if client and event exists
+                    $this->db->where('email', $client['email']);
+                    $this->db->where('event_name', $this->input->post('eventName'));
+                    $this->db->where('client_name', $client['first_name'] . ' ' . $client['last_name']);
+                    $this->db->where('event_date', $startDate);
+                    $this->db->where('event_location', $event_location);
+                    $this->db->where('type', 'welcome_email');
+                    $existing_welcome = $this->db->get($table)->row();
+
+                    if ($existing_welcome) {
+                        continue;
+                    }
+
+
+                    $data = array(
+                        'type' => 'welcome_email',
+                        'email' => $client['email'],
+                        'client_name' => $client['first_name'] . ' ' . $client['last_name'],
+                        'client_list' => $serialized_clients,
+                        'event_name' => $event_name,
+                        'event_date' => $startDate,
+                        'event_location' => $event_location,
+                        'status' => 'pending',
+                        'created_at' => date('Y-m-d H:i:s'),
+                        'updated_at' => date('Y-m-d H:i:s'),
+                        'program_outline' => $uploaded_file_urls['program_outline'] ?? null,
+                        'accommodation_sites' => $uploaded_file_urls['accommodation_sites'] ?? null,
+                        'delegate_information' => $uploaded_file_urls['delegate_information'] ?? null,
+                    );
+
+                    $this->db->insert($table, $data);
+
+                }
+
+            }
+
+            $event_id = $this->input->post('event_id') ?? $this->session->userdata('event_id');
+            $location = $this->input->post('event_location') ?? $this->session->userdata('location');
+            $venue = $this->input->post('event_venue') ?? $this->session->userdata('venue');
+            $start_date = $this->input->post('startDate') ?? $this->session->userdata('start_date');
+            $end_date = $this->input->post('endDate') ?? $this->session->userdata('end_date');
+
+            if ($event_id && $location && $venue && $start_date && $end_date) {
+                $event_data = $this->Event_model->event_details($event_id, $location, $venue, $start_date, $end_date);
+
+                if (!empty($event_data)) {
+                    $this->session->set_userdata('event_data', $event_data);
+                }
+            }
+
+            $data['event_data'] = $event_data ?: $this->session->userdata('event_data');
+
+            if (empty($data['event_data'])) {
+                show_error('No event data available.', 404);
+            }
+
+            $this->db->trans_commit();
+            set_alert('success', 'Welcome Email scheduled to be sent!');
+
+            redirect('admin/events_due/events/view');
+
+
+        } catch (Exception $e) {
+
+            $event_id = $this->input->post('event_id') ?? $this->session->userdata('event_id');
+            $location = $this->input->post('event_location') ?? $this->session->userdata('location');
+            $venue = $this->input->post('event_venue') ?? $this->session->userdata('venue');
+            $start_date = $this->input->post('startDate') ?? $this->session->userdata('start_date');
+            $end_date = $this->input->post('endDate') ?? $this->session->userdata('end_date');
+
+            if ($event_id && $location && $venue && $start_date && $end_date) {
+                $event_data = $this->Event_model->event_details($event_id, $location, $venue, $start_date, $end_date);
+
+                // Store event data in session if not already available
+                if (!empty($event_data)) {
+                    $this->session->set_userdata('event_data', $event_data);
+                }
+            }
+
+            $data['event_data'] = $event_data ?: $this->session->userdata('event_data');
+
+            if (empty($data['event_data'])) {
+                show_error('No event data available.', 404);
+            }
+
+            $this->db->trans_rollback();
+            log_message('error', 'File Upload Error: ' . $e->getMessage());
+            set_alert('danger', 'Error: ' . $e->getMessage());
+
+            redirect('admin/events_due/events/view');
+
+        }
+
+    }
+
+
 }
