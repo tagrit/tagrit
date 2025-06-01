@@ -80,12 +80,55 @@
                     </div>
                 </div>
 
-                <p style="margin-top: 15px; font-size: 14px; font-weight: bold;
-                     color: white; margin-bottom:15px;  background: linear-gradient(45deg, #007bff, #0056b3);
-                     padding: 10px 15px; border-radius: 6px; display: inline-block;
-                     box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.1); text-transform: uppercase;">
-                    <i class="fa fa-users" aria-hidden="true"></i> Delegates
-                </p>
+                <div style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 20px;
+                    ">
+
+                    <p style="
+                        font-size: 14px;
+                        font-weight: bold;
+                        color: white;
+                        background: linear-gradient(45deg, #007bff, #0056b3);
+                        padding: 10px 15px;
+                        border-radius: 6px;
+                        box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.1);
+                        text-transform: uppercase;
+                        margin-top: 10px;
+                        ">
+                        <i class="fa fa-users" aria-hidden="true"></i> Delegates
+                    </p>
+
+                    <button style="
+                            font-size: 14px;
+                            font-weight: bold;
+                            color: white;
+                            background: linear-gradient(45deg, #28a745, #218838);
+                            padding: 10px 20px;
+                            border: none;
+                            border-radius: 6px;
+                            display: inline-flex;
+                            align-items: center;
+                            box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.1);
+                            text-transform: uppercase;
+                            cursor: pointer;"
+                            data-toggle="modal"
+                            data-target="#sendWelcomeEmailModal"
+                            data-event-id="<?php echo $event_data['event_id']; ?>"
+                            data-event-name="<?php echo $event_data['event_name']; ?>"
+                            data-location="<?php echo $event_data['location']; ?>"
+                            data-venue="<?php echo $event_data['venue']; ?>"
+                            data-start-date="<?php echo $event_data['start_date']; ?>"
+                            data-end-date="<?php echo $event_data['end_date']; ?>"
+                            data-clients="<?= htmlspecialchars(json_encode($event_data['clients']), ENT_QUOTES, 'UTF-8'); ?>"
+                            class="send-welcome-btn">
+                        <i class="fa fa-paper-plane" aria-hidden="true" style="margin-right: 8px;"></i>
+                        Send Welcome Email
+                    </button>
+                </div>
+
 
                 <?php if (!empty($event_data['clients'])): ?>
                     <table class="table dt-table" id="delegates-table">
@@ -158,8 +201,104 @@
         </div>
     </div>
 </div>
+
+
+<div class="modal fade" id="sendWelcomeEmailModal" tabindex="-1" role="dialog"
+     aria-labelledby="sendWelcomeEmailModalLabel"
+     aria-hidden="true">
+    <?php echo form_open('admin/events_due/events/send_welcome_email', [
+        'id' => 'send-welcome-email',
+        'enctype' => 'multipart/form-data'
+    ]); ?>
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header d-flex justify-content-between align-items-center">
+                <button type="button" class="close d-flex align-items-center" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <!-- Hidden Inputs for Event Data -->
+                <input type="hidden" name="event_id" id="event_id">
+                <input type="hidden" name="eventName" id="eventName">
+                <input type="hidden" name="event_location" id="event_location">
+                <input type="hidden" name="event_venue" id="event_venue">
+                <input type="hidden" name="startDate" id="startDate">
+                <input type="hidden" name="endDate" id="endDate">
+                <input type="hidden" name="clients[]" id="clients">
+
+                <!-- Client Details -->
+                <div style="margin-top:10px;" class="col-md-12">
+                    <div class="form-group">
+                        <label for="program_outline" class="control-label">Program Outline</label>
+                        <input type="file" id="program_outline" name="program_outline"
+                               class="form-control"
+                               value=""
+                               required>
+                    </div>
+                </div>
+
+                <div style="margin-top:10px;" class="col-md-12">
+                    <div class="form-group">
+                        <label for="accommodation_sites" class="control-label">Accommodation Sites</label>
+                        <input type="file" id="accommodation_sites" name="accommodation_sites"
+                               class="form-control"
+                               value=""
+                               required>
+                    </div>
+                </div>
+
+                <div style="margin-top:10px;" class="col-md-12">
+                    <div class="form-group">
+                        <label for="delegate_information" class="control-label">Delegate Information</label>
+                        <input type="file" id="delegate_information" name="delegate_information"
+                               class="form-control"
+                               value=""
+                               required>
+                    </div>
+                </div>
+            </div>
+            <div style="margin-top:-20px; margin-right:15px;" class="modal-footer">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fa fa-paper-plane" aria-hidden="true" style="margin-right: 6px;"></i>
+                    send Email
+                </button>
+            </div>
+        </div>
+    </div>
+    <?php echo form_close(); ?>
+</div>
+
+
 <?php init_tail(); ?>
 <script>
+
+
+    $(document).ready(function () {
+        $('.send-welcome-btn').on('click', function () {
+
+            let eventId = $(this).data('event-id');
+            let eventName = $(this).data('event-name');
+            let location = $(this).data('location');
+            let venue = $(this).data('venue');
+            let startDate = $(this).data('start-date');
+            let endDate = $(this).data('end-date');
+
+            let clientsData = $(this).data('clients');
+            console.log(clientsData);
+
+            $('#clients').val(JSON.stringify(clientsData));
+            $('#event_id').val(eventId);
+            $('#eventName').val(eventName);
+            $('#event_location').val(location);
+            $('#event_venue').val(venue);
+            $('#startDate').val(startDate);
+            $('#endDate').val(endDate);
+        });
+    });
+
+
     function copyUniqueCodeToClipboard() {
         const text = document.getElementById('unique_code').textContent.trim(); // Get the unique code text
         navigator.clipboard.writeText(text).then(() => {
