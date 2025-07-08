@@ -193,7 +193,7 @@ class Cronjobs extends App_Controller
 
     public function send_reminder_email($to, $client, $client_list, $event_name, $event_date, $event_location)
     {
-        $names = array_map(fn($c) => $c['first_name'] . ' ' . $c['last_name'], $client_list);
+        $names = array_map(fn($c) => $c['first_name'], $client_list);
         $last = array_pop($names);
 
         $client_names = count($names)
