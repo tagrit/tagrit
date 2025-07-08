@@ -172,7 +172,7 @@ class Registrations extends AdminController
                 // Define templates
                 $templates = [
                     'training_invitation_letter.docx' => [
-                        'date' => $startDate,
+                        'date' =>  date('jS F Y', strtotime(date('Y-m-d'))),
                         'period' => $period,
                         'venue' => "$venue $location",
                         'cost_per_delegate' => 'KSHS ' . number_format((1.16 * $numDelegates * $costPerDelegate) / $numDelegates),
@@ -182,7 +182,7 @@ class Registrations extends AdminController
                     ],
                     'profoma_invoice.docx' => [
                         'venue' => "$venue $location",
-                        'date' => $startDate,
+                        'date' =>  date('jS F Y', strtotime(date('Y-m-d'))),
                         'period' => $period,
                         'invoice_number' => $this->generate_invoice_number(),
                         'total_fee' => $numDelegates * $costPerDelegate,
