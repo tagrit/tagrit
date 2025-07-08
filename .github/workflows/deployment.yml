@@ -104,7 +104,7 @@ jobs:
             git commit -m "Auto-commit before reset on \$(date +'%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
             git fetch --all
             git reset --hard origin/master
-            git pull origin master --rebase --force
+            git pull origin master --rebase
           
             # ----- Composer as root, warning suppressed -----
             export COMPOSER_ALLOW_SUPERUSER=1
