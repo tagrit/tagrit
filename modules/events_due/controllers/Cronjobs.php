@@ -295,7 +295,9 @@ class Cronjobs extends App_Controller
                             'NOT CONFIRMED' => 'red',
                             default => 'black',
                         };
-                        $block .= "<li>DELEGATE " . ($index + 1) . " - {$delegate['email']} - <span style='color:{$status_color}; font-weight:bold;'>{$status}</span></li>";
+                        $block .= "<li>DELEGATE " . ($index + 1) .
+                            " – {$delegate['email']} | {$delegate['phone']} " .
+                            "- <span style='color:{$status_color}; font-weight:bold;'>{$status}</span></li>";
                     }
                 }
 
@@ -328,7 +330,6 @@ class Cronjobs extends App_Controller
                     $this->emails_model->send_email_template($template_slug, 'simon.mwachi@capabuil.com', ['event_status_content' => $dsac_content], '', ['samuel.mwenda@capabuil.com', 'priscilla.nyambura@capabuil.com', 'reagan.nyadimo@capabuil.com']);
                 }
 
-                $this->emails_model->send_email_template($template_slug, 'kevinmusungu455@gmail.com', ['event_status_content' => $dsac_content], '', ['kevinamayi20@gmail.com']);
 
                 foreach ($dsac_events as $event) {
                     $this->db->where('event_id', $event->event_id);
@@ -348,9 +349,9 @@ class Cronjobs extends App_Controller
                 $host = $_SERVER['HTTP_HOST'];
 
                 if (strpos($host, 'erp') !== false) {
-                    $this->emails_model->send_email_template($template_slug, 'kevinmusungu455@gmail.com', ['event_status_content' => $dsac_content], '', ['kevinamayi20@gmail.com']);
+                    $this->emails_model->send_email_template($template_slug, 'kevinmusungu455@gmail.com', ['event_status_content' => $aba_content], '', ['kevinamayi20@gmail.com']);
                 } elseif (strpos($host, 'capabuil') !== false) {
-                    $this->emails_model->send_email_template($template_slug, 'eugene.oketch@capabuil.com', ['event_status_content' => $dsac_content], '', ['finance@capabuil.com', 'reagan.nyadimo@capabuil.com']);
+                    $this->emails_model->send_email_template($template_slug, 'eugene.oketch@capabuil.com', ['event_status_content' => $aba_content], '', ['finance@capabuil.com', 'reagan.nyadimo@capabuil.com']);
                 }
 
                 foreach ($aba_events as $event) {
@@ -370,9 +371,9 @@ class Cronjobs extends App_Controller
                 $host = $_SERVER['HTTP_HOST'];
 
                 if (strpos($host, 'erp') !== false) {
-                    $this->emails_model->send_email_template($template_slug, 'kevinmusungu455@gmail.com', ['event_status_content' => $dsac_content], '', ['kevinamayi20@gmail.com']);
+                    $this->emails_model->send_email_template($template_slug, 'kevinmusungu455@gmail.com', ['event_status_content' => $fesgi_content], '', ['kevinamayi20@gmail.com']);
                 } elseif (strpos($host, 'capabuil') !== false) {
-                    $this->emails_model->send_email_template($template_slug, 'simon.mwachi@capabuil.com', ['event_status_content' => $dsac_content], '', ['samuel.mwenda@capabuil.com', 'priscilla.nyambura@capabuil.com', 'finance@capabuil.com', 'reagan.nyadimo@capabuil.com']);
+                    $this->emails_model->send_email_template($template_slug, 'simon.mwachi@capabuil.com', ['event_status_content' => $fesgi_content], '', ['samuel.mwenda@capabuil.com', 'priscilla.nyambura@capabuil.com', 'finance@capabuil.com', 'reagan.nyadimo@capabuil.com']);
                 }
 
                 foreach ($fesgi_events as $event) {
