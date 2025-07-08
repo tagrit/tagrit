@@ -564,7 +564,7 @@ class Events extends AdminController
                     $data = array(
                         'type' => 'welcome_email',
                         'email' => $client['email'],
-                        'client_name' => $client['first_name'] . ' ' . $client['last_name'],
+                        'client_name' => $client['first_name'],
                         'client_list' => $serialized_clients,
                         'event_name' => $event_name,
                         'event_date' => $startDate,

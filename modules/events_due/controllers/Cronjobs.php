@@ -212,7 +212,7 @@ class Cronjobs extends App_Controller
 
         $host = $_SERVER['HTTP_HOST'];
 
-        if (strpos($host, 'app') !== false) {
+        if (strpos($host, 'erp') !== false) {
             $cc_emails[] = 'kevinmusungu455@gmail.com';
         } elseif (strpos($host, 'capabuil') !== false) {
             $cc_emails[] = 'customerservice@capabuil.com';
@@ -322,7 +322,7 @@ class Cronjobs extends App_Controller
 
                 $host = $_SERVER['HTTP_HOST'];
 
-                if (strpos($host, 'app') !== false) {
+                if (strpos($host, 'erp') !== false) {
                     $this->emails_model->send_email_template($template_slug, 'kevinmusungu455@gmail.com', ['event_status_content' => $dsac_content], '', ['kevinamayi20@gmail.com']);
                 } elseif (strpos($host, 'capabuil') !== false) {
                     $this->emails_model->send_email_template($template_slug, 'simon.mwachi@capabuil.com', ['event_status_content' => $dsac_content], '', ['samuel.mwenda@capabuil.com', 'priscilla.nyambura@capabuil.com', 'reagan.nyadimo@capabuil.com']);
@@ -347,7 +347,7 @@ class Cronjobs extends App_Controller
 
                 $host = $_SERVER['HTTP_HOST'];
 
-                if (strpos($host, 'app') !== false) {
+                if (strpos($host, 'erp') !== false) {
                     $this->emails_model->send_email_template($template_slug, 'kevinmusungu455@gmail.com', ['event_status_content' => $dsac_content], '', ['kevinamayi20@gmail.com']);
                 } elseif (strpos($host, 'capabuil') !== false) {
                     $this->emails_model->send_email_template($template_slug, 'eugene.oketch@capabuil.com', ['event_status_content' => $dsac_content], '', ['finance@capabuil.com', 'reagan.nyadimo@capabuil.com']);
@@ -369,7 +369,7 @@ class Cronjobs extends App_Controller
 
                 $host = $_SERVER['HTTP_HOST'];
 
-                if (strpos($host, 'app') !== false) {
+                if (strpos($host, 'erp') !== false) {
                     $this->emails_model->send_email_template($template_slug, 'kevinmusungu455@gmail.com', ['event_status_content' => $dsac_content], '', ['kevinamayi20@gmail.com']);
                 } elseif (strpos($host, 'capabuil') !== false) {
                     $this->emails_model->send_email_template($template_slug, 'simon.mwachi@capabuil.com', ['event_status_content' => $dsac_content], '', ['samuel.mwenda@capabuil.com', 'priscilla.nyambura@capabuil.com', 'finance@capabuil.com', 'reagan.nyadimo@capabuil.com']);
