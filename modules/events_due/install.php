@@ -256,7 +256,7 @@ p {
 <p style="margin-right:26.05pt"><em><b><span style="font-size:10.0pt;font-family:\'Century Gothic\',sans-serif;color:#2E75B6;background:white;font-style:normal">TRAINING:</span></b></em> <em><span style="font-size:10.0pt;font-family:\'Century Gothic\',sans-serif;color:#222222;background:white;font-style:normal">event_name</span></em></p>
 <p style="margin-right:18.95pt"><em><b><span style="font-size:10.0pt;font-family:\'Century Gothic\',sans-serif;color:#2E75B6;background:white;font-style:normal">DATES: </span></b></em> <em><b><span style="font-size:10.0pt;font-family:\'Century Gothic\',sans-serif;color:black;background:white;font-style:normal">date</span></b></em></p>
 <p style="margin-right:18.95pt"><em><b><span style="font-size:10.0pt;font-family:\'Century Gothic\',sans-serif;color:#2E75B6;background:white;font-style:normal">VENUE: </span></b></em> <em><b><span style="font-size:10.0pt;font-family:\'Century Gothic\',sans-serif;color:black;background:white;font-style:normal">location</span></b></em></p>
-<p><em><span style="font-size:10.0pt;font-family:\'Century Gothic\',sans-serif;color:#222222;background:white;font-style:normal">We have attached: the <b>Course Content, Invitation Letter</b> &amp; <b>Proforma Invoice</b> to help you/your colleagues in getting the necessary approvals for the above-mentioned training.</span></em></p>
+<p><em><span style="font-size:10.0pt;font-family:\'Century Gothic\',sans-serif;color:#222222;background:white;font-style:normal">We have attached: the <b>Invitation Letter</b> &amp; <b>Proforma Invoice</b> to help you/your colleagues in getting the necessary approvals for the above-mentioned training.The <b>Course Content</b> will be shared within 24 Hours.</span></em></p>
 <p style="margin-right:18.95pt"><a href="https://www.capabuil.com/download-cpd-calenders/?external=1"><b><span style="color:windowtext">DOWNLOAD CPD TRAINING CALENDARS</span></b></a> <em><span style="font-size:10.0pt;font-family:\'Century Gothic\',sans-serif;color:#222222;background:white;font-style:normal">to access the full listing of our competency <b>NITA &amp; ODPC APPROVED</b> programs </span></em> <em><b><span style="font-size:10.0pt;font-family:\'Century Gothic\',sans-serif;color:#2E75B6;background:white;font-style:normal">designed to meet your researched needs, rather than standard packages.</span></b></em></p>
 <p style="text-align:justify">
   <em>
@@ -281,7 +281,7 @@ p {
         'slug' => 'event-reminder',
         'language' => 'english',
         'name' => 'Event Reminder (sent client)',
-        'subject' => 'Upcoming Event Reminder',
+        'subject' => 'event_name, date, location',
         'message' => '
     <html> 
     <head>
@@ -326,7 +326,7 @@ p {
         'slug' => 'event-status-notification',
         'language' => 'english',
         'name' => 'Event Status Update (sent to staff)',
-        'subject' => 'Client Event Status List',
+        'subject' => 'CLIENTS EVENTS CONFIRMATION STATUSES',
         'message' => '
 <html> 
 <head>
