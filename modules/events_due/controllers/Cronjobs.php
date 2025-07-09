@@ -205,7 +205,7 @@ class Cronjobs extends App_Controller
         $merge_fields = [
             'client_name' => explode(' ', trim($client), 2)[0],
             'client_list' => $client_names,
-            'event_name' => $event_name,
+            'event_name' => strtoupper($event_name),
             'date' => $event_date,
             'location' => $event_location
         ];
@@ -525,7 +525,7 @@ class Cronjobs extends App_Controller
         $template_slug = 'welcome-email';
         $merge_fields = [
             'client_name' => $client,
-            'event_name' => $event_name,
+            'event_name' => strtoupper($event_name),
             'date' => $date,
             'location' => $location
         ];
