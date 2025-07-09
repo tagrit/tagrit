@@ -210,6 +210,8 @@ class Cronjobs extends App_Controller
             'location' => $event_location
         ];
 
+        $cc_emails = [];
+
         $host = $_SERVER['HTTP_HOST'];
 
         if (strpos($host, 'erp') !== false) {
@@ -245,6 +247,7 @@ class Cronjobs extends App_Controller
                     continue;
                 }
 
+
                 $reminder_sent = $event->reminder_sent_at;
                 $registration_statuses_sent = $event->registration_statuses_sent_at;
 
@@ -257,7 +260,6 @@ class Cronjobs extends App_Controller
                 $days_to_add = 3 - $day_of_week;
                 $wednesday_same_week = strtotime("+{$days_to_add} days 09:00", $reminder_timestamp);
                 $now = time();
-
 
                 if ($now < $wednesday_same_week || $now >= strtotime('+1 hour', $wednesday_same_week)) {
                     continue;
@@ -295,7 +297,9 @@ class Cronjobs extends App_Controller
                             'NOT CONFIRMED' => 'red',
                             default => 'black',
                         };
-                        $block .= "<li>DELEGATE " . ($index + 1) . " - {$delegate['email']} - <span style='color:{$status_color}; font-weight:bold;'>{$status}</span></li>";
+                        $block .= "<li>DELEGATE " . ($index + 1) .
+                            " – {$delegate['email']} | {$delegate['phone']} | {$delegate['organization']} " .
+                            "- <span style='color:{$status_color}; font-weight:bold;'>{$status}</span></li>";
                     }
                 }
 
@@ -316,74 +320,46 @@ class Cronjobs extends App_Controller
 
 
             $template_slug = 'event-status-notification';
+            $host = $_SERVER['HTTP_HOST'];
+            $env_mappings = [
+                [
+                    'keywords' => ['localhost', 'dev', 'staging', 'erp'],
+                    'to'       => 'kevinmusungu455@gmail.com',
+                    'cc'       => ['kevinamayi20@gmail.com']
+                ],
+                [
+                    'keywords' => ['capabuil'],
+                    'to'       => 'simon.mwachi@capabuil.com',
+                    'cc'       => [
+                        'samuel.mwenda@capabuil.com',
+                        'priscilla.nyambura@capabuil.com',
+                        'reagan.nyadimo@capabuil.com',
+                        'finance@capabuil.com' // Will be ignored for DSAC and ABA if needed
+                    ]
+                ]
+            ];
 
-            // Send DSAC email if any events
+            // DSAC
             if (!empty($dsac_events)) {
-
-                $host = $_SERVER['HTTP_HOST'];
-
-                if (strpos($host, 'erp') !== false) {
-                    $this->emails_model->send_email_template($template_slug, 'kevinmusungu455@gmail.com', ['event_status_content' => $dsac_content], '', ['kevinamayi20@gmail.com']);
-                } elseif (strpos($host, 'capabuil') !== false) {
-                    $this->emails_model->send_email_template($template_slug, 'simon.mwachi@capabuil.com', ['event_status_content' => $dsac_content], '', ['samuel.mwenda@capabuil.com', 'priscilla.nyambura@capabuil.com', 'reagan.nyadimo@capabuil.com']);
-                }
-
-                $this->emails_model->send_email_template($template_slug, 'kevinmusungu455@gmail.com', ['event_status_content' => $dsac_content], '', ['kevinamayi20@gmail.com']);
-
+                $this->send_event_email($host, $env_mappings, $template_slug, ['body' => $dsac_content, 'type' => 'dsac']);
                 foreach ($dsac_events as $event) {
-                    $this->db->where('event_id', $event->event_id);
-                    $this->db->where('location', $event->location);
-                    $this->db->where('venue', $event->venue);
-                    $this->db->where('start_date', $event->start_date);
-                    $this->db->where('end_date', $event->end_date);
-                    $this->db->update(db_prefix() . '_events_details', [
-                        'registration_statuses_sent_at' => date('Y-m-d H:i:s')
-                    ]);
+                    $this->update_event_detail($event);
                 }
             }
 
-            // Send FDR email if any events
+            // ABA
             if (!empty($aba_events)) {
-
-                $host = $_SERVER['HTTP_HOST'];
-
-                if (strpos($host, 'erp') !== false) {
-                    $this->emails_model->send_email_template($template_slug, 'kevinmusungu455@gmail.com', ['event_status_content' => $dsac_content], '', ['kevinamayi20@gmail.com']);
-                } elseif (strpos($host, 'capabuil') !== false) {
-                    $this->emails_model->send_email_template($template_slug, 'eugene.oketch@capabuil.com', ['event_status_content' => $dsac_content], '', ['finance@capabuil.com', 'reagan.nyadimo@capabuil.com']);
-                }
-
+                $this->send_event_email($host, $env_mappings, $template_slug, ['body' => $aba_content, 'type' => 'aba']);
                 foreach ($aba_events as $event) {
-                    $this->db->where('event_id', $event->event_id);
-                    $this->db->where('location', $event->location);
-                    $this->db->where('venue', $event->venue);
-                    $this->db->where('start_date', $event->start_date);
-                    $this->db->where('end_date', $event->end_date);
-                    $this->db->update(db_prefix() . '_events_details', [
-                        'registration_statuses_sent_at' => date('Y-m-d H:i:s')
-                    ]);
+                    $this->update_event_detail($event);
                 }
             }
 
+            // FESGI
             if (!empty($fesgi_events)) {
-
-                $host = $_SERVER['HTTP_HOST'];
-
-                if (strpos($host, 'erp') !== false) {
-                    $this->emails_model->send_email_template($template_slug, 'kevinmusungu455@gmail.com', ['event_status_content' => $dsac_content], '', ['kevinamayi20@gmail.com']);
-                } elseif (strpos($host, 'capabuil') !== false) {
-                    $this->emails_model->send_email_template($template_slug, 'simon.mwachi@capabuil.com', ['event_status_content' => $dsac_content], '', ['samuel.mwenda@capabuil.com', 'priscilla.nyambura@capabuil.com', 'finance@capabuil.com', 'reagan.nyadimo@capabuil.com']);
-                }
-
+                $this->send_event_email($host, $env_mappings, $template_slug, ['body' => $fesgi_content, 'type' => 'fesgi']);
                 foreach ($fesgi_events as $event) {
-                    $this->db->where('event_id', $event->event_id);
-                    $this->db->where('location', $event->location);
-                    $this->db->where('venue', $event->venue);
-                    $this->db->where('start_date', $event->start_date);
-                    $this->db->where('end_date', $event->end_date);
-                    $this->db->update(db_prefix() . '_events_details', [
-                        'registration_statuses_sent_at' => date('Y-m-d H:i:s')
-                    ]);
+                    $this->update_event_detail($event);
                 }
             }
 
@@ -400,6 +376,50 @@ class Cronjobs extends App_Controller
         }
     }
 
+
+    // Update helper
+    function update_event_detail($event)
+    {
+        $CI = &get_instance();
+        $CI->db->where('event_id', $event->event_id);
+        $CI->db->where('location', $event->location);
+        $CI->db->where('venue', $event->venue);
+        $CI->db->where('start_date', $event->start_date);
+        $CI->db->where('end_date', $event->end_date);
+        $CI->db->update(db_prefix() . '_events_details', [
+            'registration_statuses_sent_at' => date('Y-m-d H:i:s')
+        ]);
+    }
+
+
+    // Helper function
+    function send_event_email($host, $env_mappings, $template_slug, $content)
+    {
+
+        foreach ($env_mappings as $env) {
+            foreach ($env['keywords'] as $keyword) {
+                if (stripos($host, $keyword) !== false) {
+                    $to = $env['to'];
+                    $cc = $env['cc'];
+                    // If it's DSAC or ABA, optionally filter CC list
+                    if (isset($content['type']) && in_array($content['type'], ['dsac', 'aba'])) {
+                        $cc = array_filter($cc, fn($email) => $email !== 'finance@capabuil.com');
+                    }
+
+                    return $this->emails_model->send_email_template(
+                        $template_slug,
+                        $to,
+                        ['event_status_content' => $content['body']],
+                        '',
+                        $cc
+                    );
+                }
+            }
+        }
+
+        log_message('error', "No environment match found for host: $host");
+        return false;
+    }
 
     public function update_event_reminder_status($event_name, $venue, $location, $start_date)
     {

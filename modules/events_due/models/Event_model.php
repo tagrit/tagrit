@@ -236,6 +236,7 @@ class Event_model extends App_Model
         tblevents_due_name.name AS event_name,
         tblevents_due_events.venue,        
         tblevents_due_events.location,
+        tblevents_due_events.organization,
         tblevents_due_registrations.clients AS serialized_clients
     ');
 
