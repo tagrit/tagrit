@@ -1,0 +1,16 @@
+.tox-tinymce {
+    @apply !tw-border !tw-border-solid !tw-border-neutral-300 !tw-rounded-md;
+}
+
+.tox .tox-edit-area__iframe {
+    @apply !tw-bg-neutral-50/70;
+}
+
+.tox:not(.tox-tinymce-inline) .tox-editor-header {
+    @apply !tw-shadow-none !tw-border-b !tw-border-solid !tw-border-neutral-300;
+}
+
+.tox .tox-mbtn--active,
+.tox .tox-mbtn:hover:not(:disabled):not(.tox-mbtn--active) {
+    @apply !tw-bg-neutral-100;
+}

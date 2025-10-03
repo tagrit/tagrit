@@ -1,0 +1,97 @@
+.fc-button-primary {
+    @apply !tw-text-white !tw-bg-neutral-800 !tw-border-neutral-800;
+}
+
+.fc-button-primary:focus,
+.fc-button-primary.focus {
+    @apply !tw-bg-neutral-900 !tw-text-white !tw-border-neutral-900;
+}
+
+.fc-button-primary:hover {
+    @apply !tw-bg-neutral-900 !tw-text-white !tw-border-neutral-900;
+}
+
+.fc-button-primary:active,
+.fc-button-primary.fc-button-active {
+    @apply !tw-bg-neutral-900 !tw-text-white !tw-border-neutral-900 !tw-bg-none;
+}
+
+.fc-button-primary:active:hover,
+.fc-button-primary.fc-button-active:hover,
+.fc-button-primary:active:focus,
+.fc-button-primary.fc-button-active:focus,
+.fc-button-primary:active.focus,
+.fc-button-primary.fc-button-active.focus {
+    @apply !tw-bg-neutral-900 !tw-text-white !tw-border-neutral-900;
+}
+
+.fc-button-primary.disabled:hover,
+.fc-button-primary[disabled]:hover,
+.fc-button-primary.disabled:focus,
+.fc-button-primary[disabled]:focus,
+.fc-button-primary.disabled.focus,
+.fc-button-primary[disabled].focus {
+    @apply !tw-bg-neutral-900 !tw-border-neutral-900;
+}
+
+.fc .fc-scrollgrid {
+    @apply tw-rounded-md;
+}
+
+.fc .fc-event {
+    @apply !tw-overflow-hidden !tw-rounded-lg !tw-shadow-none !tw-outline-none;
+}
+
+.fc .fc-col-header-cell-cushion {
+    @apply !tw-p-2 !tw-text-sm !tw-font-medium !tw-text-neutral-700;
+}
+
+.fc .fc-timegrid-slot-label-cushion {
+    @apply !tw-text-xs !tw-uppercase !tw-text-neutral-400;
+}
+
+.fc .fc-popover {
+    @apply !tw-ml-1 !tw-mt-1 !tw-min-w-80 !tw-max-w-lg !tw-rounded-lg !tw-bg-white !tw-shadow-sm;
+}
+
+.fc .fc-popover .fc-popover-body {
+    @apply !tw-max-h-96 !tw-overflow-y-auto;
+}
+
+.fc .fc-popover .fc-popover-header {
+    @apply !tw-px-3 !tw-py-2;
+}
+
+.fc .fc-daygrid-day-number {
+    @apply !tw-text-xs !tw-text-neutral-400 tw-font-medium;
+}
+
+.fc .fc-day.fc-day-today .fc-daygrid-day-number {
+    @apply !tw-mr-2 !tw-mt-1 !tw-flex !tw-size-6 !tw-items-center !tw-justify-center !tw-rounded-full !tw-bg-primary-600 !tw-font-semibold !tw-text-white;
+}
+
+.fc .fc-more-link {
+    @apply !tw-text-neutral-500 hover:!tw-bg-transparent hover:!tw-text-neutral-700;
+}
+
+.fc .fc-day-other {
+    @apply tw-bg-neutral-50;
+}
+
+.fc {
+    --fc-border-color: theme('colors.neutral.200');
+    --fc-highlight-color: theme('colors.primary.50');
+
+    --fc-today-bg-color: transparent;
+    --fc-event-selected-overlay-color: transparent;
+    --fc-event-border-color: transparent;
+    --fc-event-text-color: #fff;
+    --fc-event-selected-overlay-color: transparent;
+
+    --fc-more-link-bg-color: inherit;
+    --fc-more-link-text-color: inherit;
+
+    --fc-neutral-bg-color: theme('colors.neutral.50');
+    --fc-neutral-text-color: theme('colors.neutral.600');
+    --fc-now-indicator-color: theme('colors.primary.600');
+}

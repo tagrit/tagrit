@@ -1,0 +1,11 @@
+.input-group-select .input-group-addon{
+  opacity: 1;
+}
+
+div#fill_multiple_serial_number_hs {
+  overflow: unset !important;
+}
+
+.modal{
+  z-index: 1050 !important;
+}

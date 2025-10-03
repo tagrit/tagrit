@@ -1,0 +1,6 @@
+{
+    "require": {
+        "php" : "^8.0",
+        "backup-manager/backup-manager": "^2.0"
+    }
+}

@@ -1,0 +1,33 @@
+/* Event Title */
+.event-title {
+    text-align: left;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.event-title {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.event-info {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.event-column {
+    flex: 1; /* Each column takes equal width */
+    min-width: 250px; /* Prevents columns from shrinking too much */
+}
+
+.event-info p {
+    font-size: 14px;
+    margin: 8px 0;
+    padding: 5px;
+    background: #f9f9f9;
+    border-radius: 5px;
+}
+

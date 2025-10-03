@@ -1,0 +1,28 @@
+.checkbox{
+	margin-top: 0px !important; 
+    margin-bottom: 0px !important;
+}
+.pad_left_0{
+    padding-left: 0px
+}
+.pad_right_0{
+    padding-right: 0px
+}
+
+.container {
+    width: 1570px;
+}
+
+.btn-bottom-toolbar {
+    position: fixed;
+    bottom: 0;
+    padding: 15px;
+    padding-right: 41px;
+    margin: 0 0 0 -46px;
+    -webkit-box-shadow: 0 -4px 1px -4px rgb(0 0 0 / 10%);
+    box-shadow: 0 -4px 1px -4px rgb(0 0 0 / 10%);
+    background: #fff;
+    width: calc(100% - 211px);
+    z-index: 5;
+    border-top: 1px solid #ededed;
+}

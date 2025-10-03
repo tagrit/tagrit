@@ -1,0 +1,177 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+@import "./labels";
+@import "./text";
+@import "./background";
+@import "./pagination";
+@import "./alerts";
+@import "./buttons";
+@import "./form";
+@import "./dropdown";
+@import "./progress-bar";
+@import "./tabs";
+@import "./datetimepicker";
+@import "./panel";
+@import "./table";
+@import "./gantt";
+@import "./modal";
+@import "./badge";
+@import "./select";
+@import "./formbuilder";
+@import "./fullcalendar";
+@import "./tinymce";
+
+@layer components {
+  .h1 .small,
+  .h1 small,
+  .h2 .small,
+  .h2 small,
+  .h3 .small,
+  .h3 small,
+  .h4 .small,
+  .h4 small,
+  .h5 .small,
+  .h5 small,
+  .h6 .small,
+  .h6 small,
+  h1 .small,
+  h1 small,
+  h2 .small,
+  h2 small,
+  h3 .small,
+  h3 small,
+  h4 .small,
+  h4 small,
+  h5 .small,
+  h5 small,
+  h6 .small,
+  h6 small {
+    @apply tw-text-neutral-600;
+  }
+
+  a {
+    text-decoration: none !important;
+    outline: none !important;
+  }
+
+  a {
+    @apply tw-text-primary-700 focus:tw-text-primary-800;
+  }
+
+  a.disabled {
+    pointer-events: none;
+  }
+
+  .bold,
+  b,
+  strong {
+    @apply tw-font-semibold;
+  }
+
+  .small,
+  small {
+    @apply tw-text-sm;
+  }
+
+  .caret {
+    border: solid theme("colors.neutral.800");
+    border-style: solid !important;
+    border-width: 0 1px 1px 0 !important;
+    padding: 3px;
+    transform: rotate(45deg);
+    margin-top: -5.3px;
+  }
+
+  [dir="rtl"] .caret {
+    margin-right: 10px;
+  }
+
+  .dropup .caret {
+    border-width: 0 1px 1px 0 !important;
+    transform: rotate(-135deg);
+  }
+
+  .dropup.btn-group .caret {
+    margin-top: 0;
+  }
+}
+
+.tox-dialog-wrap__backdrop {
+  @apply !tw-bg-neutral-900/25;
+}
+
+.tox-dialog-wrap__backdrop--opaque {
+  @apply !tw-bg-neutral-900/25;
+}
+
+@media (max-width: 768px) {
+  .tox-dialog-wrap__backdrop--opaque {
+    background-color: #fff !important;
+  }
+}
+
+/* Dropzone*/
+#dropzoneDragArea,
+.dropzoneDragArea {
+  @apply tw-bg-white tw-border-2 tw-border-dashed tw-border-neutral-300 tw-rounded-lg tw-p-8 tw-text-center tw-mb-4 tw-cursor-pointer tw-text-neutral-600 tw-font-semibold;
+}
+
+#dropzoneDragArea:hover,
+.dropzoneDragArea:hover {
+  @apply tw-bg-neutral-50;
+}
+
+.dropzone-manual {
+  border: 0 !important;
+  padding: 0;
+  background: transparent;
+}
+
+.dropzone-expense-preview {
+  min-height: auto;
+}
+
+.dropzone-manual.dropzone .dz-message {
+  @apply tw-font-semibold tw-mt-0;
+}
+
+form.dropzone {
+  @apply tw-bg-white tw-border-2 tw-border-dashed tw-border-neutral-300 tw-rounded-lg;
+}
+
+form.dropzone:hover {
+  @apply tw-bg-neutral-100;
+}
+
+form.dropzone input[type="file"] {
+  display: none;
+}
+
+.dropzone .dz-message {
+  @apply tw-mt-[45px] tw-text-neutral-600 tw-font-semibold;
+}
+
+.dropzone .dz-preview .dz-image {
+  border-radius: 0;
+  background: #2563eb;
+}
+
+.dz-details,
+.dz-details:hover {
+  background: #2563eb;
+  opacity: 1;
+  color: #fff;
+  height: 120px;
+}
+
+.dropzone .dz-preview .dz-details .dz-filename span,
+.dropzone .dz-preview .dz-details .dz-size span {
+  background: #323a45;
+  color: #fff;
+}
+
+.dropzone .dz-preview .dz-details .dz-filename:hover span {
+  color: #323a45;
+}

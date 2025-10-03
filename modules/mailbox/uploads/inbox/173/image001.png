@@ -1,0 +1,1170 @@
+<html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns:m="http://schemas.microsoft.com/office/2004/12/omml" xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="Generator" content="Microsoft Word 15 (filtered medium)">
+<!--[if !mso]><style>v\:* {behavior:url(#default#VML);}
+o\:* {behavior:url(#default#VML);}
+w\:* {behavior:url(#default#VML);}
+.shape {behavior:url(#default#VML);}
+</style><![endif]--><style><!--
+/* Font Definitions */
+@font-face
+	{font-family:Helvetica;
+	panose-1:2 11 6 4 2 2 2 2 2 4;}
+@font-face
+	{font-family:Wingdings;
+	panose-1:5 0 0 0 0 0 0 0 0 0;}
+@font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;}
+@font-face
+	{font-family:Aptos;}
+@font-face
+	{font-family:Consolas;
+	panose-1:2 11 6 9 2 2 4 3 2 4;}
+@font-face
+	{font-family:"Segoe UI Symbol";
+	panose-1:2 11 5 2 4 2 4 2 2 3;}
+/* Style Definitions */
+p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0cm;
+	font-size:12.0pt;
+	font-family:"Aptos",sans-serif;}
+a:link, span.MsoHyperlink
+	{mso-style-priority:99;
+	color:blue;
+	text-decoration:underline;}
+code
+	{mso-style-priority:99;
+	font-family:"Courier New";}
+p.gmail-, li.gmail-, div.gmail-
+	{mso-style-name:gmail-;
+	mso-margin-top-alt:auto;
+	margin-right:0cm;
+	mso-margin-bottom-alt:auto;
+	margin-left:0cm;
+	font-size:12.0pt;
+	font-family:"Aptos",sans-serif;}
+span.m-2753367169173952210gmailsignatureprefix
+	{mso-style-name:m_-2753367169173952210gmailsignatureprefix;}
+span.EmailStyle24
+	{mso-style-type:personal-reply;
+	font-family:"Aptos",sans-serif;
+	color:windowtext;}
+.MsoChpDefault
+	{mso-style-type:export-only;
+	font-size:10.0pt;
+	mso-ligatures:none;}
+@page WordSection1
+	{size:612.0pt 792.0pt;
+	margin:72.0pt 72.0pt 72.0pt 72.0pt;}
+div.WordSection1
+	{page:WordSection1;}
+/* List Definitions */
+@list l0
+	{mso-list-id:558901949;
+	mso-list-template-ids:-1123371340;}
+@list l0:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:;
+	mso-level-tab-stop:36.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;
+	mso-ansi-font-size:10.0pt;
+	font-family:Symbol;}
+@list l0:level2
+	{mso-level-number-format:bullet;
+	mso-level-text:;
+	mso-level-tab-stop:72.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;
+	mso-ansi-font-size:10.0pt;
+	font-family:Symbol;}
+@list l0:level3
+	{mso-level-number-format:bullet;
+	mso-level-text:;
+	mso-level-tab-stop:108.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;
+	mso-ansi-font-size:10.0pt;
+	font-family:Symbol;}
+@list l0:level4
+	{mso-level-number-format:bullet;
+	mso-level-text:;
+	mso-level-tab-stop:144.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;
+	mso-ansi-font-size:10.0pt;
+	font-family:Symbol;}
+@list l0:level5
+	{mso-level-number-format:bullet;
+	mso-level-text:;
+	mso-level-tab-stop:180.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;
+	mso-ansi-font-size:10.0pt;
+	font-family:Symbol;}
+@list l0:level6
+	{mso-level-number-format:bullet;
+	mso-level-text:;
+	mso-level-tab-stop:216.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;
+	mso-ansi-font-size:10.0pt;
+	font-family:Symbol;}
+@list l0:level7
+	{mso-level-number-format:bullet;
+	mso-level-text:;
+	mso-level-tab-stop:252.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;
+	mso-ansi-font-size:10.0pt;
+	font-family:Symbol;}
+@list l0:level8
+	{mso-level-number-format:bullet;
+	mso-level-text:;
+	mso-level-tab-stop:288.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;
+	mso-ansi-font-size:10.0pt;
+	font-family:Symbol;}
+@list l0:level9
+	{mso-level-number-format:bullet;
+	mso-level-text:;
+	mso-level-tab-stop:324.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;
+	mso-ansi-font-size:10.0pt;
+	font-family:Symbol;}
+@list l1
+	{mso-list-id:778986188;
+	mso-list-template-ids:195353052;}
+@list l2
+	{mso-list-id:1800217882;
+	mso-list-template-ids:598375994;}
+@list l2:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:;
+	mso-level-tab-stop:36.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;
+	mso-ansi-font-size:10.0pt;
+	font-family:Symbol;}
+@list l2:level2
+	{mso-level-number-format:bullet;
+	mso-level-text:o;
+	mso-level-tab-stop:72.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;
+	mso-ansi-font-size:10.0pt;
+	font-family:"Courier New";
+	mso-bidi-font-family:"Times New Roman";}
+@list l2:level3
+	{mso-level-number-format:bullet;
+	mso-level-text:;
+	mso-level-tab-stop:108.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;
+	mso-ansi-font-size:10.0pt;
+	font-family:Wingdings;}
+@list l2:level4
+	{mso-level-number-format:bullet;
+	mso-level-text:;
+	mso-level-tab-stop:144.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;
+	mso-ansi-font-size:10.0pt;
+	font-family:Wingdings;}
+@list l2:level5
+	{mso-level-number-format:bullet;
+	mso-level-text:;
+	mso-level-tab-stop:180.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;
+	mso-ansi-font-size:10.0pt;
+	font-family:Wingdings;}
+@list l2:level6
+	{mso-level-number-format:bullet;
+	mso-level-text:;
+	mso-level-tab-stop:216.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;
+	mso-ansi-font-size:10.0pt;
+	font-family:Wingdings;}
+@list l2:level7
+	{mso-level-number-format:bullet;
+	mso-level-text:;
+	mso-level-tab-stop:252.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;
+	mso-ansi-font-size:10.0pt;
+	font-family:Wingdings;}
+@list l2:level8
+	{mso-level-number-format:bullet;
+	mso-level-text:;
+	mso-level-tab-stop:288.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;
+	mso-ansi-font-size:10.0pt;
+	font-family:Wingdings;}
+@list l2:level9
+	{mso-level-number-format:bullet;
+	mso-level-text:;
+	mso-level-tab-stop:324.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;
+	mso-ansi-font-size:10.0pt;
+	font-family:Wingdings;}
+@list l3
+	{mso-list-id:1813207727;
+	mso-list-template-ids:1154888074;}
+@list l3:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:;
+	mso-level-tab-stop:36.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;
+	mso-ansi-font-size:10.0pt;
+	font-family:Symbol;}
+@list l3:level2
+	{mso-level-number-format:bullet;
+	mso-level-text:;
+	mso-level-tab-stop:72.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;
+	mso-ansi-font-size:10.0pt;
+	font-family:Symbol;}
+@list l3:level3
+	{mso-level-number-format:bullet;
+	mso-level-text:;
+	mso-level-tab-stop:108.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;
+	mso-ansi-font-size:10.0pt;
+	font-family:Symbol;}
+@list l3:level4
+	{mso-level-number-format:bullet;
+	mso-level-text:;
+	mso-level-tab-stop:144.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;
+	mso-ansi-font-size:10.0pt;
+	font-family:Symbol;}
+@list l3:level5
+	{mso-level-number-format:bullet;
+	mso-level-text:;
+	mso-level-tab-stop:180.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;
+	mso-ansi-font-size:10.0pt;
+	font-family:Symbol;}
+@list l3:level6
+	{mso-level-number-format:bullet;
+	mso-level-text:;
+	mso-level-tab-stop:216.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;
+	mso-ansi-font-size:10.0pt;
+	font-family:Symbol;}
+@list l3:level7
+	{mso-level-number-format:bullet;
+	mso-level-text:;
+	mso-level-tab-stop:252.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;
+	mso-ansi-font-size:10.0pt;
+	font-family:Symbol;}
+@list l3:level8
+	{mso-level-number-format:bullet;
+	mso-level-text:;
+	mso-level-tab-stop:288.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;
+	mso-ansi-font-size:10.0pt;
+	font-family:Symbol;}
+@list l3:level9
+	{mso-level-number-format:bullet;
+	mso-level-text:;
+	mso-level-tab-stop:324.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;
+	mso-ansi-font-size:10.0pt;
+	font-family:Symbol;}
+ol
+	{margin-bottom:0cm;}
+ul
+	{margin-bottom:0cm;}
+--></style><!--[if gte mso 9]><xml>
+<o:shapedefaults v:ext="edit" spidmax="1026" />
+</xml><![endif]--><!--[if gte mso 9]><xml>
+<o:shapelayout v:ext="edit">
+<o:idmap v:ext="edit" data="1" />
+</o:shapelayout></xml><![endif]-->
+</head>
+<body lang="EN-ZA" link="blue" vlink="purple" style="word-wrap:break-word">
+<div class="WordSection1">
+<p class="MsoNormal"><span style="mso-fareast-language:EN-US">Hi Kevin,<o:p></o:p></span></p>
+<div style="mso-element:para-border-div;border:none;border-bottom:solid windowtext 1.0pt;padding:0cm 0cm 1.0pt 0cm">
+<p class="MsoNormal" style="border:none;padding:0cm"><span style="mso-fareast-language:EN-US"><o:p>&nbsp;</o:p></span></p>
+<p class="MsoNormal" style="border:none;padding:0cm"><span style="mso-fareast-language:EN-US">Please remember to always include or Cc the API Support email address (<a href="mailto:api@accounting.sageone.co.za">api@accounting.sageone.co.za</a>) when you reply.
+<o:p></o:p></span></p>
+<p class="MsoNormal" style="border:none;padding:0cm"><span style="mso-fareast-language:EN-US"><o:p>&nbsp;</o:p></span></p>
+<p class="MsoNormal" style="border:none;padding:0cm"><span style="mso-fareast-language:EN-US">Our personal e-mail addresses are not always monitored and could result in poor service should an email go unattended for any reason.
+<o:p></o:p></span></p>
+<p class="MsoNormal" style="border:none;padding:0cm"><span style="mso-fareast-language:EN-US"><o:p>&nbsp;</o:p></span></p>
+<p class="MsoNormal" style="border:none;padding:0cm"><span style="mso-fareast-language:EN-US">We work on a rotational basis, the above-mentioned email address is always monitored and your email would be attended to quicker.<o:p></o:p></span></p>
+<p class="MsoNormal" style="border:none;padding:0cm"><span style="mso-fareast-language:EN-US"><o:p>&nbsp;</o:p></span></p>
+</div>
+<p class="MsoNormal"><span style="mso-fareast-language:EN-US"><o:p>&nbsp;</o:p></span></p>
+<p class="MsoNormal"><span style="mso-fareast-language:EN-US">Kindly provide a detailed process flow as well as the daily frequency for each endpoint you have claimed.<o:p></o:p></span></p>
+<p class="MsoNormal"><span style="mso-fareast-language:EN-US"><o:p>&nbsp;</o:p></span></p>
+<p class="MsoNormal"><span style="mso-fareast-language:EN-US">Please note that we have noted your previous replies, however they do not provide a clear picture, and we cannot properly evaluate your solution and its impact on the API and overall performance
+ of the system.<o:p></o:p></span></p>
+<p class="MsoNormal"><span style="mso-fareast-language:EN-US"><o:p>&nbsp;</o:p></span></p>
+<p class="MsoNormal"><span style="mso-fareast-language:EN-US">Regards,<o:p></o:p></span></p>
+<p class="MsoNormal"><span style="mso-fareast-language:EN-US">The Accounting API Team<o:p></o:p></span></p>
+<p class="MsoNormal"><span style="mso-fareast-language:EN-US"><o:p>&nbsp;</o:p></span></p>
+<div>
+<div style="border:none;border-top:solid #E1E1E1 1.0pt;padding:3.0pt 0cm 0cm 0cm">
+<p class="MsoNormal"><b><span lang="EN-US" style="font-size:11.0pt;font-family:&quot;Calibri&quot;,sans-serif">From:</span></b><span lang="EN-US" style="font-size:11.0pt;font-family:&quot;Calibri&quot;,sans-serif"> KEVIN AMAYI &lt;kevinamayi20@gmail.com&gt;
+<br>
+<b>Sent:</b> Monday, 31 March 2025 14:02<br>
+<b>To:</b> Kubushi, Joewie &lt;JoewieHarvey.Kubushi@sage.com&gt;<br>
+<b>Subject:</b> Re: Still Following up on the Live API<o:p></o:p></span></p>
+</div>
+</div>
+<p class="MsoNormal"><o:p>&nbsp;</o:p></p>
+<table class="MsoNormalTable" border="1" cellspacing="3" cellpadding="0" width="100%" style="width:100.0%;background:#FFFFC0;border:none;border-left:solid black 2.25pt">
+<tbody>
+<tr>
+<td style="border:none;padding:3.75pt 3.75pt 7.5pt 3.75pt">
+<p class="MsoNormal"><acronym><b><span style="font-family:&quot;Aptos&quot;,sans-serif;color:black">EXTERNAL EMAIL</span></b></acronym><o:p></o:p></p>
+</td>
+</tr>
+</tbody>
+</table>
+<div>
+<div>
+<p class="gmail-">Dear Joewie,<o:p></o:p></p>
+<p class="gmail-">Thank you for your email and for outlining the API usage limits in Section 12 of the Developer Services License Agreement. We appreciate the clarity on these standards and are committed to ensuring full compliance with Sage’s API policies.<o:p></o:p></p>
+<p class="gmail-">Based on the specified limitations, we have reviewed our request strategy and will make the following adjustments to remain within the allowed thresholds:<o:p></o:p></p>
+<ul type="disc">
+<li class="gmail-" style="mso-list:l2 level1 lfo1"><strong><span style="font-family:&quot;Aptos&quot;,sans-serif">Daily Request Limit (Section 12.4.2):</span></strong> Our system will ensure that the total number of API requests does not exceed 2,500 per day per company,
+ even though enforcement of this limit is not currently in place.<o:p></o:p></li><li class="gmail-" style="mso-list:l2 level1 lfo1"><strong><span style="font-family:&quot;Aptos&quot;,sans-serif">Per-Minute Request Limit (Section 12.4.1):</span></strong> We will maintain a request frequency of no more than one request per second to avoid surpassing
+ the limit of 100 requests per minute. This will also prevent any risk of receiving an HTTP 429 error and a temporary one-hour IP block.<o:p></o:p></li><li class="gmail-" style="mso-list:l2 level1 lfo1"><strong><span style="font-family:&quot;Aptos&quot;,sans-serif">Resource-Intensive API Calls (Section 12.4.5):</span></strong> We will minimize the use of API calls that have a high impact on system performance.<o:p></o:p></li><li class="gmail-" style="mso-list:l2 level1 lfo1"><strong><span style="font-family:&quot;Aptos&quot;,sans-serif">Fair Usage and System Performance Considerations (Sections 12.4.3 &amp; 12.4.4):</span></strong> We recognize that Sage Accounting is optimized for small business
+ usage, and we will ensure that our API interactions remain within the reasonable operational limits of 3,000 customers, 3,000 suppliers, 5,000 items, 1,000 customer invoices, 1,000 supplier invoices, and 2,000 bank transactions per month to prevent any adverse
+ effects on reporting and overall system performance.<o:p></o:p></li><li class="gmail-" style="mso-list:l2 level1 lfo1"><strong><span style="font-family:&quot;Aptos&quot;,sans-serif">Future Adjustments (Section 12.4.6):</span></strong> We will monitor any updates to Sage’s API limits and adjust our integration accordingly to maintain
+ compliance with any revised thresholds or enforcement mechanisms.<o:p></o:p></li></ul>
+<p class="gmail-">Please let us know if you have any additional recommendations or requirements that we should consider. We appreciate your guidance in ensuring seamless API integration.<o:p></o:p></p>
+<p class="gmail-">That said, we kindly request that this issue be resolved as urgently as possible to avoid disruptions that could slow down operations and frustrate our processes. A swift resolution would be highly appreciated to maintain a smooth experience
+ for all stakeholders.<o:p></o:p></p>
+<p class="gmail-">Looking forward to your prompt response.<o:p></o:p></p>
+<p class="gmail-">Best regards,<br>
+<strong><span style="font-family:&quot;Aptos&quot;,sans-serif">Kevin Amayi Musungu.</span></strong><br>
+<strong><span style="font-family:&quot;Aptos&quot;,sans-serif">Chief Technology Officer (CTO)</span></strong><o:p></o:p></p>
+</div>
+<p class="MsoNormal"><o:p>&nbsp;</o:p></p>
+<div>
+<div>
+<p class="MsoNormal">On Mon, Mar 31, 2025 at 2:21<span style="font-family:&quot;Arial&quot;,sans-serif"> </span>PM Kubushi, Joewie &lt;<a href="mailto:JoewieHarvey.Kubushi@sage.com">JoewieHarvey.Kubushi@sage.com</a>&gt; wrote:<o:p></o:p></p>
+</div>
+<blockquote style="border:none;border-left:solid #CCCCCC 1.0pt;padding:0cm 0cm 0cm 6.0pt;margin-left:4.8pt;margin-right:0cm">
+<div>
+<div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">Hi David,<o:p></o:p></p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">Kindly note that the frequency you have provided adheres to the daily limit but does not comply with the other limitations.<o:p></o:p></p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">I have copied the usage limits of our API from Section 12 of our Developer Services License Agreement below for your reference:<o:p></o:p></p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">12.4. Usage limits for the API:<br>
+<br>
+12.4.1. A limit of 100 requests can be made per minute per company. If this request limit is exceeded, the API will return HTTP 429 (Request Limit Reached) with the message “Your IP address has exceeded the allowed number of transactions per minute and has
+ been blocked for 1 hour”. Your IP address will be blocked for 1 hour. It is advisable to make no more than one request per second to avoid this.<br>
+<br>
+12.4.2. A limit of 2,500 requests can be made per day per company. Although these limits are not currently enforced, please consider this limit when calling the API. These limits will be enforced in future.<span style="color:red"><br>
+</span><br>
+<span style="color:red">12.4.3. Sage Accounting is an accounting application for small businesses, with intended usage around 3,000 customers, 3,000 suppliers, 5,000 items and 1,000 customer invoices, 1,000 supplier invoices and 2,000 bank transactions per
+ month. Users will experience performance issues, in particular with reporting, with companies that exceed reasonable usage.</span><br>
+<br>
+12.4.4. The API and all users using the API are limited to a finite pool of resources. Should these resources be exceeded, in order to maintain the performance and stability of the Sage Accounting accounting application, resource governing will take place.
+ This will affect all API users and all users are encouraged to adhere to the fair usage policies and rate limits.<br>
+<br>
+12.4.5. While all API calls are limited per minute and per day, some API calls are a lot heavier than others and will have a significant impact on the Sage Accounting service as a whole, if used too frequently. The API calls listed in this section are to be
+ kept to a minimum – as excessive use of these calls will mean performance degradation. If excessive use of these calls is detected, API keys will be blocked without warning. This list includes, but is not limited to Detailed Ledger Transaction, Customer Ageing
+ and Supplier Ageing, Customer Statement and Supplier Statement, Account Balance, Cash Movement, Item Movement, Outstanding Customer and Supplier Documents, all Transaction Listings, Allocations, Budget, Take On Balance, Trial Balance, Tax Reports.<br>
+<br>
+12.4.6. Sage Accounting may revisit the “per minute” and “per day” limits in the future.<o:p></o:p></p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">Please provide a revised frequency that ensures all stipulated API limits(not limited to those highlighted in red) are adhered to, and will not affect the overall performance of
+ SBCA.<o:p></o:p></p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">Regards,<o:p></o:p></p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">The Accounting API Team<o:p></o:p></p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+<div>
+<div style="border:none;border-top:solid #E1E1E1 1.0pt;padding:3.0pt 0cm 0cm 0cm">
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto"><b><span lang="EN-US" style="font-size:11.0pt;font-family:&quot;Calibri&quot;,sans-serif">From:</span></b><span lang="EN-US" style="font-size:11.0pt;font-family:&quot;Calibri&quot;,sans-serif"> Prof
+ David Amukowa &lt;<a href="mailto:davyamukowa@gmail.com" target="_blank">davyamukowa@gmail.com</a>&gt;
+<br>
+<b>Sent:</b> Monday, 31 March 2025 13:12<br>
+<b>To:</b> KEVIN AMAYI &lt;<a href="mailto:kevinamayi20@gmail.com" target="_blank">kevinamayi20@gmail.com</a>&gt;<br>
+<b>Cc:</b> Kubushi, Joewie &lt;<a href="mailto:JoewieHarvey.Kubushi@sage.com" target="_blank">JoewieHarvey.Kubushi@sage.com</a>&gt;; ZA - SL - Pastel - MB - My Business - API &lt;<a href="mailto:api@accounting.sageone.co.za" target="_blank">api@accounting.sageone.co.za</a>&gt;<br>
+<b>Subject:</b> Re: Still Following up on the Live API</span><o:p></o:p></p>
+</div>
+</div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+<table class="MsoNormalTable" border="1" cellspacing="3" cellpadding="0" width="100%" style="width:100.0%;background:#FFFFC0;border:none;border-left:solid black 2.25pt">
+<tbody>
+<tr>
+<td style="border:none;padding:3.75pt 3.75pt 7.5pt 3.75pt">
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto"><acronym><b><span style="font-family:&quot;Aptos&quot;,sans-serif;color:black">EXTERNAL EMAIL</span></b></acronym><o:p></o:p></p>
+</td>
+</tr>
+</tbody>
+</table>
+<div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">Dear Joewie ,&nbsp;
+<o:p></o:p></p>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+</div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">Any update on this Request ?<o:p></o:p></p>
+</div>
+</div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+<div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">On Wed, Mar 26, 2025 at 12:53<span style="font-family:&quot;Arial&quot;,sans-serif"> </span>PM KEVIN AMAYI &lt;<a href="mailto:kevinamayi20@gmail.com" target="_blank">kevinamayi20@gmail.com</a>&gt;
+ wrote:<o:p></o:p></p>
+</div>
+<blockquote style="border:none;border-left:solid #CCCCCC 1.0pt;padding:0cm 0cm 0cm 6.0pt;margin-left:4.8pt;margin-top:5.0pt;margin-right:0cm;margin-bottom:5.0pt">
+<div>
+<p>Dear Joewie,<o:p></o:p></p>
+<p>Thank you for your email. We acknowledge Sage’s API request limit of 2,500 requests per day per company, as outlined in section
+<strong><span style="font-family:&quot;Aptos&quot;,sans-serif">12.4.2</span></strong> of the Sage API standards.<o:p></o:p></p>
+<p>As requested, we confirm that our system will be making <strong><span style="font-family:&quot;Aptos&quot;,sans-serif">2,500 requests per day</span></strong>, aligning with the recommended limit. We will also ensure that our integration remains compliant with any
+ future enforcement of these limits.<o:p></o:p></p>
+<p>Please let us know if you require any further information or if there are any additional considerations we should keep in mind.<o:p></o:p></p>
+<p>Best regards,<br>
+<strong><span style="font-family:&quot;Aptos&quot;,sans-serif">Kevin Amayi Musungu.</span></strong><o:p></o:p></p>
+</div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+<div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">On Wed, Mar 26, 2025 at 12:13<span style="font-family:&quot;Arial&quot;,sans-serif"> </span>PM Kubushi, Joewie &lt;<a href="mailto:JoewieHarvey.Kubushi@sage.com" target="_blank">JoewieHarvey.Kubushi@sage.com</a>&gt;
+ wrote:<o:p></o:p></p>
+</div>
+<blockquote style="border:none;border-left:solid #CCCCCC 1.0pt;padding:0cm 0cm 0cm 6.0pt;margin-left:4.8pt;margin-top:5.0pt;margin-right:0cm;margin-bottom:5.0pt">
+<div>
+<div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">Hi David,<o:p></o:p></p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">I have copied the usage limits of our API from Section 12 of our Developer Services License Agreement below for your reference:<o:p></o:p></p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">12.4. Usage limits for the API:<br>
+<br>
+<span style="color:red">12.4.1. A limit of 100 requests can be made per minute per company. If this request limit is exceeded, the API will return HTTP 429 (Request Limit Reached) with the message “Your IP address has exceeded the allowed number of transactions
+ per minute and has been blocked for 1 hour”. Your IP address will be blocked for 1 hour. It is advisable to make no more than one request per second to avoid this.<br>
+<br>
+12.4.2. A limit of 2,500 requests can be made per day per company. Although these limits are not currently enforced, please consider this limit when calling the API. These limits will be enforced in future.<br>
+</span><br>
+12.4.3. Sage Accounting is an accounting application for small businesses, with intended usage around 3,000 customers, 3,000 suppliers, 5,000 items and 1,000 customer invoices, 1,000 supplier invoices and 2,000 bank transactions per month. Users will experience
+ performance issues, in particular with reporting, with companies that exceed reasonable usage.<br>
+<br>
+12.4.4. The API and all users using the API are limited to a finite pool of resources. Should these resources be exceeded, in order to maintain the performance and stability of the Sage Accounting accounting application, resource governing will take place.
+ This will affect all API users and all users are encouraged to adhere to the fair usage policies and rate limits.<br>
+<br>
+12.4.5. While all API calls are limited per minute and per day, some API calls are a lot heavier than others and will have a significant impact on the Sage Accounting service as a whole, if used too frequently. The API calls listed in this section are to be
+ kept to a minimum – as excessive use of these calls will mean performance degradation. If excessive use of these calls is detected, API keys will be blocked without warning. This list includes, but is not limited to Detailed Ledger Transaction, Customer Ageing
+ and Supplier Ageing, Customer Statement and Supplier Statement, Account Balance, Cash Movement, Item Movement, Outstanding Customer and Supplier Documents, all Transaction Listings, Allocations, Budget, Take On Balance, Trial Balance, Tax Reports.<br>
+<br>
+12.4.6. Sage Accounting may revisit the “per minute” and “per day” limits in the future.<o:p></o:p></p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">Regards,<o:p></o:p></p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">The Accounting API Team<o:p></o:p></p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+<div>
+<div style="border:none;border-top:solid #E1E1E1 1.0pt;padding:3.0pt 0cm 0cm 0cm">
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto"><b><span lang="EN-US" style="font-size:11.0pt;font-family:&quot;Calibri&quot;,sans-serif">From:</span></b><span lang="EN-US" style="font-size:11.0pt;font-family:&quot;Calibri&quot;,sans-serif"> Prof
+ David Amukowa &lt;<a href="mailto:davyamukowa@gmail.com" target="_blank">davyamukowa@gmail.com</a>&gt;
+<br>
+<b>Sent:</b> Wednesday, 26 March 2025 11:12<br>
+<b>To:</b> Kubushi, Joewie &lt;<a href="mailto:JoewieHarvey.Kubushi@sage.com" target="_blank">JoewieHarvey.Kubushi@sage.com</a>&gt;<br>
+<b>Cc:</b> KEVIN AMAYI &lt;<a href="mailto:kevinamayi20@gmail.com" target="_blank">kevinamayi20@gmail.com</a>&gt;; ZA - SL - Pastel - MB - My Business - API &lt;<a href="mailto:api@accounting.sageone.co.za" target="_blank">api@accounting.sageone.co.za</a>&gt;<br>
+<b>Subject:</b> Re: Still Following up on the Live API</span><o:p></o:p></p>
+</div>
+</div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+<table class="MsoNormalTable" border="1" cellspacing="3" cellpadding="0" width="100%" style="width:100.0%;background:#FFFFC0;border:none;border-left:solid black 2.25pt">
+<tbody>
+<tr>
+<td style="border:none;padding:3.75pt 3.75pt 7.5pt 3.75pt">
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto"><acronym><b><span style="font-family:&quot;Aptos&quot;,sans-serif;color:black">EXTERNAL EMAIL</span></b></acronym><o:p></o:p></p>
+</td>
+</tr>
+</tbody>
+</table>
+<div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">Hi&nbsp;Joewie,
+<o:p></o:p></p>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+</div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">Then can we work with your Limits, the Default Limits that you have per Day for every Endpoint ?<o:p></o:p></p>
+</div>
+</div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+<div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">On Wed, Mar 26, 2025 at 11:12<span style="font-family:&quot;Arial&quot;,sans-serif"> </span>AM Kubushi, Joewie &lt;<a href="mailto:JoewieHarvey.Kubushi@sage.com" target="_blank">JoewieHarvey.Kubushi@sage.com</a>&gt;
+ wrote:<o:p></o:p></p>
+</div>
+<blockquote style="border:none;border-left:solid #CCCCCC 1.0pt;padding:0cm 0cm 0cm 6.0pt;margin-left:4.8pt;margin-top:5.0pt;margin-right:0cm;margin-bottom:5.0pt">
+<div>
+<div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">Hi David,<o:p></o:p></p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">Kindly note we suggest you consider the process flow of how your solutions works and draw daily estimates from that.<o:p></o:p></p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">Please note some of the data you are pulling will not require daily syncs as it does not change drastically, i.e. TaxType/Get can be cached to reduce the amount of calls made to
+ it.<o:p></o:p></p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">To ensure you get a proper estimate, please consider the use for each endpoint and the total amount of actions each endpoint has will be your daily frequency.<o:p></o:p></p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">Regards,<o:p></o:p></p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">The Accounting API Team<o:p></o:p></p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+<div>
+<div style="border:none;border-top:solid #E1E1E1 1.0pt;padding:3.0pt 0cm 0cm 0cm">
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto"><b><span lang="EN-US" style="font-size:11.0pt;font-family:&quot;Calibri&quot;,sans-serif">From:</span></b><span lang="EN-US" style="font-size:11.0pt;font-family:&quot;Calibri&quot;,sans-serif"> Prof
+ David Amukowa &lt;<a href="mailto:davyamukowa@gmail.com" target="_blank">davyamukowa@gmail.com</a>&gt;
+<br>
+<b>Sent:</b> Wednesday, 26 March 2025 10:04<br>
+<b>To:</b> Kubushi, Joewie &lt;<a href="mailto:JoewieHarvey.Kubushi@sage.com" target="_blank">JoewieHarvey.Kubushi@sage.com</a>&gt;<br>
+<b>Cc:</b> KEVIN AMAYI &lt;<a href="mailto:kevinamayi20@gmail.com" target="_blank">kevinamayi20@gmail.com</a>&gt;; ZA - SL - Pastel - MB - My Business - API &lt;<a href="mailto:api@accounting.sageone.co.za" target="_blank">api@accounting.sageone.co.za</a>&gt;<br>
+<b>Subject:</b> Re: Still Following up on the Live API</span><o:p></o:p></p>
+</div>
+</div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+<table class="MsoNormalTable" border="1" cellspacing="3" cellpadding="0" width="100%" style="width:100.0%;background:#FFFFC0;border:none;border-left:solid black 2.25pt">
+<tbody>
+<tr>
+<td style="border:none;padding:3.75pt 3.75pt 7.5pt 3.75pt">
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto"><acronym><b><span style="font-family:&quot;Aptos&quot;,sans-serif;color:black">EXTERNAL EMAIL</span></b></acronym><o:p></o:p></p>
+</td>
+</tr>
+</tbody>
+</table>
+<div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">Hello&nbsp;Joewie,&nbsp;
+<o:p></o:p></p>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">Thanks for your Reply , let me ask assuming we want to sychronice everything that is in Sage Accounting that we have been using since 2019 . Based on the Screenshot&nbsp;I have shared
+ below . What do you&nbsp;advise&nbsp; ? I am not sure of the number of Calls that we will be calling per Day . and we thought it can just be a one time&nbsp; Sync either from Sage to system and it Syncs everything at once&nbsp;<o:p></o:p></p>
+</div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+</div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto"><img border="0" width="522" height="258" style="width:5.4333in;height:2.6833in" id="m_-2753367169173952210m_-6050100558940843662m_1762563334694905020m_-2186513859724947328_x005f_x0000_i1037" src="cid:image001.png@01DBA2E6.F33116E0"><o:p></o:p></p>
+</div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+</div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">it Should Synchronise&nbsp;this&nbsp;<o:p></o:p></p>
+</div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+</div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+</div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto"><img border="0" width="523" height="89" style="width:5.45in;height:.925in" id="m_-2753367169173952210m_-6050100558940843662m_1762563334694905020m_-2186513859724947328Picture_x0020_2" src="cid:image002.png@01DBA2E6.F33116E0"><o:p></o:p></p>
+</div>
+</div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+<div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">On Wed, Mar 26, 2025 at 10:52<span style="font-family:&quot;Arial&quot;,sans-serif"> </span>AM Kubushi, Joewie &lt;<a href="mailto:JoewieHarvey.Kubushi@sage.com" target="_blank">JoewieHarvey.Kubushi@sage.com</a>&gt;
+ wrote:<o:p></o:p></p>
+</div>
+<blockquote style="border:none;border-left:solid #CCCCCC 1.0pt;padding:0cm 0cm 0cm 6.0pt;margin-left:4.8pt;margin-top:5.0pt;margin-right:0cm;margin-bottom:5.0pt">
+<div>
+<div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">Hi David,<o:p></o:p></p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">I have copied the usage limits of our API from Section 12 of our Developer Services License Agreement below for your reference:<o:p></o:p></p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">12.4. Usage limits for the API:<br>
+<br>
+<span style="color:red">12.4.1. A limit of 100 requests can be made per minute per company. If this request limit is exceeded, the API will return HTTP 429 (Request Limit Reached) with the message “Your IP address has exceeded the allowed number of transactions
+ per minute and has been blocked for 1 hour”. Your IP address will be blocked for 1 hour. It is advisable to make no more than one request per second to avoid this.<br>
+<br>
+12.4.2. A limit of 2,500 requests can be made per day per company. Although these limits are not currently enforced, please consider this limit when calling the API. These limits will be enforced in future.<br>
+<br>
+12.4.3. Sage Accounting is an accounting application for small businesses, with intended usage around 3,000 customers, 3,000 suppliers, 5,000 items and 1,000 customer invoices, 1,000 supplier invoices and 2,000 bank transactions per month. Users will experience
+ performance issues, in particular with reporting, with companies that exceed reasonable usage.<br>
+</span><br>
+12.4.4. The API and all users using the API are limited to a finite pool of resources. Should these resources be exceeded, in order to maintain the performance and stability of the Sage Accounting accounting application, resource governing will take place.
+ This will affect all API users and all users are encouraged to adhere to the fair usage policies and rate limits.<br>
+<br>
+12.4.5. While all API calls are limited per minute and per day, some API calls are a lot heavier than others and will have a significant impact on the Sage Accounting service as a whole, if used too frequently. The API calls listed in this section are to be
+ kept to a minimum – as excessive use of these calls will mean performance degradation. If excessive use of these calls is detected, API keys will be blocked without warning. This list includes, but is not limited to Detailed Ledger Transaction, Customer Ageing
+ and Supplier Ageing, Customer Statement and Supplier Statement, Account Balance, Cash Movement, Item Movement, Outstanding Customer and Supplier Documents, all Transaction Listings, Allocations, Budget, Take On Balance, Trial Balance, Tax Reports.<br>
+<br>
+12.4.6. Sage Accounting may revisit the “per minute” and “per day” limits in the future.<o:p></o:p></p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">Regards,<o:p></o:p></p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">The Accounting API Team<o:p></o:p></p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+<div>
+<div style="border:none;border-top:solid #E1E1E1 1.0pt;padding:3.0pt 0cm 0cm 0cm">
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto"><b><span lang="EN-US" style="font-size:11.0pt;font-family:&quot;Calibri&quot;,sans-serif">From:</span></b><span lang="EN-US" style="font-size:11.0pt;font-family:&quot;Calibri&quot;,sans-serif"> Prof
+ David Amukowa &lt;<a href="mailto:davyamukowa@gmail.com" target="_blank">davyamukowa@gmail.com</a>&gt;
+<br>
+<b>Sent:</b> Wednesday, 26 March 2025 09:47<br>
+<b>To:</b> Kubushi, Joewie &lt;<a href="mailto:JoewieHarvey.Kubushi@sage.com" target="_blank">JoewieHarvey.Kubushi@sage.com</a>&gt;; KEVIN AMAYI &lt;<a href="mailto:kevinamayi20@gmail.com" target="_blank">kevinamayi20@gmail.com</a>&gt;<br>
+<b>Cc:</b> ZA - SL - Pastel - MB - My Business - API &lt;<a href="mailto:api@accounting.sageone.co.za" target="_blank">api@accounting.sageone.co.za</a>&gt;<br>
+<b>Subject:</b> Re: Still Following up on the Live API</span><o:p></o:p></p>
+</div>
+</div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+<table class="MsoNormalTable" border="1" cellspacing="3" cellpadding="0" width="100%" style="width:100.0%;background:#FFFFC0;border:none;border-left:solid black 2.25pt">
+<tbody>
+<tr>
+<td style="border:none;padding:3.75pt 3.75pt 7.5pt 3.75pt">
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto"><acronym><b><span style="font-family:&quot;Aptos&quot;,sans-serif;color:black">EXTERNAL EMAIL</span></b></acronym><o:p></o:p></p>
+</td>
+</tr>
+</tbody>
+</table>
+<div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">Hi&nbsp;Joewie,
+<o:p></o:p></p>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+</div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">Yes we will be using this Endpoints too&nbsp;<o:p></o:p></p>
+</div>
+<div>
+<ul type="disc">
+<li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;mso-list:l0 level1 lfo2">
+Allocation/GetCustomerAllocationsAndOustandingDocuments,<o:p></o:p></li><li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;mso-list:l0 level1 lfo2">
+TaxType/Get,<o:p></o:p></li></ul>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">for the Daily Estimate Calls, what is the maximum&nbsp;on your side that one can call per Day ?<o:p></o:p></p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+</div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+</div>
+</div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+<div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">On Wed, Mar 26, 2025 at 10:05<span style="font-family:&quot;Arial&quot;,sans-serif"> </span>AM Kubushi, Joewie &lt;<a href="mailto:JoewieHarvey.Kubushi@sage.com" target="_blank">JoewieHarvey.Kubushi@sage.com</a>&gt;
+ wrote:<o:p></o:p></p>
+</div>
+<blockquote style="border:none;border-left:solid #CCCCCC 1.0pt;padding:0cm 0cm 0cm 6.0pt;margin-left:4.8pt;margin-top:5.0pt;margin-right:0cm;margin-bottom:5.0pt">
+<div>
+<div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">Hi David,<o:p></o:p></p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">Kindly note that we took a look at your Sandbox API logs and have found the following endpoints which you called but did not claim.<o:p></o:p></p>
+<ul type="disc">
+<li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;mso-list:l3 level1 lfo3">
+Allocation/GetCustomerAllocationsAndOustandingDocuments,<o:p></o:p></li><li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;mso-list:l3 level1 lfo3">
+TaxType/Get,<o:p></o:p></li></ul>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">Please advise whether you will be using the aforementioned endpoints in your solution.<o:p></o:p></p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">Additionally, please provide a clear estimate of your daily frequency of calls to the API per endpoint, e.g. Customer/Get = 6 daily calls.<o:p></o:p></p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">Regards,<o:p></o:p></p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">The Accounting API Team<o:p></o:p></p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+<div>
+<div style="border:none;border-top:solid #E1E1E1 1.0pt;padding:3.0pt 0cm 0cm 0cm">
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto"><b><span lang="EN-US" style="font-size:11.0pt;font-family:&quot;Calibri&quot;,sans-serif">From:</span></b><span lang="EN-US" style="font-size:11.0pt;font-family:&quot;Calibri&quot;,sans-serif"> Prof
+ David Amukowa &lt;<a href="mailto:davyamukowa@gmail.com" target="_blank">davyamukowa@gmail.com</a>&gt;
+<br>
+<b>Sent:</b> Friday, 21 March 2025 07:44<br>
+<b>To:</b> Kubushi, Joewie &lt;<a href="mailto:JoewieHarvey.Kubushi@sage.com" target="_blank">JoewieHarvey.Kubushi@sage.com</a>&gt;<br>
+<b>Cc:</b> ZA - SL - Pastel - MB - My Business - API &lt;<a href="mailto:api@accounting.sageone.co.za" target="_blank">api@accounting.sageone.co.za</a>&gt;<br>
+<b>Subject:</b> Re: Still Following up on the Live API</span><o:p></o:p></p>
+</div>
+</div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+<table class="MsoNormalTable" border="1" cellspacing="3" cellpadding="0" width="100%" style="width:100.0%;background:#FFFFC0;border:none;border-left:solid black 2.25pt">
+<tbody>
+<tr>
+<td style="border:none;padding:3.75pt 3.75pt 7.5pt 3.75pt">
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto"><acronym><b><span style="font-family:&quot;Aptos&quot;,sans-serif;color:black">EXTERNAL EMAIL</span></b></acronym><o:p></o:p></p>
+</td>
+</tr>
+</tbody>
+</table>
+<div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">Good Morning&nbsp;Joewie,
+<o:p></o:p></p>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+</div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">Currently, the module is calling the following Sage SA APIs:<br>
+<br>
+•<span style="font-family:&quot;Segoe UI Symbol&quot;,sans-serif">⁠</span> &nbsp;<span style="font-family:&quot;Segoe UI Symbol&quot;,sans-serif">⁠</span>Company/get<br>
+•<span style="font-family:&quot;Segoe UI Symbol&quot;,sans-serif">⁠</span> &nbsp;<span style="font-family:&quot;Segoe UI Symbol&quot;,sans-serif">⁠</span>Customer/get<br>
+•<span style="font-family:&quot;Segoe UI Symbol&quot;,sans-serif">⁠</span> &nbsp;<span style="font-family:&quot;Segoe UI Symbol&quot;,sans-serif">⁠</span>Customer/Save<br>
+•<span style="font-family:&quot;Segoe UI Symbol&quot;,sans-serif">⁠</span> &nbsp;<span style="font-family:&quot;Segoe UI Symbol&quot;,sans-serif">⁠</span>CustomerCategory/get<br>
+•<span style="font-family:&quot;Segoe UI Symbol&quot;,sans-serif">⁠</span> &nbsp;<span style="font-family:&quot;Segoe UI Symbol&quot;,sans-serif">⁠</span>CustomerCategory/save<br>
+•<span style="font-family:&quot;Segoe UI Symbol&quot;,sans-serif">⁠</span> &nbsp;<span style="font-family:&quot;Segoe UI Symbol&quot;,sans-serif">⁠</span>TaxInvoice/Get<br>
+•<span style="font-family:&quot;Segoe UI Symbol&quot;,sans-serif">⁠</span> &nbsp;<span style="font-family:&quot;Segoe UI Symbol&quot;,sans-serif">⁠</span>TaxInvoice/save<br>
+•<span style="font-family:&quot;Segoe UI Symbol&quot;,sans-serif">⁠</span> &nbsp;<span style="font-family:&quot;Segoe UI Symbol&quot;,sans-serif">⁠</span>CustomerReceipt/Get<br>
+•<span style="font-family:&quot;Segoe UI Symbol&quot;,sans-serif">⁠</span> &nbsp;<span style="font-family:&quot;Segoe UI Symbol&quot;,sans-serif">⁠</span>CustomerReceipt/Save<br>
+•<span style="font-family:&quot;Segoe UI Symbol&quot;,sans-serif">⁠</span> &nbsp;<span style="font-family:&quot;Segoe UI Symbol&quot;,sans-serif">⁠</span>SupplierInvoice/Get<br>
+•<span style="font-family:&quot;Segoe UI Symbol&quot;,sans-serif">⁠</span> &nbsp;<span style="font-family:&quot;Segoe UI Symbol&quot;,sans-serif">⁠</span>SupplierInvoice/Save<br>
+•<span style="font-family:&quot;Segoe UI Symbol&quot;,sans-serif">⁠</span> &nbsp;<span style="font-family:&quot;Segoe UI Symbol&quot;,sans-serif">⁠</span>SupplierPayment/Save<br>
+•<span style="font-family:&quot;Segoe UI Symbol&quot;,sans-serif">⁠</span> &nbsp;<span style="font-family:&quot;Segoe UI Symbol&quot;,sans-serif">⁠</span>Allocation/Get<br>
+•<span style="font-family:&quot;Segoe UI Symbol&quot;,sans-serif">⁠</span> &nbsp;<span style="font-family:&quot;Segoe UI Symbol&quot;,sans-serif">⁠</span>Allocation/Save<br>
+•<span style="font-family:&quot;Segoe UI Symbol&quot;,sans-serif">⁠</span> &nbsp;<span style="font-family:&quot;Segoe UI Symbol&quot;,sans-serif">⁠</span>Item/get<br>
+•<span style="font-family:&quot;Segoe UI Symbol&quot;,sans-serif">⁠</span> &nbsp;<span style="font-family:&quot;Segoe UI Symbol&quot;,sans-serif">⁠</span>Item/save<br>
+•<span style="font-family:&quot;Segoe UI Symbol&quot;,sans-serif">⁠</span> &nbsp;<span style="font-family:&quot;Segoe UI Symbol&quot;,sans-serif">⁠</span>ItemCategory/get<br>
+•<span style="font-family:&quot;Segoe UI Symbol&quot;,sans-serif">⁠</span> &nbsp;<span style="font-family:&quot;Segoe UI Symbol&quot;,sans-serif">⁠</span>ItemCategory/save<br>
+•<span style="font-family:&quot;Segoe UI Symbol&quot;,sans-serif">⁠</span> &nbsp;<span style="font-family:&quot;Segoe UI Symbol&quot;,sans-serif">⁠</span>BankAccount/get<br>
+•<span style="font-family:&quot;Segoe UI Symbol&quot;,sans-serif">⁠</span> &nbsp;<span style="font-family:&quot;Segoe UI Symbol&quot;,sans-serif">⁠</span>Supplier/Get<br>
+•<span style="font-family:&quot;Segoe UI Symbol&quot;,sans-serif">⁠</span> &nbsp;<span style="font-family:&quot;Segoe UI Symbol&quot;,sans-serif">⁠</span>Supplier/Save<br>
+<br>
+Regarding the API call frequency, it depends on our usage. If you perform a manual sync, the API will be called once per execution. However, if you use the Automatic Sync feature, the API will be called every 30 minutes.<o:p></o:p></p>
+</div>
+</div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+<div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">On Thu, Mar 20, 2025 at 10:58<span style="font-family:&quot;Arial&quot;,sans-serif"> </span>AM Kubushi, Joewie &lt;<a href="mailto:JoewieHarvey.Kubushi@sage.com" target="_blank">JoewieHarvey.Kubushi@sage.com</a>&gt;
+ wrote:<o:p></o:p></p>
+</div>
+<blockquote style="border:none;border-left:solid #CCCCCC 1.0pt;padding:0cm 0cm 0cm 6.0pt;margin-left:4.8pt;margin-top:5.0pt;margin-right:0cm;margin-bottom:5.0pt">
+<div>
+<div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">Hi David,<o:p></o:p></p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">Kindly find the attached email, which still requires action from your end.<o:p></o:p></p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">Please note that we have requested a detailed list of endpoints which you will be using in your solution.<o:p></o:p></p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">Additionally, we would also appreciate a daily frequency of calls attached to each endpoint within your claimed scope.<o:p></o:p></p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">For illustration purposes, please note that answers such as Customer/Get = 7 calls daily, are allowed.<o:p></o:p></p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">Regards,<o:p></o:p></p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">The Accounting API Team<o:p></o:p></p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+<div>
+<div style="border:none;border-top:solid #E1E1E1 1.0pt;padding:3.0pt 0cm 0cm 0cm">
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto"><b><span lang="EN-US" style="font-size:11.0pt;font-family:&quot;Calibri&quot;,sans-serif">From:</span></b><span lang="EN-US" style="font-size:11.0pt;font-family:&quot;Calibri&quot;,sans-serif"> Prof
+ David Amukowa &lt;</span><a href="mailto:davyamukowa@gmail.com" target="_blank"><span lang="EN-US" style="font-size:11.0pt;font-family:&quot;Calibri&quot;,sans-serif">davyamukowa@gmail.com</span></a><span lang="EN-US" style="font-size:11.0pt;font-family:&quot;Calibri&quot;,sans-serif">&gt;
+<br>
+<b>Sent:</b> Thursday, 20 March 2025 08:50<br>
+<b>To:</b> ZA - SL - Pastel - MB - My Business - API &lt;</span><a href="mailto:api@accounting.sageone.co.za" target="_blank"><span lang="EN-US" style="font-size:11.0pt;font-family:&quot;Calibri&quot;,sans-serif">api@accounting.sageone.co.za</span></a><span lang="EN-US" style="font-size:11.0pt;font-family:&quot;Calibri&quot;,sans-serif">&gt;;
+ Kubushi, Joewie &lt;</span><a href="mailto:JoewieHarvey.Kubushi@sage.com" target="_blank"><span lang="EN-US" style="font-size:11.0pt;font-family:&quot;Calibri&quot;,sans-serif">JoewieHarvey.Kubushi@sage.com</span></a><span lang="EN-US" style="font-size:11.0pt;font-family:&quot;Calibri&quot;,sans-serif">&gt;<br>
+<b>Subject:</b> Re: Still Following up on the Live API</span><o:p></o:p></p>
+</div>
+</div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+<table class="MsoNormalTable" border="1" cellspacing="3" cellpadding="0" width="100%" style="width:100.0%;background:#FFFFC0;border:none;border-left:solid black 2.25pt">
+<tbody>
+<tr>
+<td style="border:none;padding:3.75pt 3.75pt 7.5pt 3.75pt">
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto"><acronym><b><span style="font-family:&quot;Aptos&quot;,sans-serif;color:black">EXTERNAL EMAIL</span></b></acronym><o:p></o:p></p>
+</td>
+</tr>
+</tbody>
+</table>
+<div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">Good, I think this request has taken so much time . kindly&nbsp;assist to provide the LIVE API . Your API Process is so complicated . you have not streamlined the process like&nbsp; Sage
+ Central European have done on their side .&nbsp;<o:p></o:p></p>
+</div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+<div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">On Wed, Mar 19, 2025 at 7:42<span style="font-family:&quot;Arial&quot;,sans-serif"> </span>AM Prof David Amukowa &lt;<a href="mailto:davyamukowa@gmail.com" target="_blank">davyamukowa@gmail.com</a>&gt;
+ wrote:<o:p></o:p></p>
+</div>
+<blockquote style="border:none;border-left:solid #CCCCCC 1.0pt;padding:0cm 0cm 0cm 6.0pt;margin-left:4.8pt;margin-top:5.0pt;margin-right:0cm;margin-bottom:5.0pt">
+<div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto"><br clear="all">
+<o:p></o:p></p>
+</div>
+<div>
+<div>
+<div style="border:solid #E3E3E3 1.0pt;padding:0cm 0cm 0cm 0cm">
+<p style="margin:0cm;box-sizing:border-box;unicode-bidi:plaintext"><span style="font-family:&quot;Arial&quot;,sans-serif;color:#374151">Good morning,</span><o:p></o:p></p>
+<p style="margin:0cm;box-sizing:border-box;unicode-bidi:plaintext"><span style="font-family:&quot;Arial&quot;,sans-serif;color:#374151">&nbsp;</span><o:p></o:p></p>
+<p style="margin:0cm;box-sizing:border-box;unicode-bidi:plaintext"><span style="font-family:&quot;Arial&quot;,sans-serif;color:#374151">I hope this email finds you well. I am writing to follow up on my request for the&nbsp;<b><span style="border:solid #E3E3E3 1.0pt;padding:0cm">Live
+ API Key&nbsp;</span></b>, which I submitted last week on&nbsp;<b><span style="border:solid #E3E3E3 1.0pt;padding:0cm">4th March&nbsp;</span></b>. As requested, I promptly provided the required information in my initial response on the same day. Unfortunately, I have yet
+ to receive confirmation or further guidance regarding the issuance of the Live API Key.&nbsp;</span><o:p></o:p></p>
+<p style="margin:0cm;box-sizing:border-box;unicode-bidi:plaintext"><span style="font-family:&quot;Arial&quot;,sans-serif;color:#374151">&nbsp;</span><o:p></o:p></p>
+<p style="margin:0cm;box-sizing:border-box;unicode-bidi:plaintext"><b><span style="font-family:&quot;Arial&quot;,sans-serif;color:#374151">I have shared more photos below for more illustration&nbsp;of what we want to synchronize&nbsp;from Sage</span></b><o:p></o:p></p>
+<p style="margin:0cm;box-sizing:border-box;unicode-bidi:plaintext"><span style="font-family:&quot;Arial&quot;,sans-serif;color:#374151">Given the urgency of integrating our third-party system with Sage for seamless imprest reconciliation and data synchronization, I kindly
+ ask for your assistance in expediting this process. Below is the information I previously submitted for clarity:</span><o:p></o:p></p>
+</div>
+<div style="margin-top:36.0pt;margin-bottom:36.0pt">
+<div class="MsoNormal" align="center" style="text-align:center">
+<hr size="1" width="100%" noshade="" style="color:#374151" align="center">
+</div>
+</div>
+<div style="border:solid #E3E3E3 1.0pt;padding:0cm 0cm 0cm 0cm">
+<p style="margin:0cm;box-sizing:border-box;unicode-bidi:plaintext"><b><span style="font-family:&quot;Arial&quot;,sans-serif;color:#374151;border:solid #E3E3E3 1.0pt;padding:0cm;background:yellow">1. Resellers (Sandbox) API Key:</span></b><span style="font-family:&quot;Arial&quot;,sans-serif;color:#374151"><br>
+</span><code><b><span style="font-size:9.5pt;font-family:Consolas;color:#EB5757;border:solid #E3E3E3 1.0pt;padding:2.0pt">{C2EF3A03-01E5-4830-9B2E-8391627F89CA}</span></b></code><o:p></o:p></p>
+<p style="margin:0cm;box-sizing:border-box;unicode-bidi:plaintext"><b><span style="font-family:&quot;Arial&quot;,sans-serif;color:#374151;border:solid #E3E3E3 1.0pt;padding:0cm;background:yellow">2. Name of company on Resellers (Sandbox) environment:</span></b><span style="font-family:&quot;Arial&quot;,sans-serif;color:#374151"><br>
+<b><span style="border:solid #E3E3E3 1.0pt;padding:0cm">Capabuil Limited</span></b></span><o:p></o:p></p>
+<p style="margin:0cm;box-sizing:border-box;unicode-bidi:plaintext"><b><span style="font-family:&quot;Arial&quot;,sans-serif;color:#374151;border:solid #E3E3E3 1.0pt;padding:0cm;background:yellow">3. Email address used to register company on Resellers (Sandbox):</span></b><span style="font-family:&quot;Arial&quot;,sans-serif;color:#374151"><br>
+</span><a href="mailto:Tabithabarasa@capabuil.com" target="_blank"><b><span style="font-size:9.5pt;font-family:Consolas;border:solid #E3E3E3 1.0pt;padding:2.0pt">Tabithabarasa@capabuil.com</span></b></a><o:p></o:p></p>
+<p style="margin-bottom:12.0pt;box-sizing:border-box;unicode-bidi:plaintext"><b><span style="font-family:&quot;Arial&quot;,sans-serif;color:#374151;border:solid #E3E3E3 1.0pt;padding:0cm;background:yellow">4. Description of your solution:</span></b><span style="font-family:&quot;Arial&quot;,sans-serif;color:#374151"><br>
+We want to synchronize&nbsp;Data From Sage Accounting to the Perfex CRM system . we will will download&nbsp;the the Contacts list first as CSV and upload&nbsp;them on the perfex CRM after there is when we will synchronise&nbsp;all our Invoices and Expenses and Payments with perfex
+ CRM see the Image Below</span><o:p></o:p></p>
+</div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto"><img border="0" width="503" height="274" style="width:5.2416in;height:2.85in" id="m_-2753367169173952210m_-6050100558940843662m_1762563334694905020m_-2186513859724947328m_-1940413934775644240m_-929828076760264563m_-8748145426000691287Picture_x0020_5" src="cid:image003.png@01DBA2E6.F33116E0"><o:p></o:p></p>
+<div style="border:solid #E3E3E3 1.0pt;padding:0cm 0cm 0cm 0cm">
+<p style="margin:0cm"><span style="font-family:&quot;Arial&quot;,sans-serif;color:#374151">&nbsp;</span><o:p></o:p></p>
+<p style="margin:0cm;box-sizing:border-box;unicode-bidi:plaintext"><b><span style="font-family:&quot;Arial&quot;,sans-serif;color:#374151">IT SHOULD ALSO SYNCHRONICE&nbsp;, INVOICES, PAYMENTS, EXPENSES&nbsp;</span></b><o:p></o:p></p>
+<p style="margin:0cm;box-sizing:border-box;unicode-bidi:plaintext"><span style="font-family:&quot;Arial&quot;,sans-serif;color:#374151">&nbsp;</span><o:p></o:p></p>
+</div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto"><img border="0" width="503" height="145" style="width:5.2416in;height:1.5083in" id="m_-2753367169173952210m_-6050100558940843662m_1762563334694905020m_-2186513859724947328m_-1940413934775644240m_-929828076760264563m_-8748145426000691287Picture_x0020_3" src="cid:image004.png@01DBA2E6.F33116E0"><o:p></o:p></p>
+<div style="border:solid #E3E3E3 1.0pt;padding:0cm 0cm 0cm 0cm">
+<p style="margin:0cm"><span style="font-family:&quot;Arial&quot;,sans-serif;color:#374151">&nbsp;</span><o:p></o:p></p>
+<p style="margin:0cm;box-sizing:border-box;unicode-bidi:plaintext"><b><span style="font-family:&quot;Arial&quot;,sans-serif;color:#374151;border:solid #E3E3E3 1.0pt;padding:0cm;background:yellow">5. Which API endpoints are you calling in your integration solution?</span></b><o:p></o:p></p>
+</div>
+<div style="border:solid #E3E3E3 1.0pt;padding:0cm 0cm 0cm 0cm;margin-left:29.25pt">
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;margin-left:18.0pt">
+<span style="font-size:10.0pt;font-family:Symbol;color:#374151">·</span><span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;color:#374151">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><code><b><span style="font-size:9.5pt;font-family:Consolas;color:#EB5757;border:solid #E3E3E3 1.0pt;padding:2.0pt">Customer/Get</span></b></code><span style="font-family:&quot;Arial&quot;,sans-serif;color:#374151">,&nbsp;</span><code><b><span style="font-size:9.5pt;font-family:Consolas;color:#EB5757;border:solid #E3E3E3 1.0pt;padding:2.0pt">Customer/Save</span></b></code><span style="font-family:&quot;Arial&quot;,sans-serif;color:#374151">,
+ and endpoints related to&nbsp;<b><span style="border:solid #E3E3E3 1.0pt;padding:0cm">Customer Invoices&nbsp;</span></b>and&nbsp;<b><span style="border:solid #E3E3E3 1.0pt;padding:0cm">Contacts&nbsp;</span></b>.</span><o:p></o:p></p>
+</div>
+<div style="border:solid #E3E3E3 1.0pt;padding:0cm 0cm 0cm 0cm">
+<p style="margin:0cm;box-sizing:border-box;unicode-bidi:plaintext"><b><span style="font-family:&quot;Arial&quot;,sans-serif;color:#374151;border:solid #E3E3E3 1.0pt;padding:0cm;background:yellow">6. Daily API call volume estimate:</span></b><span style="font-family:&quot;Arial&quot;,sans-serif;color:#374151"><br>
+Exact volume is TBD, but the system will sync all data from the third-party platform to Sage.</span><o:p></o:p></p>
+<p style="margin:0cm;box-sizing:border-box;unicode-bidi:plaintext"><b><span style="font-family:&quot;Arial&quot;,sans-serif;color:#374151;border:solid #E3E3E3 1.0pt;padding:0cm;background:yellow">7. Sage Business Cloud Accounting functions in use:</span></b><o:p></o:p></p>
+</div>
+<div style="border:solid #E3E3E3 1.0pt;padding:0cm 0cm 0cm 0cm;margin-left:29.25pt">
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;margin-left:18.0pt">
+<span style="font-size:10.0pt;font-family:Symbol;color:#374151">·</span><span style="font-size:7.0pt;font-family:&quot;Times New Roman&quot;,serif;color:#374151">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><span style="font-family:&quot;Arial&quot;,sans-serif;color:#374151">Capturing invoices, items, and processing reports.</span><o:p></o:p></p>
+</div>
+<div style="border:solid #E3E3E3 1.0pt;padding:0cm 0cm 0cm 0cm">
+<p style="margin:0cm;box-sizing:border-box;unicode-bidi:plaintext"><b><span style="font-family:&quot;Arial&quot;,sans-serif;color:#374151;border:solid #E3E3E3 1.0pt;padding:0cm;background:yellow">8. Do you intend to commercialize your solution?</span></b><span style="font-family:&quot;Arial&quot;,sans-serif;color:#374151"><br>
+<b><span style="border:solid #E3E3E3 1.0pt;padding:0cm">No&nbsp;</span></b>(Internal use only).</span><o:p></o:p></p>
+</div>
+</div>
+<div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;margin-bottom:8.0pt;line-height:13.8pt">
+<span style="color:#500050">&nbsp;</span><o:p></o:p></p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;margin-bottom:8.0pt;line-height:13.8pt">
+<span style="color:#500050;background:yellow">If you are granted the API Key, please give us a contact person&nbsp;in the event that&nbsp;the API Key needs to be disabled and we need to resolve errors generated by your solution.</span><o:p></o:p></p>
+<ol start="1" type="1">
+<li class="MsoNormal" style="mso-margin-top-alt:auto;margin-bottom:8.0pt;line-height:13.8pt;mso-list:l1 level1 lfo4">
+Full Name:&nbsp;<b>David Amukowa</b><o:p></o:p></li><li class="MsoNormal" style="mso-margin-top-alt:auto;margin-bottom:8.0pt;line-height:13.8pt;mso-list:l1 level1 lfo4">
+Telephone Number:&nbsp;<b>0701020320</b><o:p></o:p></li><li class="MsoNormal" style="mso-margin-top-alt:auto;margin-bottom:8.0pt;line-height:13.8pt;mso-list:l1 level1 lfo4">
+Email address:&nbsp;<a href="mailto:davyamukowa@gmail.com" target="_blank"><b>davyamukowa@gmail.com</b></a><o:p></o:p></li><li class="MsoNormal" style="mso-margin-top-alt:auto;margin-bottom:8.0pt;line-height:13.8pt;mso-list:l1 level1 lfo4">
+Company Name:&nbsp;<b>Capabuil Limited</b><o:p></o:p></li><li class="MsoNormal" style="mso-margin-top-alt:auto;margin-bottom:8.0pt;line-height:13.8pt;mso-list:l1 level1 lfo4">
+Solution Name:&nbsp;<b>Capacity Training</b><o:p></o:p></li><li class="MsoNormal" style="mso-margin-top-alt:auto;margin-bottom:8.0pt;line-height:13.8pt;mso-list:l1 level1 lfo4">
+Corporate Website:&nbsp;<a href="http://capabuil.com/" target="_blank"><b>capabuil.com</b></a><o:p></o:p></li></ol>
+</div>
+</div>
+</div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">--
+<o:p></o:p></p>
+<div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+</div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto"><img border="0" width="180" height="95" style="width:1.875in;height:.9916in" id="_x0000_i1035" src="https://ci3.googleusercontent.com/mail-sig/AIorK4x39FH-yWkwMwQLIwnH56j5qn9WnN55tvenWlF1Z_kf4es7NocfV43kzbXsWskbO3WPCiYhASUqBXw5"><o:p></o:p></p>
+</div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto"><b>David Amukowa&nbsp;</b><o:p></o:p></p>
+</div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto"><b>IT Consultant&nbsp;</b><o:p></o:p></p>
+</div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+</div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+</div>
+</div>
+</div>
+</blockquote>
+</div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto"><br clear="all">
+<o:p></o:p></p>
+</div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+</div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">--
+<o:p></o:p></p>
+<div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+</div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto"><img border="0" width="180" height="95" style="width:1.875in;height:.9916in" id="_x0000_i1034" src="https://ci3.googleusercontent.com/mail-sig/AIorK4x39FH-yWkwMwQLIwnH56j5qn9WnN55tvenWlF1Z_kf4es7NocfV43kzbXsWskbO3WPCiYhASUqBXw5"><o:p></o:p></p>
+</div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto"><b>David Amukowa&nbsp;</b><o:p></o:p></p>
+</div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto"><b>IT Consultant&nbsp;</b><o:p></o:p></p>
+</div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+</div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+</div>
+</div>
+</div>
+</div>
+<table class="MsoNormalTable" border="0" cellspacing="0" cellpadding="0" width="100%" style="width:100.0%;border-collapse:collapse">
+<tbody>
+<tr>
+<td style="padding:9.0pt 0cm 0cm 0cm"></td>
+</tr>
+<tr>
+<td style="background:white;padding:0cm 0cm 0cm 0cm">
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;line-height:13.5pt">
+<span style="font-size:9.0pt;font-family:&quot;Helvetica&quot;,sans-serif;color:black"><img border="0" width="88" height="68" style="width:.9166in;height:.7083in" id="_x0000_i1033" src="https://www.sage.com/en-gb/-/media/Images/SageDotCom/Master/Logos/sage-logo-black-esig.png" alt="Sage"></span><o:p></o:p></p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+<table class="MsoNormalTable" border="0" cellspacing="0" cellpadding="0" width="100%" style="width:100.0%;border-collapse:collapse">
+<tbody>
+<tr>
+<td style="padding:0cm 0cm 0cm 0cm">
+<p class="MsoNormal" style="mso-margin-top-alt:auto;margin-bottom:12.0pt;line-height:10.5pt">
+<span style="font-size:7.5pt;font-family:&quot;Arial&quot;,sans-serif;color:black"><br>
+</span><span style="font-size:7.5pt;font-family:&quot;Arial&quot;,sans-serif;color:#777777">The information contained in this email transmission may constitute confidential information. If you are not the intended recipient, please take notice that reuse of the information
+ is prohibited.</span><span style="font-size:7.5pt;font-family:&quot;Arial&quot;,sans-serif;color:black">
+</span><o:p></o:p></p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</blockquote>
+</div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto"><br clear="all">
+<o:p></o:p></p>
+</div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+</div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">--
+<o:p></o:p></p>
+<div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+</div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto"><img border="0" width="180" height="95" style="width:1.875in;height:.9916in" id="_x0000_i1032" src="https://ci3.googleusercontent.com/mail-sig/AIorK4x39FH-yWkwMwQLIwnH56j5qn9WnN55tvenWlF1Z_kf4es7NocfV43kzbXsWskbO3WPCiYhASUqBXw5"><o:p></o:p></p>
+</div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto"><b>David Amukowa&nbsp;</b><o:p></o:p></p>
+</div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto"><b>IT Consultant&nbsp;</b><o:p></o:p></p>
+</div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+</div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</blockquote>
+</div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto"><br clear="all">
+<o:p></o:p></p>
+</div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+</div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">--
+<o:p></o:p></p>
+<div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+</div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto"><img border="0" width="180" height="95" style="width:1.875in;height:.9916in" id="_x0000_i1031" src="https://ci3.googleusercontent.com/mail-sig/AIorK4x39FH-yWkwMwQLIwnH56j5qn9WnN55tvenWlF1Z_kf4es7NocfV43kzbXsWskbO3WPCiYhASUqBXw5"><o:p></o:p></p>
+</div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto"><b>David Amukowa&nbsp;</b><o:p></o:p></p>
+</div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto"><b>IT Consultant&nbsp;</b><o:p></o:p></p>
+</div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+</div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</blockquote>
+</div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto"><br clear="all">
+<o:p></o:p></p>
+</div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+</div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">--
+<o:p></o:p></p>
+<div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+</div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto"><img border="0" width="180" height="95" style="width:1.875in;height:.9916in" id="_x0000_i1030" src="https://ci3.googleusercontent.com/mail-sig/AIorK4x39FH-yWkwMwQLIwnH56j5qn9WnN55tvenWlF1Z_kf4es7NocfV43kzbXsWskbO3WPCiYhASUqBXw5"><o:p></o:p></p>
+</div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto"><b>David Amukowa&nbsp;</b><o:p></o:p></p>
+</div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto"><b>IT Consultant&nbsp;</b><o:p></o:p></p>
+</div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+</div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</blockquote>
+</div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto"><br clear="all">
+<o:p></o:p></p>
+</div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+</div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">--
+<o:p></o:p></p>
+<div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+</div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto"><img border="0" width="180" height="95" style="width:1.875in;height:.9916in" id="_x0000_i1029" src="https://ci3.googleusercontent.com/mail-sig/AIorK4x39FH-yWkwMwQLIwnH56j5qn9WnN55tvenWlF1Z_kf4es7NocfV43kzbXsWskbO3WPCiYhASUqBXw5"><o:p></o:p></p>
+</div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto"><b>David Amukowa&nbsp;</b><o:p></o:p></p>
+</div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto"><b>IT Consultant&nbsp;</b><o:p></o:p></p>
+</div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+</div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</blockquote>
+</div>
+</blockquote>
+</div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto"><br clear="all">
+<o:p></o:p></p>
+</div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+</div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto"><span class="m-2753367169173952210gmailsignatureprefix">--
+</span><o:p></o:p></p>
+<div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+</div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto"><img border="0" width="180" height="95" style="width:1.875in;height:.9916in" id="_x0000_i1028" src="https://ci3.googleusercontent.com/mail-sig/AIorK4x39FH-yWkwMwQLIwnH56j5qn9WnN55tvenWlF1Z_kf4es7NocfV43kzbXsWskbO3WPCiYhASUqBXw5"><o:p></o:p></p>
+</div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto"><b>David Amukowa&nbsp;</b><o:p></o:p></p>
+</div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto"><b>IT Consultant&nbsp;</b><o:p></o:p></p>
+</div>
+<div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+</div>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;<o:p></o:p></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</blockquote>
+</div>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,344 @@
+.section-container {
+    position: relative;
+    border: 1px solid grey; /* Adjust the border color and thickness as needed */
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 8px; /* Optional: for rounded corners */
+}
+
+.section-label {
+    position: absolute;
+    top: -10px; /* Adjust based on your needs */
+    left: 10px; /* Adjust based on your needs */
+    background-color: #fff; /* Adjust the background color */
+    padding: 0 10px;
+    font-size: 14px; /* Adjust the font size */
+    font-weight: bold; /* Optional: for bold text */
+    border-radius: 4px; /* Optional: for rounded corners */
+}
+
+.custom-section {
+    background-color: white;
+    color: #1f2937; /* Equivalent to dark:bg-gray-900 */
+    padding: 1rem;
+}
+
+.custom-container {
+    padding: 1rem;
+    margin: 0 auto;
+    max-width: 100%;
+}
+
+.custom-col {
+    margin-bottom: 1.5rem;
+}
+
+.custom-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.custom-input, .custom-select, .custom-textarea {
+    background-color: #f9fafb; /* Equivalent to bg-gray-50 */
+    border: 1px solid #d1d5db; /* Equivalent to border-gray-300 */
+    color: #111827; /* Equivalent to text-gray-900 */
+    font-size: 0.875rem;
+    border-radius: 0.375rem; /* Equivalent to rounded-lg */
+    padding: 0.625rem; /* Equivalent to p-2.5 */
+    width: 100%;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.custom-timeline {
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+    padding: 0 0.75rem;
+}
+
+.custom-steps {
+    position: relative;
+}
+
+.custom-step {
+    position: relative;
+    margin-bottom: 2.5rem;
+    padding-left: 1.5rem;
+}
+
+.custom-step-icon {
+    position: absolute;
+    top: 0;
+    left: -1.5rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    background-color: #dbeafe; /* Equivalent to bg-blue-100 */
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 0 2px white; /* Equivalent to ring-8 ring-white */
+}
+
+.custom-svg {
+    width: 1rem;
+    height: 1rem;
+    color: #1d4ed8; /* Equivalent to text-blue-800 */
+}
+
+.custom-step-title {
+    margin-bottom: 0.25rem;
+    font-size: 1.125rem;
+    font-weight: 600;
+}
+
+.custom-time {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    font-size: 0.875rem;
+}
+
+.custom-step-details {
+    list-style-type: none;
+    padding: 0;
+    margin-top:3px;
+    color: grey; /* Equivalent to text-gray-500 */
+}
+
+.custom-step-detail {
+    display: flex;
+    align-items: center;
+}
+
+.custom-check-icon {
+    width: 1rem;
+    height: 1rem;
+    margin-right: 0.5rem;
+    color: #10b981; /* Equivalent to text-green-500 */
+}
+
+.custom-detail-title {
+    font-weight: bold;
+}
+
+.custom-sub-details {
+    padding-left: 1.25rem; /* Equivalent to ps-5 */
+    margin-top: 0.5rem;
+    list-style-type: none;
+    color: grey; /* Equivalent to dark:text-gray-400 */
+}
+
+.custom-form-grid {
+    display: grid;
+    gap: 1rem;
+}
+
+.custom-form-group {
+    margin-bottom: 1.5rem;
+}
+
+.custom-button {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.625rem 1.25rem; /* Equivalent to px-5 py-2.5 */
+    margin-top: 0.4rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: black;
+    background-color: transparent;
+    border-radius: 0.375rem; /* Equivalent to rounded-lg */
+    transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.custom-button:hover {
+    background-color: black; /* Equivalent to hover:bg-primary-800 */
+    color: white; /* Equivalent to hover:bg-primary-800 */
+}
+
+
+.flex-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/** DASHBOARD LABELS **/
+.card-container {
+    display: flex;
+    justify-content: space-around;
+}
+
+.card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: center;
+    position: relative;
+}
+
+.card .icon {
+    font-size: 50px;
+    margin-bottom: 10px;
+}
+
+.card .label {
+    font-size: 12px;
+    text-transform: uppercase;
+    color: #777;
+    margin-bottom: 5px;
+}
+
+.card .count {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.card.bg-blue {
+    background-color: #e0f7fa;
+}
+
+.card.bg-green {
+    background-color: #e8f5e9;
+}
+
+.card.bg-orange {
+    background-color: #fff3e0;
+}
+
+.error-message {
+    color: red; /* Change this to the color you want */
+    font-size: 0.9em; /* Optional: Adjust the font size */
+    margin-top: 5px; /* Optional: Add some spacing above the error message */
+}
+
+/*WayBill/Shipping Steps Style*/
+.steps {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: stretch;
+    margin: 1em 0;
+    box-shadow: none;
+    line-height: 1.14285714em;
+    border-radius: .28571429rem;
+    border: 1px solid rgba(34, 36, 38, .15);
+}
+
+.steps:first-child {
+    margin-top: 0;
+}
+
+.step {
+    font-size: 1rem;
+    position: relative;
+    display: flex;
+    flex: 1 0 auto;
+    flex-wrap: wrap;
+    flex-direction: row;
+    vertical-align: middle;
+    align-items: center;
+    justify-content: center;
+    margin: 0 0;
+    padding: 1.14285714em 2em;
+    background: #fff;
+    color: rgba(0, 0, 0, .87);
+    box-shadow: none;
+    border-radius: 0;
+    border: none;
+    border-right: 1px solid rgba(34, 36, 38, .15);
+    transition: background-color .1s ease, opacity .1s ease, color .1s ease, box-shadow .1s ease, -webkit-box-shadow .1s ease;
+}
+
+.step:first-child {
+    padding-left: 2em;
+    border-radius: .28571429rem 0 0 .28571429rem;
+}
+
+.step:last-child {
+    border-right: none;
+    margin-right: 0;
+    border-radius: 0 .28571429rem .28571429rem 0;
+}
+
+.step:not(:last-child):after {
+    display: block;
+    position: absolute;
+    z-index: 2;
+    content: '';
+    top: 50%;
+    right: 0;
+    border: medium none;
+    background-color: #fff;
+    width: 1.14285714em;
+    height: 1.14285714em;
+    border-style: solid;
+    border-color: rgba(34, 36, 38, .15);
+    border-width: 0 1px 1px 0;
+    transform: translateY(-50%) translateX(50%) rotate(-45deg);
+}
+
+.step.active {
+    cursor: auto;
+    background-color: #f3f4f5;
+}
+
+.step.active:not(:last-child):after {
+    background-color: #f3f4f5;
+}
+
+.step-icon {
+    width: auto;
+    display: block;
+    line-height: 1;
+    font-size: 2.5em;
+    margin: 0 1rem 0rem 0;
+    opacity: 1;
+    height: 1em;
+}
+
+.step-body {
+    display: block;
+}
+
+.step-title {
+    font-family: Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    font-size: 1.14285714em;
+    font-weight: 700;
+}
+
+.step-description {
+    margin-top: .25em;
+    font-weight: 400;
+    font-size: .92857143em;
+}
+
+/* Checkbox Styles */
+.question-container {
+    margin-bottom: 20px;
+    font-size: 18px;
+    padding-left:30px;
+}
+
+.custom-checkbox {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.custom-checkbox input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    margin-left:10px;
+    margin-bottom:5px;
+}
+
+.checkbox-text {
+    font-weight: bold;
+    color: #333;
+}
+
+
+

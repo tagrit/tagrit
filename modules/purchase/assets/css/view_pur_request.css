@@ -1,0 +1,72 @@
+
+  .signature-pad--body{
+    border-radius: 4px;
+    position: relative;
+    -webkit-box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    border: 1px solid #c0cbda;
+  }
+  .p_style{
+   margin-top: 15px;
+  }
+  .hr_style{
+    margin-top: 5px; 
+
+  }
+  span.fontz9{
+    font-size: 9px;
+  }
+  .martop0{
+    margin-top: 0px; 
+  }
+  .apr_div{
+    text-align: center; 
+    font-size: 15px;
+  }
+  .img_style{
+    width: 150px; 
+    height: 80px;
+  }
+  .ul_style{
+    min-width: 500px;
+    min-height: 190px;
+  }
+  .ip_style{
+    width:1px; 
+    height:1px; 
+    border:0px;
+  }
+
+  .mtop0{
+    margin-top: 0px;
+  }
+
+    table.table{
+    margin-top: 10px;
+  }
+
+.table{
+        width: 100%;
+    max-width: 100%;
+    margin-bottom: 10px;
+}
+
+.pright0{
+  padding-right: 0px;
+}
+
+.compare_quotes_table thead{
+  background-color: #f9f9f9;
+}
+
+input { 
+    width: 100%;
+    height:100%; 
+    display:inline-block;
+    position:relative;
+}
+
+.dialog_withd {
+    width: 65%;
+}

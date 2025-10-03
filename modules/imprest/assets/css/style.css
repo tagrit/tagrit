@@ -1,0 +1,143 @@
+/* Fund Request Modal Styles */
+.modal-dialog {
+    max-width: 50%;
+    /* Adjust the width of the modal */
+}
+
+.modal-content {
+    padding: 20px;
+    border-radius: 8px;
+    /* Rounded corners for the modal */
+}
+
+.modal-header,
+.modal-footer {
+    border-bottom: none;
+    /* Remove border from header and footer */
+}
+
+.modal-title {
+    font-weight: bold;
+    color: #0056b3;
+    /* Title color */
+}
+
+/* Table Styles */
+.table {
+    margin-top: 15px;
+    border-collapse: separate;
+    border-spacing: 0 15px;
+    /* Space between rows */
+}
+
+.table th {
+    /* background-color: #090909; */
+    /* Header background color */
+    font-weight: bold;
+}
+
+.table td {
+    background-color: #ffffff;
+    /* Row background color */
+    border-top: solid 2px #dee2e6;
+    /* Top border for rows */
+}
+
+/* Form Input Styles */
+.form-control {
+    margin-bottom: 10px;
+    /* Space between form inputs */
+    border-radius: 4px;
+    /* Rounded borders for inputs */
+}
+
+/* Button Styles */
+.btn-info {
+    background-color: #28a745;
+    /* Green color */
+    border-color: #28a745;
+    border-radius: 25px;
+    /* Rounded borders */
+    margin-right: 10px;
+    /* Add some space to the right of the button */
+    padding: 10px 20px;
+    /* Padding inside buttons */
+    font-size: 16px;
+    /* Larger font size for buttons */
+    margin-bottom: 20px;
+}
+
+.btn-info:hover {
+    background-color: #218838;
+    /* Darker green on hover */
+    border-color: #218838;
+}
+
+/* Style for the 'Add another imprest Item' button */
+.add-item {
+    background-color: #28a745;
+    /* Green color */
+    color: #ffffff;
+    margin-top: 10px;
+    padding: 10px 15px;
+    /* Increased padding for better visibility */
+    font-size: 16px;
+    /* Increased font size for readability */
+    border: none;
+    border-radius: 25px;
+    /* Rounded borders */
+    box-shadow: 0 2px 4px rgba(0, 123, 255, 0.5);
+    /* Add a subtle shadow for depth */
+}
+
+.add-item:hover {
+    background-color: #218838;
+    /* Darker green on hover */
+}
+
+/* Imprest Items Table Styles */
+#imprestItemsTable {
+    width: 100%;
+    /* Ensure the table takes up the full width of its container */
+}
+
+#imprestItemsTable th:nth-child(1) {
+    width: 70%;
+    /* Imprest Item column takes up 70% of the table width */
+}
+
+#imprestItemsTable th:nth-child(2) {
+    width: 30%;
+    /* Amount ($) column takes up 30% of the table width */
+}
+
+#imprestItemsTable th {
+    font-weight: bold;
+    /* Bold font for table headers */
+}
+
+#imprestItemsTable td {
+    padding: 10px;
+    /* Padding inside table cells */
+}
+
+#totalAmount {
+    font-weight: bold;
+    /* Bold font for total amount */
+    text-align: right;
+    /* Align total amount to the right */
+}
+
+/* Ensure the dropdown and amount input align properly */
+#imprestItemsTable .form-control {
+    margin-bottom: 0;
+    /* Remove margin to align with the dropdown */
+}
+
+.table>thead>tr>th {
+    vertical-align: middle;
+    color: white;
+}
+
+
+/*progress bar css */

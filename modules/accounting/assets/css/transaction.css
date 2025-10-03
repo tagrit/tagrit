@@ -1,0 +1,64 @@
+.div_content{
+	border: 1px solid silver;
+	padding: 15px;
+	margin-bottom: 10px;
+}
+
+
+.label-tab1{
+        border: 1px solid #84C529 !important;
+        color: #84C529 !important;
+    }
+.label-tab2{
+   border: 1px solid #28B8DA !important;
+    color: #28B8DA !important;
+}
+.label-tabus{
+   border: 1px solid red !important;
+    color: red !important;
+}
+.label-tab3{
+   border: 1px solid #da2828 !important;
+    color: #da2828 !important;
+}
+
+
+.label-done {
+    background: rgb(132, 197, 41);
+    border: rgb(132, 197, 41);
+    color: #ffffff !important;
+}
+
+.label-cancelled {
+    background: rgba(244, 3, 47, 0.59);
+    border: 1px solid rgb(248, 106, 132);
+    color: #ffffff !important;
+}
+.label-planned {
+    background: rgba(40, 184, 218, 0.93);
+    border: 1px solid rgb(40, 184, 218);
+    color: #ffffff !important;
+}
+.label-warning {
+    background: rgba(255, 152, 0, 1);
+    border: 1px solid rgb(255, 152, 0);
+    color: #ffffff !important;
+}
+
+.label-confirmed {
+    background: rgb(63 81 181 / 92%);
+    border: 1px solid rgb(63 81 181 / 92%);
+    color: #ffffff !important;
+}
+
+.label-in_progress {
+    background: #2196f3;
+    border: 1px solid #2196f3;
+    color: #ffffff !important;
+}
+
+.label-draft {
+    background: #9e9e9e;
+    border: 1px solid #9e9e9e;
+    color: #ffffff !important;
+}

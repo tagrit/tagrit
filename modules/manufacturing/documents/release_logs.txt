@@ -1,0 +1,34 @@
+1.0.3
+-	Update some minor errors, interface errors
+1.0.4
+-	BOM: Show more product codes before the product name
+-	MO: Show more product codes before the product name
+-	MO: Update Cost hour for manufacturing order
+-	MO: check available quantity before Mark as Planned
+-	MO: After Mark as Done Mo => Purchase price of product = Total Material Cost + Total Labour Cost
+-	Manufacturing module:
+-	Costing related Manufacturing order
+o	Total Material Cost + Total employee working cost + Total work center cost.
+o	Total employee working cost = Cost/Hour * Working time each work center
+o	Total work center cost = cost per hour on each work center * Working time each work center
+-	BOM: fix a component search bug on the management screen, allowing mass delete Component
+-	Fix bug related new template
+-	Fix bug when run on PHP 8.1
+-	Fix bugs on Dasboard, menu icon
+1.0.5
+-	Fix Some minor errors
+-	Product: Fix product when create new Product mark as "can be manufactured"
+-	MO: Allow add an extra material after a finished manufacture
+-	MO: Bom Change Logs: records related changes to material quantities when a Work Order is executed
+-	Work Order: Allow Task creation function in Work order
+Bugs
+-	Delete manufacturing order -> delete work order reference
+Manufacturing order 
+-	Allowed to change the actual quantity produced.
+
+
+24/04/2024
+Product: display Sales and Purchase tab base on "Can be sold" and "Can be purchased" option
+
+25/04/2024
+Work Order: fix bugs physical file have been deleted on Routing, mark as done MO have component 

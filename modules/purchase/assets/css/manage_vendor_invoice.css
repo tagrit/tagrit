@@ -1,0 +1,15 @@
+.table>tbody>tr>td {
+    vertical-align: middle;
+}
+.pad_left_0{
+	padding-left: 0px;
+}
+.pad_right_0{
+	padding-right: 0px;
+}
+.align_div{
+	vertical-align: middle;
+}
+.p{
+	    margin: 0 0 0px;
+}

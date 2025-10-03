@@ -1,0 +1,147 @@
+
+.check-card {
+  border: 1px solid #c0c0c0;
+  background-color: #fff;
+  border-radius: 5px;
+  padding: 25px;
+  background-size: cover !important;
+  background-repeat: no-repeat !important;
+  height: 386px;
+  width: 890px;
+  margin: 0 auto;
+  position: relative;
+}
+.check-card .address{
+  text-transform: uppercase;
+  font-size: 15px;
+  font-family: Tahoma;
+}
+
+.check-card .bank-name{
+  text-transform: uppercase;
+  font-size: 15px;
+  font-family: Tahoma;
+}
+
+.check-card .address h4, .check-card .bank-name h4{
+ font-weight: bold;
+}
+.check-card .date-input{
+  margin-top: 40px;
+  width: 100%;
+}
+.frcard{
+
+  justify-content: center;
+}
+.signature{
+  margin-top: 33px; 
+}
+.card-number{
+  font-family: 'MicrFont';
+  letter-spacing: 2px;
+  font-weight: 600;
+  font-size: 25px;
+}
+
+.check-border-bottom{
+  border-bottom: 1px solid #000;
+}
+.money_text {
+  height: 15px;
+}
+
+.accounting.checks #small-table.col-md-3 .dataTables_wrapper .row:nth-child(2) .col-md-7,
+.accounting.checks #small-table.col-md-3 .dataTables_wrapper .row:nth-child(2) .col-md-5,
+.accounting.checks #small-table.col-md-3 .dataTables_wrapper .row:nth-child(2) .col-md-5 .dataTables_filter label,
+.accounting.checks #small-table.col-md-3 .dataTables_wrapper .row:nth-child(2) .col-md-5 .dataTables_filter .input-group,
+.accounting.checks #small-table.col-md-3 .dataTables_wrapper .row:nth-child(2) .col-md-5 .dataTables_filter .input-group input[type="search"]
+{
+  width: 100% !important;
+}
+.check-font-style1{
+  font-family: fantasy;
+}
+
+.img_void_check_style{
+    z-index: 10000;
+    position: absolute;
+    margin-top: 80px;
+    margin-left: 300px;
+}
+
+img {
+  max-width: 100%;
+}
+
+.template-box label {
+  font-weight: 600;
+  font-size: 2rem;
+  margin-left: 10px;
+}
+
+.align-items-center {
+  -ms-flex-align: center!important;
+  align-items: center!important;
+}
+.justify-content-center {
+  -ms-flex-pack: center!important;
+  justify-content: center!important;
+}
+.d-flex {
+  display: -ms-flexbox!important;
+  display: flex!important;
+}
+
+.dflexy {
+  display: -webkit-flex!important;
+  display: -ms-flexbox!important;
+  display: flex!important;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.px-10{
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.ip_style {
+    display: none;
+    width: 1px;
+    height: 1px;
+    border: 0px;
+}
+
+.signature-pad--body {
+    border-radius: 4px;
+    position: relative;
+    -webkit-box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    border: 1px solid #c0cbda;
+}
+
+.img_style {
+    width: 150px;
+    height: 50px;
+}
+
+.text-wrap {
+  word-break: break-word !important;
+}
+
+.width-250{
+  width: 250px;
+}
+
+.acc-text-info{
+  color: #31708f !important;
+}
+
+.acc-text-success{
+  color: #3c763d !important;
+}
+.bill-card{
+  height: 349px !important;
+}

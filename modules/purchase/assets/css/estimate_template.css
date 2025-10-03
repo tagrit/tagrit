@@ -1,0 +1,99 @@
+
+  .pad_div_0{
+    padding-left: 0px
+  }
+  .padr_div_0{
+    padding-right: 0px;
+  }
+  .p_style{
+    margin-top: 0px; 
+    color: #d81b60;
+  }
+  .hr_style{
+    margin-top: 10px; 
+    border: 0.5px solid; 
+    color: #d81b60
+  }
+  .td_style{
+    margin-bottom:25px;
+  }
+
+  .mtop0{
+    margin-top: 0px;
+  }
+  table.table{
+    margin-top: 10px;
+  }
+
+.table{
+        width: 100%;
+    max-width: 100%;
+    margin-bottom: 10px;
+}
+
+.pright0{
+  padding-right: 0px;
+}
+
+.pleft0{
+  padding-left: 0px;
+}
+
+input.pur_input_none {
+    background: 0 0 !important;
+}
+
+.input-transparent {
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    outline: none;
+    border: 0 !important;
+    background: transparent;
+}
+
+.container {
+    width: 1570px;
+}
+
+.ribbon {
+    position: absolute;
+    right: -5px;
+    top: -5px;
+    z-index: 1;
+    overflow: hidden;
+    width: 75px;
+    height: 75px;
+    text-align: right;
+}
+
+.ribbon.success span {
+    background: #84c529;
+}
+
+.ribbon.info span {
+    background: #03a9f4;
+}
+
+.ribbon.warning span {
+    background: #FF6F00;
+}
+
+.ribbon.danger span {
+    background: #FC2D42;
+}
+
+.ribbon span {
+    font-size: 11px;
+    font-weight: 500;
+    color: #FFF;
+    text-transform: uppercase;
+    text-align: center;
+    line-height: 20px;
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+    width: 100px;
+    display: block;
+    position: absolute;
+    top: 19px;
+    right: -21px;
+}

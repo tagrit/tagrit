@@ -1,0 +1,15 @@
+# Enable URL rewriting
+RewriteEngine On
+
+# Redirect ALL HTTP requests to HTTPS
+RewriteCond %{HTTPS} off
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Ensure UTF-8 charset is set
+AddDefaultCharset utf-8
+
+# Clean URL routing to index.php (e.g., for frameworks like CodeIgniter or Laravel)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond $1 !^(index\.php|resources|robots\.txt)
+RewriteRule ^(.*)$ index.php?/$1 [L,QSA]

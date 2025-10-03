@@ -1,0 +1,14 @@
+div#input-group-addon-wh {
+   	position: absolute;
+    border-left: 1px solid #c0c0c0;
+    right: 2px;
+    border-radius: unset;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    top: 26px;
+    background-color: #fff;
+}
+.input-group-proposal{
+    position: relative;
+    border-collapse: separate;
+}

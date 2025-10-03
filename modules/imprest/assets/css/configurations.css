@@ -1,0 +1,92 @@
+/* configurations.css */
+
+/* Overall padding and background */
+#wrapper {
+    min-height: 100vh;
+    background-color: #f4f7fa;
+    padding: 20px;
+}
+
+/* Panel styling */
+.panel_s {
+    background-color: #ffffff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    border-radius: 8px;
+}
+
+/* Header with tabs styling */
+.panel-body h4 {
+    margin-bottom: 20px;
+}
+
+.hr-panel-heading {
+    border-top: 1px solid #e4e5e7;
+    margin-bottom: 20px;
+}
+
+/* Button group styling */
+.btn-group {
+    background-color: #f1f1f1;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.btn-group .btn {
+    background-color: #4299e1;
+    color: white;
+    border: none;
+    margin-right: 10px;
+    border-radius: 20px;
+    padding: 10px 20px;
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.btn-group .btn:hover,
+.btn-group .btn:focus {
+    background-color: #3182ce;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+/* Content area styling */
+.tab-content {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+
+/* configurations.css */
+
+/* Existing styles... */
+
+/* Responsive styles for mobile devices */
+@media (max-width: 768px) {
+    .btn-group .btn {
+        /* Full width for buttons on small screens */
+        display: block;
+        width: 100%;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        margin-right: 0;
+    }
+
+    .btn-group {
+        /* Stack buttons vertically on small screens */
+        display: block;
+    }
+
+    .tab-content {
+        /* Adjust padding for content area on small screens */
+        padding: 10px;
+    }
+
+    /* Add any additional responsive styles you need here */
+}
+
+/* You can add more media queries for different screen sizes if necessary */
